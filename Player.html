@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>С.О.В. — Магический экзамен</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="embers" id="embers"></div>
+
+<div class="wrap">
+
+  <!-- ============ ЭКРАН 1 — выбор участника ============ -->
+  <section id="screen-select" class="card center">
+    <div class="eyebrow">Хогвартс · Экзаменационная комиссия</div>
+    <h1 style="font-size:32px; margin:10px 0 6px;">С.О.В. по волшебному миру</h1>
+    <p class="muted small" style="max-width:440px; margin:0 auto 26px;">
+      Экзамен состоит из <b id="q-total-1"></b> вопросов. На каждый даётся
+      <b id="time-per-1"></b> секунд — не успеешь, ответ засчитается как неверный.
+      Отвечай честно и не подглядывай в книгу.
+    </p>
+    <div class="hr"></div>
+    <div class="eyebrow" style="margin-bottom:14px;">Назовите себя экзаменатору</div>
+    <div class="portraits" id="portraits"></div>
+  </section>
+
+  <!-- ============ ЭКРАН 2 — сам квиз ============ -->
+  <section id="screen-quiz" class="card hidden">
+    <div class="progress-top"><i id="progress-fill" style="width:0%"></i></div>
+    <div class="row" style="margin-bottom:6px;">
+      <div class="eyebrow" id="q-counter">Вопрос 1 из 71</div>
+      <div class="timer" id="timer">
+        <svg viewBox="0 0 80 80">
+          <circle class="track" cx="40" cy="40" r="34"></circle>
+          <circle class="fill" id="timer-fill" cx="40" cy="40" r="34"></circle>
+        </svg>
+        <div class="num" id="timer-num">30</div>
+      </div>
+    </div>
+    <div class="qtext" id="q-text">Текст вопроса</div>
+    <div class="options" id="q-options"></div>
+  </section>
+
+  <!-- ============ ЭКРАН 3 — завершение (без итогов!) ============ -->
+  <section id="screen-result" class="card center hidden">
+    <div class="eyebrow">Экзамен завершён</div>
+    <h1 style="font-size:30px; margin:10px 0 6px;" id="result-name">Результат</h1>
+    <p class="muted small" style="max-width:400px; margin:0 auto 6px;">
+      Ответы засчитаны и запечатаны в конверт — их огласят на общем экране,
+      когда экзамен сдадут оба волшебника.
+    </p>
+
+    <div class="hr"></div>
+
+    <div id="send-loading" class="stack center">
+      <p class="muted small"><span class="spinner"></span>&nbsp; Сова летит в Хогвартс...</p>
+    </div>
+
+    <div id="send-ok" class="stack center hidden">
+      <p style="color:var(--ok);">Результат доставлен. Ждите оглашения победителя на главном экране.</p>
+    </div>
+
+    <div id="send-error" class="stack center hidden">
+      <p style="color:var(--ember-lt);">Сову перехватили Пожиратели смерти — результат не дошёл.</p>
+      <div class="btn-row">
+        <button class="btn" id="btn-retry">Отправить снова</button>
+        <button class="btn ghost" id="btn-copy">Скопировать результат</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="quiz-data.js"></script>
+<script src="magic-fx.js"></script>
+<script>
+initMagicFX('embers');
+
+/* ---------------- состояние ---------------- */
+let currentParticipant = null;
+let qIndex = 0;
+let score = 0;
+let answers = [];
+let timeLeft = TIME_PER_QUESTION;
+let timerInterval = null;
+let questionStartedAt = 0;
+let answered = false;
+
+document.getElementById('q-total-1').textContent = QUESTIONS.length;
+document.getElementById('time-per-1').textContent = TIME_PER_QUESTION;
+
+/* ---------------- экран выбора участника ---------------- */
+const portraitsHost = document.getElementById('portraits');
+PARTICIPANTS.forEach(p => {
+  const btn = document.createElement('button');
+  btn.className = 'portrait';
+  btn.innerHTML = `
+    <div class="portrait-frame">
+      <img src="${p.photo}" alt="${p.short}" onerror="this.style.display='none'; this.parentElement.querySelector('.initial').style.display='flex';">
+      <div class="initial" style="display:none; align-items:center; justify-content:center; width:100%; height:100%;">${p.short[0]}</div>
+    </div>
+    <div class="portrait-name">${p.id}</div>
+  `;
+  btn.addEventListener('click', () => startQuiz(p));
+  portraitsHost.appendChild(btn);
+});
+
+function startQuiz(participant){
+  currentParticipant = participant;
+  qIndex = 0; score = 0; answers = [];
+  show('screen-quiz');
+  renderQuestion();
+}
+
+/* ---------------- экраны ---------------- */
+function show(id){
+  ['screen-select','screen-quiz','screen-result'].forEach(s=>{
+    document.getElementById(s).classList.toggle('hidden', s!==id);
+  });
+}
+
+/* ---------------- рендер вопроса ---------------- */
+const CIRC = 2 * Math.PI * 34;
+document.getElementById('timer-fill').style.strokeDasharray = CIRC;
+
+function renderQuestion(){
+  answered = false;
+  const q = QUESTIONS[qIndex];
+  document.getElementById('q-counter').textContent = `Вопрос ${qIndex+1} из ${QUESTIONS.length}`;
+  document.getElementById('progress-fill').style.width = (qIndex / QUESTIONS.length * 100) + '%';
+  document.getElementById('q-text').textContent = q.text;
+
+  const optsHost = document.getElementById('q-options');
+  optsHost.innerHTML = '';
+  const letters = ['А','Б','В','Г'];
+  q.options.forEach((opt, i) => {
+    const b = document.createElement('button');
+    b.className = 'option';
+    b.innerHTML = `<span class="mark">${letters[i]}</span><span>${opt}</span>`;
+    b.addEventListener('click', () => selectAnswer(i));
+    optsHost.appendChild(b);
+  });
+
+  timeLeft = TIME_PER_QUESTION;
+  questionStartedAt = Date.now();
+  updateTimerUI();
+  clearInterval(timerInterval);
+  timerInterval = setInterval(tick, 100);
+}
+
+function tick(){
+  timeLeft -= 0.1;
+  if(timeLeft <= 0){
+    timeLeft = 0;
+    updateTimerUI();
+    clearInterval(timerInterval);
+    if(!answered) selectAnswer(-1); // время вышло — ответа нет
+    return;
+  }
+  updateTimerUI();
+}
+
+function updateTimerUI(){
+  const frac = timeLeft / TIME_PER_QUESTION;
+  const offset = CIRC * (1 - frac);
+  const fillEl = document.getElementById('timer-fill');
+  fillEl.style.strokeDashoffset = offset;
+  document.getElementById('timer-num').textContent = Math.ceil(timeLeft);
+  document.getElementById('timer').classList.toggle('warn', timeLeft <= 8);
+}
+
+function selectAnswer(i){
+  if(answered) return;
+  answered = true;
+  clearInterval(timerInterval);
+  const q = QUESTIONS[qIndex];
+  const timeTakenMs = Date.now() - questionStartedAt;
+  const isCorrect = i === q.correct;
+  if(isCorrect) score++;
+
+  answers.push({
+    questionId: qIndex + 1,
+    questionText: q.text,
+    selected: i === -1 ? null : q.options[i],
+    correctAnswer: q.options[q.correct],
+    isCorrect: isCorrect,
+    timeTakenMs: timeTakenMs
+  });
+
+  // ответ не раскрывается игроку — только помечаем выбранный вариант как "принят"
+  const opts = document.querySelectorAll('#q-options .option');
+  opts.forEach((el, idx) => {
+    el.disabled = true;
+    if(idx === i) el.classList.add('selected');
+  });
+
+  setTimeout(() => {
+    qIndex++;
+    if(qIndex < QUESTIONS.length){
+      renderQuestion();
+    } else {
+      finishQuiz();
+    }
+  }, 500);
+}
+
+/* ---------------- финал ---------------- */
+function finishQuiz(){
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('result-name').textContent = currentParticipant.id;
+  show('screen-result');
+  sendResult(); // отправляем сразу, без промежуточного экрана с ожиданием клика
+}
+
+function buildPayload(){
+  return {
+    participant: currentParticipant.id,
+    answers: answers,
+    score: score,
+    totalQuestions: QUESTIONS.length,
+    submittedAt: new Date().toISOString()
+  };
+}
+
+async function sendResult(){
+  document.getElementById('send-error').classList.add('hidden');
+  document.getElementById('send-ok').classList.add('hidden');
+  document.getElementById('send-loading').classList.remove('hidden');
+
+  const payload = buildPayload();
+  // локальная резервная копия на случай сбоя сети
+  try{ localStorage.setItem('hp-quiz-last-result', JSON.stringify(payload)); }catch(e){}
+
+  try{
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // без preflight
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if(data && data.ok){
+      document.getElementById('send-loading').classList.add('hidden');
+      document.getElementById('send-ok').classList.remove('hidden');
+    } else {
+      throw new Error((data && data.error) || 'Неизвестная ошибка');
+    }
+  } catch(err){
+    document.getElementById('send-loading').classList.add('hidden');
+    document.getElementById('send-error').classList.remove('hidden');
+  }
+}
+
+document.getElementById('btn-retry').addEventListener('click', sendResult);
+document.getElementById('btn-copy').addEventListener('click', () => {
+  const payload = buildPayload();
+  navigator.clipboard.writeText(JSON.stringify(payload, null, 2))
+    .then(()=> alert('Результат скопирован в буфер обмена — можно передать его вручную.'));
+});
+
+/* поддержка выбора ответа клавишами 1-4 */
+document.addEventListener('keydown', (e)=>{
+  if(document.getElementById('screen-quiz').classList.contains('hidden')) return;
+  const map = {'1':0,'2':1,'3':2,'4':3};
+  if(map.hasOwnProperty(e.key)) selectAnswer(map[e.key]);
+});
+</script>
+</body>
+</html>
