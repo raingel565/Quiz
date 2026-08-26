@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>С.О.В. — Главный экран</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .vs{ font-family:'Cinzel', serif; font-size:14px; color:var(--brass); letter-spacing:.3em; }
+  .duel{ display:flex; align-items:center; justify-content:center; gap:28px; margin:24px 0; flex-wrap:wrap; }
+  .duel .portrait{ cursor:default; }
+  .duel .portrait:hover{ transform:none; box-shadow:none; }
+  .duel .score-big{ font-family:'Cinzel', serif; font-size:34px; color:var(--brass-lt); margin-top:10px; }
+  .duel .status{ font-size:15px; color:var(--parchment-dim); margin-top:4px; }
+  .winner-tag{
+    font-family:'Cinzel', serif; font-size:12px; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--void); background:linear-gradient(180deg, var(--brass-lt), var(--brass));
+    padding:5px 12px; border-radius:999px; display:inline-block; margin-bottom:10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="embers" id="embers"></div>
+
+<div class="wrap">
+
+  <!-- ============ ЭКРАН 1 — титул ============ -->
+  <section id="screen-title" class="card center">
+    <div class="eyebrow">Хогвартс · Большой зал</div>
+    <h1 style="font-size:34px; margin:10px 0 6px;">С.О.В. по волшебному миру</h1>
+    <p class="muted small" style="max-width:480px; margin:0 auto 26px;">
+      Главный экран экзамена. Участники отвечают на свои телефоны
+      (страница «Экзаменуемый»), а здесь — атмосфера и оглашение результатов.
+    </p>
+    <div class="hr"></div>
+    <div class="btn-row">
+      <button class="btn" id="btn-present">Показать вопросы</button>
+      <button class="btn ghost" id="btn-skip">Сразу к результатам</button>
+    </div>
+  </section>
+
+  <!-- ============ ЭКРАН 2 — показ вопросов (атмосфера) ============ -->
+  <section id="screen-present" class="card hidden">
+    <div class="progress-top"><i id="progress-fill" style="width:0%"></i></div>
+    <div class="row" style="margin-bottom:6px;">
+      <div class="eyebrow" id="q-counter">Вопрос 1 из 71</div>
+      <div class="timer" id="timer">
+        <svg viewBox="0 0 80 80">
+          <circle class="track" cx="40" cy="40" r="34"></circle>
+          <circle class="fill" id="timer-fill" cx="40" cy="40" r="34"></circle>
+        </svg>
+        <div class="num" id="timer-num">30</div>
+      </div>
+    </div>
+    <div class="qtext" id="q-text">Текст вопроса</div>
+    <div class="options" id="q-options"></div>
+    <div class="hr"></div>
+    <div class="btn-row">
+      <button class="btn ghost" id="btn-next">Следующий вопрос</button>
+      <button class="btn ghost" id="btn-finish-early">Завершить показ</button>
+    </div>
+  </section>
+
+  <!-- ============ ЭКРАН 3 — сбор результатов ============ -->
+  <section id="screen-results" class="card center hidden">
+    <div class="eyebrow">Оглашение результатов</div>
+    <h1 style="font-size:30px; margin:10px 0 4px;">Кто лучше знает волшебный мир?</h1>
+    <p class="muted small" id="results-sub">Собираем ответы участников...</p>
+
+    <div class="duel" id="duel"></div>
+
+    <div id="winner-block" class="hidden">
+      <div class="hr"></div>
+      <div class="winner-tag">Победитель экзамена</div>
+      <h1 style="font-size:28px;" id="winner-name">—</h1>
+    </div>
+
+    <div class="hr"></div>
+    <div class="btn-row">
+      <button class="btn" id="btn-refresh">Обновить результаты</button>
+      <button class="btn ghost" id="btn-restart">Начать заново</button>
+    </div>
+    <p class="muted small" id="results-note" style="margin-top:14px;"></p>
+  </section>
+
+</div>
+
+<script src="quiz-data.js"></script>
+<script src="magic-fx.js"></script>
+<script>
+initMagicFX('embers');
+
+function show(id){
+  ['screen-title','screen-present','screen-results'].forEach(s=>{
+    document.getElementById(s).classList.toggle('hidden', s!==id);
+  });
+}
+
+/* ================= ЭКРАН ПРЕЗЕНТАЦИИ (без подсчёта очков) ================= */
+let pIndex = 0;
+let pTimeLeft = TIME_PER_QUESTION;
+let pTimerInterval = null;
+const CIRC = 2 * Math.PI * 34;
+
+document.getElementById('btn-present').addEventListener('click', () => {
+  pIndex = 0;
+  show('screen-present');
+  renderPresentQuestion();
+});
+document.getElementById('btn-skip').addEventListener('click', () => {
+  show('screen-results');
+  loadResults();
+});
+document.getElementById('btn-finish-early').addEventListener('click', () => {
+  clearInterval(pTimerInterval);
+  show('screen-results');
+  loadResults();
+});
+document.getElementById('btn-next').addEventListener('click', advancePresent);
+
+function renderPresentQuestion(){
+  const q = QUESTIONS[pIndex];
+  document.getElementById('q-counter').textContent = `Вопрос ${pIndex+1} из ${QUESTIONS.length}`;
+  document.getElementById('progress-fill').style.width = (pIndex / QUESTIONS.length * 100) + '%';
+  document.getElementById('q-text').textContent = q.text;
+
+  const optsHost = document.getElementById('q-options');
+  optsHost.innerHTML = '';
+  const letters = ['А','Б','В','Г'];
+  q.options.forEach((opt, i) => {
+    const d = document.createElement('div');
+    d.className = 'option';
+    d.style.cursor = 'default';
+    d.innerHTML = `<span class="mark">${letters[i]}</span><span>${opt}</span>`;
+    optsHost.appendChild(d);
+  });
+
+  pTimeLeft = TIME_PER_QUESTION;
+  updatePresentTimer();
+  clearInterval(pTimerInterval);
+  pTimerInterval = setInterval(()=>{
+    pTimeLeft -= 0.1;
+    if(pTimeLeft <= 0){ pTimeLeft = 0; updatePresentTimer(); clearInterval(pTimerInterval); advancePresent(); return; }
+    updatePresentTimer();
+  }, 100);
+}
+
+function updatePresentTimer(){
+  const frac = pTimeLeft / TIME_PER_QUESTION;
+  const fillEl = document.getElementById('timer-fill');
+  fillEl.style.strokeDasharray = CIRC;
+  fillEl.style.strokeDashoffset = CIRC * (1 - frac);
+  document.getElementById('timer-num').textContent = Math.ceil(pTimeLeft);
+  document.getElementById('timer').classList.toggle('warn', pTimeLeft <= 8);
+}
+
+function advancePresent(){
+  clearInterval(pTimerInterval);
+  pIndex++;
+  if(pIndex < QUESTIONS.length){
+    renderPresentQuestion();
+  } else {
+    show('screen-results');
+    loadResults();
+  }
+}
+
+/* ================= ЭКРАН РЕЗУЛЬТАТОВ ================= */
+document.getElementById('btn-refresh').addEventListener('click', loadResults);
+document.getElementById('btn-restart').addEventListener('click', () => {
+  document.getElementById('winner-block').classList.add('hidden');
+  show('screen-title');
+});
+
+function renderDuelSkeleton(){
+  const host = document.getElementById('duel');
+  host.innerHTML = '';
+  PARTICIPANTS.forEach(p => {
+    const el = document.createElement('div');
+    el.className = 'portrait';
+    el.id = 'duel-' + slug(p.id);
+    el.innerHTML = `
+      <div class="portrait-frame">
+        <img src="${p.photo}" alt="${p.short}" onerror="this.style.display='none'; this.parentElement.querySelector('.initial').style.display='flex';">
+        <div class="initial" style="display:none; align-items:center; justify-content:center; width:100%; height:100%;">${p.short[0]}</div>
+      </div>
+      <div class="portrait-name">${p.id}</div>
+      <div class="score-big">—</div>
+      <div class="status muted">Ждём результат...</div>
+    `;
+    host.appendChild(el);
+  });
+}
+function slug(s){ return s.toLowerCase().replace(/[^a-zа-я0-9]+/gi,'-'); }
+
+async function loadResults(){
+  renderDuelSkeleton();
+  document.getElementById('results-sub').textContent = 'Собираем ответы участников...';
+  document.getElementById('results-note').textContent = '';
+  document.getElementById('winner-block').classList.add('hidden');
+
+  try{
+    const res = await fetch(SCRIPT_URL + '?action=getResults');
+    const data = await res.json();
+    if(!data || !data.ok) throw new Error('bad response');
+    renderResults(data.results);
+  } catch(err){
+    document.getElementById('results-sub').textContent = 'Не удалось связаться с совиной почтой (Google Drive).';
+    document.getElementById('results-note').textContent = 'Проверь ссылку на скрипт и повтори попытку.';
+  }
+}
+
+function renderResults(results){
+  let allDone = true;
+  let best = null; // {id, score}
+  let tie = false;
+
+  PARTICIPANTS.forEach(p => {
+    const r = results[p.id];
+    const el = document.getElementById('duel-' + slug(p.id));
+    const scoreEl = el.querySelector('.score-big');
+    const statusEl = el.querySelector('.status');
+
+    if(r){
+      scoreEl.textContent = `${r.score} / ${r.totalQuestions}`;
+      statusEl.textContent = 'Экзамен сдан';
+      statusEl.style.color = 'var(--ok)';
+
+      if(best === null || r.score > best.score){
+        best = { id: p.id, score: r.score };
+        tie = false;
+      } else if(r.score === best.score){
+        tie = true;
+      }
+    } else {
+      allDone = false;
+      scoreEl.textContent = '—';
+      statusEl.textContent = 'Ждём результат...';
+      statusEl.style.color = '';
+    }
+  });
+
+  if(allDone && best !== null){
+    document.getElementById('results-sub').textContent = 'Все результаты собраны.';
+    const wb = document.getElementById('winner-block');
+    wb.classList.remove('hidden');
+    if(tie){
+      document.getElementById('winner-name').textContent = 'Ничья — оба Мастера волшебного мира!';
+    } else {
+      document.getElementById('winner-name').textContent = best.id;
+      const winEl = document.getElementById('duel-' + slug(best.id));
+      winEl.classList.add('winner-glow');
+    }
+  } else {
+    document.getElementById('results-sub').textContent = 'Ещё не все прошли экзамен — нажмите «Обновить результаты» позже.';
+  }
+}
+</script>
+</body>
+</html>
