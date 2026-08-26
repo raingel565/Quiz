@@ -1,0 +1,367 @@
+/* ============================================================
+   МАГИЧЕСКИЙ КВИЗ — общие стили
+   Палитра:
+     --void      #0b0908  почти чёрный, тёплый уголь
+     --panel     #17120d  тёмное дерево / кожа
+     --panel-2   #1f1810  чуть светлее панель (карточки)
+     --brass     #c8a24d  состаренная латунь / золото
+     --brass-lt  #e9cd8a  светлая латунь (акценты, хайлайты)
+     --parchment #ece0c3  пергамент — основной текст
+     --parchment-dim #b9ab88  приглушённый пергамент (второстепенный текст)
+     --ember     #b23a24  тлеющий уголь — предупреждение/время истекает
+     --ember-lt  #e2643f
+     --ok        #6f9a5c  приглушённый зелёный — верный ответ
+   Шрифты: Cinzel (заголовки, "гравировка по камню"), Cormorant Garamond (текст)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+:root{
+  --void:#0b0908;
+  --panel:#17120d;
+  --panel-2:#201911;
+  --brass:#c8a24d;
+  --brass-lt:#e9cd8a;
+  --parchment:#ece0c3;
+  --parchment-dim:#b9ab88;
+  --ember:#b23a24;
+  --ember-lt:#e2643f;
+  --ok:#6f9a5c;
+  --line: rgba(200,162,77,0.35);
+}
+
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(178,58,36,0.12), transparent 60%),
+    radial-gradient(ellipse 900px 600px at 90% 110%, rgba(200,162,77,0.10), transparent 60%),
+    var(--void);
+  color:var(--parchment);
+  font-family:'Cormorant Garamond', serif;
+  font-size:19px;
+  line-height:1.5;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  overflow-x:hidden;
+}
+
+/* --- фон: медленно плывущие искры/пылинки от свечей --- */
+.embers{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+.embers span{
+  position:absolute; bottom:-10px; width:3px; height:3px; border-radius:50%;
+  background:var(--brass-lt); opacity:0; filter:blur(0.3px);
+  animation:rise linear infinite;
+  box-shadow:0 0 6px 1px rgba(233,205,138,0.6);
+}
+@keyframes rise{
+  0%{ transform:translateY(0) translateX(0); opacity:0; }
+  8%{ opacity:.75; }
+  90%{ opacity:.35; }
+  100%{ transform:translateY(-110vh) translateX(var(--drift,20px)); opacity:0; }
+}
+@media (prefers-reduced-motion: reduce){
+  .embers{ display:none; }
+}
+
+h1,h2,h3, .display{
+  font-family:'Cinzel', serif;
+  font-weight:600;
+  letter-spacing:.02em;
+  color:var(--brass-lt);
+  margin:0;
+}
+
+.eyebrow{
+  font-family:'Cinzel', serif;
+  font-size:12.5px;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--brass);
+  opacity:.85;
+}
+
+a{ color:var(--brass-lt); }
+
+.wrap{
+  position:relative; z-index:1;
+  width:100%; max-width:760px;
+  padding:40px 20px 64px;
+  display:flex; flex-direction:column; align-items:center;
+  min-height:100vh;
+  justify-content:center;
+}
+
+/* --- карточка-пергамент с двойной латунной рамкой --- */
+.card{
+  position:relative;
+  width:100%;
+  background:
+    linear-gradient(180deg, var(--panel-2), var(--panel));
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:44px 40px;
+  box-shadow:
+    0 0 0 6px rgba(11,9,8,0.55),
+    0 24px 60px -20px rgba(0,0,0,.75),
+    inset 0 0 60px rgba(178,58,36,0.05);
+}
+.card::before{
+  content:'';
+  position:absolute; inset:8px;
+  border:1px solid rgba(200,162,77,0.22);
+  border-radius:3px;
+  pointer-events:none;
+}
+/* уголки-виньетки */
+.card::after{
+  content:'';
+  position:absolute; inset:8px;
+  border-radius:3px;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 0 0, rgba(200,162,77,0.5) 0, transparent 3px) top left / 60px 60px no-repeat,
+    radial-gradient(circle at 100% 0, rgba(200,162,77,0.5) 0, transparent 3px) top right / 60px 60px no-repeat,
+    radial-gradient(circle at 0 100%, rgba(200,162,77,0.5) 0, transparent 3px) bottom left / 60px 60px no-repeat,
+    radial-gradient(circle at 100% 100%, rgba(200,162,77,0.5) 0, transparent 3px) bottom right / 60px 60px no-repeat;
+}
+
+.hr{
+  height:1px; margin:22px 0;
+  background:linear-gradient(90deg, transparent, var(--line) 20%, var(--line) 80%, transparent);
+}
+
+/* --- кнопки --- */
+.btn{
+  font-family:'Cinzel', serif;
+  font-size:14px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--void);
+  background:linear-gradient(180deg, var(--brass-lt), var(--brass));
+  border:none;
+  padding:15px 30px;
+  border-radius:4px;
+  cursor:pointer;
+  transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+  box-shadow:0 6px 18px -6px rgba(200,162,77,.55);
+}
+.btn:hover{ filter:brightness(1.08); transform:translateY(-1px); }
+.btn:active{ transform:translateY(0); }
+.btn:focus-visible{ outline:2px solid var(--brass-lt); outline-offset:3px; }
+.btn:disabled{ opacity:.45; cursor:not-allowed; filter:none; transform:none; }
+
+.btn.ghost{
+  background:transparent;
+  color:var(--brass-lt);
+  border:1px solid var(--line);
+  box-shadow:none;
+}
+.btn.ghost:hover{ background:rgba(200,162,77,0.08); }
+
+.btn-row{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+
+/* --- таймер: латунное кольцо-печать --- */
+.timer{
+  position:relative;
+  width:74px; height:74px;
+  flex:0 0 auto;
+}
+.timer svg{ width:100%; height:100%; transform:rotate(-90deg); }
+.timer circle{
+  fill:none;
+  stroke-width:5;
+}
+.timer .track{ stroke:rgba(200,162,77,0.18); }
+.timer .fill{
+  stroke:var(--brass-lt);
+  stroke-linecap:round;
+  transition:stroke-dashoffset .2s linear, stroke .3s ease;
+}
+.timer.warn .fill{ stroke:var(--ember-lt); }
+.timer .num{
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Cinzel', serif;
+  font-size:20px;
+  color:var(--brass-lt);
+}
+.timer.warn .num{ color:var(--ember-lt); }
+@keyframes pulse{ 0%,100%{ opacity:1;} 50%{ opacity:.55;} }
+.timer.warn .num{ animation:pulse 1s ease-in-out infinite; }
+
+/* --- прогресс всего квиза --- */
+.progress-top{
+  width:100%; height:3px; background:rgba(200,162,77,0.15);
+  border-radius:2px; overflow:hidden; margin-bottom:10px;
+}
+.progress-top > i{
+  display:block; height:100%; background:linear-gradient(90deg, var(--brass), var(--brass-lt));
+  transition:width .3s ease;
+}
+
+/* --- варианты ответов --- */
+.options{ display:flex; flex-direction:column; gap:12px; margin-top:8px; }
+.option{
+  display:flex; align-items:center; gap:14px;
+  text-align:left;
+  background:rgba(236,224,195,0.03);
+  border:1px solid var(--line);
+  border-radius:5px;
+  padding:14px 18px;
+  cursor:pointer;
+  color:var(--parchment);
+  font-family:'Cormorant Garamond', serif;
+  font-size:19px;
+  transition:background .15s ease, border-color .15s ease, transform .1s ease;
+}
+.option:hover:not(:disabled){ background:rgba(200,162,77,0.09); border-color:var(--brass); }
+.option:focus-visible{ outline:2px solid var(--brass-lt); outline-offset:2px; }
+.option .mark{
+  flex:0 0 auto;
+  width:28px; height:28px;
+  border-radius:50%;
+  border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Cinzel', serif; font-size:12px; color:var(--brass);
+}
+.option.correct{ border-color:var(--ok); background:rgba(111,154,92,0.14); }
+.option.correct .mark{ border-color:var(--ok); color:var(--ok); }
+.option.wrong{ border-color:var(--ember); background:rgba(178,58,36,0.12); }
+.option.wrong .mark{ border-color:var(--ember); color:var(--ember-lt); }
+/* игрок: ответ помечается как "принят", без раскрытия верно/неверно */
+.option.selected{ border-color:var(--brass); background:rgba(200,162,77,0.14); }
+.option.selected .mark{ border-color:var(--brass); color:var(--brass-lt); }
+.option:disabled{ cursor:default; }
+
+/* --- участники / портреты --- */
+.portraits{ display:flex; gap:22px; justify-content:center; flex-wrap:wrap; margin-top:6px; }
+.portrait{
+  width:190px;
+  background:rgba(236,224,195,0.03);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:18px 16px 20px;
+  cursor:pointer;
+  color:inherit;
+  font-family:inherit;
+  transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.portrait:hover{ transform:translateY(-3px); border-color:var(--brass); box-shadow:0 14px 30px -14px rgba(200,162,77,.4); }
+.portrait:focus-visible{ outline:2px solid var(--brass-lt); outline-offset:3px; }
+.portrait-frame{
+  width:100%; aspect-ratio:3/4;
+  border-radius:4px;
+  border:1px solid var(--line);
+  background:
+    radial-gradient(circle at 50% 35%, rgba(200,162,77,0.16), transparent 60%),
+    linear-gradient(180deg, #241c13, #150f0a);
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+  margin-bottom:12px;
+}
+.portrait-frame img{ width:100%; height:100%; object-fit:cover; display:block; }
+.portrait-frame .initial{
+  font-family:'Cinzel', serif; font-size:40px; color:var(--brass);
+  opacity:.8;
+}
+.portrait-name{ font-family:'Cinzel', serif; font-size:15px; text-align:center; color:var(--parchment); }
+
+/* --- утилити --- */
+.center{ text-align:center; }
+.muted{ color:var(--parchment-dim); }
+.small{ font-size:15px; }
+.stack{ display:flex; flex-direction:column; gap:8px; }
+.row{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.hidden{ display:none !important; }
+
+.qtext{
+  font-size:25px;
+  line-height:1.35;
+  color:var(--parchment);
+  margin:18px 0 22px;
+}
+
+.score-badge{
+  display:inline-flex; align-items:center; gap:10px;
+  border:1px solid var(--line); border-radius:999px;
+  padding:8px 18px;
+  font-family:'Cinzel', serif; font-size:14px; letter-spacing:.06em;
+  color:var(--brass-lt);
+}
+
+.spinner{
+  width:20px; height:20px; border-radius:50%;
+  border:2px solid rgba(200,162,77,0.25);
+  border-top-color:var(--brass-lt);
+  animation:spin .8s linear infinite; display:inline-block;
+}
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+.winner-glow{
+  box-shadow:0 0 0 1px var(--brass), 0 0 40px 6px rgba(233,205,138,.35);
+}
+
+/* --- декоративные свечи по бокам --- */
+.candle-deco{
+  position:fixed; z-index:0; pointer-events:none;
+  width:46px;
+  animation:candle-bob 6s ease-in-out infinite;
+  filter:drop-shadow(0 0 12px rgba(233,205,138,.35));
+}
+.candle-deco.right{ animation-delay:-3s; }
+@keyframes candle-bob{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-8px); }
+}
+.candle-deco .flame{
+  transform-origin:50% 90%;
+  animation:flame-flicker 2.2s ease-in-out infinite;
+}
+@keyframes flame-flicker{
+  0%,100%{ transform:scale(1,1) rotate(0deg); opacity:1; }
+  20%{ transform:scale(.9,1.1) rotate(-4deg); opacity:.9; }
+  45%{ transform:scale(1.08,.92) rotate(3deg); opacity:1; }
+  70%{ transform:scale(.95,1.05) rotate(-2deg); opacity:.95; }
+}
+@media (max-width:760px){ .candle-deco{ width:34px; opacity:.7; } }
+@media (max-width:520px){ .candle-deco{ display:none; } }
+
+/* --- летающие совы --- */
+.owl{
+  position:fixed; z-index:0; pointer-events:none;
+  width:38px; height:26px;
+  color:rgba(200,162,77,0.55);
+  will-change:transform;
+}
+.owl-inner{ width:100%; height:100%; }
+.owl-inner.flip{ transform:scaleX(-1); }
+.owl .wing{ transform-origin:30px 20px; animation:wing-flap .45s ease-in-out infinite; }
+.owl .wing.right{ animation-delay:.22s; }
+@keyframes wing-flap{
+  0%,100%{ transform:scaleY(1); }
+  50%{ transform:scaleY(.5); }
+}
+
+.sparkle{
+  position:absolute; width:4px; height:4px; border-radius:50%;
+  background:var(--brass-lt); opacity:0;
+  animation:sparkle 1.6s ease-in-out infinite;
+  box-shadow:0 0 8px 2px rgba(233,205,138,.8);
+}
+@keyframes sparkle{
+  0%,100%{ opacity:0; transform:scale(.4); }
+  50%{ opacity:1; transform:scale(1); }
+}
+
+footer.note{ margin-top:28px; }
+
+@media (max-width:520px){
+  body{ font-size:17px; }
+  .card{ padding:30px 22px; }
+  .qtext{ font-size:21px; }
+  .portrait{ width:150px; }
+}
