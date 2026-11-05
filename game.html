@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Гранд Лайн: настольная игра</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -75,6 +76,48 @@ table.t td,table.t th{border:1px solid var(--line);padding:3px 6px;text-align:ce
 @media (prefers-reduced-motion:reduce){.ring{animation:none}}
 @media (max-width:900px){main{grid-template-columns:minmax(0,1fr)}#map{max-height:none}}
 svg text{font-family:var(--f-display)}
+/* ===== Soft dark theme: выпуклые панели, градиенты, мягкие тени ===== */
+:root:root:root{
+  --bg:#0b100d; --panel:#1f2529; --ink:#e8efe9; --muted:#8e9d95; --line:rgba(255,255,255,.08);
+  --accent:#34c46d; --accent-ink:#04170c; --gold:#f2b84a; --danger:#ff7a4d; --good:#4fd48a;
+  --sea:#1f6f6a; --sea2:#238a52; --sea3:#9a7430; --sea4:#6b57b8; --node-hidden:#7d8a80;
+  --raise:linear-gradient(150deg,#2a3135 0%,#1b2023 100%);
+  --sunk:#121619;
+  --sh-out:6px 8px 18px rgba(0,0,0,.5),-3px -3px 10px rgba(255,255,255,.035),inset 0 1px 0 rgba(255,255,255,.07);
+  --sh-in:inset 3px 4px 9px rgba(0,0,0,.65),inset -2px -2px 6px rgba(255,255,255,.04);
+  color-scheme:dark}
+html{background:#0b100d}
+body{background:radial-gradient(900px 600px at 12% 108%,rgba(40,140,80,.22),transparent 60%),radial-gradient(800px 500px at 100% -10%,rgba(40,110,120,.14),transparent 60%),#0b100d;background-attachment:fixed}
+#top,#now,.card{background:var(--raise);border:1px solid var(--line);border-radius:20px;box-shadow:var(--sh-out)}
+#top{padding:10px 16px}
+#now{border-left:4px solid var(--accent);padding:9px 16px}
+.pill{background:var(--sunk);border:0;box-shadow:var(--sh-in);padding:4px 12px}
+.pill .dot{box-shadow:0 0 6px currentColor}
+.dot{border:0;background:var(--accent);box-shadow:0 0 8px rgba(52,196,109,.7)}
+.dot.off{background:#3a4348;box-shadow:none;opacity:1}
+.btn{background:var(--raise);border:0;border-radius:14px;padding:8px 13px;box-shadow:var(--sh-out);transition:transform .12s,box-shadow .12s,filter .12s}
+.btn:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.12);box-shadow:var(--sh-out),0 0 0 1px rgba(52,196,109,.45)}
+.btn:active:not(:disabled){transform:translateY(1px);box-shadow:var(--sh-in)}
+.btn:disabled{opacity:.4;box-shadow:none}
+.btn.primary{background:linear-gradient(150deg,#47dc83,#1b9a4e);color:#04170c;box-shadow:6px 8px 18px rgba(0,0,0,.5),0 0 18px rgba(52,196,109,.35),inset 0 1px 0 rgba(255,255,255,.35)}
+.btn.warn{background:linear-gradient(150deg,#3a2923,#241915);color:var(--danger);box-shadow:var(--sh-out),inset 0 0 0 1px rgba(255,122,77,.35)}
+#mapwrap{background:radial-gradient(120% 120% at 50% 40%,#1c7a45 0%,#13552f 55%,#0d3a21 100%);border:0;border-radius:36px;padding:14px;box-shadow:0 0 0 10px #171c1f,0 0 0 11px rgba(255,255,255,.06),inset 0 6px 30px rgba(0,0,0,.55),10px 14px 30px rgba(0,0,0,.55);margin:6px 10px 10px 6px}
+#mapwrap{align-self:start}
+.legend{color:#cfe3d5}
+.legend i{border:0;box-shadow:0 0 0 1px rgba(0,0,0,.4),0 2px 4px rgba(0,0,0,.4)}
+.pchip,.tag{background:var(--sunk);border:0;box-shadow:var(--sh-in);border-radius:12px}
+.pchip.act{box-shadow:var(--sh-in),0 0 0 2px var(--accent)}
+.crd{background:var(--sunk);border:0;border-radius:14px;box-shadow:var(--sh-in)}
+.crd.sel{background:linear-gradient(150deg,rgba(52,196,109,.28),rgba(52,196,109,.1));box-shadow:var(--sh-in),0 0 0 1px var(--accent)}
+.slot{border:2px dashed rgba(255,255,255,.14);border-radius:14px;background:rgba(0,0,0,.18)}
+.ov{background:rgba(5,8,7,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.modal{background:var(--raise);border:1px solid var(--line);border-radius:26px;box-shadow:0 30px 70px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.07);padding:20px}
+table.t td,table.t th{border-color:var(--line)}
+#log div{border-bottom:1px dashed rgba(255,255,255,.1)}
+select,input[type=text],input[type=number]{background:var(--sunk);color:var(--ink);border:0;border-radius:12px;padding:7px 10px;box-shadow:var(--sh-in)}
+.num,h1,h2,h3,#top .title{text-shadow:0 1px 0 rgba(0,0,0,.4)}
+.win{color:var(--good)}.lose{color:var(--danger)}
+
 .legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;padding:4px 6px;color:var(--muted)}
 .legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:4px;vertical-align:-1px;border:1px solid var(--ink)}
 </style>
@@ -1171,7 +1214,7 @@ function helpHtml(){
   return '<div class="ov"><div class="modal"><h2>Справка и допущения</h2>'
   +'<div class="small">Правила взяты из вашего документа «Правила игры — единая версия». Там, где в правилах или на карточках чего-то не хватало, я выбрал простое решение. Всё это можно поменять.</div>'
   +'<ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px">'
-  +'<li>Колоды заданий (обычные, понеглифов, Лафтейла) и погоды: взяты из ваших заметок и примеров, недостающие придуманы мной как заглушки. Награды за обычные задания: 15–30 Берри. «Путь к истокам»: Фунша = Ист Блю №6.</li>'
+  +'<li>Колоды заданий: ивентовые (27 карт), понеглифов (4) и Лафтейла (4) — ваши карты. Награды за ивентовые я пересчитал в масштаб игры (10–35 Берри), условия сформулированы по тексту карт; спорные места (счёт 2:0 для «Безупречной победы», Шанкс = босс 5 ур.) — моё допущение.</li>'
   +'<li>Погода: Аквалагуна ×6, Buster Call ×4, Затишье ×6, Зунеша ×4 (по морю), Калм Белт ×5 (−1 ОД всем на раунд), Шторм Гранд Лайна ×6 (все уходят на случайную безопасную соседнюю локацию), Течение Тарай ×6 (+1 ОД всем на раунд). Нами защищена от негативных эффектов погоды. Эффект на ОД действует в раунде после карты. Бомбардировка Buster Call отправляет в тюрьму на 2 хода.</li>'
   +'<li>Золотой Дэн-Дэн Муси даётся за победу над Адмиралом дозора (4 ур.). Остальные особые карты сокровищ покупаются как обычные, но неактивны, пока вы не победите в дуэли персонажа, указанного на карте (его А/У напечатаны на карте): действие «Сразиться за карту» из руки, 0 ОД, считается в лимит 3 дуэлей. Для карт с пометкой проигрыш — карта уходит в сброс.</li>'
   +'<li>Выложенные пассивные карты и открытые карты атаки после дуэли уходят в сброс; невскрытые карты атаки возвращаются в руку. Карты сокровищ с характеристиками остаются, если в тексте не сказано иное. Карты сокровищ с характеристиками (А/У) работают как 3-я пассивка; суммы по картам: Ловушка 15, Расписка 10, подпольный рынок −10.</li>'
@@ -1250,15 +1293,16 @@ function nodePos(id){
 function renderMap(){
   const R=33;
   let s='';
-  s+='<defs><radialGradient id="bgg" cx="50%" cy="50%" r="75%"><stop offset="0" stop-color="var(--panel)"/><stop offset="1" stop-color="var(--bg)"/></radialGradient></defs>';
-  s+='<rect width="1588" height="1123" fill="url(#bgg)"/>';
+  s+='<defs><radialGradient id="gloss" cx="35%" cy="28%" r="75%"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".45" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity=".28"/></radialGradient>'
+   +'<filter id="sh" x="-30%" y="-30%" width="170%" height="180%"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#000" flood-opacity=".55"/></filter>'
+   +['N:#2fb3ad','W:#3fcf7c','E:#e0aa4a','S:#9a83e6'].map(x=>{const [k,c]=x.split(':');return '<linearGradient id="z'+k+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+c+'" stop-opacity=".30"/><stop offset="1" stop-color="'+c+'" stop-opacity=".08"/></linearGradient>'}).join('')+'</defs>';
   const Z={N:[14,120,780,500,'--sea'],W:[14,590,780,1000,'--sea2'],E:[808,120,1574,500,'--sea3'],S:[808,590,1574,1000,'--sea4']};
-  for(const k in Z){const [x0,y0,x1,y1,c]=Z[k];s+='<rect x="'+x0+'" y="'+y0+'" width="'+(x1-x0)+'" height="'+(y1-y0)+'" rx="18" fill="var('+c+')" opacity=".75"/>'}
-  s+='<rect x="14" y="508" width="1560" height="78" fill="var(--sea)" opacity=".5"/><text x="794" y="552" text-anchor="middle" font-size="22" fill="var(--muted)" letter-spacing="6">ГРАНД ЛАЙН</text>';
-  s+='<rect x="764" y="90" width="60" height="930" fill="#b94a3a" opacity=".35"/><text transform="translate(800,300) rotate(-90)" font-size="20" fill="var(--muted)" letter-spacing="5">RED LINE</text>';
+  for(const k in Z){const [x0,y0,x1,y1,c]=Z[k];s+='<rect x="'+x0+'" y="'+y0+'" width="'+(x1-x0)+'" height="'+(y1-y0)+'" rx="34" fill="url(#z'+k+')" stroke="rgba(255,255,255,.18)" stroke-width="2"/>'}
+  s+='<rect x="14" y="508" width="1560" height="78" rx="20" fill="#0a2f2c" opacity=".55"/><text x="794" y="552" text-anchor="middle" font-size="22" fill="#9fd3c9" letter-spacing="6">ГРАНД ЛАЙН</text>';
+  s+='<rect x="764" y="90" width="60" height="930" rx="26" fill="#e0533f" opacity=".28"/><text transform="translate(800,300) rotate(-90)" font-size="20" fill="#f3b3a8" letter-spacing="5">RED LINE</text>';
   const lab={N:[34,160],W:[34,970],E:[1554,160],S:[1554,970]};
   for(const k in lab)s+='<text x="'+lab[k][0]+'" y="'+lab[k][1]+'" font-size="28" fill="var(--ink)" text-anchor="'+(k==='E'||k==='S'?'end':'start')+'" font-weight="700">'+SEAS[k]+'</text>';
-  for(const [a,b] of MAPD.edges){const p=MAPD.nodes[a],q=MAPD.nodes[b];s+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+q[0]+'" y2="'+q[1]+'" stroke="var(--ink)" stroke-opacity=".55" stroke-width="3"/>'}
+  for(const [a,b] of MAPD.edges){const p=MAPD.nodes[a],q=MAPD.nodes[b];s+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+q[0]+'" y2="'+q[1]+'" stroke="#e8efe9" stroke-opacity=".38" stroke-width="3" stroke-linecap="round"/>'}
   for(const r of REDL){const p=MAPD.nodes[r];s+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+MT[0]+'" y2="'+MT[1]+'" stroke="#c0392b" stroke-width="4" stroke-dasharray="10 7"/>'}
   s+='<circle cx="'+MT[0]+'" cy="'+MT[1]+'" r="26" fill="#8a6a3a" stroke="var(--ink)" stroke-width="3"/><text x="'+MT[0]+'" y="'+(MT[1]+60)+'" text-anchor="middle" font-size="16" fill="var(--ink)">Reverse Mountain</text>';
   if(G.laftel){for(const a of G.laftel.anch){const p=MAPD.nodes[a];s+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+G.laftel.x+'" y2="'+G.laftel.y+'" stroke="var(--gold)" stroke-width="3" stroke-dasharray="3 6"/>'}}
@@ -1272,7 +1316,9 @@ function renderMap(){
     const dark=t==='market'||t==='jail'||t==='battle'||t==='dozor'||t==='start';
     const isRed=REDL.includes(id);
     s+='<g data-id="'+id+'" style="cursor:'+(pickable.has(id)?'pointer':'default')+'">';
-    s+='<circle cx="'+x+'" cy="'+y+'" r="'+R+'" fill="'+fill+'" stroke="'+(isRed?'#c0392b':'var(--ink)')+'" stroke-width="'+(isRed?6:3)+'"/>';
+    s+='<circle cx="'+x+'" cy="'+y+'" r="'+R+'" fill="'+fill+'" stroke="'+(isRed?'#ff6a5a':'rgba(0,0,0,.5)')+'" stroke-width="'+(isRed?5:2.5)+'" filter="url(#sh)"/>'
+      +'<circle cx="'+x+'" cy="'+y+'" r="'+R+'" fill="url(#gloss)" pointer-events="none"/>'
+      +'<circle cx="'+x+'" cy="'+y+'" r="'+(R-6)+'" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.5" stroke-dasharray="3 5" pointer-events="none"/>';
     s+='<text x="'+x+'" y="'+(y+9)+'" text-anchor="middle" font-size="26" font-weight="700" fill="'+(dark?'#fff':'#2a2118')+'">'+numOf(id)+'</text>';
     if(!t)s+='<text x="'+(x+R-6)+'" y="'+(y-R+12)+'" font-size="16" fill="var(--ink)">?</text>';
     if(pickable.has(id))s+='<circle class="ring" cx="'+x+'" cy="'+y+'" r="'+(R+8)+'" fill="none" stroke="var(--accent)" stroke-width="5"/>';
@@ -1295,7 +1341,7 @@ function renderMap(){
       const ang=Math.PI*0.25+i*0.9;const px=x+Math.cos(ang)*(R+2),py=y+Math.sin(ang)*(R+2);
       UI.np=UI.np||{};UI.np[p.i]=[px,py];
       const op=(UI.pp||{})[p.i];const dx=op?op[0]-px:0,dy=op?op[1]-py:0;
-      s+='<g class="pawn" data-dx="'+dx+'" data-dy="'+dy+'" pointer-events="none"><circle cx="'+px+'" cy="'+py+'" r="13" fill="'+p.color+'" stroke="'+(p===P()?'var(--ink)':'#fff')+'" stroke-width="'+(p===P()?4:2)+'"/><text x="'+px+'" y="'+(py+5)+'" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">'+esc(p.name[0]||'?')+'</text></g>';
+      s+='<g class="pawn" data-dx="'+dx+'" data-dy="'+dy+'" pointer-events="none" filter="url(#sh)"><circle cx="'+px+'" cy="'+py+'" r="13" fill="'+p.color+'" stroke="'+(p===P()?'#fff':'rgba(255,255,255,.7)')+'" stroke-width="'+(p===P()?4:2)+'"/><circle cx="'+px+'" cy="'+py+'" r="13" fill="url(#gloss)"/><text x="'+px+'" y="'+(py+5)+'" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">'+esc(p.name[0]||'?')+'</text></g>';
     });
   }
   $('#map').innerHTML=s;
@@ -1396,3 +1442,5 @@ window.__g={
 render();
 })();
 </script>
+
+</body></html>
