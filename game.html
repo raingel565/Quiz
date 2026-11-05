@@ -1,0 +1,1398 @@
+<title>Гранд Лайн: настольная игра</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Philosopher:wght@400;700&display=swap">
+<style>
+/* Layout: карта слева на весь экран, панель игрока справа; на телефоне панель под картой. */
+:root{
+  --bg:#efe3c8; --panel:#f8f0dc; --ink:#2a2118; --muted:#7a6a52; --line:#c9b68e;
+  --accent:#0f5c63; --accent-ink:#ffffff; --gold:#b98a2c; --danger:#a8321f; --good:#2d7a45;
+  --sea:#bcd9d6; --sea2:#c9dcc0; --sea3:#e7d3a8; --sea4:#d6c8e0; --node-hidden:#d9bd82;
+  --f-display:'Philosopher',Georgia,serif; --f-body:'Manrope',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1b24; --panel:#17262f; --ink:#ecdfc2; --muted:#9bab9f; --line:#30464f;
+  --accent:#4fb3b8; --accent-ink:#06191c; --gold:#e0b552; --danger:#ef7a63; --good:#6cc287;
+  --sea:#1d3b45; --sea2:#243d33; --sea3:#43391f; --sea4:#33284a; --node-hidden:#6f5d3a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1b24; --panel:#17262f; --ink:#ecdfc2; --muted:#9bab9f; --line:#30464f;
+  --accent:#4fb3b8; --accent-ink:#06191c; --gold:#e0b552; --danger:#ef7a63; --good:#6cc287;
+  --sea:#1d3b45; --sea2:#243d33; --sea3:#43391f; --sea4:#33284a; --node-hidden:#6f5d3a; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.4;
+  padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px));padding-block:8px}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#app{display:flex;flex-direction:column;gap:8px;min-height:100%}
+#top{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+#top .title{font-family:var(--f-display);font-weight:700;font-size:18px}
+#top .sp{flex:1}
+#now{display:flex;flex-wrap:wrap;gap:4px 18px;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent,#1f7a8c);border-radius:10px;padding:7px 12px;font-size:13px;line-height:1.35}
+#now b{font-weight:700}
+#now .nx{color:var(--muted,#6b6354)}
+#now:empty{display:none}
+.pill{display:inline-flex;gap:6px;align-items:center;padding:2px 10px;border-radius:99px;border:1px solid var(--line);background:var(--bg);font-weight:600;white-space:nowrap}
+.dot{width:11px;height:11px;border-radius:50%;display:inline-block;border:1px solid var(--ink)}
+.dot.off{opacity:.2}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:6px 10px;font-weight:600;text-align:left}
+.btn:hover:not(:disabled){border-color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.warn{border-color:var(--danger);color:var(--danger)}
+main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:8px;flex:1;min-height:0}
+#mapwrap{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px;min-width:0}
+#map{width:100%;height:auto;display:block;max-height:calc(100vh - 80px)}
+#side{display:flex;flex-direction:column;gap:8px;min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;min-width:0}
+.card h3{font-size:15px;margin-bottom:6px}
+.plist{display:flex;flex-wrap:wrap;gap:6px}
+.pchip{display:flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:3px 8px;background:var(--bg);font-size:12px}
+.pchip.act{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.grp{display:flex;flex-direction:column;gap:5px;margin-bottom:8px}
+.grp>b{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:5px}
+.tag{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:12px;background:var(--bg)}
+.small{font-size:12px;color:var(--muted)}
+#log{max-height:200px;overflow:auto;font-size:12px;display:flex;flex-direction:column;gap:2px}
+#log div{border-bottom:1px dashed var(--line);padding-bottom:2px}
+.ov{position:fixed;inset:0;background:rgba(10,15,20,.6);display:flex;align-items:center;justify-content:center;padding:12px;z-index:50}
+.ov.solid{background:var(--bg)}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;max-width:760px;width:100%;max-height:92vh;overflow:auto;display:flex;flex-direction:column;gap:10px}
+.modal h2{font-size:21px}
+table.t{border-collapse:collapse;width:100%;font-size:13px}
+table.t td,table.t th{border:1px solid var(--line);padding:3px 6px;text-align:center}
+.chars{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.chars .btn{display:flex;flex-direction:column;gap:2px}
+.crd{border:1px solid var(--line);border-radius:8px;padding:5px 8px;background:var(--bg);display:flex;gap:8px;align-items:center;justify-content:space-between}
+.crd.sel{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,var(--bg))}
+.slot{min-height:44px;border:2px dashed var(--line);border-radius:8px;padding:4px 8px;display:flex;gap:4px;flex-wrap:wrap;align-items:center;flex:1;min-width:90px}
+.num{font-family:var(--f-display);font-weight:700;font-size:18px}
+.win{color:var(--good);font-weight:800}.lose{color:var(--danger);font-weight:800}
+.ring{animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.ring{animation:none}}
+@media (max-width:900px){main{grid-template-columns:minmax(0,1fr)}#map{max-height:none}}
+svg text{font-family:var(--f-display)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;padding:4px 6px;color:var(--muted)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:4px;vertical-align:-1px;border:1px solid var(--ink)}
+</style>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><svg id="map" viewBox="0 80 1588 960" role="img" aria-label="Игровое поле"></svg><div class="legend" id="legend"></div></section><aside id="side"></aside></main></div>
+<div id="modal"></div>
+<script>
+(function(){
+'use strict';
+const MAPD={"nodes": {"N6": [230, 246], "N1": [348, 244], "N4": [468, 261], "N5": [531, 175], "N8": [570, 268], "N3": [680, 265], "N12": [201, 367], "N2": [75, 395], "N7": [318, 405], "N11": [468, 390], "N9": [608, 366], "N10": [542, 450], "W10": [214, 665], "W6": [172, 749], "W4": [75, 716], "W1": [306, 702], "W5": [283, 795], "W7": [465, 698], "W12": [591, 708], "W2": [647, 640], "W9": [680, 778], "W3": [572, 850], "W11": [424, 888], "W8": [288, 905], "E10": [1031, 190], "E2": [1150, 217], "E5": [1333, 248], "E12": [1452, 242], "E1": [1233, 298], "E8": [1371, 334], "E3": [1500, 331], "E6": [984, 291], "E4": [905, 419], "E7": [1126, 443], "E11": [1265, 455], "E9": [1421, 431], "S2": [1044, 645], "S5": [1213, 675], "S9": [1472, 661], "S10": [1120, 717], "S7": [1359, 727], "S4": [936, 742], "S6": [1050, 821], "S12": [1500, 778], "S3": [1412, 872], "S11": [1290, 874], "S8": [1145, 892], "S1": [905, 905]}, "edges": [["N6", "N1"], ["N6", "N2"], ["N1", "N4"], ["N4", "N5"], ["N5", "N8"], ["N4", "N8"], ["N8", "N3"], ["N3", "N9"], ["N9", "N10"], ["N10", "N11"], ["N11", "N7"], ["N7", "N12"], ["N12", "N2"], ["W10", "W1"], ["W1", "W7"], ["W7", "W12"], ["W12", "W2"], ["W12", "W9"], ["W9", "W3"], ["W3", "W11"], ["W11", "W8"], ["W1", "W5"], ["W5", "W6"], ["W6", "W4"], ["W6", "W10"], ["E10", "E2"], ["E2", "E1"], ["E1", "E5"], ["E5", "E12"], ["E12", "E3"], ["E3", "E8"], ["E8", "E9"], ["E9", "E11"], ["E11", "E7"], ["E7", "E6"], ["E6", "E10"], ["E6", "E4"], ["S2", "S5"], ["S2", "S10"], ["S5", "S7"], ["S7", "S9"], ["S9", "S12"], ["S12", "S3"], ["S3", "S11"], ["S11", "S8"], ["S8", "S6"], ["S6", "S4"], ["S6", "S1"], ["S4", "S10"], ["S4", "S1"]], "mt": [794, 567]};
+const SEAS={N:'Норт Блю',W:'Вест Блю',E:'Ист Блю',S:'Саус Блю'};
+const SEAK=['N','W','E','S'];
+const REDS={N:'N10',W:'W2',E:'E4',S:'S2'};
+const REDL=Object.values(REDS);
+const MT=MAPD.mt;
+const COLORS=['#d94b3d','#2f6fdb','#e0a21a','#7a45c9','#1f9d8a','#d1569a'];
+const TYPES={start:{n:'Старт',c:'#38a85c'},event:{n:'Ивентовая (задания)',c:'#f08a2c'},base:{n:'Базовая',c:'#f4efe4'},dozor:{n:'База Дозора',c:'#3d7be0'},battle:{n:'Поле битвы',c:'#e0463a'},jail:{n:'Тюрьма',c:'#8b8f98'},market:{n:'Чёрный рынок',c:'#2b2b33'}};
+const CH={
+ zoro:{n:'Зоро',A:4,U:2,d:'Две карты атаки в одном слоте'},
+ kata:{n:'Катакури',A:4,U:7,d:'Самое высокое уклонение'},
+ luffy:{n:'Луффи',A:4,U:3,d:'+3 ко всем выложенным картам атаки'},
+ hancock:{n:'Хенкок',A:4,U:5,d:'Соперник не может использовать пассивные способности'},
+ law:{n:'Трафальгар Ло',A:5,U:3,d:'Раз в ход крадёт случайную карту у игрока из того же моря'},
+ nami:{n:'Нами',A:4,U:4,d:'Иммунитет к погоде; +5 к каждой выплате дохода'},
+ olesya:{n:'Олеся Д. Мося',A:4,U:4,d:'При взятии карты смотрит две верхние и выбирает одну'},
+ robin:{n:'Нико Робин',A:4,U:4,d:'Сама выбирает задание Лафтейла; для победы по понеглифам хватает трёх'}
+};
+const PAS={
+ will:{n:'Воля вооружения',d:'+2 к атаке в каждом раунде',c:3},
+ chopper:{n:'Тони Тони Чоппер',d:'+2 к уклонению',c:3},
+ rumble:{n:'Рамбл Болл',d:'+3 к атаке в каждом раунде, 5 Берри один раз за дуэль',c:3},
+ impact:{n:'Impact Dial',d:'Поглощает до 3 атаки соперника и добавляет к следующей карте',c:4},
+ buggy:{n:'Клоун Багги',d:'Если проиграете, соперник получит только 20 Берри и никаких трофеев',c:2},
+ barto:{n:'Бартоломео',d:'Первая карта атаки против вас аннулируется',c:4},
+ meito:{n:'Мейто',d:'Ничья в раунде считается вашей победой',c:4},
+ mihawk:{n:'Дракуль Михоук',d:'Карты 7 и 8 дают +4 к атаке',c:2}
+};
+const TRE={
+ vivre:{n:'Вивр-карта Зунеши',d:'Перемещает Зунешу на соседнюю локацию',ap:0,c:2},
+ ancient:{n:'Древняя вивр-карта Зунеши',d:'Перемещает Зунешу в любое море на ту же цифру',ap:0,c:2},
+ fraternal:{n:'Братское наследие',d:'3-я пассивка: +5 к атаке в каждом раунде',ap:null,c:1,pas:{a:5,u:0}},
+ scav:{n:'Мусорщики',d:'Взять любую карту из открытого сброса (кроме понеглифов и Лафтейла), 1 ОД',ap:1,c:4},
+ coupe:{n:'Coupe de Burst',d:'Отменить дуэль, на которую вас вызвали, и уйти на соседнюю локацию',ap:null,c:6},
+ trap:{n:'Ловушка',d:'Чтобы сбросить: 15 Берри или ещё одна карта сокровищ',ap:null,c:8},
+ escape:{n:'Побег',d:'Бесплатно выйти из тюрьмы, если проиграли дозорному или попали в тюрьму',ap:null,c:8},
+ debt:{n:'Долговая расписка',d:'Чтобы сбросить: 10 Берри или ещё одна карта сокровищ',ap:null,c:8},
+ dandan:{n:'Золотой Дэн-Дэн Муси',d:'Выдаётся за победу над Адмиралом дозора. Любая фишка локации становится белой; всё, что было на ней, уходит на ближайшую белую базу',ap:0,sp:1},
+ key:{n:'Ключ от Импел Даун',d:'Чтобы получить: победить Магеллана (А7 / У−7), при проигрыше карта в сброс. Тюрьмы вам не вредят; 1 ОД: перейти в любую открытую тюрьму',ap:1,cond:{n:'Магеллан',a:7,u:-7},lossObt:1,c:1},
+ shears:{n:'Ножницы Похитителя Теней',d:'Чтобы получить: победить Гекко Морию (А3 / У5). После победы над боссом 1–2 уровня персонаж навсегда получает +2 к атаке',ap:null,cond:{n:'Гекко Мория',a:3,u:5},c:1},
+ fist:{n:'Огненный кулак',d:'Чтобы получить: победить Эйса (А7 / У5), при проигрыше карта в сброс. 3-я пассивка: +5 к атаке; +10 к уклонению, если у соперника нет Воли вооружения',ap:null,cond:{n:'Эйс',a:7,u:5},lossObt:1,pas:{a:5,u:0},c:1},
+ marco:{n:'Феникс Марко',d:'Чтобы получить: победить Марко (А3 / У10), при проигрыше карта в сброс. 3-я пассивка: раз за дуэль проигранный раунд считается ничьей',ap:null,cond:{n:'Марко',a:3,u:10},lossObt:1,pas:{a:0,u:0},c:1},
+ poseidon:{n:'Древнее оружие Посейдон',d:'Чтобы получить: победить Короля Нептуна (А6 / У0), при проигрыше карта в сброс. Раз за игру поменять местами две открытые фишки локаций',ap:0,cond:{n:'Король Нептун',a:6,u:0},lossObt:1,c:1},
+ laxus:{n:'Лаксус Дреяр',d:'Гость. 3-я пассивка: +10 к атаке во всех раундах. Вне дуэли: громовой дождь, все игроки уходят на стартовые локации (карта сбрасывается)',ap:0,guest:1,pas:{a:10,u:0}},
+ natsu:{n:'Нацу Драгнил',d:'Гость. 3-я пассивка, сбрасывается после дуэли. Раз за дуэль «съедает огонь»: +20 к атаке в раунде, который иначе проигран или сведён вничью',ap:null,guest:1,once:1,pas:{a:0,u:0}},
+ jinwoo:{n:'Сон Джин Ву',d:'Гость. 3-я пассивка, сбрасывается после дуэли. В дуэли вместо 1d12 вы бросаете особый кубик 1d20',ap:null,guest:1,once:1,pas:{a:0,u:0}},
+ underground:{n:'Подпольный рынок',d:'Чтобы получить: победить Дофламинго (А5 / У5). Покупать карты сокровищ можно где угодно со скидкой 10',ap:null,cond:{n:'Дофламинго',a:5,u:5},c:2},
+};
+const SPECIAL_PAY={dozor:{4:['dandan']},pirate:{}};
+const activeC=c=>!TRE[c.key].cond||c.active;
+const BOSS={
+ dozor:[[1,'Солдат дозора',4,2,3],[2,'Капитан дозора',5,3,2],[3,'Вице-адмирал дозора',5,5,2],[4,'Адмирал дозора',7,5,2],[5,'Герой дозора',8,5,1]],
+ pirate:[[1,'Простой пират',4,2,3],[2,'Капитан пиратов',5,3,2],[3,'Шичибукай',5,5,2],[4,'Великий пират',4,8,2],[5,'Правитель морей',9,3,1]]
+};
+const REWARD={1:5,2:10,3:15,4:25,5:35};
+const GUESTS_OLD=[{n:'Шанкс',a:3,u:2},{n:'Дракуль Михоук',a:2,u:3},{n:'Утка (пустышка)',a:0,u:0},{n:'Клоун Багги',a:1,u:1},{n:'Гарп',a:4,u:-1}];
+const WEATHER=[
+ ...['E','W','N','S'].map(s=>({k:'zun',s,n:'Зунеша ('+SEAS[s]+')'})),
+ ...Array(6).fill({k:'aqua',n:'Аквалагуна'}),
+ ...Array(4).fill({k:'buster',n:'Buster Call'}),
+ ...Array(6).fill({k:'still',n:'Затишье'}),
+ ...Array(5).fill({k:'belt',n:'Калм Белт'}),
+ ...Array(6).fill({k:'storm',n:'Шторм Гранд Лайна'}),
+ ...Array(6).fill({k:'tarai',n:'Течение Тарай'})
+];
+const T_EVENT=[
+ {id:'e1',c:3,t:'Зачистка новичков',d:'Вступите в дуэль и победите любого Босса 1-го или 2-го уровня',k:'bossWin',lv:[1,2],o:[{r:10}],rt:'+10 Берри'},
+ {id:'e2',c:2,t:'Крупная дичь',d:'Победите Босса 4-го или 5-го уровня',k:'bossWin',lv:[4,5],o:[{r:25}],rt:'+25 Берри'},
+ {id:'e3',c:2,t:'Взятка офицеру Дозора',d:'Доберитесь до Чёрного рынка и сдайте задание там. Пока оно у вас, нельзя начинать дуэли с игроками (дуэль отменит задание и вернёт карту в колоду)',k:'bribe',o:[{pas:1}],rt:'1 карта пассивной способности'},
+ {id:'e4',c:3,t:'Заказ Мирового Правительства',d:'Выследите и победите Босса ровно 3-го уровня',k:'bossWin',lv:[3],o:[{r:15,lab:'+15 Берри'},{atk:1,lab:'1 карта атаки'}],rt:'+15 Берри ИЛИ 1 карта атаки'},
+ {id:'e5',c:2,t:'Сброс контрабанды',d:'Находясь на Чёрном рынке, добровольно сбросьте 1 любую карту сокровищ со своей руки',k:'contra',o:[{r:20}],rt:'+20 Берри'},
+ {id:'e6',c:2,t:'Испытание Воли',d:'Победите Босса 3-го или 4-го уровня, не разыграв в этом бою ни одной карты пассивных способностей',k:'bossWin',lv:[3,4],noPas:true,o:[{r:20,atk:1,lab:'+20 Берри и 1 карта атаки'},{pas:1,lab:'1 карта пассивной способности'}],rt:'+20 Берри и 1 карта атаки ИЛИ 1 карта пассивной'},
+ {id:'e7',c:3,t:'Проба сил',d:'Будучи инициатором, вступите в дуэль с любым другим игроком. Засчитывается и при поражении, если вы выиграли хотя бы один раунд',k:'pvpInit',o:[{r:10}],rt:'+10 Берри'},
+ {id:'e8',c:1,t:'Сильнейший Йонко',d:'Победите в дуэли Фигарленда Шанкса (Босс 5-го уровня)',k:'bossWin',lv:[5],o:[{r:35}],rt:'+35 Берри'},
+ {id:'e9',c:2,t:'Безупречная победа',d:'Победите Босса 2-го уровня со счётом 2:0: ни одного проигранного или сведённого вничью раунда',k:'bossWin',lv:[2],flawless:true,o:[{r:15,atk:1}],rt:'+15 Берри и 1 карта атаки'},
+ {id:'e10',c:2,t:'Перестройка арсенала',d:'Находясь на любой Базовой локации (белая фишка), добровольно сбросьте с руки ровно 3 карты атаки',k:'rebuild',o:[{r:25}],rt:'+25 Берри'},
+ {id:'e11',c:3,t:'Охотник за головами',d:'Целенаправленно отправьтесь на Поле битвы, вступите в бой с Боссом любого уровня и одержите над ним победу',k:'bossWin',o:[{r:15}],rt:'+15 Берри к обычной награде за босса'},
+ {id:'e12',c:2,t:'Форсированный марш',d:'В течение одного своего хода потратьте все доступные ОД исключительно на перемещение. В этот ход нельзя покупать карты и инициировать дуэли',k:'march',o:[{r:10}],rt:'+10 Берри'}
+];
+const T_PON=[
+ {id:'p1',t:'Кровь Завоевателя',d:'Выиграйте дуэль у другого игрока и немедленно сбросьте с руки карты атаки общей суммой 10 и более',k:'conquer',rt:'Роад-понеглиф'},
+ {id:'p2',t:'Воля Эпохи',d:'Вступите в дуэль с любым Боссом или Дозорным и одержите победу. В этом бою строго запрещено применять эффекты любых ваших пассивных способностей',k:'npcNoPas',rt:'Роад-понеглиф'},
+ {id:'p3',t:'Цена Свободы',d:'Единовременно заплатите в банк 85 Берри',k:'pay',n:85,rt:'Роад-понеглиф'},
+ {id:'p4',t:'Кругосветная Экспедиция',d:'В момент взятия задания бросьте кубик 1d12. Установите 2 пиратских флага на локации с выпавшим числом в двух морях и получите за них доход минимум 1 раз',k:'world',rt:'Роад-понеглиф'}
+];
+const T_LAF=[
+ {id:'l1',t:'Наследие Джой Боя',d:'Находясь на Лафтейле, сбросьте 2 куба понеглифа и любые 5 карт с руки',k:'heritage',rt:'Статус Короля Пиратов (победа в игре)'},
+ {id:'l2',t:'Путь сильнейшего пирата',d:'Находясь на Лафтейле, сбросьте 1 куб понеглифа и выиграйте дуэль у персонажа другого игрока',k:'duelP',rt:'Статус Короля Пиратов (победа в игре)'},
+ {id:'l3',t:'Последнее испытание',d:'Находясь на Лафтейле, сбросьте 1 куб понеглифа и победите врага 5-го уровня',k:'lvl5',rt:'Статус Короля Пиратов (победа в игре)'},
+ {id:'l4',t:'Путь Зунеши',d:'Находясь на Лафтейле, покиньте его, попадите на Зунешу и переместитесь вместе с ней, используя карту погоды или вивр-карту Зунеши. После перемещения сбросьте 1 куб понеглифа',k:'zun',rt:'Статус Короля Пиратов (победа в игре)'}
+];
+// ---------- RNG ----------
+let seedv=(Date.now()&0x7fffffff);
+function rnd(){seedv|=0;seedv=seedv+0x6D2B79F5|0;let t=Math.imul(seedv^seedv>>>15,1|seedv);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}
+const d=n=>1+Math.floor(rnd()*n);
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+let CID=1;
+const card=(kind,o)=>Object.assign({cid:CID++,kind},o);
+// ---------- graph ----------
+const ADJ={};
+function link(a,b){(ADJ[a]=ADJ[a]||[]);(ADJ[b]=ADJ[b]||[]);if(!ADJ[a].includes(b))ADJ[a].push(b);if(!ADJ[b].includes(a))ADJ[b].push(a)}
+for(const [a,b] of MAPD.edges)link(a,b);
+function baseGraph(){return ADJ}
+const seaOf=id=>id[0], numOf=id=>+id.slice(1);
+// ---------- state ----------
+let G=null, UI={viewer:-1,showRules:false,showHelp:false,prepSel:null,setup:null};
+const P=()=>G.players[G.cur];
+const log=s=>{G.log.unshift(s);if(G.log.length>250)G.log.pop()};
+const pname=p=>p.name+' ('+CH[p.ch].n+')';
+function typeOf(id){return G.type[id]||null}
+function isCombat(id){const t=G.type[id];return t==='dozor'||t==='battle'}
+function stats(p){return{A:CH[p.ch].A+p.bA,U:CH[p.ch].U+p.bU}}
+function newGame(cfg){
+  CID=1;
+  const decks={atk:[],pas:[],tre:[],weather:shuffle(WEATHER.map(w=>Object.assign({},w))),
+    tev:shuffle(T_EVENT.flatMap(x=>Array.from({length:x.c},()=>Object.assign({},x)))),tpon:shuffle(T_PON.map(x=>Object.assign({},x))),tlaf:shuffle(T_LAF.map(x=>Object.assign({},x)))};
+  for(const [v,c] of [[1,16],[3,16],[5,16],[7,14],[8,12]])for(let i=0;i<c;i++)decks.atk.push(card('atk',{v}));
+  for(const k in PAS)for(let i=0;i<PAS[k].c;i++)decks.pas.push(card('pas',{key:k}));
+  for(const k in TRE)if(!TRE[k].sp&&!TRE[k].guest)for(let i=0;i<TRE[k].c;i++)decks.tre.push(card('tre',{key:k}));
+  shuffle(decks.atk);shuffle(decks.pas);shuffle(decks.tre);
+  const specials=[];for(const k in TRE)if(TRE[k].sp)for(let i=0;i<TRE[k].sp;i++)specials.push(card('tre',{key:k,used:false}));
+  const bossD={};
+  for(const t of ['dozor','pirate']){bossD[t]=[];for(const [lv,n,a,u,c] of BOSS[t])for(let i=0;i<c;i++)bossD[t].push({lv,n,a,u,type:t});shuffle(bossD[t])}
+  for(const k in ADJ){const i=ADJ[k].indexOf('L');if(i>=0)ADJ[k].splice(i,1)}
+  delete ADJ.L;
+  const type={},boxes={};
+  for(const s of SEAK){boxes[s]=shuffle(['event','event','event','base','base','base','base','dozor','battle','jail','market']);type[s+'1']='start'}
+  G={players:[],cur:0,round:1,ap:3,duels:0,decks,discard:[],specials,bossD,type,boxes,flags:{},ponAt:{},zun:null,
+     log:[],pending:null,winner:null,endAfter:false,roll:null,search:{phase:'idle',rolls:[],veto:null},laftel:null,
+     guest:['laxus','natsu','jinwoo'][d(3)-1],guestBought:false,apMod:0,lastWeather:null,stolen:false,over:false};
+  for(const s of ['W','N','S']){const n=d(6)+d(6);G.ponAt[s+n]={owner:null}}
+  G.ponAt.Z={owner:null};
+  cfg.players.forEach((c,i)=>{
+    const p={i,name:c.name,ch:c.ch,sea:c.sea,loc:c.sea+'1',berries:20,atk:[card('atk',{v:3}),card('atk',{v:5}),card('atk',{v:7})],pas:[],tre:[],task:null,ltask:null,pon:[],fl:4,skip:0,jail:0,bA:0,bU:0,guest:null,prev:c.sea+'1',
+      cnt:{winP:0,winB:0,winD:0,winAny:0,moves:0},color:COLORS[i],poseidonUsed:false};
+    p.pas.push(decks.pas.pop(),decks.pas.pop());
+    G.players.push(p);
+  });
+  G.cur=0;log('Игра началась. Первым ходит '+pname(G.players[0])+'.');
+  UI.viewer=-1;UI.pp={};
+  beginTurn();
+}
+// ---------- helpers ----------
+function pay(p,n){p.berries-=n}
+function recycleAtk(){const a=G.discard.filter(c=>c.kind==='atk');G.discard=G.discard.filter(c=>c.kind!=='atk');G.decks.atk=shuffle(a)}
+function drawDeck(name){
+  if(name==='pas'&&!G.decks.pas.length){const a=G.discard.filter(c=>c.kind==='pas');G.discard=G.discard.filter(c=>c.kind!=='pas');G.decks.pas=shuffle(a)}
+  const D=G.decks[name];
+  if(name==='atk'&&!D.length)recycleAtk();
+  return D.length?D.shift():null;
+}
+function drawFor(p,name,cb){ // returns card via cb (olesya picks 1 of 2)
+  if(p.ch==='olesya'){
+    const a=drawDeck(name),b=drawDeck(name);
+    if(a&&b){
+      ask('pick',{who:p.i,title:'Олеся: выберите одну из двух карт',opts:[a,b].map(c=>({label:cname(c),run:()=>{const o=c===a?b:a;G.decks[name].push(o);cb(c)}}))});
+      return;
+    }
+    cb(a||b);return;
+  }
+  cb(drawDeck(name));
+}
+function cname(c){
+  if(!c)return'—';
+  if(c.kind==='atk')return'Атака '+c.v;
+  if(c.kind==='pas')return PAS[c.key].n;
+  if(c.kind==='tre')return TRE[c.key].n;
+  return'?';
+}
+function cdesc(c){if(c.kind==='atk')return'Прибавляет '+c.v+' к атаке';if(c.kind==='pas')return PAS[c.key].d;return TRE[c.key].d}
+function ask(type,data){
+  G.pending=Object.assign({type},data);
+  if(G.pending.who==null)G.pending.who=G.cur;
+}
+const optsOf=()=>G.pending.opts||[];
+function nbrsOf(p){
+  let from=p.loc,base;
+  if(from==='Z')base=(ADJ[G.zun.cell]||[]).slice();
+  else base=(ADJ[from]||[]).slice();
+  if(from!=='Z'&&G.zun)base=base.map(x=>x===G.zun.cell?'Z':x);
+  base=base.filter((x,i)=>base.indexOf(x)===i&&x!==from);
+  return base;
+}
+function revealed(id){return id==='Z'||id==='L'||!!G.type[id]}
+function drawToken(loc){
+  if(G.type[loc])return G.type[loc];
+  const s=seaOf(loc);
+  const t=G.boxes[s].pop();
+  G.type[loc]=t;
+  log('Фишка вскрыта на '+SEAS[s]+' №'+numOf(loc)+': '+TYPES[t].n+'.');
+  return t;
+}
+function nodeNum(id){return id==='Z'?numOf(G.zun.cell):(id==='L'?0:numOf(id))}
+function locName(id){if(id==='Z')return'Зунеша (остров Зоя)';if(id==='L')return'Лафтейл';return SEAS[seaOf(id)]+' №'+numOf(id)}
+function flagCount(p){return 4-p.fl}
+function playersAt(id){return G.players.filter(q=>q.loc===id)}
+// ---------- arrival ----------
+function arrive(p,loc,o,cb){
+  o=o||{};
+  p.prev=p.loc;
+  p.loc=loc;
+  if(loc!=='Z'&&loc!=='L')p.sea=seaOf(loc);
+  if(p.task&&p.task.seas)p.task.seas.add(p.sea);if(p.ltask&&p.ltask.seas)p.ltask.seas.add(p.sea);
+  const t=loc==='Z'||loc==='L'?null:drawToken(loc);
+  if(loc==='L'){log(pname(p)+' прибыл на Лафтейл!');checkLaftelArrival(p)}
+  if(o.quiet||!t){cb&&cb();return}
+  if(t==='dozor'){log(pname(p)+' попал на Базу Дозора.');startNpcFight(p,'dozor',cb);return}
+  if(t==='battle'){log(pname(p)+' вышел на Поле битвы.');startNpcFight(p,'pirate',cb);return}
+  if(t==='jail'){
+    if(hasTre(p,'key')){log(pname(p)+': Ключ от Импел Даун защищает от тюрьмы.');cb&&cb();return}
+    jailEntry(p,cb);return;
+  }
+  cb&&cb();
+}
+function hasTre(p,k){return p.tre.some(c=>c.key===k&&activeC(c))}
+function jailEntry(p,cb){
+  const o=[];
+  o.push({label:'Заплатить откуп 15 Берри',dis:p.berries<15,run:()=>{pay(p,15);log(pname(p)+' откупился из тюрьмы.');cb&&cb()}});
+  o.push({label:'Сразиться с дозорным (дуэль)',dis:G.duels>=3,run:()=>startNpcFight(p,'dozor',cb,true)});
+  const e=p.tre.find(c=>c.key==='escape');
+  if(e)o.push({label:'Сыграть «Побег»',run:()=>{discardCard(p,e);log(pname(p)+' сбежал из тюрьмы картой «Побег».');cb&&cb()}});
+  ask('jailEntry',{who:p.i,title:'Тюрьма',text:'Откупиться, сразиться с дозорным или сбежать.',opts:o,noskip:true});
+}
+// ---------- discard ----------
+function discardCard(p,c){
+  for(const k of['atk','pas','tre']){const i=p[k].indexOf(c);if(i>=0)p[k].splice(i,1)}
+  if(c.kind==='tre'&&TRE[c.key].sp){c.used=false;G.specials.push(c)}else{c.active=false;G.discard.push(c)}
+}
+function discardTre(p,c,cb){
+  const pen=c.key==='trap'?15:(c.key==='debt'?10:0);
+  if(!pen){discardCard(p,c);cb&&cb();return}
+  const others=p.tre.filter(x=>x!==c);
+  const o=[];
+  o.push({label:'Заплатить '+pen+' Берри',dis:p.berries<pen,run:()=>{pay(p,pen);discardCard(p,c);log(pname(p)+' сбросил «'+TRE[c.key].n+'» (−'+pen+').');cb&&cb()}});
+  others.forEach(x=>o.push({label:'Сбросить вместо этого «'+TRE[x.key].n+'»',run:()=>{discardTre2(p,x);discardCard(p,c);log(pname(p)+' сбросил «'+TRE[c.key].n+'» и ещё одну карту.');cb&&cb()}}));
+  o.push({label:'Отмена',run:()=>{cb&&cb(true)}});
+  ask('trap',{who:p.i,title:'Сброс «'+TRE[c.key].n+'»',text:'Нужно заплатить или сбросить ещё одну карту сокровищ.',opts:o});
+}
+function discardTre2(p,c){discardCard(p,c)}
+// ---------- income ----------
+const PAYT={2:50,12:50,3:30,11:30,4:20,10:20,5:15,9:15,6:12,8:12,7:10};
+function incomeRoll(){
+  const a=d(6),b=d(6),n=a+b;G.roll=[a,b];
+  log(pname(P())+' бросает 2d6: '+a+'+'+b+' = '+n+'.');
+  const res=[];
+  for(const q of G.players){
+    let sum=0;const flagLocs=Object.keys(G.flags).filter(l=>G.flags[l]===q.i&&numOf(l)===n);
+    let stand=q.loc!=='Z'&&q.loc!=='L'&&numOf(q.loc)===n&&!['jail','dozor','battle','start'].includes(G.type[q.loc]);
+    for(const l of flagLocs){
+      if(['jail','dozor','battle','start'].includes(G.type[l]))continue;
+      let x=PAYT[n];if(stand&&q.loc===l){x*=2;stand=false}
+      if(q.ch==='nami')x+=5;sum+=x;
+    }
+    if(stand){let x=PAYT[n];if(q.ch==='nami')x+=5;sum+=x}
+    if(sum){q.berries+=sum;res.push(q.name+' +'+sum)}
+  }
+  log(res.length?'Доход: '+res.join(', ')+'.':'Доход: никто ничего не получил.');
+  for(const q of G.players){const t=q.task;if(t&&t.def.k==='world'&&t.target===n){
+    const ls=Object.keys(G.flags).filter(l=>G.flags[l]===q.i&&numOf(l)===n&&!['jail','dozor','battle','start'].includes(G.type[l]));
+    if(new Set(ls.map(seaOf)).size>=2){t.done=true;log(q.name+': флаги кругосветной экспедиции принесли доход.')}}}
+}
+// ---------- turns ----------
+function beginTurn(){
+  const p=P();
+  G.ap=Math.max(1,3+(p.ch==='nami'?Math.max(0,G.apMod):G.apMod));G.apMax=G.ap;G.duels=0;G.turnNo=(G.turnNo||0)+1;G.tm={mv0:p.cnt.moves,buy:0,pvp:0};G.stolen=false;G.endAfter=false;
+  if(p.skip>0){p.skip--;log(pname(p)+' пропускает ход (травма).');return endTurn()}
+  if(p.jail>0){
+    const e=p.tre.find(c=>c.key==='escape');
+    const o=[{label:'Заплатить взятку 15 Берри и выйти',dis:p.berries<15,run:()=>{pay(p,15);p.jail=0;log(pname(p)+' дал взятку и вышел.');startTurnMain()}}];
+    if(e)o.push({label:'Сыграть «Побег»',run:()=>{discardCard(p,e);p.jail=0;log(pname(p)+' сбежал.');startTurnMain()}});
+    o.push({label:'Отсидеть ход (осталось '+p.jail+')',run:()=>{p.jail--;log(pname(p)+' сидит в тюрьме.');endTurn()}});
+    ask('jailTurn',{who:p.i,title:'Вы в тюрьме',text:'Осталось ходов: '+p.jail,opts:o});
+    return;
+  }
+  startTurnMain();
+}
+function startTurnMain(){incomeRoll()}
+function endTurn(){
+  if(G.winner!=null)return;
+  marchCheck(P());
+  if(P().task&&P().task.armed)P().task.armed=false;
+  G.pending=null;
+  G.cur++;
+  if(G.cur>=G.players.length){G.cur=0;endRound(beginTurn)}else beginTurn();
+}
+function endRound(cb){
+  G.round++;
+  // weather
+  if(!G.decks.weather.length){G.decks.weather=shuffle(G.weatherDiscard||[]);G.weatherDiscard=[]}
+  const w=G.decks.weather.shift();
+  if(w){
+    (G.weatherDiscard=G.weatherDiscard||[]).push(w);
+    G.lastWeather=w;log('Погода: '+w.n+'.');
+    G.apMod=0;
+    if(w.k==='zun')moveZunToSea(w.s);
+    if(w.k==='tarai')G.apMod=1;
+    if(w.k==='belt'){G.apMod=-1}
+    if(w.k==='aqua'){const n=d(12);log('Бросок 1d12: '+n+'. Флаги на локациях №'+n+' смываются.');
+      for(const l of Object.keys(G.flags)){if(numOf(l)!==n)continue;const o=G.players[G.flags[l]];if(o.ch==='nami'){log('Флаг Нами устоял (иммунитет).');continue}delete G.flags[l];o.fl++;log('Флаг '+o.name+' на '+locName(l)+' смыт.')}}
+    if(w.k==='buster'){const n=d(12);log('Бросок 1d12: '+n+'. Локации №'+n+' бомбардируются!');
+      for(const l of Object.keys(G.flags)){if(numOf(l)!==n)continue;const o=G.players[G.flags[l]];if(o.ch==='nami')continue;delete G.flags[l];o.fl++;log('Флаг '+o.name+' на '+locName(l)+' сгорел.')}
+      for(const q of G.players){if(q.ch==='nami'||q.loc==='Z'||q.loc==='L'||numOf(q.loc)!==n)continue;q.jail=2;log(q.name+' отправлен в тюрьму бомбардировкой.')}}
+    if(w.k==='storm')for(const q of G.players){
+      if(q.ch==='nami'||q.loc==='Z'||q.loc==='L')continue;
+      const opts=nbrsOf(q).filter(x=>x!=='Z'&&x!=='L'&&G.type[x]&&!['dozor','battle','jail'].includes(G.type[x]));
+      if(opts.length){const t=opts[d(opts.length)-1];q.prev=q.loc;q.loc=t;q.sea=seaOf(t);log(q.name+' унесён штормом на '+locName(t)+'.')}
+    }
+  }
+  searchStep(cb);
+}
+// ---------- Zunesha ----------
+function moveZunToSea(s){
+  let n,guard=0;
+  do{n=d(12);guard++}while(guard<30&&['jail','dozor','battle'].includes(G.type[s+n]));
+  setZun(s+n);
+}
+function setZun(cell){
+  const passengers=G.players.filter(q=>q.loc==='Z');
+  for(const q of passengers)if(q.ltask&&q.ltask.def.k==='zun'){q.ltask.moved=true;log(q.name+': Зунеша переместилась с ним на борту.')}
+  G.zun={cell};
+  for(const q of G.players){if(q.loc===cell){q.loc='Z';passengers.push(q)}}
+  log('Зунеша встала на '+locName(cell)+'.'+(passengers.length?' На борту: '+passengers.map(q=>q.name).join(', ')+'.':''));
+}
+// ---------- Laftel search ----------
+function ownersKey(){return G.players.map(p=>p.pon.length).join(',')+'|'+G.players.map(p=>p.pon.join('+')).join(';')}
+function searchStep(cb){
+  const S=G.search;
+  if(G.laftel){cb();return}
+  const total=G.players.reduce((a,p)=>a+p.pon.length,0);
+  if(S.phase==='idle'){
+    if(total<4||S.veto===ownersKey()){cb();return}
+    const owners=G.players.filter(p=>p.pon.length);
+    const next=i=>{
+      if(i>=owners.length){S.phase='rolling';log('Все владельцы понеглифов согласились. Начинается поиск Лафтейла.');doSearchRoll();cb();return}
+      ask('consent',{who:owners[i].i,title:'Поиск Лафтейла',text:'Все 4 роад-понеглифа найдены. Согласны запустить вычисление координат? Любой владелец может отказаться.',
+        opts:[{label:'Согласен',run:()=>next(i+1)},{label:'Отказываюсь (вето)',run:()=>{S.veto=ownersKey();log(owners[i].name+' наложил вето на поиск Лафтейла.');cb()}}]});
+    };
+    next(0);
+  }else if(S.phase==='rolling'){doSearchRoll();cb()}
+  else cb();
+}
+function doSearchRoll(){
+  const S=G.search,order=['E','W','N','S'];
+  if(S.rolls.length>=4)return;
+  const sea=order[S.rolls.length];
+  let sum=0;for(let i=0;i<4;i++)sum+=Math.ceil(d(6)/2);
+  const id=sea+sum;S.rolls.push(id);
+  log('Роад-понеглифы указывают на '+locName(id)+'.');
+  if(S.rolls.length===4){
+    const pt=s=>MAPD.nodes[s];
+    const [E,W,N,Sx]=S.rolls.map(pt);
+    function inter(a,b,c,dd){
+      const x1=a[0],y1=a[1],x2=b[0],y2=b[1],x3=c[0],y3=c[1],x4=dd[0],y4=dd[1];
+      const den=(x1-x2)*(y3-y4)-(y1-y2)*(x3-x4);
+      if(Math.abs(den)<1e-6)return[(x1+x2+x3+x4)/4,(y1+y2+y3+y4)/4];
+      const px=((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4))/den,py=((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4))/den;
+      return[Math.max(60,Math.min(1528,px)),Math.max(60,Math.min(1063,py))];
+    }
+    const [x,y]=inter(E,W,N,Sx);
+    G.laftel={x:Math.round(x),y:Math.round(y),anch:S.rolls.slice()};
+    for(const a of S.rolls)link('L',a);
+    log('Нитки пересеклись: появился остров Лафтейл!');
+    S.phase='done';
+  }
+}
+function checkLaftelArrival(p){
+  const need=p.ch==='robin'?3:4;
+  if(p.pon.length>=need){win(p,'собрал все роад-понеглифы и добрался до Лафтейла');}
+}
+function win(p,why){G.winner=p.i;G.pending=null;log(pname(p)+' '+why+' и становится Королём Пиратов!')}
+// ---------- tasks ----------
+function giveTask(p,cat,def,loc){
+  const t={cat,def,loc:loc||null,base:Object.assign({},p.cnt),seas:new Set([p.sea]),startSea:p.sea,target:null,done:false,takeAp:G.ap,turnNo:G.turnNo};
+  if(def.k==='world'){do{t.target=d(12)}while(t.target===1);log(p.name+': выпало '+t.target+' — нужны 2 флага на локациях №'+t.target+' в двух морях и доход с них.')}
+  return t;
+}
+function taskDone(p,t){
+  const f=t.def,c=p.cnt,b=t.base;
+  switch(f.k){
+    case'winAny':case'winP':case'winB':case'winD':case'moves':return c[f.k]-b[f.k]>=f.n;
+    case'flags':return flagCount(p)>=f.n;
+    case'hold_atk':return p.atk.length>=f.n;
+    case'hold_tre':return p.tre.length>=f.n;
+    case'othersea':return p.loc!=='Z'&&p.loc!=='L'&&seaOf(p.loc)!==t.startSea;
+    case'visitLoc':return p.loc===f.loc;
+    case'visitNum':return p.loc!=='Z'&&p.loc!=='L'&&numOf(p.loc)===t.target;
+    case'visitLow':return p.loc!=='Z'&&p.loc!=='L'&&numOf(p.loc)<=3&&seaOf(p.loc)!==t.startSea;
+    case'seas':return t.seas.size>=f.n;
+  }
+  return !!t.done;
+}
+function checkTasks(){
+  for(const p of G.players){
+    if(G.pending)return;
+    if(p.task&&taskDone(p,p.task))completeTask(p,'task');
+    if(G.winner!=null)return;
+    if(p.ltask&&taskDone(p,p.ltask))completeTask(p,'ltask');
+    if(G.winner!=null)return;
+  }
+}
+function giveCards(p,kind,n){
+  for(let i=0;i<n;i++)drawFor(p,kind,c=>{if(!c)return;if(p[kind].length<10){p[kind].push(c);log(p.name+' получает '+(kind==='atk'?'карту атаки '+c.v:'пассивку «'+PAS[c.key].n+'»')+'.')}else{G.discard.push(c);log(p.name+': рука полна, карта ушла в сброс.')}});
+}
+function applyOpt(p,o,def){
+  if(o.r){p.berries+=o.r;log(p.name+' получает +'+o.r+' Берри.')}
+  if(o.atk)giveCards(p,'atk',o.atk);
+  if(o.pas)giveCards(p,'pas',o.pas);
+}
+function taskReward(p,def){
+  const o=def.o||[];
+  if(o.length<=1){if(o[0])applyOpt(p,o[0],def);return}
+  ask('pick',{who:p.i,title:'Награда за «'+def.t+'»: выберите',opts:o.map(x=>({label:x.lab,run:()=>applyOpt(p,x,def)}))});
+}
+function cancelTask(p,why){
+  const t=p.task;if(!t)return;p.task=null;G.decks.tev.push(t.def);
+  log(p.name+': задание «'+t.def.t+'» отменено ('+why+'), карта вернулась в колоду.');
+}
+function taskEvent(p,kind,info){
+  const t=p.task;if(!t)return;
+  if(kind==='pvpWin'){if(t.def.k==='conquer')t.armed=true;return}
+  if(kind==='npcWin'){if(t.def.k==='npcNoPas'&&!info.pasUsed)t.done=true;return}
+  if(t.cat!=='ev'||t.def.k!==kind)return;
+  const f=t.def;
+  if(kind==='bossWin'){
+    if(f.lv&&!f.lv.includes(info.lv))return;
+    if(f.noPas&&info.pasUsed)return;
+    if(f.flawless&&info.lost>0)return;
+    t.done=true;
+  }else if(kind==='pvpInit'){
+    if(info.rounds>=1)t.done=true;
+  }
+}
+function marchCheck(p){
+  const t=p.task;if(!t||t.cat!=='ev'||t.def.k!=='march'||!G.tm)return;
+  if(t.turnNo===G.turnNo&&t.takeAp===G.apMax&&G.ap===0&&G.tm.buy===0&&G.tm.pvp===0&&p.cnt.moves-G.tm.mv0===G.apMax){t.done=true;completeTask(p,'task')}
+}
+function completeTask(p,slot){
+  const t=p[slot];p[slot]=null;
+  const dk=t.cat==='ev'?'tev':t.cat==='pon'?'tpon':'tlaf';
+  G.decks[dk].push(t.def);
+  if(t.cat==='ev'){log(pname(p)+' выполнил задание «'+t.def.t+'».');taskReward(p,t.def)}
+  else if(t.cat==='pon'){
+    delete G.ponAt[t.loc];p.pon.push(t.loc);
+    log(pname(p)+' выполнил «'+t.def.t+'» и получил роад-понеглиф!');
+  }else{win(p,'выполнил задание Лафтейла «'+t.def.t+'»')}
+}
+// ---------- duels ----------
+function prepKey(side){return side.p?side.p.i:-1}
+function validPrep(p,pr){
+  if(!pr)return false;
+  const ids=new Set();
+  const per=p.ch==='zoro'?2:1;
+  if(pr.slots.length>3)return false;
+  for(const sl of pr.slots){if(sl.length>per)return false;for(const id of sl){if(ids.has(id))return false;ids.add(id);if(!p.atk.find(c=>c.cid===id))return false}}
+  const pids=new Set();let reg=0,tp=0;
+  for(const id of pr.pas){if(pids.has(id))return false;pids.add(id);const c=p.pas.find(c=>c.cid===id)||p.tre.find(c=>c.cid===id&&TRE[c.key].pas&&activeC(c));if(!c)return false;if(c.kind==='pas')reg++;else tp++}
+  return reg<=2&&tp<=1;
+}
+function randomPrep(p){
+  const hand=shuffle(p.atk.slice());
+  const per=p.ch==='zoro'?2:1;
+  const slots=[];
+  for(let i=0;i<3;i++){const sl=[];for(let j=0;j<per;j++){if(hand.length&&rnd()<.9)sl.push(hand.pop().cid)}slots.push(sl)}
+  const pas=shuffle(p.pas.slice()).slice(0,Math.floor(rnd()*3)).map(c=>c.cid);
+  const tp=p.tre.filter(c=>TRE[c.key].pas&&activeC(c));
+  if(tp.length&&rnd()<.5)pas.push(tp[0].cid);
+  return{slots,pas};
+}
+function sideFromPrep(p,pr){
+  const slots=pr.slots.map(sl=>sl.map(id=>p.atk.find(c=>c.cid===id)));
+  const pas=pr.pas.map(id=>p.pas.find(c=>c.cid===id)||p.tre.find(c=>c.cid===id));
+  const s=stats(p);
+  return{p,A:s.A,U:s.U,slots,pas,ch:p.ch,name:p.name};
+}
+function runDuel(S1,S2){
+  const S=[S1,S2];
+  const st=S.map((s,i)=>{
+    const opp=S[1-i];
+    let keys=s.pas.map(c=>c.key);
+    if(opp.ch==='hancock'&&s.p)keys=[];
+    const has=k=>keys.includes(k);
+    let tA=0,tU=0;for(const c of s.pas)if(TRE[c.key]&&TRE[c.key].pas&&keys.includes(c.key)){tA+=TRE[c.key].pas.a;tU+=TRE[c.key].pas.u}
+    return{s,keys,has,tA,tU,carry:0,annul:false,marco:false,rumble:false,wins:0,placed:keys.slice()};
+  });
+  for(const x of st){if(x.has('rumble')&&x.s.p&&x.s.p.berries>=5){x.rumble=true}}
+  const rounds=[],used=[[],[]];
+  for(let r=0;r<3&&st[0].wins<2&&st[1].wins<2;r++){
+    const cur=st.map((x,i)=>{
+      const opp=st[1-i];
+      let cards=(x.s.slots[r]||[]).slice();
+      let ann=false;
+      if(cards.length&&opp.has('barto')&&!x.annul){x.annul=true;cards.shift();ann=true}
+      used[i].push(...(x.s.slots[r]||[]));
+      let val=0;
+      for(const c of cards){val+=c.v;if(x.s.ch==='luffy')val+=3;if(x.has('mihawk')&&c.v>=7)val+=4}
+      const roll=x.keys.includes('jinwoo')?d(20):d(12);
+      let pa=0;if(x.has('will'))pa+=2;if(x.rumble)pa+=3;
+      const att=x.s.A+val+roll+pa+x.tA+x.carry;
+      let ev=x.s.U+x.tU+(x.has('chopper')?2:0);
+      if(x.keys.includes('fist')&&!opp.has('will'))ev+=10;
+      return{val,roll,att,ev,ann,cs:(x.s.slots[r]||[]).map(c=>c.v),carry:x.carry,pa};
+    });
+    st.forEach(x=>x.carry=0);
+    let sc=[cur[0].att-cur[1].ev,cur[1].att-cur[0].ev];
+    const abs=[0,0];
+    for(let i=0;i<2;i++){if(st[i].has('impact')){abs[i]=3;sc[1-i]-=3;}}
+    for(let i=0;i<2;i++)if(abs[i])st[i].carry=abs[i];
+    const nat=[false,false];
+    for(let i=0;i<2;i++){if(st[i].keys.includes('natsu')&&!st[i].natsuUsed&&sc[i]<=sc[1-i]){st[i].natsuUsed=true;sc[i]+=20;nat[i]=true}}
+    let out;
+    if(sc[0]>sc[1])out=0;else if(sc[1]>sc[0])out=1;else{
+      const m0=st[0].has('meito'),m1=st[1].has('meito');
+      out=m0&&!m1?0:m1&&!m0?1:-1;
+    }
+    let marco=false;
+    if(out>=0){const l=1-out;if(st[l].keys.includes('marco')&&!st[l].marco){st[l].marco=true;out=-1;marco=true}}
+    if(out>=0)st[out].wins++;
+    rounds.push({cur,sc,out,marco,abs,nat});
+  }
+  let winner=-1;if(st[0].wins>=2)winner=0;else if(st[1].wins>=2)winner=1;
+  return{rounds,winner,st,used,w:[st[0].wins,st[1].wins]};
+}
+function applyDuelCards(res){
+  // списать открытые карты атаки, Рамбл Болл, потерю карт-сокровищ при проигрыше
+  [0,1].forEach(i=>{
+    const x=res.st[i],p=x.s.p;if(!p)return;
+    for(const c of res.used[i])discardCard(p,c);
+    if(x.rumble){p.berries-=5}
+    for(const c of x.s.pas.slice()){
+      if(c.kind==='pas'){discardCard(p,c);continue}
+      if(TRE[c.key].once){discardCard(p,c);continue}
+    }
+  });
+}
+function reqPrep(p,title,opp,cb){
+  ask('prep',{who:p.i,title,opp,cb,opts:[{label:'Случайная расстановка (авто)',run:()=>cb(randomPrep(p))}]});
+}
+function startPvp(ch,df){
+  const p=G.players[ch],q=G.players[df];
+  const cb=()=>{
+    G.duels++;
+    reqPrep(p,'Дуэль: ваша расстановка (против '+pname(q)+')',q,pp=>{
+      const a=sideFromPrep(p,pp);
+      reqPrep(q,'Дуэль: расстановка защитника (против '+pname(p)+')',p,qp=>{
+        const b=sideFromPrep(q,qp);
+        const res=runDuel(a,b);
+        applyDuelCards(res);
+        const w=res.winner;
+        const desc=w===-1?'Боевая ничья':(w===0?p.name:q.name)+' побеждает';
+        log('Дуэль '+p.name+' vs '+q.name+': '+res.w[0]+':'+res.w[1]+'. '+desc+'.');
+        ask('duelResult',{who:ch,res,names:[p.name,q.name],title:'Итог дуэли',opts:[{label:'Продолжить',run:()=>afterPvp(p,q,res)}]});
+      });
+    });
+  };
+  // Coupe de Burst
+  const cb2=q.tre.find(c=>c.key==='coupe');
+  if(cb2){
+    ask('coupe',{who:df,title:'Вас вызвал '+pname(p),text:'Сыграть «Coupe de Burst» и уйти от дуэли?',opts:[
+      {label:'Сыграть «Coupe de Burst»',run:()=>{discardCard(q,cb2);log(q.name+' отменил дуэль картой Coupe de Burst.');retreat(q,()=>{})}},
+      {label:'Принять дуэль',run:cb}]});
+  }else cb();
+}
+function afterPvp(p,q,res){
+  const w=res.winner;
+  taskEvent(p,'pvpInit',{rounds:res.w[0]});
+  if(w===-1){
+    log('Ничья: '+p.name+' уходит на соседнюю локацию.');
+    retreat(p,()=>{});return;
+  }
+  const W=w===0?p:q,L=w===0?q:p;
+  W.cnt.winP++;W.cnt.winAny++;
+  taskEvent(W,'pvpWin',{});
+  if(W.ltask&&W.ltask.def.k==='duelP'&&W.ltask.paid&&W.loc==='L')W.ltask.done=true;
+  W.berries+=20;
+  const buggy=res.st[w===0?1:0].keys.includes('buggy');
+  const finish=()=>{
+    retreat(L,()=>{if(L===p)G.endAfter=true});
+  };
+  if(buggy){log('Клоун Багги: '+W.name+' получает только 20 Берри.');finish();return}
+  const hasP=L.pon.length>0,hasT=L.tre.length>0;
+  const takeRandom=()=>{
+    const pool=[...L.atk.map(c=>['atk',c]),...L.pas.map(c=>['pas',c])];
+    if(!pool.length){finish();return}
+    const [k,c]=pool[d(pool.length)-1];
+    L[k].splice(L[k].indexOf(c),1);
+    if(W[k].length<10){W[k].push(c);log(W.name+' вслепую забирает карту у '+L.name+'.')}else G.discard.push(c);
+    finish();
+  };
+  const takeTre=()=>{
+    const c=L.tre[d(L.tre.length)-1];L.tre.splice(L.tre.indexOf(c),1);
+    if(W.tre.length<3){W.tre.push(c);log(W.name+' забирает карту сокровищ у '+L.name+'.')}else{G.discard.push(c);log(W.name+' забирает карту сокровищ, но слотов нет: она в сбросе.')}
+    finish();
+  };
+  const takePon=()=>{
+    const x=L.pon.pop();W.pon.push(x);
+    G.ponAt[x]=undefined;delete G.ponAt[x];
+    log(W.name+' забирает роад-понеглиф у '+L.name+'.');finish();
+  };
+  if(hasP||hasT){
+    const o=[];
+    if(hasP)o.push({label:'Забрать роад-понеглиф',run:takePon});
+    if(hasT)o.push({label:'Забрать случайную карту сокровищ',run:takeTre});
+    ask('loot',{who:W.i,title:'Трофей победителя',text:'Выберите, что забрать у '+L.name+'.',opts:o});
+  }else takeRandom();
+}
+// retreat: choose neighbour for player p
+function retreat(p,cb){
+  let cands=nbrsOf(p).filter(x=>x!=='L'||true);
+  const bad=x=>x!=='Z'&&x!=='L'&&(G.type[x]==='dozor'||G.type[x]==='battle');
+  let good=cands.filter(x=>!bad(x)&&x!=='L');
+  if(!good.length){
+    // ближайшая нейтральная
+    const seen=new Set([p.loc]);let fr=[p.loc];
+    for(let k=0;k<6&&!good.length;k++){
+      const nx=[];
+      for(const a of fr)for(const b of (ADJ[a]||[])){if(seen.has(b))continue;seen.add(b);nx.push(b);if(!bad(b)&&b!=='L'&&b!==(G.zun&&G.zun.cell))good.push(b)}
+      fr=nx;
+    }
+  }
+  if(!good.length){cb&&cb();return}
+  const o=good.map(x=>({label:locName(x)+(G.type[x]?' ('+TYPES[G.type[x]].n+')':x==='Z'?'':' (неизвестно)'),loc:x,run:()=>{
+    log(p.name+' отступает на '+locName(x)+'.');
+    arrive(p,x,{quiet:true},cb);
+  }}));
+  ask('retreat',{who:p.i,title:'Отступление: '+p.name,text:'Выберите соседнюю локацию.',opts:o,pick:good});
+}
+function startNpcFight(p,type,cb,fromJail){
+  const deck=G.bossD[type];
+  const b=deck.shift();deck.push(b);
+  const npcOpp={ch:'npc',name:b.n};
+  G.duels++;
+  const origin=p.prev;
+  reqPrep(p,'Бой: '+b.n+' (ур. '+b.lv+', А'+b.a+' / У'+b.u+')',{name:b.n,npc:true,A:b.a,U:b.u},pp=>{
+    const a=sideFromPrep(p,pp);
+    const bs={p:null,A:b.a,U:b.u,slots:[],pas:[],ch:'npc',name:b.n};
+    const res=runDuel(a,bs);
+    applyDuelCards(res);
+    const w=res.winner;
+    const pasUsed=a.pas.length>0;
+    log('Бой '+p.name+' vs '+b.n+': '+res.w[0]+':'+res.w[1]+'.');
+    ask('duelResult',{who:p.i,res,names:[p.name,b.n],title:'Итог боя',opts:[{label:'Продолжить',run:()=>{
+      if(w===0){
+        p.berries+=REWARD[b.lv];p.cnt.winAny++;if(type==='dozor')p.cnt.winD++;else p.cnt.winB++;
+        log(p.name+' побеждает «'+b.n+'» (+'+REWARD[b.lv]+' Берри).');
+        if(type==='pirate')taskEvent(p,'bossWin',{lv:b.lv,pasUsed,lost:res.w[1]});
+        taskEvent(p,'npcWin',{pasUsed});
+        if(p.ltask&&p.ltask.def.k==='lvl5'&&p.ltask.paid&&b.lv===5)p.ltask.done=true;
+        const sks=SPECIAL_PAY[type][b.lv]||[];
+        for(const sk of sks){const i=G.specials.findIndex(c=>c.key===sk);if(i>=0&&p.tre.length<3){const c=G.specials.splice(i,1)[0];p.tre.push(c);log(p.name+' получает особую карту «'+TRE[sk].n+'»!');break}}
+        if(b.lv<=2&&type==='pirate'){const sh=p.tre.find(c=>c.key==='shears'&&activeC(c));if(sh){discardCard(p,sh);p.bA+=2;log(p.name+' применил Ножницы Похитителя Теней: +2 к атаке навсегда.')}}
+        cb&&cb();
+      }else if(w===1){
+        if(type==='pirate'){
+          p.skip=1;log(p.name+' проиграл боссу, отступает и пропустит следующий ход.');
+          G.endAfter=true;
+          if(origin&&origin!==p.loc&&(origin==='Z'||origin==='L'||MAPD.nodes[origin])){p.loc=origin;if(origin!=='Z'&&origin!=='L')p.sea=seaOf(origin)}
+          cb&&cb();
+        }else{
+          const e=p.tre.find(c=>c.key==='escape');
+          const arrest=()=>{p.jail=2;G.endAfter=true;log(p.name+' арестован дозором: 2 хода в тюрьме.');cb&&cb()};
+          const BRIBE=15;
+          const bribeOrArrest=()=>{
+            if(p.berries>=BRIBE)ask('arrest',{who:p.i,title:'Арест',text:'Вы проиграли дозорному. Можно заплатить взятку '+BRIBE+' Берри (0 ОД) и остаться на свободе, либо принять арест: 2 хода в тюрьме.',opts:[
+              {label:'Заплатить взятку '+BRIBE+' Берри',run:()=>{pay(p,BRIBE);log(p.name+' дал взятку '+BRIBE+' Берри и избежал ареста.');cb&&cb()}},
+              {label:'Принять арест',run:arrest}]});
+            else arrest();
+          };
+          if(e&&!hasTre(p,'key'))ask('escape',{who:p.i,title:'Арест',text:'Сыграть «Побег» сразу после поражения?',opts:[
+            {label:'Сыграть «Побег»',run:()=>{discardCard(p,e);log(p.name+' избежал ареста.');retreat(p,cb)}},{label:'Нет, принять арест',run:bribeOrArrest}]});
+          else if(hasTre(p,'key')){log('Ключ от Импел Даун: арест не действует.');cb&&cb()}
+          else bribeOrArrest();
+        }
+      }else{log('Ничья с «'+b.n+'».');cb&&cb()}
+    }}]});
+  });
+}
+// ---------- treasure / actions ----------
+function uniqueFight(p,c){
+  const T=TRE[c.key],b=T.cond;
+  G.duels++;G.tm.pvp++;
+  reqPrep(p,'Дуэль за карту «'+T.n+'»: '+b.n+' (А'+b.a+' / У'+b.u+')',{name:b.n,npc:true,A:b.a,U:b.u},pp=>{
+    const a=sideFromPrep(p,pp);
+    const bs={p:null,A:b.a,U:b.u,slots:[],pas:[],ch:'npc',name:b.n};
+    const res=runDuel(a,bs);
+    applyDuelCards(res);
+    log('Дуэль за карту «'+T.n+'»: '+res.w[0]+':'+res.w[1]+'.');
+    ask('duelResult',{who:p.i,res,names:[p.name,b.n],title:'Итог дуэли за карту',opts:[{label:'Продолжить',run:()=>{
+      if(res.winner===0){c.active=true;p.cnt.winAny++;log(p.name+' побеждает персонажа «'+b.n+'»: карта «'+T.n+'» активна.')}
+      else if(res.winner===1&&T.lossObt){discardCard(p,c);log(p.name+' проиграл: карта «'+T.n+'» уходит в сброс.')}
+      else log('Карта «'+T.n+'» остаётся неактивной.');
+    }}]});
+  });
+}
+function useTre(p,c){
+  const T=TRE[c.key];
+  if(T.ap)G.ap-=T.ap;
+  const done=()=>{};
+  if(c.key==='vivre'){
+    const cell=G.zun.cell;
+    const o=(ADJ[cell]||[]).filter(x=>x!=='L'&&!['jail','dozor','battle'].includes(G.type[x])).map(x=>({label:locName(x),loc:x,run:()=>{discardCard(p,c);setZun(x)}}));
+    o.push({label:'Отмена',run:()=>{G.ap+=T.ap||0}});
+    ask('pickloc',{who:p.i,title:'Вивр-карта',text:'Куда переместить Зунешу?',opts:o,pick:o.filter(x=>x.loc).map(x=>x.loc)});
+  }else if(c.key==='ancient'){
+    const n=numOf(G.zun.cell);
+    const o=SEAK.filter(s=>!['jail','dozor','battle'].includes(G.type[s+n])&&s+n!==G.zun.cell).map(s=>({label:SEAS[s]+' №'+n,loc:s+n,run:()=>{discardCard(p,c);setZun(s+n)}}));
+    o.push({label:'Отмена',run:()=>{}});
+    ask('pickloc',{who:p.i,title:'Древняя вивр-карта',text:'В какое море?',opts:o,pick:o.filter(x=>x.loc).map(x=>x.loc)});
+  }else if(c.key==='dandan'){
+    const cand=Object.keys(G.type).filter(l=>G.type[l]!=='start'&&G.type[l]!=='base');
+    const o=cand.map(l=>({label:locName(l)+' ('+TYPES[G.type[l]].n+')',loc:l,run:()=>{
+      discardCard(p,c);G.type[l]='base';log(p.name+' превращает '+locName(l)+' в обычную базу (Дэн-Дэн Муси).');
+      const near=bfsNear(l,x=>G.type[x]==='base');
+      for(const q of G.players)if(q.loc===l&&near){q.loc=near;q.sea=seaOf(near);log(q.name+' перенесён на '+locName(near)+'.')}
+      if(G.flags[l]!=null){const ow=G.players[G.flags[l]];delete G.flags[l];if(near&&G.flags[near]==null&&!ownFlagNum(ow,near)){G.flags[near]=ow.i}else ow.fl++}
+    }}));
+    o.push({label:'Отмена',run:()=>{}});
+    ask('pickloc',{who:p.i,title:'Золотой Дэн-Дэн Муси',text:'Выберите локацию.',opts:o,pick:cand});
+  }else if(c.key==='poseidon'){
+    const cand=Object.keys(G.type).filter(l=>G.type[l]!=='start');
+    const o1=cand.map(l=>({label:locName(l)+' ('+TYPES[G.type[l]].n+')',loc:l,run:()=>{
+      const o2=cand.filter(x=>x!==l).map(x=>({label:locName(x)+' ('+TYPES[G.type[x]].n+')',loc:x,run:()=>{
+        const t=G.type[l];G.type[l]=G.type[x];G.type[x]=t;c.used=true;p.poseidonUsed=true;log(p.name+' меняет местами фишки '+locName(l)+' и '+locName(x)+'.');
+      }}));
+      o2.push({label:'Отмена',run:()=>{}});
+      ask('pickloc',{who:p.i,title:'Посейдон: вторая локация',opts:o2,pick:cand.filter(x=>x!==l)});
+    }}));
+    o1.push({label:'Отмена',run:()=>{}});
+    ask('pickloc',{who:p.i,title:'Древнее оружие Посейдон',text:'Первая локация.',opts:o1,pick:cand});
+  }else if(c.key==='scav'){
+    const pool=G.discard.filter(x=>(x.kind==='atk'&&p.atk.length<10)||(x.kind==='pas'&&p.pas.length<10)||(x.kind==='tre'&&p.tre.length<3));
+    const uniq=[];const seen={};
+    for(const x of pool){const k=x.kind+(x.v||x.key);if(!seen[k]){seen[k]=1;uniq.push(x)}}
+    const o=uniq.map(x=>({label:cname(x),run:()=>{discardCard(p,c);G.discard.splice(G.discard.indexOf(x),1);p[x.kind].push(x);log(p.name+' достаёт из сброса: '+cname(x)+'.')}}));
+    o.push({label:'Отмена',run:()=>{G.ap+=1}});
+    ask('pick',{who:p.i,title:'Мусорщики',text:'Выберите карту из открытого сброса.',opts:o});
+  }else if(c.key==='laxus'){
+    discardCard(p,c);log(p.name+' вызывает громовой дождь (Лаксус): все игроки на стартовых локациях.');
+    for(const q of G.players){q.prev=q.loc;q.loc=q.sea+'1'}
+  }else if(c.key==='key'){
+    const cand=Object.keys(G.type).filter(l=>G.type[l]==='jail'&&l!==p.loc);
+    const o=cand.map(l=>({label:locName(l),loc:l,run:()=>{log(p.name+' телепортируется в тюрьму '+locName(l)+'.');arrive(p,l,{quiet:true})}}));
+    o.push({label:'Отмена',run:()=>{G.ap+=1}});
+    ask('pickloc',{who:p.i,title:'Ключ от Импел Даун',opts:o,pick:cand});
+  }
+}
+function bfsNear(from,ok){
+  const seen=new Set([from]);let fr=[from];
+  while(fr.length){const nx=[];for(const a of fr)for(const b of (ADJ[a]||[])){if(seen.has(b))continue;seen.add(b);if(b!=='L'&&ok(b))return b;nx.push(b)}fr=nx}
+  return null;
+}
+function ownFlagNum(p,loc){const n=numOf(loc);const c=Object.keys(G.flags).filter(l=>G.flags[l]===p.i&&numOf(l)===n).length;if(p.task&&p.task.def.k==='world'&&p.task.target===n)return c>=2;return c>0}
+// ---------- action list ----------
+function actions(){
+  if(G.winner!=null)return[];
+  if(G.pending)return optsOf().map(o=>Object.assign({g:'pending'},o));
+  const p=P(),A=[],ap=G.ap;
+  const add=(g,label,run,dis)=>A.push({g,label,run,dis:!!dis});
+  // move
+  for(const t of nbrsOf(p)){
+    const cost=1;
+    let dis=ap<cost;
+    if(t!=='Z'&&t!=='L'&&isCombat(t)&&G.duels>=3)dis=true;
+    if(t==='Z'&&!G.zun)continue;
+    const lab=(t==='Z'?'Зунеша':locName(t))+(t!=='Z'&&t!=='L'&&G.type[t]?' · '+TYPES[G.type[t]].n:'');
+    A.push({g:'move',label:lab,loc:t,dis,run:()=>{
+      G.ap-=1;p.cnt.moves++;
+      log(p.name+' идёт на '+locName(t)+'.');
+      arrive(p,t,{},null);
+    }});
+  }
+  // duel
+  for(const q of G.players)if(q!==p&&q.loc===p.loc)add('duel','Вызвать на дуэль: '+pname(q)+(p.task&&p.task.def.k==='bribe'?' (отменит задание)':''),()=>{G.ap-=1;G.tm.pvp++;if(p.task&&p.task.def.k==='bribe')cancelTask(p,'дуэль с игроком');log(p.name+' вызывает '+q.name+' на дуэль.');startPvp(p.i,q.i)},ap<1||G.duels>=3);
+  // flags
+  const loc=p.loc;
+  const here=loc!=='Z'&&loc!=='L';
+  const lt=here?G.type[loc]:null;
+  if(here&&lt&&!['jail','dozor','battle'].includes(lt)){
+    const fo=G.flags[loc];
+    const ownSame=ownFlagNum(p,loc)&&!(fo===p.i);
+    if(fo==null)add('flag','Поставить флаг (2 ОД)',()=>{G.ap-=2;G.flags[loc]=p.i;p.fl--;log(p.name+' ставит флаг на '+locName(loc)+'.')},ap<2||p.fl<1||ownSame||lt==='start');
+    else if(fo!==p.i)add('flag','Сжечь флаг '+G.players[fo].name+' и поставить свой (2 ОД)',()=>{const o=G.players[fo];G.ap-=2;o.fl++;G.flags[loc]=p.i;p.fl--;log(p.name+' сжигает флаг '+o.name+' и ставит свой.')},ap<2||p.fl<1||ownSame);
+    if(fo===p.i)add('flag','Поднять свой флаг (бесплатно)',()=>{delete G.flags[loc];p.fl++;log(p.name+' поднимает свой флаг.')});
+  }
+  // poneglyph
+  if(G.ponAt[p.loc]&&G.ponAt[p.loc].owner==null)add('task','Карта понеглифа (2 ОД)',()=>{
+    G.ap-=2;
+    const def=G.decks.tpon.shift();
+    p.task=giveTask(p,'pon',def,p.loc);G.ponAt[p.loc].owner=p.i;
+    log(p.name+' читает роад-понеглиф: «'+def.t+'».');
+  },ap<2||!!p.task);
+  // laftel
+  if(p.loc==='L'&&!p.ltask){
+    const dis=ap<2||p.pon.length<1;
+    if(p.ch==='robin')add('task','Выбрать задание Лафтейла (2 ОД)',()=>{
+      G.ap-=2;
+      ask('pick',{who:p.i,title:'Нико Робин: задание Лафтейла',opts:G.decks.tlaf.map(def=>({label:def.t+' — '+def.d,run:()=>{G.decks.tlaf.splice(G.decks.tlaf.indexOf(def),1);p.ltask=giveTask(p,'laf',def);log(p.name+' выбирает задание Лафтейла «'+def.t+'».')}}))});
+    },dis);
+    else add('task','Карта Лафтейла (2 ОД)',()=>{G.ap-=2;const def=G.decks.tlaf.shift();p.ltask=giveTask(p,'laf',def);log(p.name+' тянет задание Лафтейла: «'+def.t+'».')},dis);
+  }
+  // draw cards
+  add('cards','Взять карту атаки (3 ОД)',()=>{G.ap-=3;drawFor(p,'atk',c=>{if(c){p.atk.push(c);log(p.name+' берёт карту атаки.')}})},ap<3||p.atk.length>=10);
+  add('cards','Взять пассивную способность (3 ОД)',()=>{G.ap-=3;drawFor(p,'pas',c=>{if(c){p.pas.push(c);log(p.name+' берёт пассивную способность.')}})},ap<3||p.pas.length>=10);
+  // treasure
+  for(const c of p.tre){
+    const T=TRE[c.key];
+    if(['vivre','ancient'].includes(c.key))add('tre','Сыграть: '+T.n,()=>useTre(p,c),!G.zun||ap<(T.ap||0));
+    if(c.key==='laxus')add('tre','Сыграть: Лаксус — громовой дождь',()=>useTre(p,c));
+    if(['dandan','scav','key'].includes(c.key)&&activeC(c))add('tre','Сыграть: '+T.n+(T.ap?' ('+T.ap+' ОД)':''),()=>useTre(p,c),ap<(T.ap||0)||(c.key==='key'&&!Object.keys(G.type).some(l=>G.type[l]==='jail'&&l!==p.loc)));
+    if(T.cond&&!c.active)add('tre','Сразиться за карту «'+T.n+'»: '+T.cond.n+' (А'+T.cond.a+' / У'+T.cond.u+')',()=>uniqueFight(p,c),G.duels>=3);
+    if(c.key==='poseidon'&&!c.used&&c.active)add('tre','Сыграть: '+T.n+' (раз за игру)',()=>useTre(p,c));
+    add('tre','Выбросить из руки: '+T.n+' (освободить слот)',()=>{discardTre(p,c,()=>{})});
+  }
+  // market
+  const atMarket=here&&lt==='market';
+  const disc=hasTre(p,'underground')?10:0;
+  if((atMarket||disc)&&true){
+    const price=Math.max(0,30-disc);
+    add('market','Купить карту сокровищ ('+price+' Берри)',()=>{
+      pay(p,price);G.tm.buy++;
+      drawFor(p,'tre',c=>{if(c){p.tre.push(c);log(p.name+' покупает карту сокровищ: «'+TRE[c.key].n+'».')}});
+    },p.berries<price||p.tre.length>=3);
+  }
+  if(atMarket&&!G.guestBought)add('market','Купить гостевого персонажа (50 Берри)',()=>{pay(p,50);G.tm.buy++;G.guestBought=true;const c=card('tre',{key:G.guest});p.tre.push(c);log(p.name+' нанимает гостя: «'+TRE[c.key].n+'».')},p.berries<50||p.tre.length>=3);
+  if(p.ltask){
+    const lt2=p.ltask,kk=lt2.def.k,atL=p.loc==='L';
+    const payCube=()=>{p.pon.pop();log(p.name+' сбрасывает куб роад-понеглифа.')};
+    if(kk==='heritage'&&atL){
+      const hand=()=>[...p.atk.map(c=>['atk',c]),...p.pas.map(c=>['pas',c]),...p.tre.map(c=>['tre',c])];
+      add('task','Сбросить 2 куба понеглифа и 5 карт с руки («'+lt2.def.t+'»)',()=>{
+        payCube();payCube();
+        const step=n=>{if(n===0){lt2.done=true;return}
+          ask('pick',{who:p.i,title:'Наследие Джой Боя: сбросьте карту (осталось '+n+')',opts:hand().map(([k,c])=>({label:(k==='atk'?'Атака '+c.v:cname(c)),run:()=>{if(k==='tre')discardCard(p,c);else{p[k].splice(p[k].indexOf(c),1);G.discard.push(c)}step(n-1)}}))})};
+        step(5)},p.pon.length<2||hand().length<5);
+    }
+    if((kk==='duelP'||kk==='lvl5')&&atL&&!lt2.paid)add('task','Сбросить 1 куб понеглифа («'+lt2.def.t+'»)',()=>{payCube();lt2.paid=true},p.pon.length<1);
+    if(kk==='zun'&&lt2.moved)add('task','Сбросить 1 куб понеглифа после перемещения («'+lt2.def.t+'»)',()=>{payCube();lt2.done=true},p.pon.length<1);
+  }
+  if(p.task&&p.task.def.k==='conquer'&&p.task.armed){
+    const tk=p.task,tot=p.atk.reduce((a,c)=>a+c.v,0);
+    add('task','Сбросить карты атаки суммой ≥10 («'+tk.def.t+'»)',()=>{
+      const step=sum=>ask('pick',{who:p.i,title:'Кровь Завоевателя: сбросьте карты атаки (сброшено '+sum+' из 10)',opts:p.atk.map(c=>({label:'Атака '+c.v,run:()=>{p.atk.splice(p.atk.indexOf(c),1);G.discard.push(c);if(sum+c.v>=10)tk.done=true;else step(sum+c.v)}})).concat(sum===0?[{label:'Отмена',run:()=>{}}]:[])});
+      step(0)},tot<10);
+  }
+  // event-task actions
+  if(p.task&&p.task.cat==='ev'){
+    const tk=p.task,kk=tk.def.k;
+    if(kk==='bribe'&&atMarket)add('task','Сдать «'+tk.def.t+'» на Чёрном рынке (0 ОД)',()=>{tk.done=true});
+    if(kk==='contra'&&atMarket)for(const c of p.tre)add('task','Сбросить «'+TRE[c.key].n+'» («'+tk.def.t+'»)',()=>{discardCard(p,c);tk.done=true});
+    if(kk==='rebuild'&&here&&lt==='base')add('task','Сбросить 3 карты атаки («'+tk.def.t+'»)',()=>{
+      const step=n=>{if(n===0){tk.done=true;return}
+        ask('pick',{who:p.i,title:'Перестройка арсенала: сбросьте карту атаки (осталось '+n+')',opts:p.atk.map(c=>({label:'Атака '+c.v,run:()=>{p.atk.splice(p.atk.indexOf(c),1);G.discard.push(c);step(n-1)}}))})};
+      step(3)},p.atk.length<3);
+  }
+  // tasks
+  if(here&&lt==='event'&&!p.task)add('task','Взять задание на ивентовой локации',()=>{
+    drawFor(p,'tev',def=>{p.task=giveTask(p,'ev',def);log(p.name+' берёт задание «'+def.t+'».')});
+  });
+  if(p.task){
+    const f=p.task.def;
+    if(f.k==='pay')add('task','Заплатить '+f.n+' Берри: «'+f.t+'»',()=>{pay(p,f.n);completeTask(p,'task')},p.berries<f.n);
+    if(f.k==='disc2')add('task','Сбросить 2 карты сокровищ: «'+f.t+'»',()=>{
+      const a=p.tre.slice(0,2);for(const c of a)discardCard(p,c);completeTask(p,'task');
+    },p.tre.length<2);
+    add('task','Сбросить задание (−10 Берри)',()=>{
+      pay(p,10);const t=p.task;p.task=null;if(t.cat==='pon'&&G.ponAt[t.loc])G.ponAt[t.loc].owner=null;
+      G.decks[t.cat==='pon'?'tpon':'tev'].push(t.def);log(p.name+' сбрасывает задание «'+t.def.t+'».');
+    },p.berries<10);
+  }
+  if(p.ltask){
+    const f=p.ltask.def;
+    if(f.k==='pay')add('task','Заплатить '+f.n+' Берри: «'+f.t+'»',()=>{pay(p,f.n);completeTask(p,'ltask')},p.berries<f.n);
+  }
+  // Law
+  if(p.ch==='law'&&!G.stolen){
+    for(const q of G.players)if(q!==p&&q.sea===p.sea&&(q.atk.length+q.pas.length+q.tre.length))add('cards','Ло: украсть карту у '+q.name,()=>{
+      G.stolen=true;
+      const pool=[...q.atk.map(c=>c),...q.pas,...q.tre];
+      const c=pool[d(pool.length)-1];
+      const k=c.kind;
+      if(p[k].length<(k==='tre'?3:10)){q[k].splice(q[k].indexOf(c),1);p[k].push(c);log(p.name+' крадёт карту у '+q.name+'.')}else log(p.name+' не смог унести карту: нет места.');
+    });
+  }
+  add('end','Закончить ход',()=>{log(p.name+' завершает ход.');endTurn()});
+  return A;
+}
+function act(a){
+  if(!a||a.dis||G.winner!=null)return;
+  const wasPending=!!G.pending;
+  if(wasPending){const pe=G.pending;G.pending=null;a.run();if(pe.type==='duelResult'&&!G.pending){}}
+  else a.run();
+  after();
+}
+function after(){
+  let guard=0;
+  while(guard++<5){
+    checkTasks();
+    if(G.winner!=null)break;
+    if(!G.pending&&G.endAfter){G.endAfter=false;endTurn();continue}
+    break;
+  }
+  if(!window.__nor)render();
+}
+// ---------- UI ----------
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let ACTS=[];
+function viewerNeeded(){
+  if(!G||G.winner!=null)return null;
+  const w=G.pending?G.pending.who:G.cur;
+  return w;
+}
+function render(){
+  if(!G){renderSetup();return}
+  const need=viewerNeeded();
+  $('#top').innerHTML=topHtml();
+  $('#now').innerHTML=nowHtml();
+  renderMap();
+  ACTS=actions();
+  $('#side').innerHTML=sideHtml();
+  $('#legend').innerHTML=Object.entries(TYPES).map(([k,t])=>'<span><i style="background:'+t.c+'"></i>'+t.n+'</span>').join('')+'<span><i style="background:var(--node-hidden)"></i>Фишка не вскрыта</span>';
+  let m='';
+  if(G.winner!=null)m=winHtml();
+  else if(need!=null&&G.players.length>1&&UI.viewer!==need)m=curtainHtml(need);
+  else if(G.pending&&UI.viewer===need)m=pendingHtml();
+  else if(UI.showRules)m=helpHtml();
+  $('#modal').innerHTML=m;
+  bind();
+}
+function nowHtml(){
+  if(G.winner!=null)return '<span><b>Игра окончена.</b></span>';
+  const p=P(),pe=G.pending;
+  let now,next;
+  if(pe){
+    const w=G.players[pe.who]||p;
+    const M={
+      prep:['Подготовка к дуэли: '+w.name+' выкладывает карты','Затем бросок d12 и раунды (до 2 побед из 3)'],
+      duelResult:['Идёт дуэль: раунды и броски кубиков','Затем итог: награда, трофей, отступление или арест'],
+      retreat:['Отступление после поражения: '+w.name+' выбирает локацию','Затем игра продолжается'],
+      arrest:['Проигрыш дозорному: решение о взятке','Взятка — свобода и ход продолжается; арест — 2 хода в тюрьме'],
+      escape:['Карта «Побег из тюрьмы»: сыграть или нет','Иначе — взятка или арест'],
+      jailEntry:['Тюрьма: '+w.name+' решает, как поступить','Откуп 15 Берри или бой с дозорным'],
+      jailTurn:['Ход в тюрьме: '+w.name,'Взятка, «Побег» или пропуск хода'],
+      coupe:['Вас вызвали на дуэль: можно сыграть «Coupe de Burst»','Иначе дуэль начнётся сразу'],
+      consent:['Поиск Лафтейла: нужно согласие игроков','Затем остров открывается'],
+      loot:['Трофей победителя: '+w.name+' выбирает добычу','Затем проигравший отступает'],
+      trap:['Ловушка: выбор','Затем ход продолжается']
+    };
+    const m=M[pe.type];
+    now=m?m[0]:(pe.title||'Выбор');next=m?m[1]:'';
+    if(!m&&pe.text)next=pe.text;
+  }else{
+    now='Ход '+pname(p)+': осталось ОД — '+G.ap+' из '+G.apMax+(G.duels?', дуэлей за ход: '+G.duels+'/3':'');
+    const last=G.cur===G.players.length-1;
+    next='После хода: бросок дохода 2d6 у следующего игрока'+(last?', перед этим — карта погоды раунда':'')+'.';
+  }
+  const lg=G.log&&G.log.length?G.log[0]:'';
+  return '<span><b>Сейчас:</b> '+esc(now)+'</span>'+(next?'<span class="nx"><b>Дальше:</b> '+esc(next)+'</span>':'')+(lg?'<span class="nx"><b>Только что:</b> '+esc(lg)+'</span>':'');
+}
+function topHtml(){
+  const p=P();
+  const dots=Array.from({length:Math.max(3,G.apMax||3)},(_,i)=>i).map(i=>'<span class="dot'+(i<G.ap?'':' off')+'" style="background:var(--accent)"></span>').join('');
+  return '<span class="title">Гранд Лайн</span><span class="pill">Раунд '+G.round+'</span><span class="pill"><span class="dot" style="background:'+p.color+'"></span>'+esc(pname(p))+'</span><span class="pill">ОД '+dots+'</span>'
+   +(G.roll?'<span class="pill">Кубики: '+G.roll[0]+' + '+G.roll[1]+' = '+(G.roll[0]+G.roll[1])+'</span>':'')
+   +(G.lastWeather?'<span class="pill" title="'+esc(G.lastWeather.n)+'">Погода: '+esc(G.lastWeather.n.split(':')[0])+'</span>':'')
+   +'<span class="sp"></span><button class="btn" data-ui="rules">Справка и допущения</button>';
+}
+function sideHtml(){
+  const p=P();
+  let h='<div class="card"><div class="plist">'+G.players.map(q=>'<div class="pchip'+(q===p?' act':'')+'"><span class="dot" style="background:'+q.color+'"></span><b>'+esc(q.name)+'</b> '+esc(CH[q.ch].n)+' · '+q.berries+' Б · флаги '+flagCount(q)+'/4 · понеглифы '+q.pon.length+(q.jail?' · тюрьма '+q.jail:'')+(q.skip?' · травма':'')+'</div>').join('')+'</div></div>';
+  const viewer=viewerNeeded();
+  const showHand=UI.viewer===p.i||G.players.length===1;
+  h+='<div class="card"><h3>Ход: '+esc(pname(p))+'</h3>';
+  if(G.pending&&G.pending.type!=='prep'){h+='<div class="small">Ожидается решение: '+esc(G.pending.title||'')+'</div>'}
+  else{
+    const groups={move:'Перемещение (или нажмите на карту)',duel:'Дуэль',flag:'Флаги',task:'Задания и понеглифы',cards:'Карты',tre:'Сокровища',market:'Чёрный рынок',end:''};
+    for(const g of Object.keys(groups)){
+      const items=ACTS.map((a,i)=>[a,i]).filter(([a])=>a.g===g);
+      if(!items.length)continue;
+      h+='<div class="grp">'+(groups[g]?'<b>'+groups[g]+'</b>':'')+'<div class="row">'+items.map(([a,i])=>'<button class="btn'+(g==='end'?(G.ap===0?' primary':''):'')+'" data-a="'+i+'"'+(a.dis?' disabled':'')+'>'+esc(a.label)+'</button>').join('')+'</div></div>';
+    }
+  }
+  h+='</div>';
+  if(showHand)h+=handHtml(p);
+  h+='<div class="card"><h3>Журнал</h3><div id="log">'+G.log.slice(0,60).map(l=>'<div>'+esc(l)+'</div>').join('')+'</div></div>';
+  return h;
+}
+function handHtml(p){
+  const cnt={};for(const c of p.atk)cnt[c.v]=(cnt[c.v]||0)+1;
+  const st=stats(p);
+  let h='<div class="card"><h3>Рука: '+esc(p.name)+'</h3>';
+  h+='<div class="small">'+esc(CH[p.ch].n)+': атака '+st.A+' / уклонение '+st.U+' — '+esc(CH[p.ch].d)+''+'</div>';
+  h+='<div class="grp"><b>Карты атаки ('+p.atk.length+'/10)</b><div class="row">'+Object.keys(cnt).sort((a,b)=>a-b).map(v=>'<span class="tag"><b>'+v+'</b> ×'+cnt[v]+'</span>').join('')+'</div></div>';
+  h+='<div class="grp"><b>Пассивные ('+p.pas.length+'/10)</b><div class="row">'+p.pas.map(c=>'<span class="tag" title="'+esc(PAS[c.key].d)+'">'+esc(PAS[c.key].n)+'</span>').join('')+'</div></div>';
+  h+='<div class="grp"><b>Сокровища ('+p.tre.length+'/3)</b>'+p.tre.map(c=>'<div class="small"><b>'+esc(TRE[c.key].n)+(activeC(c)?'':' (не активна)')+'</b>: '+esc(TRE[c.key].d)+'</div>').join('')+'</div>';
+  const tk=[p.task&&['Задание',p.task],p.ltask&&['Лафтейл',p.ltask]].filter(Boolean);
+  h+='<div class="grp"><b>Задания</b>'+(tk.length?tk.map(([n,t])=>'<div class="small"><b>'+n+': '+esc(t.def.t)+'</b> — '+esc(t.def.d)+(t.target?' (цель №'+t.target+')':'')+(t.def.rt?' · награда: '+esc(t.def.rt):'')+(t.paid?' [куб сброшен]':'')+(t.moved?' [Зунеша переместилась]':'')+'</div>').join(''):'<div class="small">нет</div>')+'</div>';
+  h+='<div class="small">Понеглифы: '+p.pon.length+'. Особые ходы: нажмите на соседнюю локацию на карте.</div></div>';
+  return h;
+}
+function curtainHtml(need){
+  const q=G.players[need];
+  return '<div class="ov solid"><div class="modal" style="text-align:center;align-items:center"><h2>Передайте устройство</h2><div style="font-size:20px"><span class="dot" style="background:'+q.color+';width:18px;height:18px"></span> '+esc(pname(q))+'</div><div class="small">Остальным игрокам лучше отвернуться: на экране будут ваши карты.</div><button class="btn primary" data-ui="ready" data-p="'+need+'">Я готов</button></div></div>';
+}
+function winHtml(){
+  const p=G.players[G.winner];
+  return '<div class="ov"><div class="modal" style="text-align:center;align-items:center"><h2>Король Пиратов: '+esc(pname(p))+'</h2><div>'+esc(G.log[0])+'</div><button class="btn primary" data-ui="new">Новая игра</button></div></div>';
+}
+function pendingHtml(){
+  const pe=G.pending;
+  if(pe.type==='prep')return prepHtml(pe);
+  if(pe.type==='duelResult')return resultHtml(pe);
+  const retr=pe.pick&&pe.pick.length;
+  let h='<div class="ov"><div class="modal"><h2>'+esc(pe.title||'Выбор')+'</h2>'+(pe.text?'<div>'+esc(pe.text)+'</div>':'')+'<div class="grp">';
+  ACTS.forEach((a,i)=>{h+='<button class="btn" data-a="'+i+'"'+(a.dis?' disabled':'')+'>'+esc(a.label)+'</button>'});
+  return h+'</div></div></div>';
+}
+function prepHtml(pe){
+  const p=G.players[pe.who];
+  if(!UI.prep||UI.prep.key!==pe){UI.prep={key:pe,slots:[[],[],[]],pas:[]}}
+  const S=UI.prep,per=p.ch==='zoro'?2:1;
+  const used=new Set(S.slots.flat());
+  const opp=pe.opp;
+  let h='<div class="ov"><div class="modal"><h2>'+esc(pe.title)+'</h2>';
+  h+='<div class="small">Соперник: '+esc(opp.name)+(opp.npc?' (босс: атака '+opp.A+', уклонение '+opp.U+')':' — '+esc(CH[opp.ch].n)+', атака '+stats(opp).A+' / уклонение '+stats(opp).U)+'. Серия до 2 побед, максимум 3 раунда. Раунд: атака + карта + 1d12 + пассивки − уклонение соперника.</div>';
+  const st=stats(p);
+  h+='<div class="small">Вы: атака '+st.A+' / уклонение '+st.U+'.</div>';
+  h+='<div class="grp"><b>Пассивные способности (до 2 + одна карта сокровищ как 3-я)</b><div class="row">';
+  const pl=p.pas.concat(p.tre.filter(c=>TRE[c.key].pas&&activeC(c)));
+  const pcount=S.pas.length;
+  for(const c of pl){
+    const sel=S.pas.includes(c.cid);
+    const nm=c.kind==='pas'?PAS[c.key].n:TRE[c.key].n,ds=c.kind==='pas'?PAS[c.key].d:TRE[c.key].d;
+    h+='<button class="crd'+(sel?' sel':'')+'" data-pas="'+c.cid+'" title="'+esc(ds)+'"><span>'+esc(nm)+'</span></button>';
+  }
+  if(!pl.length)h+='<span class="small">нет</span>';
+  h+='</div></div><div class="grp"><b>Карты атаки по раундам (нажмите карту, затем она встанет в первый свободный слот; нажмите на слот, чтобы вернуть)</b><div class="row">';
+  S.slots.forEach((sl,i)=>{h+='<div class="slot" data-slot="'+i+'"><span class="small">Раунд '+(i+1)+':</span> '+sl.map(id=>'<span class="tag">'+p.atk.find(c=>c.cid===id).v+'</span>').join('')+'</div>'});
+  h+='</div><div class="row">';
+  for(const c of p.atk.slice().sort((a,b)=>a.v-b.v)){if(used.has(c.cid))continue;h+='<button class="crd" data-atk="'+c.cid+'"><span class="num">'+c.v+'</span></button>'}
+  h+='</div></div><div class="row"><button class="btn primary" data-prepok="1">Готово</button><button class="btn" data-a="0">Случайно</button></div></div></div>';
+  return h;
+}
+function resultHtml(pe){
+  const res=pe.res;
+  if(!UI.dz||UI.dz.key!==pe)UI.dz={key:pe,shown:0,spin:[false,false],done:[false,false]};
+  const Z=UI.dz,n=res.rounds.length;
+  const wins=[0,0];
+  for(let r=0;r<Z.shown;r++){const o=res.rounds[r].out;if(o>=0)wins[o]++}
+  const side=i=>{
+    const x=res.st[i],s0=x.s;
+    const pas=s0.pas.map(c=>c.kind==='pas'?PAS[c.key].n:TRE[c.key].n);
+    const blocked=s0.pas.length&&!x.keys.length;
+    return '<div class="card" style="flex:1;min-width:150px"><h3>'+esc(pe.names[i])+'</h3><div class="small">'+(s0.p?esc(CH[s0.ch].n)+' · ':'')+'атака '+s0.A+' / уклонение '+s0.U+'</div>'
+      +'<div class="small">Пассивные: '+(pas.length?esc(pas.join(', ')):'нет')+(blocked?' (отключены Хенкок)':'')+'</div>'
+      +'<div style="font-size:22px;margin-top:4px">'+[0,1].map(k=>'<span style="color:'+(k<wins[i]?'var(--danger)':'var(--line)')+'">●</span>').join(' ')+'</div></div>';
+  };
+  let h='<div class="ov"><div class="modal"><h2>'+esc(pe.title)+'</h2><div class="row" style="flex-wrap:nowrap">'+side(0)+side(1)+'</div>';
+  const line=(r)=>{
+    const R=res.rounds[r],c=R.cur;
+    const part=(x,k)=>{
+      const o=x.att-res.st[k].s.A-x.val-x.roll;
+      return '<div class="small">атака '+res.st[k].s.A+' + карта '+x.val+(x.ann?' (аннулирована)':'')+' + кубик <b>'+x.roll+'</b>'+(o?' + эффекты '+(o>0?'+':'')+o:'')+' = <b>'+x.att+'</b>; уклонение соперника −'+c[1-k].ev+' → <span class="num">'+R.sc[k]+'</span></div>';
+    };
+    const out=R.out===-1?'Ничья'+(R.marco?' (Феникс Марко)':''):'<span class="win">Раунд за '+esc(pe.names[R.out])+'</span>';
+    return '<div class="card"><b>Раунд '+(r+1)+'</b><div class="row" style="flex-wrap:nowrap"><div style="flex:1;min-width:0">'+part(c[0],0)+'</div><div style="flex:1;min-width:0">'+part(c[1],1)+'</div></div><div>'+(R.nat&&(R.nat[0]||R.nat[1])?'Нацу даёт +20. ':'')+out+'</div></div>';
+  };
+  for(let r=0;r<Z.shown;r++)h+=line(r);
+  if(Z.shown<n){
+    const R=res.rounds[Z.shown],c=R.cur;
+    const box=k=>{
+      const x=c[k],hi=res.st[k].keys.includes('jinwoo')?20:12;
+      const cardTxt='Карта: '+(x.cs.length?x.cs.join(' + '):'нет')+(x.ann?' (аннулирована)':'');
+      let mid;
+      if(Z.done[k])mid='<span class="num" style="font-size:40px">'+x.roll+'</span>';
+      else if(Z.spin[k])mid='<span class="num" style="font-size:40px" id="d'+k+'">?</span>';
+      else mid='<button class="btn primary" data-dz="die" data-k="'+k+'">Бросить d'+hi+(res.st[k].s.p?'':' за босса')+'</button>';
+      return '<div style="flex:1;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center"><b>'+esc(pe.names[k])+'</b><span class="small">'+cardTxt+'</span>'+mid+'</div>';
+    };
+    h+='<div class="card"><b>Раунд '+(Z.shown+1)+'</b><div class="row" style="flex-wrap:nowrap;justify-content:space-around">'+box(0)+box(1)+'</div></div>';
+    h+='<div class="row"><button class="btn" data-dz="skip">Показать всё сразу</button></div>';
+  }
+  if(Z.shown>=n)h+='<div class="'+(res.winner===-1?'':'win')+'" style="font-size:18px">'+(res.winner===-1?'Боевая ничья':'Победа: '+esc(pe.names[res.winner]))+' ('+res.w[0]+' : '+res.w[1]+')</div><button class="btn primary" data-a="0">Продолжить</button>';
+  return h+'</div></div>';
+}
+function helpHtml(){
+  return '<div class="ov"><div class="modal"><h2>Справка и допущения</h2>'
+  +'<div class="small">Правила взяты из вашего документа «Правила игры — единая версия». Там, где в правилах или на карточках чего-то не хватало, я выбрал простое решение. Всё это можно поменять.</div>'
+  +'<ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px">'
+  +'<li>Колоды заданий (обычные, понеглифов, Лафтейла) и погоды: взяты из ваших заметок и примеров, недостающие придуманы мной как заглушки. Награды за обычные задания: 15–30 Берри. «Путь к истокам»: Фунша = Ист Блю №6.</li>'
+  +'<li>Погода: Аквалагуна ×6, Buster Call ×4, Затишье ×6, Зунеша ×4 (по морю), Калм Белт ×5 (−1 ОД всем на раунд), Шторм Гранд Лайна ×6 (все уходят на случайную безопасную соседнюю локацию), Течение Тарай ×6 (+1 ОД всем на раунд). Нами защищена от негативных эффектов погоды. Эффект на ОД действует в раунде после карты. Бомбардировка Buster Call отправляет в тюрьму на 2 хода.</li>'
+  +'<li>Золотой Дэн-Дэн Муси даётся за победу над Адмиралом дозора (4 ур.). Остальные особые карты сокровищ покупаются как обычные, но неактивны, пока вы не победите в дуэли персонажа, указанного на карте (его А/У напечатаны на карте): действие «Сразиться за карту» из руки, 0 ОД, считается в лимит 3 дуэлей. Для карт с пометкой проигрыш — карта уходит в сброс.</li>'
+  +'<li>Выложенные пассивные карты и открытые карты атаки после дуэли уходят в сброс; невскрытые карты атаки возвращаются в руку. Карты сокровищ с характеристиками остаются, если в тексте не сказано иное. Карты сокровищ с характеристиками (А/У) работают как 3-я пассивка; суммы по картам: Ловушка 15, Расписка 10, подпольный рынок −10.</li>'
+  +'<li>Гости: в партию выкладывается один из трёх (Лаксус, Нацу, Сон Джин Ву), покупается за 50 Берри как карта сокровищ (3-я пассивка). Impact Dial: −3 к итогу соперника и +3 к вашей следующей карте. Чоппер: +2 к уклонению. Рамбл Болл: 5 Берри один раз за дуэль, +3 к атаке в каждом раунде.</li>'
+  +'<li>Зунеша стоит на клетке и блокирует её; игроки с этой клетки переезжают на ней (отдельный узел «Зунеша»), там же лежит 4-й понеглиф.</li>'
+  +'<li>Лафтейл появляется на пересечении линий Ист–Вест и Норт–Саус; вход только с 4 опорных локаций. Победа также при понеглифах у одного игрока (Робин: достаточно 3).</li>'
+  +'<li>В тюрьму после ареста вы не переноситесь: остаётесь на месте и пропускаете 2 хода (или платите 15 / играете «Побег»). Игроков за столом до 4 (по одному на море).</li>'
+  +'<li>Мусорщики стоят 1 ОД. Вивр-карты и Дэн-Дэн Муси бесплатны.</li>'
+  +'</ul><button class="btn primary" data-ui="close">Закрыть</button></div></div>';
+}
+function bind(){
+  document.querySelectorAll('#modal [data-a],#side [data-a]').forEach(b=>b.onclick=()=>{const a=ACTS[+b.dataset.a];act(a)});
+  document.querySelectorAll('[data-ui]').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.ui;
+    if(k==='ready'){UI.viewer=+b.dataset.p;render()}
+    else if(k==='rules'){UI.showRules=true;render()}
+    else if(k==='close'){UI.showRules=false;render()}
+    else if(k==='new'){G=null;UI.setup=null;render()}
+  });
+  document.querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>{
+    const id=b.dataset.id;
+    const a=ACTS.find(x=>x.loc===id&&!x.dis);
+    if(a)act(a);
+  });
+  const pe=G&&G.pending;
+  document.querySelectorAll('[data-dz]').forEach(b=>b.onclick=()=>{
+    const Z=UI.dz;if(!Z||!pe)return;
+    const n=pe.res.rounds.length;
+    if(b.dataset.dz==='skip'){Z.shown=n;Z.spin=[false,false];Z.done=[false,false];render();return}
+    const k=+b.dataset.k;
+    const fast=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fin=()=>{
+      if(UI.dz!==Z||G.pending!==pe)return;
+      Z.spin[k]=false;Z.done[k]=true;render();
+      if(Z.done[0]&&Z.done[1])setTimeout(()=>{if(UI.dz===Z&&G.pending===pe){Z.shown++;Z.done=[false,false];render()}},900);
+    };
+    if(fast){fin();return}
+    Z.spin[k]=true;render();
+    const el=document.getElementById('d'+k);
+    const hi=pe.res.st[k].keys.includes('jinwoo')?20:12;
+    const tm=setInterval(()=>{if(el&&el.isConnected)el.textContent=1+Math.floor(Math.random()*hi)},60);
+    setTimeout(()=>{clearInterval(tm);fin()},800);
+  });
+  if(pe&&pe.type==='prep'){
+    const p=G.players[pe.who],S=UI.prep,per=p.ch==='zoro'?2:1;
+    document.querySelectorAll('[data-pas]').forEach(b=>b.onclick=()=>{
+      const id=+b.dataset.pas,i=S.pas.indexOf(id);
+      if(i>=0)S.pas.splice(i,1);else{
+        const c=p.pas.find(c=>c.cid===id)||p.tre.find(c=>c.cid===id);
+        const reg=S.pas.filter(x=>p.pas.find(c=>c.cid===x)).length,tp=S.pas.length-reg;
+        if(c.kind==='pas'&&reg<2)S.pas.push(id);else if(c.kind==='tre'&&tp<1)S.pas.push(id);
+      }
+      render();
+    });
+    document.querySelectorAll('[data-atk]').forEach(b=>b.onclick=()=>{
+      const id=+b.dataset.atk;const sl=S.slots.find(s=>s.length<per);if(sl){sl.push(id);render()}
+    });
+    document.querySelectorAll('[data-slot]').forEach(b=>b.onclick=()=>{S.slots[+b.dataset.slot].pop();render()});
+    const ok=document.querySelector('[data-prepok]');
+    if(ok)ok.onclick=()=>{
+      const pr={slots:S.slots.map(s=>s.slice()),pas:S.pas.slice()};
+      if(!validPrep(p,pr))return;
+      UI.prep=null;
+      const cb=pe.cb;G.pending=null;cb(pr);after();
+    };
+    const auto=document.querySelector('#modal [data-a]');
+    if(auto)auto.onclick=()=>{UI.prep=null;act(ACTS[0])};
+  }
+}
+// ---------- map ----------
+function nodePos(id){
+  if(id==='Z'){const c=MAPD.nodes[G.zun.cell];return[c[0]+34,c[1]-30]}
+  if(id==='L')return[G.laftel.x,G.laftel.y];
+  return MAPD.nodes[id];
+}
+function renderMap(){
+  const R=33;
+  let s='';
+  s+='<defs><radialGradient id="bgg" cx="50%" cy="50%" r="75%"><stop offset="0" stop-color="var(--panel)"/><stop offset="1" stop-color="var(--bg)"/></radialGradient></defs>';
+  s+='<rect width="1588" height="1123" fill="url(#bgg)"/>';
+  const Z={N:[14,120,780,500,'--sea'],W:[14,590,780,1000,'--sea2'],E:[808,120,1574,500,'--sea3'],S:[808,590,1574,1000,'--sea4']};
+  for(const k in Z){const [x0,y0,x1,y1,c]=Z[k];s+='<rect x="'+x0+'" y="'+y0+'" width="'+(x1-x0)+'" height="'+(y1-y0)+'" rx="18" fill="var('+c+')" opacity=".75"/>'}
+  s+='<rect x="14" y="508" width="1560" height="78" fill="var(--sea)" opacity=".5"/><text x="794" y="552" text-anchor="middle" font-size="22" fill="var(--muted)" letter-spacing="6">ГРАНД ЛАЙН</text>';
+  s+='<rect x="764" y="90" width="60" height="930" fill="#b94a3a" opacity=".35"/><text transform="translate(800,300) rotate(-90)" font-size="20" fill="var(--muted)" letter-spacing="5">RED LINE</text>';
+  const lab={N:[34,160],W:[34,970],E:[1554,160],S:[1554,970]};
+  for(const k in lab)s+='<text x="'+lab[k][0]+'" y="'+lab[k][1]+'" font-size="28" fill="var(--ink)" text-anchor="'+(k==='E'||k==='S'?'end':'start')+'" font-weight="700">'+SEAS[k]+'</text>';
+  for(const [a,b] of MAPD.edges){const p=MAPD.nodes[a],q=MAPD.nodes[b];s+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+q[0]+'" y2="'+q[1]+'" stroke="var(--ink)" stroke-opacity=".55" stroke-width="3"/>'}
+  for(const r of REDL){const p=MAPD.nodes[r];s+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+MT[0]+'" y2="'+MT[1]+'" stroke="#c0392b" stroke-width="4" stroke-dasharray="10 7"/>'}
+  s+='<circle cx="'+MT[0]+'" cy="'+MT[1]+'" r="26" fill="#8a6a3a" stroke="var(--ink)" stroke-width="3"/><text x="'+MT[0]+'" y="'+(MT[1]+60)+'" text-anchor="middle" font-size="16" fill="var(--ink)">Reverse Mountain</text>';
+  if(G.laftel){for(const a of G.laftel.anch){const p=MAPD.nodes[a];s+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+G.laftel.x+'" y2="'+G.laftel.y+'" stroke="var(--gold)" stroke-width="3" stroke-dasharray="3 6"/>'}}
+  const act=ACTS.filter(a=>a.loc&&!a.dis).map(a=>a.loc);
+  const pickable=new Set([...act,...((G.pending&&G.pending.pick)||[])]);
+  const ids=Object.keys(MAPD.nodes);
+  for(const id of ids){
+    const [x,y]=MAPD.nodes[id];
+    const t=G.type[id];
+    const fill=t?TYPES[t].c:'var(--node-hidden)';
+    const dark=t==='market'||t==='jail'||t==='battle'||t==='dozor'||t==='start';
+    const isRed=REDL.includes(id);
+    s+='<g data-id="'+id+'" style="cursor:'+(pickable.has(id)?'pointer':'default')+'">';
+    s+='<circle cx="'+x+'" cy="'+y+'" r="'+R+'" fill="'+fill+'" stroke="'+(isRed?'#c0392b':'var(--ink)')+'" stroke-width="'+(isRed?6:3)+'"/>';
+    s+='<text x="'+x+'" y="'+(y+9)+'" text-anchor="middle" font-size="26" font-weight="700" fill="'+(dark?'#fff':'#2a2118')+'">'+numOf(id)+'</text>';
+    if(!t)s+='<text x="'+(x+R-6)+'" y="'+(y-R+12)+'" font-size="16" fill="var(--ink)">?</text>';
+    if(pickable.has(id))s+='<circle class="ring" cx="'+x+'" cy="'+y+'" r="'+(R+8)+'" fill="none" stroke="var(--accent)" stroke-width="5"/>';
+    if(G.flags[id]!=null){const c=G.players[G.flags[id]].color;s+='<line x1="'+(x-R+2)+'" y1="'+(y-R-16)+'" x2="'+(x-R+2)+'" y2="'+(y-R+8)+'" stroke="var(--ink)" stroke-width="3"/><polygon points="'+(x-R+2)+','+(y-R-16)+' '+(x-R+24)+','+(y-R-8)+' '+(x-R+2)+','+(y-R)+'" fill="'+c+'" stroke="var(--ink)" stroke-width="1.5"/>'}
+    if(G.ponAt[id])s+='<rect x="'+(x+R-12)+'" y="'+(y-R-4)+'" width="22" height="22" transform="rotate(45 '+(x+R-1)+' '+(y-R+7)+')" fill="var(--gold)" stroke="var(--ink)" stroke-width="2"/><text x="'+(x+R-1)+'" y="'+(y-R+13)+'" text-anchor="middle" font-size="14" font-weight="700" fill="#2a2118">П</text>';
+    s+='</g>';
+  }
+  // Laftel & Zunesha
+  if(G.laftel){const {x,y}=G.laftel;const on=pickable.has('L');s+='<g data-id="L" style="cursor:pointer"><circle cx="'+x+'" cy="'+y+'" r="38" fill="var(--gold)" stroke="var(--ink)" stroke-width="4"/><text x="'+x+'" y="'+(y+6)+'" text-anchor="middle" font-size="16" font-weight="700" fill="#2a2118">Лафтейл</text>'+(on?'<circle class="ring" cx="'+x+'" cy="'+y+'" r="48" fill="none" stroke="var(--accent)" stroke-width="5"/>':'')+'</g>'}
+  if(G.zun){const [x,y]=nodePos('Z');const on=pickable.has('Z');const c=MAPD.nodes[G.zun.cell];
+    s+='<circle cx="'+c[0]+'" cy="'+c[1]+'" r="'+(R+6)+'" fill="none" stroke="#555" stroke-width="5" stroke-dasharray="6 4"/>';
+    s+='<g data-id="Z" style="cursor:pointer"><ellipse cx="'+x+'" cy="'+y+'" rx="40" ry="24" fill="#8c8f96" stroke="var(--ink)" stroke-width="3"/><text x="'+x+'" y="'+(y+5)+'" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Зунеша</text>'+(G.ponAt.Z?'<rect x="'+(x+26)+'" y="'+(y-30)+'" width="18" height="18" fill="var(--gold)" stroke="var(--ink)" stroke-width="2"/>':'')+(on?'<ellipse class="ring" cx="'+x+'" cy="'+y+'" rx="50" ry="34" fill="none" stroke="var(--accent)" stroke-width="5"/>':'')+'</g>';}
+  // players
+  UI.np={};
+  const byLoc={};
+  for(const p of G.players)(byLoc[p.loc]=byLoc[p.loc]||[]).push(p);
+  for(const loc in byLoc){
+    const [x,y]=nodePos(loc);const arr=byLoc[loc];
+    arr.forEach((p,i)=>{
+      const ang=Math.PI*0.25+i*0.9;const px=x+Math.cos(ang)*(R+2),py=y+Math.sin(ang)*(R+2);
+      UI.np=UI.np||{};UI.np[p.i]=[px,py];
+      const op=(UI.pp||{})[p.i];const dx=op?op[0]-px:0,dy=op?op[1]-py:0;
+      s+='<g class="pawn" data-dx="'+dx+'" data-dy="'+dy+'" pointer-events="none"><circle cx="'+px+'" cy="'+py+'" r="13" fill="'+p.color+'" stroke="'+(p===P()?'var(--ink)':'#fff')+'" stroke-width="'+(p===P()?4:2)+'"/><text x="'+px+'" y="'+(py+5)+'" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">'+esc(p.name[0]||'?')+'</text></g>';
+    });
+  }
+  $('#map').innerHTML=s;
+  const fast=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!fast)document.querySelectorAll('#map .pawn').forEach(g=>{
+    const dx=+g.dataset.dx,dy=+g.dataset.dy;
+    if(Math.abs(dx)+Math.abs(dy)<2)return;
+    g.style.transform='translate('+dx+'px,'+dy+'px)';
+    void g.getBoundingClientRect();
+    requestAnimationFrame(()=>{g.style.transition='transform .6s cubic-bezier(.4,.1,.2,1)';g.style.transform='translate(0,0)'});
+  });
+  UI.pp=Object.assign({},UI.np);
+}
+// ---------- setup ----------
+function renderSetup(){
+  $('#top').innerHTML='<span class="title">Гранд Лайн</span><span class="sp"></span>';
+  $('#side').innerHTML='';$('#map').innerHTML='';$('#legend').innerHTML='';
+  if(!UI.setup)UI.setup={step:'count',n:2,names:['Игрок 1','Игрок 2','Игрок 3','Игрок 4'],order:[],picks:[],cur:0};
+  const S=UI.setup;
+  let h='<div class="ov solid"><div class="modal" style="max-width:900px">';
+  if(S.step==='count'){
+    h+='<h2>Гранд Лайн: новая партия</h2><div class="small">Один экран, ходите по очереди. Играют от 2 до 4 человек, по одному в каждом море.</div>';
+    h+='<div class="row"><label>Игроков: <select id="cnt">'+[2,3,4].map(n=>'<option'+(S.n===n?' selected':'')+'>'+n+'</option>').join('')+'</select></label></div>';
+    h+='<div class="row">'+[0,1,2,3].slice(0,S.n).map(i=>'<input id="nm'+i+'" value="'+esc(S.names[i])+'" maxlength="14" style="padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)">').join('')+'</div>';
+    h+='<button class="btn primary" id="go">Бросить кубики на очерёдность</button>';
+  }else if(S.step==='roll'){
+    h+='<h2>Очерёдность хода</h2><table class="t"><tr><th>Игрок</th><th>2d6</th></tr>'+S.order.map(o=>'<tr><td>'+esc(o.name)+'</td><td>'+o.r+'</td></tr>').join('')+'</table><div class="small">Больше сумма — раньше ход. Ничьи перебрасываются. Персонажей и море выбирают по порядку.</div><button class="btn primary" id="go2">Выбирать персонажей</button>';
+  }else{
+    const pl=S.order[S.cur];
+    const taken=S.picks.map(p=>p.ch),seas=S.picks.map(p=>p.sea);
+    h+='<h2>'+esc(pl.name)+', выберите персонажа и море ('+(S.cur+1)+'/'+S.order.length+')</h2>';
+    h+='<div class="chars">'+Object.keys(CH).map(k=>'<button class="btn" data-ch="'+k+'"'+(taken.includes(k)?' disabled':'')+(S.selCh===k?' style="border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)"':'')+'><b>'+CH[k].n+'</b><span>атака '+CH[k].A+' · уклонение '+CH[k].U+'</span><span class="small">'+CH[k].d+'</span></button>').join('')+'</div>';
+    h+='<div class="row">'+SEAK.map(s=>'<button class="btn" data-sea="'+s+'"'+(seas.includes(s)?' disabled':'')+(S.selSea===s?' style="border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)"':'')+'>'+SEAS[s]+'</button>').join('')+'</div>';
+    h+='<button class="btn primary" id="pick"'+(S.selCh&&S.selSea?'':' disabled')+'>Подтвердить</button>';
+  }
+  h+='</div></div>';
+  $('#modal').innerHTML=h;
+  const g=id=>document.getElementById(id);
+  if(S.step==='count'){
+    g('cnt').onchange=e=>{S.n=+e.target.value;renderSetup()};
+    g('go').onclick=()=>{
+      S.names=S.names.map((x,i)=>{const el=g('nm'+i);return el?(el.value.trim()||x):x});
+      let list=S.names.slice(0,S.n).map(n=>({name:n,r:0}));
+      let ok=false,guard=0;
+      while(!ok&&guard++<50){list.forEach(o=>o.r=d(6)+d(6));ok=new Set(list.map(o=>o.r)).size===list.length}
+      list.sort((a,b)=>b.r-a.r);S.order=list;S.step='roll';renderSetup();
+    };
+  }else if(S.step==='roll'){g('go2').onclick=()=>{S.step='pick';renderSetup()}}
+  else{
+    document.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{S.selCh=b.dataset.ch;renderSetup()});
+    document.querySelectorAll('[data-sea]').forEach(b=>b.onclick=()=>{S.selSea=b.dataset.sea;renderSetup()});
+    g('pick').onclick=()=>{
+      S.picks.push({name:S.order[S.cur].name,ch:S.selCh,sea:S.selSea});S.selCh=null;S.selSea=null;S.cur++;
+      if(S.cur>=S.order.length){const cfg={players:S.picks.slice()};UI.setup=null;newGame(cfg);render()}else renderSetup();
+    };
+  }
+}
+// ---------- test API ----------
+window.__g={
+  render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
+  start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
+  get G(){return G},
+  actions,act,after,
+  step(){
+    // выбор случайного действия бота; пока не завершён ход, предпочитает осмысленные
+    const A=actions().filter(a=>!a.dis);
+    if(!A.length)return false;
+    let a;
+    if(G.pending){
+      if(G.pending.type==='prep'){const pe=G.pending;const p=G.players[pe.who];const pr=randomPrep(p);if(!validPrep(p,pr))throw new Error('bad random prep');G.pending=null;pe.cb(pr);after();return true}
+      a=A[Math.floor(rnd()*A.length)];
+    }else{
+      const non=A.filter(x=>x.g!=='end');
+      a=(non.length&&rnd()<.92)?non[Math.floor(rnd()*non.length)]:A.find(x=>x.g==='end');
+    }
+    act(a);return true;
+  },
+  check(){
+    const err=[];
+    const seen=new Set();
+    for(const p of G.players){
+      if(p.berries<0)err.push('berries<0 '+p.name);
+      if(p.atk.length>10||p.pas.length>10||p.tre.length>3)err.push('limit '+p.name+' '+p.atk.length+' '+p.pas.length+' '+p.tre.length);
+      if(p.fl<0||p.fl>4)err.push('fl '+p.fl);
+      if(p.fl!==4-Object.keys(G.flags).filter(l=>G.flags[l]===p.i).length)err.push('flag count mismatch '+p.name);
+      if(!p.loc||(p.loc!=='Z'&&p.loc!=='L'&&!MAPD.nodes[p.loc]))err.push('bad loc '+p.loc);
+      if(p.loc==='Z'&&!G.zun)err.push('Z without zun');
+      for(const c of [...p.atk,...p.pas,...p.tre]){if(seen.has(c.cid))err.push('dup card '+c.cid);seen.add(c.cid)}
+      if(p.pon.length+Object.keys(G.ponAt).length>4+0&&false)err.push('pon');
+    }
+    for(const c of G.discard){if(seen.has(c.cid))err.push('dup discard '+c.cid);seen.add(c.cid)}
+    const tot=G.players.reduce((a,p)=>a+p.pon.length,0)+Object.keys(G.ponAt).length;
+    if(tot!==4)err.push('poneglyph total '+tot);
+    if(G.ap<0)err.push('ap<0 '+G.ap);
+    return err;
+  }
+};
+render();
+})();
+</script>
