@@ -517,7 +517,10 @@ function revealed(id){return id==='Z'||id==='L'||!!G.type[id]}
 function drawToken(loc){
   if(G.type[loc])return G.type[loc];
   const s=seaOf(loc);
-  const t=G.boxes[s].pop();
+  let t;
+  if(G.ponAt[loc]){ // остров понеглифа сам по себе особая локация: на нём всегда обычная база
+    const bx=G.boxes[s],i=bx.lastIndexOf('base');if(i>=0)bx.splice(i,1);t='base';
+  }else t=G.boxes[s].pop();
   G.type[loc]=t;
   log('Фишка вскрыта на '+SEAS[s]+' №'+numOf(loc)+': '+TYPES[t].n+'.');
   return t;
@@ -1988,7 +1991,7 @@ window.__g={
   render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
   get G(){return G},get NET(){return NET},submit,
-  draw:(i,n)=>{G.players[i].ch='olesya';drawFor(G.players[i],n,c=>{});render()},  fxr:(...a)=>fxRoll(...a),  sfx:n=>SFX.play(n,0),SFX,  fx:(i,c)=>{fxCard(G.players[i],c)},flush:()=>{flushFx()},get tev(){return G.decks.tev[0]},clearFx:()=>{FXQ.length=0;FXBUSY=false},
+  draw:(i,n)=>{G.players[i].ch='olesya';drawFor(G.players[i],n,c=>{});render()},  reveal:l=>drawToken(l),  fxr:(...a)=>fxRoll(...a),  sfx:n=>SFX.play(n,0),SFX,  fx:(i,c)=>{fxCard(G.players[i],c)},flush:()=>{flushFx()},get tev(){return G.decks.tev[0]},clearFx:()=>{FXQ.length=0;FXBUSY=false},
   netStep(){
     if(!NET.on||!G||G.winner!=null||NET.desync||viewerNeeded()!==NET.me)return false;
     const A=actions();const pe=G.pending;
