@@ -574,6 +574,7 @@ function discardTre(p,c,cb){
 }
 function discardTre2(p,c){discardCard(p,c)}
 // ---------- income ----------
+let CARD_PRICE=10; // цена карты атаки / пассивки в Берри (одна покупка за ход)
 const PAYT={2:50,12:50,3:30,11:30,4:20,10:20,5:15,9:15,6:12,8:12,7:10};
 function incomeRoll(){
   const a=d(6),b=d(6),n=a+b;G.roll=[a,b];fxRoll('Доход · '+P().name,[a,b],6,{gate:1,who:P().i});
@@ -599,7 +600,7 @@ function incomeRoll(){
 // ---------- turns ----------
 function beginTurn(){
   const p=P();
-  G.ap=Math.max(1,3+(p.ch==='nami'?Math.max(0,G.apMod):G.apMod));G.apMax=G.ap;G.duels=0;G.turnNo=(G.turnNo||0)+1;G.tm={mv0:p.cnt.moves,buy:0,pvp:0};G.stolen=false;G.endAfter=false;
+  G.ap=Math.max(1,3+(p.ch==='nami'?Math.max(0,G.apMod):G.apMod));G.apMax=G.ap;G.duels=0;G.turnNo=(G.turnNo||0)+1;G.tm={mv0:p.cnt.moves,buy:0,pvp:0};G.stolen=false;G.cardBought=false;G.endAfter=false;
   if(p.skip>0){p.skip--;log(pname(p)+' пропускает ход (травма).');return endTurn()}
   if(p.jail>0){
     const e=p.tre.find(c=>c.key==='escape');
@@ -1143,8 +1144,8 @@ function actions(){
     else add('task','Карта Лафтейла (2 ОД)',()=>{G.ap-=2;const def=G.decks.tlaf.shift();p.ltask=giveTask(p,'laf',def);log(p.name+' тянет задание Лафтейла: «'+def.t+'».')},dis);
   }
   // draw cards
-  add('cards','Взять карту атаки (3 ОД)',()=>{G.ap-=3;drawFor(p,'atk',c=>{if(c){p.atk.push(c);fxCard(p,c);log(p.name+' берёт карту атаки.')}})},ap<3||p.atk.length>=10);
-  add('cards','Взять пассивную способность (3 ОД)',()=>{G.ap-=3;drawFor(p,'pas',c=>{if(c){p.pas.push(c);fxCard(p,c);log(p.name+' берёт пассивную способность.')}})},ap<3||p.pas.length>=10);
+  add('cards','Купить карту атаки ('+CARD_PRICE+' Берри)',()=>{pay(p,CARD_PRICE);G.cardBought=true;G.tm.buy++;drawFor(p,'atk',c=>{if(c){p.atk.push(c);fxCard(p,c);log(p.name+' покупает карту атаки.')}})},p.berries<CARD_PRICE||p.atk.length>=10||!!G.cardBought);
+  add('cards','Купить пассивную способность ('+CARD_PRICE+' Берри)',()=>{pay(p,CARD_PRICE);G.cardBought=true;G.tm.buy++;drawFor(p,'pas',c=>{if(c){p.pas.push(c);fxCard(p,c);log(p.name+' покупает пассивную способность.')}})},p.berries<CARD_PRICE||p.pas.length>=10||!!G.cardBought);
   // treasure
   for(const c of p.tre){
     const T=TRE[c.key];
@@ -1599,7 +1600,7 @@ function helpHtml(){
   +'<li>Зунеша стоит на клетке и блокирует её; игроки с этой клетки переезжают на ней (отдельный узел «Зунеша»), там же лежит 4-й понеглиф.</li>'
   +'<li>Лафтейл появляется на пересечении линий Ист–Вест и Норт–Саус; вход только с 4 опорных локаций. Победа также при понеглифах у одного игрока (Робин: достаточно 3).</li>'
   +'<li>В тюрьму после ареста вы не переноситесь: остаётесь на месте и пропускаете 2 хода (или платите 15 / играете «Побег»). Игроков за столом до 4 (по одному на море).</li>'
-  +'<li>Мусорщики стоят 1 ОД. Вивр-карты и Дэн-Дэн Муси бесплатны.</li>'
+  +'<li>Карты атаки и пассивные способности покупаются за Берри (10 за карту) и не тратят ОД. За ход можно купить только одну такую карту, в руке не больше 10 карт атаки и 10 пассивок. Мусорщики стоят 1 ОД. Вивр-карты и Дэн-Дэн Муси бесплатны.</li>'
   +'</ul><button class="btn primary" data-ui="close">Закрыть</button></div></div>';
 }
 function bind(){
@@ -1991,7 +1992,7 @@ window.__g={
   render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
   get G(){return G},get NET(){return NET},submit,
-  draw:(i,n)=>{G.players[i].ch='olesya';drawFor(G.players[i],n,c=>{});render()},  reveal:l=>drawToken(l),  fxr:(...a)=>fxRoll(...a),  sfx:n=>SFX.play(n,0),SFX,  fx:(i,c)=>{fxCard(G.players[i],c)},flush:()=>{flushFx()},get tev(){return G.decks.tev[0]},clearFx:()=>{FXQ.length=0;FXBUSY=false},
+  draw:(i,n)=>{G.players[i].ch='olesya';drawFor(G.players[i],n,c=>{});render()},  reveal:l=>drawToken(l),  setPrice:n=>{CARD_PRICE=n},get MAPD(){return MAPD},get REDL(){return REDL},get CH(){return CH},rnd:()=>rnd(),  fxr:(...a)=>fxRoll(...a),  sfx:n=>SFX.play(n,0),SFX,  fx:(i,c)=>{fxCard(G.players[i],c)},flush:()=>{flushFx()},get tev(){return G.decks.tev[0]},clearFx:()=>{FXQ.length=0;FXBUSY=false},
   netStep(){
     if(!NET.on||!G||G.winner!=null||NET.desync||viewerNeeded()!==NET.me)return false;
     const A=actions();const pe=G.pending;
