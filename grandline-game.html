@@ -469,15 +469,24 @@ function drawFor(p,name,cb){ // returns card via cb (olesya picks 1 of 2)
   if(p.ch==='olesya'){
     const a=drawDeck(name),b=drawDeck(name);
     if(a&&b){
-      ask('pick',{who:p.i,title:'Олеся: выберите одну из двух карт',opts:[a,b].map(c=>({label:cname(c),run:()=>{const o=c===a?b:a;G.decks[name].push(o);cb(c)}}))});
+      ask('pick',{who:p.i,title:'Олеся: выберите одну из двух карт',opts:[a,b].map(c=>({label:cfull(c),run:()=>{const o=c===a?b:a;G.decks[name].push(o);cb(c)}}))});
       return;
     }
     cb(a||b);return;
   }
   cb(drawDeck(name));
 }
+function cfull(c){
+  if(!c)return'—';
+  if(c.kind==='atk')return'Карта атаки +'+c.v;
+  if(c.kind==='pas')return'Пассивка «'+PAS[c.key].n+'»: '+PAS[c.key].d;
+  if(c.kind==='tre')return'Сокровище «'+TRE[c.key].n+'»: '+TRE[c.key].d;
+  if(c.t)return'Задание «'+c.t+'»: '+c.d+(c.rt?' · Награда: '+c.rt:'');
+  return'—';
+}
 function cname(c){
   if(!c)return'—';
+  if(c.t)return'Задание «'+c.t+'»';
   if(c.kind==='atk')return'Атака '+c.v;
   if(c.kind==='pas')return PAS[c.key].n;
   if(c.kind==='tre')return TRE[c.key].n;
@@ -1970,7 +1979,7 @@ window.__g={
   render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
   get G(){return G},get NET(){return NET},submit,
-  fxr:(...a)=>fxRoll(...a),  sfx:n=>SFX.play(n,0),SFX,  fx:(i,c)=>{fxCard(G.players[i],c)},flush:()=>{flushFx()},get tev(){return G.decks.tev[0]},clearFx:()=>{FXQ.length=0;FXBUSY=false},
+  draw:(i,n)=>{G.players[i].ch='olesya';drawFor(G.players[i],n,c=>{});render()},  fxr:(...a)=>fxRoll(...a),  sfx:n=>SFX.play(n,0),SFX,  fx:(i,c)=>{fxCard(G.players[i],c)},flush:()=>{flushFx()},get tev(){return G.decks.tev[0]},clearFx:()=>{FXQ.length=0;FXBUSY=false},
   netStep(){
     if(!NET.on||!G||G.winner!=null||NET.desync||viewerNeeded()!==NET.me)return false;
     const A=actions();const pe=G.pending;
