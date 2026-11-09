@@ -1812,15 +1812,40 @@ function startOnline(meta){
   render();
 }
 function netErr(e,pref){NET.err=(pref||'Ошибка')+(e&&e.message?': '+e.message:'');render()}
+
+// ---------- Firebase Realtime Database (для запуска вне Claude, напр. GitHub Pages) ----------
+const FBCFG={apiKey:"AIzaSyA16VBj4bMCLwPwPGxahLkT1bGZbt7MAM4",authDomain:"grand-line-54d48.firebaseapp.com",databaseURL:"https://grand-line-54d48-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"grand-line-54d48",storageBucket:"grand-line-54d48.firebasestorage.app",messagingSenderId:"739647385330",appId:"1:739647385330:web:2c4a8242d91edb6c4fea6b"};
+const FBV='10.12.2';
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>rej(new Error('не удалось загрузить '+src));document.head.appendChild(s)})}
+async function fbLoad(){
+  if(!window.firebase){await loadScript('https://www.gstatic.com/firebasejs/'+FBV+'/firebase-app-compat.js');await loadScript('https://www.gstatic.com/firebasejs/'+FBV+'/firebase-database-compat.js')}
+  if(!firebase.apps.length)firebase.initializeApp(FBCFG);
+  return firebase.database();
+}
+function fbDb(rdb){
+  const P=p=>p.split('/').length===2?p+'/meta':p;
+  const clean=d=>JSON.parse(JSON.stringify(d));
+  const dsnap=sn=>{const v=sn.val();return{exists:v!==null&&v!==undefined,data:()=>v}};
+  const doc=path=>({
+    async get(){return dsnap(await rdb.ref(P(path)).once('value'))},
+    async set(d){await rdb.ref(P(path)).set(clean(d))},
+    async update(d){await rdb.ref(P(path)).update(clean(d))},
+    onSnapshot(cb,err){const r=rdb.ref(P(path));const h=r.on('value',s=>cb(dsnap(s)),e=>err&&err(e));return()=>r.off('value',h)}
+  });
+  const collection=path=>({onSnapshot(cb,err){const r=rdb.ref(path);const h=r.on('value',s=>{const docs=[];s.forEach(c=>{docs.push({id:c.key,data:()=>c.val()})});cb({docs})},e=>err&&err(e));return()=>r.off('value',h)}});
+  return{doc,collection};
+}
+function localUid(){if(window.__uid)return window.__uid;let u='';try{u=localStorage.getItem('gl_uid')||''}catch(e){}if(!u){u='u'+Math.random().toString(36).slice(2,10)+Date.now().toString(36);try{localStorage.setItem('gl_uid',u)}catch(e){}}return u}
 async function netInit(){
   if(NET.db)return true;
-  try{
-    if(!window.claude||!claude.use)throw new Error('сетевой режим работает только на опубликованной странице в Claude');
-    const db=await claude.use('db'),user=await claude.use('user');
-    if(!db||!user)throw new Error('нет доступа к общему хранилищу: войдите в аккаунт, владелец должен выдать вам доступ Contributor');
-    const id=await user.id();if(!id)throw new Error('не удалось определить пользователя');
-    NET.db=db;NET.uid=safeId(id);return true;
-  }catch(e){NET.err=e.message||String(e);return false}
+  if(window.claude&&claude.use){
+    try{
+      const db=await claude.use('db'),user=await claude.use('user');
+      if(db&&user){const id=await user.id();if(id){NET.db=db;NET.uid=safeId(id);return true}}
+    }catch(e){}
+  }
+  try{NET.db=fbDb(await fbLoad());NET.uid=safeId(localUid());return true}
+  catch(e){NET.err='Нет связи с сервером игры: '+(e.message||e);return false}
 }
 async function netJoin(code,create){
   NET.err='';NET.busy=true;render();
