@@ -233,6 +233,12 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 #mapwrap{background:#fff!important;border:3px solid #5a3b1f!important;border-radius:22px!important;padding:8px!important;box-shadow:0 0 0 6px #171c1f,0 12px 34px rgba(0,0,0,.45)!important}
 #mapwrap .legend,#mapwrap .legend span{color:#5a3b1f!important}
 #mapwrap .legend i{border:1.5px solid #5a3b1f!important;box-shadow:none!important}
+.dscene.pons{width:170px;height:190px;filter:drop-shadow(0 10px 10px #0008)}
+.pons .dwrap{scale:1.5}
+.pons .dwrap{width:74px;height:104px}
+.pon{position:relative;width:74px;height:104px;transform-style:preserve-3d}
+.pf{position:absolute;inset:0;background-size:100% 100%;backface-visibility:hidden;box-shadow:inset 0 0 14px #0009}
+.pf.cap{background:#6e1d12;height:74px;top:15px;width:74px}
 #evfx.out{animation:dfout .28s ease both}
 .evc{max-width:440px;width:100%;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:22px 24px;border-radius:24px;background:linear-gradient(145deg,#2a3236,#1b2124);box-shadow:var(--sh-out,0 10px 30px #0008);color:#eaf3ee;animation:evpop .35s cubic-bezier(.3,1.5,.5,1) both}
 @keyframes evpop{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
@@ -1104,8 +1110,9 @@ function actions(){
   if(G.ponAt[p.loc]&&G.ponAt[p.loc].owner==null)add('task','Карта понеглифа (2 ОД)',()=>{
     G.ap-=2;
     const def=G.decks.tpon.shift();
+    const pn=T_PON.findIndex(x=>x.id===def.id)+1;fxRoll('Понеглиф · '+p.name,[pn],4,{kind:'pon',gate:1,who:p.i});
     p.task=giveTask(p,'pon',def,p.loc);G.ponAt[p.loc].owner=p.i;
-    log(p.name+' читает роад-понеглиф: «'+def.t+'».');
+    log(p.name+' читает роад-понеглиф №'+pn+': «'+def.t+'».');
   },ap<2||!!p.task);
   // laftel
   if(p.loc==='L'&&!p.ltask){
@@ -1232,6 +1239,26 @@ function viewerNeeded(){
 // ---------- анимация кубиков (только визуальная, на ход игры не влияет) ----------
 const DROT={1:[0,0],2:[0,-90],3:[90,0],4:[-90,0],5:[0,90],6:[0,180]};
 const DPIPS={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+
+// ---------- понеглиф-кость (4 грани: 1–4) ----------
+const PONFACE={};
+function ponFaceUrl(n){
+  if(PONFACE[n])return PONFACE[n];
+  let sd=n*7919+13;const rnd=()=>{sd=(sd*16807)%2147483647;return sd/2147483647};
+  let g='';
+  for(let c=0;c<5;c++){const x=14+c*11.5;for(let r=0;r<4;r++){
+    const y=62+r*9.4,k=Math.floor(rnd()*4);let d='M'+x+' '+y+' v6';
+    if(k===0)d+=' M'+(x-3)+' '+(y+1)+' h6';
+    else if(k===1)d+=' M'+(x-3)+' '+(y+3)+' h6 M'+(x-2)+' '+y+' h4';
+    else if(k===2)d+=' M'+x+' '+y+' q4 -1 3 3 M'+(x-3)+' '+(y+4)+' h6';
+    else d+=' M'+(x-3)+' '+(y+1)+' q3 -3 6 0 M'+(x-3)+' '+(y+5)+' h6';
+    g+='<path d="'+d+'" />'}}
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 74 104" width="148" height="208"><defs><linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c0432a"/><stop offset=".55" stop-color="#9a2e1c"/><stop offset="1" stop-color="#6e1d12"/></linearGradient><filter id="n" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="'+n+'"/><feColorMatrix values="0 0 0 0 .1  0 0 0 0 .03  0 0 0 0 .02  0 0 0 .55 0"/></filter></defs><rect width="74" height="104" fill="url(#a)"/><rect width="74" height="104" filter="url(#n)"/><rect x="2.5" y="2.5" width="69" height="99" fill="none" stroke="#3a0e07" stroke-width="1.6" opacity=".7"/><g fill="none" stroke="#2a0a06" stroke-width="2" stroke-linecap="round" opacity=".88">'+g+'</g><circle cx="37" cy="30" r="21" fill="#7a2415" stroke="#2a0a06" stroke-width="2"/><circle cx="37" cy="30" r="17" fill="none" stroke="#e8c27a" stroke-width="1" opacity=".7"/><text x="37" y="43" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="800" font-size="34" fill="#f3d79b" stroke="#2a0a06" stroke-width=".8">'+n+'</text></svg>';
+  return PONFACE[n]="url('data:image/svg+xml,"+encodeURIComponent(svg).replace(/'/g,'%27')+"')";
+}
+function ponDie(){
+  return '<div class="dscene pons"><div class="dwrap"><div class="pon">'+[1,2,3,4].map(n=>'<div class="pf" style="transform:rotateY('+(n-1)*90+'deg) translateZ(37px);background-image:'+ponFaceUrl(n)+'"></div>').join('')+'<div class="pf cap" style="transform:rotateX(90deg) translateZ(52px)"></div><div class="pf cap" style="transform:rotateX(-90deg) translateZ(52px)"></div></div></div></div>';
+}
 const FXQ=[];
 function fxRoll(label,vals,sides,opt){if(window.__nor)return;FXQ.push(Object.assign({t:'d',label,vals:vals.slice(),sides:sides||6},opt||{}))}
 function fxEvent(ev){if(window.__nor)return;FXQ.push(Object.assign({t:'e'},ev))}
@@ -1312,21 +1339,24 @@ function diceFx(rows,done){
   const old=document.getElementById('dicefx');if(old)old.remove();
   const o=document.createElement('div');o.id='dicefx';
   const face=n=>'<div class="fc f'+n+'">'+Array.from({length:9},(_,i)=>'<i'+(DPIPS[n].includes(i)?' class="on"':'')+'></i>').join('')+'</div>';
-  const die=(r)=>(r.sides||6)===6?'<div class="dscene"><div class="dwrap"><div class="cube">'+[1,2,3,4,5,6].map(face).join('')+'</div></div></div>':'<div class="dscene"><div class="dwrap"><div class="pd s'+r.sides+'"><b>?</b></div></div></div>';
+  const die=(r)=>r.kind==='pon'?ponDie():(r.sides||6)===6?'<div class="dscene"><div class="dwrap"><div class="cube">'+[1,2,3,4,5,6].map(face).join('')+'</div></div></div>':'<div class="dscene"><div class="dwrap"><div class="pd s'+r.sides+'"><b>?</b></div></div></div>';
   const gated=rows.some(r=>r.gate&&(!NET.on||r.who===NET.me));
-  o.innerHTML=rows.map(r=>'<div class="drow"><div class="dl">'+esc(r.label)+'</div>'+r.vals.map(()=>die(r)).join('')+'<div class="dsum">'+(r.vals.length>1?'= ':'')+r.vals.reduce((a,b)=>a+b,0)+'</div></div>').join('')+(gated?'<button class="btn primary dgo">Бросить кубики</button>':'<div class="dhint">нажмите, чтобы пропустить</div>');
+  o.innerHTML=rows.map(r=>'<div class="drow"><div class="dl">'+esc(r.label)+'</div>'+r.vals.map(()=>die(r)).join('')+'<div class="dsum">'+(r.vals.length>1?'= ':'')+r.vals.reduce((a,b)=>a+b,0)+'</div></div>').join('')+(gated?'<button class="btn primary dgo">'+(rows.every(r=>r.kind==='pon')?'Прочитать понеглиф':'Бросить кубики')+'</button>':'<div class="dhint">нажмите, чтобы пропустить</div>');
   document.body.appendChild(o);
   let fin=false,started=false;
   const end=()=>{if(fin)return;fin=true;o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},300)};
-  const flat=[];rows.forEach(r=>r.vals.forEach(v=>flat.push({v,s:r.sides||6})));
-  const cubes=o.querySelectorAll('.dwrap>.cube,.dwrap>.pd'),wraps=o.querySelectorAll('.dwrap');
+  const flat=[];rows.forEach(r=>r.vals.forEach(v=>flat.push({v,s:r.sides||6,k:r.kind})));
+  const cubes=o.querySelectorAll('.dwrap>.cube,.dwrap>.pd,.dwrap>.pon'),wraps=o.querySelectorAll('.dwrap');
   const go=()=>{
     if(started)return;started=true;SFX.play('dice',0);
     const b=o.querySelector('.dgo');if(b)b.replaceWith(Object.assign(document.createElement('div'),{className:'dhint',textContent:'нажмите, чтобы пропустить'}));
     let maxT=0;
     cubes.forEach((c,i)=>{
-      const {v,s}=flat[i],dur=950+Math.random()*350+i*60;maxT=Math.max(maxT,dur);
-      if(s===6){
+      const {v,s,k}=flat[i],dur=950+Math.random()*350+i*60;maxT=Math.max(maxT,dur);
+      if(k==='pon'){
+        const sp=Math.ceil(3+Math.random()*2)*360;
+        c.animate([{transform:'rotateX(-30deg) rotateY(0deg) rotateZ(8deg)'},{transform:'rotateX(-14deg) rotateY('+(-(v-1)*90-sp)+'deg) rotateZ(0deg)'}],{duration:dur+250,easing:'cubic-bezier(.12,.55,.2,1)',fill:'forwards'});maxT=Math.max(maxT,dur+250);
+      }else if(s===6){
         const [rx,ry]=DROT[v],a=Math.ceil(2+Math.random()*2)*360,b2=Math.ceil(2+Math.random()*2)*360;
         c.animate([{transform:'rotateX(-40deg) rotateY(-60deg) rotateZ(0deg)'},{transform:'rotateX('+(rx+a)+'deg) rotateY('+(ry-b2)+'deg) rotateZ(0deg)'}],{duration:dur,easing:'cubic-bezier(.12,.55,.2,1)',fill:'forwards'});
       }else{
@@ -1940,7 +1970,7 @@ window.__g={
   render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
   get G(){return G},get NET(){return NET},submit,
-  sfx:n=>SFX.play(n,0),SFX,  fx:(i,c)=>{fxCard(G.players[i],c)},flush:()=>{flushFx()},get tev(){return G.decks.tev[0]},clearFx:()=>{FXQ.length=0;FXBUSY=false},
+  fxr:(...a)=>fxRoll(...a),  sfx:n=>SFX.play(n,0),SFX,  fx:(i,c)=>{fxCard(G.players[i],c)},flush:()=>{flushFx()},get tev(){return G.decks.tev[0]},clearFx:()=>{FXQ.length=0;FXBUSY=false},
   netStep(){
     if(!NET.on||!G||G.winner!=null||NET.desync||viewerNeeded()!==NET.me)return false;
     const A=actions();const pe=G.pending;
