@@ -396,6 +396,7 @@ const card=(kind,o)=>Object.assign({cid:CID++,kind},o);
 const ADJ={};
 function link(a,b){(ADJ[a]=ADJ[a]||[]);(ADJ[b]=ADJ[b]||[]);if(!ADJ[a].includes(b))ADJ[a].push(b);if(!ADJ[b].includes(a))ADJ[b].push(a)}
 for(const [a,b] of MAPD.edges)link(a,b);
+for(let i=0;i<REDL.length;i++)for(let j=i+1;j<REDL.length;j++)link(REDL[i],REDL[j]); // проходы между морями (Reverse Mountain): красные локации соседствуют друг с другом
 function baseGraph(){return ADJ}
 const seaOf=id=>id[0], numOf=id=>+id.slice(1);
 // ---------- state ----------
