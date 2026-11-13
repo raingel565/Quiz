@@ -104,6 +104,7 @@ body{background:radial-gradient(900px 600px at 12% 108%,rgba(40,140,80,.22),tran
 .btn.primary{background:linear-gradient(150deg,#47dc83,#1b9a4e);color:#04170c;box-shadow:6px 8px 18px rgba(0,0,0,.5),0 0 18px rgba(52,196,109,.35),inset 0 1px 0 rgba(255,255,255,.35)}
 .btn.warn{background:linear-gradient(150deg,#3a2923,#241915);color:var(--danger);box-shadow:var(--sh-out),inset 0 0 0 1px rgba(255,122,77,.35)}
 #mapwrap{background:radial-gradient(120% 120% at 50% 40%,#1c7a45 0%,#13552f 55%,#0d3a21 100%);border:0;border-radius:36px;padding:14px;box-shadow:0 0 0 10px #171c1f,0 0 0 11px rgba(255,255,255,.06),inset 0 6px 30px rgba(0,0,0,.55),10px 14px 30px rgba(0,0,0,.55);margin:6px 10px 10px 6px}
+#ver{position:fixed;right:10px;bottom:8px;z-index:100001;font:700 11px/1 var(--f-body);letter-spacing:.04em;color:#fff;background:rgba(22,27,30,.55);padding:4px 8px;border-radius:8px;pointer-events:none;user-select:none}
 #mapwrap{align-self:start;position:relative}
 #toasts{position:absolute;top:22px;left:22px;z-index:100000;display:flex;flex-direction:column;gap:6px;width:min(300px,calc(100% - 44px));pointer-events:none}
 .toast{pointer-events:auto;display:flex;align-items:flex-start;gap:8px;padding:7px 8px 7px 11px;border-radius:12px;background:rgba(22,27,30,.9);color:#f4efe2;font:600 12.5px/1.35 var(--f-body);box-shadow:0 6px 18px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px);animation:toastin .22s ease-out}
@@ -302,7 +303,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V1</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
