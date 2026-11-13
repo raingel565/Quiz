@@ -105,7 +105,7 @@ body{background:radial-gradient(900px 600px at 12% 108%,rgba(40,140,80,.22),tran
 .btn.warn{background:linear-gradient(150deg,#3a2923,#241915);color:var(--danger);box-shadow:var(--sh-out),inset 0 0 0 1px rgba(255,122,77,.35)}
 #mapwrap{background:radial-gradient(120% 120% at 50% 40%,#1c7a45 0%,#13552f 55%,#0d3a21 100%);border:0;border-radius:36px;padding:14px;box-shadow:0 0 0 10px #171c1f,0 0 0 11px rgba(255,255,255,.06),inset 0 6px 30px rgba(0,0,0,.55),10px 14px 30px rgba(0,0,0,.55);margin:6px 10px 10px 6px}
 #mapwrap{align-self:start;position:relative}
-#toasts{position:absolute;top:22px;left:22px;z-index:30;display:flex;flex-direction:column;gap:6px;width:min(300px,calc(100% - 44px));pointer-events:none}
+#toasts{position:absolute;top:22px;left:22px;z-index:100000;display:flex;flex-direction:column;gap:6px;width:min(300px,calc(100% - 44px));pointer-events:none}
 .toast{pointer-events:auto;display:flex;align-items:flex-start;gap:8px;padding:7px 8px 7px 11px;border-radius:12px;background:rgba(22,27,30,.9);color:#f4efe2;font:600 12.5px/1.35 var(--f-body);box-shadow:0 6px 18px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px);animation:toastin .22s ease-out}
 .toast.out{opacity:0;transform:translateX(-12px);transition:.22s}
 .toast .tx{flex:1;min-width:0;word-wrap:break-word}
@@ -568,6 +568,15 @@ document.addEventListener('pointerdown',e=>{SFX.unlock();const b=e.target.closes
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#sndbtn');if(b){const on=SFX.toggle();b.textContent=on?'🔊':'🔇'}});
 
 const TOAST_SKIP=/^Доход:|^Погода:|бросает 2d6|^Бросок 1d12|^Фишка вскрыта|^Все игроки (получают|теряют)|^Игра началась/;
+let TOAST_TICK=null;
+function toastTick(){
+  const h=document.getElementById('toasts');if(!h){return}
+  const paused=!!document.querySelector('#dicefx,#cardfx,#evfx,#modal .ov');
+  const list=h.querySelectorAll('.toast:not(.out)');
+  if(!list.length){clearInterval(TOAST_TICK);TOAST_TICK=null;return}
+  if(paused)return;
+  list.forEach(el=>{if(el.matches(':hover'))return;el._ttl-=300;if(el._ttl<=0)toastClose(el)});
+}
 function toastClose(el){if(!el||el.classList.contains('out'))return;el.classList.add('out');setTimeout(()=>{el.remove();toastSync()},230)}
 function toastSync(){const h=document.getElementById('toasts');if(!h)return;const n=h.querySelectorAll('.toast').length;let c=h.querySelector('.tclear');if(n>1&&!c){c=document.createElement('button');c.className='tclear';c.textContent='Закрыть все';c.onclick=()=>h.querySelectorAll('.toast').forEach(toastClose);h.appendChild(c)}else if(n<=1&&c)c.remove();else if(c)h.appendChild(c)}
 function toastPush(s){
@@ -575,15 +584,16 @@ function toastPush(s){
   const h=document.getElementById('toasts');if(!h)return;
   const mv=/^(.+?) идёт на (.+)\.$/.exec(s);
   const list=[...h.querySelectorAll('.toast:not(.out)')],last=list[list.length-1];
-  if(mv&&last&&last.dataset.mv===mv[1]){const path=JSON.parse(last.dataset.path);path.push(mv[2]);last.dataset.path=JSON.stringify(path);last.querySelector('.tx').textContent=mv[1]+' идёт: '+path.join(' → ');clearTimeout(last._t);last._t=setTimeout(()=>toastClose(last),5500);return}
+  if(mv&&last&&last.dataset.mv===mv[1]){const path=JSON.parse(last.dataset.path);path.push(mv[2]);last.dataset.path=JSON.stringify(path);last.querySelector('.tx').textContent=mv[1]+' идёт: '+path.join(' → ');last._ttl=12000;return}
   const el=document.createElement('div');el.className='toast';
   if(mv){el.dataset.mv=mv[1];el.dataset.path=JSON.stringify([mv[2]])}
   el.innerHTML='<span class="tx"></span><button type="button" aria-label="Закрыть уведомление" title="Закрыть">✕</button>';
   el.querySelector('.tx').textContent=s;
-  el.querySelector('button').onclick=()=>{clearTimeout(el._t);toastClose(el)};
+  el.querySelector('button').onclick=()=>toastClose(el);
   const c=h.querySelector('.tclear');h.insertBefore(el,c||null);
-  const vis=[...h.querySelectorAll('.toast:not(.out)')];while(vis.length>3){toastClose(vis.shift())}
-  el._t=setTimeout(()=>toastClose(el),/ дуэль|побежда|задани|понеглиф/i.test(s)?9000:6500);
+  const vis=[...h.querySelectorAll('.toast:not(.out)')];while(vis.length>4){toastClose(vis.shift())}
+  el._ttl=/ дуэль|побежда|задани|понеглиф|Королём/i.test(s)?20000:13000;
+  if(!TOAST_TICK)TOAST_TICK=setInterval(toastTick,300);
   toastSync();
 }
 const log=s=>{logSnd(s);try{toastPush(s)}catch(e){}G.log.unshift(s);if(G.log.length>250)G.log.pop();if(LOGCAP)LOGCAP.push(s)};
@@ -780,6 +790,7 @@ function beginTurn(){
 function startTurnMain(){incomeRoll()}
 function endTurn(){
   if(G.winner!=null)return;
+  if(!window.__nor&&P().bot&&G.players.length>1&&G.players.some(q=>!q.bot))FXHOLD=Date.now()+4500;
   marchCheck(P());
   if(P().task&&P().task.armed)P().task.armed=false;
   G.pending=null;
@@ -1513,7 +1524,9 @@ function cardFx(rows,done){
   o.onclick=e=>{if(!started){if(e.target.closest('.dgo'))go()}else end()};
   if(!mine)setTimeout(go,900);
 }
+let FXHOLD=0;
 function flushFx(){
+  if(FXQ.length&&Date.now()<FXHOLD){setTimeout(flushFx,FXHOLD-Date.now()+30);return}
   if(FXBUSY||!FXQ.length||window.__nor||document.querySelector('[data-ui=ready]'))return;
   FXBUSY=true;const next=()=>{FXBUSY=false;flushFx()};
   if(FXQ[0].t==='s'){SFX.play(FXQ.shift().n,0);next();return}
@@ -2703,7 +2716,7 @@ function botSchedule(){
   const pe=G.pending;
   const humanSees=pe&&pe.type==='duelResult'&&pe.res.st.some(x=>x.s.p&&!x.s.p.bot);
   if(humanSees)return; // человек сам нажмёт «Продолжить»
-  let delay=pe&&pe.type==='duelResult'?3600:(pe&&pe.type==='prep'?1700:1500);
+  let delay=pe&&pe.type==='duelResult'?4000:(pe&&pe.type==='prep'?2000:2000);
   BOTTIMER=setTimeout(function tick(){
     BOTTIMER=null;
     if(!G||G.winner!=null||NET.on)return;
