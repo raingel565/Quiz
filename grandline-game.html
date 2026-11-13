@@ -582,6 +582,7 @@ function pay(p,n){p.berries-=n}
 function recycleAtk(){const a=G.discard.filter(c=>c.kind==='atk');G.discard=G.discard.filter(c=>c.kind!=='atk');G.decks.atk=shuffle(a)}
 function drawDeck(name){
   if(name==='pas'&&!G.decks.pas.length){const a=G.discard.filter(c=>c.kind==='pas');G.discard=G.discard.filter(c=>c.kind!=='pas');G.decks.pas=shuffle(a)}
+  if(name==='tre'&&!G.decks.tre.length){const a=G.discard.filter(c=>c.kind==='tre');G.discard=G.discard.filter(c=>c.kind!=='tre');G.decks.tre=shuffle(a);if(a.length)log('Колода сокровищ закончилась: сброс перемешан в новую колоду.')}
   const D=G.decks[name];
   if(name==='atk'&&!D.length)recycleAtk();
   return D.length?D.shift():null;
@@ -653,6 +654,9 @@ function arrive(p,loc,o,cb){
   const t=loc==='Z'||loc==='L'?null:drawToken(loc);
   if(loc==='L'){log(pname(p)+' прибыл на Лафтейл!');checkLaftelArrival(p)}
   if(o.quiet||!t){cb&&cb();return}
+  if((t==='dozor'||t==='battle')&&G.duels>=3){
+    const back=p.prev;log(pname(p)+': лимит 3 дуэли за ход исчерпан, бой не начинается — возврат на '+locName(back)+'.');
+    p.loc=back;if(back!=='Z'&&back!=='L')p.sea=seaOf(back);cb&&cb();return}
   if(t==='dozor'){log(pname(p)+' попал на Базу Дозора.');startNpcFight(p,'dozor',cb);return}
   if(t==='battle'){log(pname(p)+' вышел на Поле битвы.');startNpcFight(p,'pirate',cb);return}
   if(t==='jail'){
@@ -668,7 +672,8 @@ function jailEntry(p,cb){
   o.push({label:'Сразиться с дозорным (дуэль)',dis:G.duels>=3,run:()=>startNpcFight(p,'dozor',cb,true)});
   const e=p.tre.find(c=>c.key==='escape');
   if(e)o.push({label:'Сыграть «Побег»',run:()=>{discardCard(p,e);log(pname(p)+' сбежал из тюрьмы картой «Побег».');cb&&cb()}});
-  ask('jailEntry',{who:p.i,title:'Тюрьма',text:'Откупиться, сразиться с дозорным или сбежать.',opts:o,noskip:true});
+  o.push({label:'Сесть в тюрьму: пропустить 2 хода',run:()=>{p.jail=2;G.endAfter=true;log(pname(p)+' садится в тюрьму на 2 хода.');cb&&cb()}});
+  ask('jailEntry',{who:p.i,title:'Тюрьма',text:'Откупиться, сразиться с дозорным, сбежать или отсидеть 2 хода.',opts:o,noskip:true});
 }
 // ---------- discard ----------
 function discardCard(p,c){
@@ -753,7 +758,7 @@ function endRound(cb){
       for(const l of Object.keys(G.flags)){if(numOf(l)!==n)continue;const o=G.players[G.flags[l]];if(o.ch==='nami'){log('Флаг Нами устоял (иммунитет).');continue}delete G.flags[l];o.fl++;log('Флаг '+o.name+' на '+locName(l)+' смыт.')}}
     if(w.k==='buster'){const n=d(12);fxRoll('Погода · Buster Call',[n],12);log('Бросок 1d12: '+n+'. Локации №'+n+' бомбардируются!');
       for(const l of Object.keys(G.flags)){if(numOf(l)!==n)continue;const o=G.players[G.flags[l]];if(o.ch==='nami')continue;delete G.flags[l];o.fl++;log('Флаг '+o.name+' на '+locName(l)+' сгорел.')}
-      for(const q of G.players){if(q.ch==='nami'||q.loc==='Z'||q.loc==='L'||numOf(q.loc)!==n)continue;q.jail=2;log(q.name+' отправлен в тюрьму бомбардировкой.')}}
+      for(const q of G.players){if(q.ch==='nami'||q.loc==='Z'||q.loc==='L'||numOf(q.loc)!==n)continue;if(hasTre(q,'key')){log(q.name+': Ключ от Импел Даун спасает от тюрьмы.');continue}q.jail=2;log(q.name+' отправлен в тюрьму бомбардировкой.')}}
     if(w.k==='storm')for(const q of G.players){
       if(q.ch==='nami'||q.loc==='Z'||q.loc==='L')continue;
       const opts=nbrsOf(q).filter(x=>x!=='Z'&&x!=='L'&&G.type[x]&&!['dozor','battle','jail'].includes(G.type[x]));
@@ -851,6 +856,7 @@ function taskDone(p,t){
 function checkTasks(){
   for(const p of G.players){
     if(G.pending)return;
+    if(G.laftel&&p.loc==='L'){checkLaftelArrival(p);if(G.winner!=null)return}
     if(p.task&&taskDone(p,p.task))completeTask(p,'task');
     if(G.winner!=null)return;
     if(p.ltask&&taskDone(p,p.ltask))completeTask(p,'ltask');
@@ -891,7 +897,7 @@ function taskEvent(p,kind,info){
 }
 function marchCheck(p){
   const t=p.task;if(!t||t.cat!=='ev'||t.def.k!=='march'||!G.tm)return;
-  if(t.turnNo===G.turnNo&&t.takeAp===G.apMax&&G.ap===0&&G.tm.buy===0&&G.tm.pvp===0&&p.cnt.moves-G.tm.mv0===G.apMax){t.done=true;completeTask(p,'task')}
+  if((t.turnNo<G.turnNo||t.takeAp===G.apMax)&&G.ap===0&&G.tm.buy===0&&G.tm.pvp===0&&p.cnt.moves-G.tm.mv0===G.apMax){t.done=true;completeTask(p,'task')}
 }
 function completeTask(p,slot){
   const t=p[slot];p[slot]=null;
@@ -1101,7 +1107,7 @@ function startNpcFight(p,type,cb,fromJail){
       if(w===0){
         p.berries+=REWARD[b.lv];p.cnt.winAny++;if(type==='dozor')p.cnt.winD++;else p.cnt.winB++;
         log(p.name+' побеждает «'+b.n+'» (+'+REWARD[b.lv]+' Берри).');
-        if(type==='pirate')taskEvent(p,'bossWin',{lv:b.lv,pasUsed,lost:res.w[1]});
+        if(type==='pirate')taskEvent(p,'bossWin',{lv:b.lv,pasUsed,lost:res.rounds.filter(r=>r.out!==0).length});
         taskEvent(p,'npcWin',{pasUsed});
         if(p.ltask&&p.ltask.def.k==='lvl5'&&p.ltask.paid&&b.lv===5)p.ltask.done=true;
         const sks=SPECIAL_PAY[type][b.lv]||[];
@@ -1278,7 +1284,7 @@ function actions(){
     add('market','Купить карту сокровищ ('+price+' Берри)',()=>{
       pay(p,price);G.tm.buy++;
       drawFor(p,'tre',c=>{if(c){p.tre.push(c);fxCard(p,c);log(p.name+' покупает карту сокровищ: «'+TRE[c.key].n+'».')}});
-    },p.berries<price||p.tre.length>=3);
+    },p.berries<price||p.tre.length>=3||(!G.decks.tre.length&&!G.discard.some(c=>c.kind==='tre')));
   }
   if(atMarket&&!G.guestBought)add('market','Купить гостевого персонажа (50 Берри)',()=>{pay(p,50);G.tm.buy++;G.guestBought=true;const c=card('tre',{key:G.guest});p.tre.push(c);fxCard(p,c);log(p.name+' нанимает гостя: «'+TRE[c.key].n+'».')},p.berries<50||p.tre.length>=3);
   if(p.ltask){
@@ -1286,11 +1292,13 @@ function actions(){
     const payCube=()=>{p.pon.pop();log(p.name+' сбрасывает куб роад-понеглифа.')};
     if(kk==='heritage'&&atL){
       const hand=()=>[...p.atk.map(c=>['atk',c]),...p.pas.map(c=>['pas',c]),...p.tre.map(c=>['tre',c])];
+      const pen=c=>c.kind==='tre'?(c.key==='trap'?15:c.key==='debt'?10:0):0;
+      const canN=()=>{let b=p.berries,n=0;for(const [k,c] of hand().sort((x,y)=>pen(x[1])-pen(y[1]))){if(pen(c)<=b){b-=pen(c);n++}}return n};
       add('task','Сбросить 2 куба понеглифа и 5 карт с руки («'+lt2.def.t+'»)',()=>{
         payCube();payCube();
         const step=n=>{if(n===0){lt2.done=true;return}
-          ask('pick',{who:p.i,title:'Наследие Джой Боя: сбросьте карту (осталось '+n+')',opts:hand().map(([k,c])=>({label:(k==='atk'?'Атака '+c.v:cname(c)),run:()=>{if(k==='tre')discardCard(p,c);else{p[k].splice(p[k].indexOf(c),1);G.discard.push(c)}step(n-1)}}))})};
-        step(5)},p.pon.length<2||hand().length<5);
+          ask('pick',{who:p.i,title:'Наследие Джой Боя: сбросьте карту (осталось '+n+')',opts:hand().map(([k,c])=>({label:(k==='atk'?'Атака '+c.v:cname(c))+(pen(c)?' (штраф '+pen(c)+' Берри)':''),dis:pen(c)>p.berries,run:()=>{if(k==='tre'){if(pen(c))pay(p,pen(c));discardCard(p,c)}else{p[k].splice(p[k].indexOf(c),1);G.discard.push(c)}step(n-1)}}))})};
+        step(5)},p.pon.length<2||canN()<5);
     }
     if((kk==='duelP'||kk==='lvl5')&&atL&&!lt2.paid)add('task','Сбросить 1 куб понеглифа («'+lt2.def.t+'»)',()=>{payCube();lt2.paid=true},p.pon.length<1);
     if(kk==='zun'&&lt2.moved)add('task','Сбросить 1 куб понеглифа после перемещения («'+lt2.def.t+'»)',()=>{payCube();lt2.done=true},p.pon.length<1);
@@ -1305,7 +1313,7 @@ function actions(){
   if(p.task&&p.task.cat==='ev'){
     const tk=p.task,kk=tk.def.k;
     if(kk==='bribe'&&atMarket)add('task','Сдать «'+tk.def.t+'» на Чёрном рынке (0 ОД)',()=>{tk.done=true});
-    if(kk==='contra'&&atMarket)for(const c of p.tre)add('task','Сбросить «'+TRE[c.key].n+'» («'+tk.def.t+'»)',()=>{discardCard(p,c);tk.done=true});
+    if(kk==='contra'&&atMarket)for(const c of p.tre)add('task','Сбросить «'+TRE[c.key].n+'» («'+tk.def.t+'»)',()=>{discardTre(p,c,cancel=>{if(!cancel)tk.done=true})});
     if(kk==='rebuild'&&here&&lt==='base')add('task','Сбросить 3 карты атаки («'+tk.def.t+'»)',()=>{
       const step=n=>{if(n===0){tk.done=true;return}
         ask('pick',{who:p.i,title:'Перестройка арсенала: сбросьте карту атаки (осталось '+n+')',opts:p.atk.map(c=>({label:'Атака '+c.v,run:()=>{p.atk.splice(p.atk.indexOf(c),1);G.discard.push(c);step(n-1)}}))})};
@@ -2444,6 +2452,7 @@ function bPend(p,pe,A){
     let i=idx(/Сыграть «Побег/);if(i>=0)return i;
     i=idx(/откуп|взятк/);if(i>=0)return i;
     i=idx(/Сразиться/);if(i>=0)return i;
+    i=idx(/Отсидеть|Сесть в тюрьму/);if(i>=0)return i;
     return first();
   }
   if(T==='loot'){let i=idx(/понеглиф/);if(i>=0)return i;i=idx(/сокровищ/);return i>=0?i:first()}
@@ -2510,6 +2519,14 @@ function bTurn(p,A){
     if(age>(p.task.cat==='pon'?16:12)){const j=find(/Сбросить задание/);if(j>=0)return j}
   }
   if(p.task&&p.task.def.k==='world'&&p.fl===0&&here&&G.flags[loc]===p.i&&numOf(loc)!==p.task.target){const j=find(/Поднять свой флаг/);if(j>=0)return j}
+  // форсированный марш: весь ход только движение по безопасным клеткам
+  if(p.task&&p.task.def.k==='march'&&ap>=1&&G.tm.buy===0&&G.tm.pvp===0&&p.cnt.moves-G.tm.mv0===G.apMax-ap&&(p.task.turnNo<G.turnNo||p.task.takeAp===G.apMax)){
+    const safe=x=>x==='Z'||(G.type[x]&&!['dozor','battle','jail'].includes(G.type[x]));
+    const g=bGoal(p),st=g.nodes.length?bStepToward(p,g.nodes,{fear:30}):null;
+    let mi=st&&safe(st.step)?A.findIndex(a=>!a.dis&&a.g==='move'&&a.loc===st.step):-1;
+    if(mi<0)mi=A.findIndex(a=>!a.dis&&a.g==='move'&&a.loc!=='L'&&safe(a.loc));
+    if(mi>=0)return mi;
+  }
   // 1. завершение заданий Лафтейла
   if(p.ltask){
     const k=p.ltask.def.k;
@@ -2564,12 +2581,7 @@ function bTurn(p,A){
     const near=fp.length&&fp.some(x=>bFromNode(p.loc,x)<=3);
     if(!near){const j=find(/Взять задание/);if(j>=0)return j}
   }
-  if(p.task&&p.task.cat==='ev'){
-    const k=p.task.def.k;
-    if(k==='march'&&!(G.ap===G.apMax&&p.task.turnNo===G.turnNo)){
-      const j=find(/Сбросить задание/);if(j>=0&&p.berries>=10&&bFreePons().length)return j;
-    }
-  }
+
   // 7. дуэль с игроком, если выгодно
   const duelI=A.findIndex(a=>!a.dis&&a.g==='duel');
   if(duelI>=0&&G.duels<3){
