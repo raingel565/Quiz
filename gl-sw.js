@@ -1,5 +1,5 @@
 // Гранд Лайн: service worker. Сеть в приоритете (чтобы всегда была свежая версия), кэш — на случай офлайна.
-const CACHE = 'gl-v1';
+const CACHE = 'gl-v2';
 const CORE = ['./grandline-game.html', './gl-manifest.json', './gl-icon-192.png', './gl-icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).catch(() => {}));
