@@ -88,6 +88,73 @@ table.t td,table.t th{border:1px solid var(--line);padding:3px 6px;text-align:ce
 #gd-tip .gd-sk{background:none!important;border:0!important;color:#7a6a55!important;font-weight:600!important;flex:none!important;text-decoration:underline}
 
 #map .halo{animation:pulse 1.4s ease-in-out infinite}
+/* V17: визуал — дуэль, карта, погода, баннеры */
+.arena{display:flex;align-items:stretch;gap:6px;position:relative;flex-shrink:0;min-height:170px}.modal>*{flex-shrink:0}
+.arena .dfc{flex:1;min-width:0;overflow:hidden;border:2px solid var(--pcol,#8a8f98);border-radius:18px;padding:10px 8px;text-align:center;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(0,0,0,.12))}
+.arena .dfc h3{margin:6px 0 2px;font-size:16px}
+.arena .por{width:76px;height:76px;border-radius:50%;object-fit:cover;border:3px solid var(--pcol,#8a8f98);box-shadow:0 0 18px var(--pcol,#8a8f98);display:block;margin:0 auto}
+.arena .por.boss{display:flex;align-items:center;justify-content:center;font-size:38px;background:#2a1f1a;color:#f2b01e}
+.arena .vs{align-self:center;font-weight:900;font-size:26px;color:#f2b01e;text-shadow:0 0 14px rgba(242,176,30,.8);animation:vsp 1.6s ease-in-out infinite}
+.arena.shake{animation:shk .5s}
+.pip{display:inline-block;width:22px;height:22px;border-radius:50%;border:2px solid var(--line);margin:0 3px;vertical-align:middle}
+.pip.on{background:#f2b01e;border-color:#fff;box-shadow:0 0 12px #f2b01e}
+.pip.pop{animation:pipp .7s}
+.rbn{font-size:24px;font-weight:900;text-align:center;letter-spacing:.05em;text-transform:uppercase;color:#f2b01e;text-shadow:0 0 16px rgba(242,176,30,.7);animation:bnin .55s}
+.rbn.draw{color:#aab3bd;text-shadow:none}
+.fin{font-size:30px;font-weight:900;text-align:center;animation:finin .8s;text-shadow:0 0 22px rgba(242,176,30,.8)}
+@keyframes vsp{50%{transform:scale(1.18)}}
+@keyframes shk{10%,50%,90%{transform:translateX(-6px)}30%,70%{transform:translateX(6px)}}
+@keyframes pipp{0%{transform:scale(0)}60%{transform:scale(1.7)}100%{transform:scale(1)}}
+@keyframes bnin{0%{opacity:0;transform:scale(2.2)}100%{opacity:1;transform:scale(1)}}
+@keyframes finin{0%{opacity:0;transform:scale(.4) rotate(-6deg)}70%{transform:scale(1.15)}100%{opacity:1;transform:none}}
+/* карта */
+#map .wv{animation:wvd 7s ease-in-out infinite alternate}
+@keyframes wvd{from{transform:translateX(-6px)}to{transform:translateX(8px)}}
+#map .rv{transform-box:fill-box;transform-origin:center;animation:rvf .75s ease}
+@keyframes rvf{0%{transform:scaleX(0)}60%{transform:scaleX(1.18)}100%{transform:scaleX(1)}}
+#map .ponglow{animation:pgl 1.8s ease-in-out infinite}
+@keyframes pgl{50%{opacity:.78;filter:drop-shadow(0 0 7px #f2b01e)}}
+#map .wake{fill:rgba(255,255,255,.75);stroke:rgba(90,150,170,.6);stroke-width:1.5;animation:wk 1s ease-out forwards;pointer-events:none}
+@keyframes wk{from{opacity:.9;transform:scale(1)}to{opacity:0;transform:scale(2.2)}}
+#map .mist{animation:mst 9s ease-in-out infinite alternate}
+@keyframes mst{from{transform:translateX(-30px);opacity:.55}to{transform:translateX(30px);opacity:.9}}
+/* погода и баннеры */
+.wfx{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.wfx i,.wfx svg{position:absolute;display:block}
+.wfx-storm{background:rgba(15,25,45,.55)}
+.wfx .rain{inset:-20% 0 0 0;background:repeating-linear-gradient(105deg,rgba(190,220,255,.55) 0 2px,transparent 2px 22px);animation:rainf .35s linear infinite;opacity:.8}
+.wfx .rain.r2{background:repeating-linear-gradient(105deg,rgba(220,235,255,.35) 0 1px,transparent 1px 13px);animation-duration:.22s}
+@keyframes rainf{from{transform:translate(0,-30px)}to{transform:translate(-20px,30px)}}
+.wfx .flash{inset:0;background:#fff;opacity:0;animation:lfl 2.4s infinite}
+@keyframes lfl{0%,12%,18%,100%{opacity:0}13%{opacity:.85}15%{opacity:.1}16%{opacity:.7}50%{opacity:0}52%{opacity:.6}54%{opacity:0}}
+.wfx-buster{background:radial-gradient(circle at 50% 50%,rgba(255,200,90,.35),rgba(60,20,10,.6))}
+.wfx .bflash{inset:0;background:#fff;animation:bfl 1.4s ease-out forwards}
+@keyframes bfl{0%{opacity:.95}100%{opacity:0}}
+.wfx .ring{left:50%;top:50%;width:40px;height:40px;margin:-20px;border:1px solid rgba(255,170,60,.9);border-radius:50%;animation:rng 1.6s ease-out infinite}
+.wfx .ring.r2{animation-delay:.6s}
+@keyframes rng{from{transform:scale(1);opacity:1}to{transform:scale(34);opacity:0}}
+.wfx .smoke{left:0;right:0;bottom:-10%;height:55%;background:radial-gradient(ellipse at 50% 100%,rgba(70,60,60,.85),transparent 70%);animation:smk 3s ease-out infinite alternate}
+@keyframes smk{from{transform:translateY(20px);opacity:.5}to{transform:translateY(-20px);opacity:1}}
+.wfx-aqua{background:rgba(20,70,110,.35)}
+.wfx .wave{left:0;bottom:0;width:200%;height:55%;animation:wvr 3s ease-in-out infinite alternate}
+.wfx .wave.w2{height:42%;animation-duration:2.2s;opacity:.7}
+@keyframes wvr{from{transform:translateX(0) translateY(40px)}to{transform:translateX(-25%) translateY(-10px)}}
+.wfx-tarai{background:rgba(30,100,140,.3)}
+.wfx .cur{left:-30%;width:60%;height:5px;border-radius:5px;background:linear-gradient(90deg,transparent,rgba(190,235,255,.9),transparent);animation:curm 1.6s linear infinite}
+.wfx .cur:nth-child(1){top:30%}.wfx .cur.c2{top:48%;animation-delay:.5s}.wfx .cur.c3{top:66%;animation-delay:1s}
+@keyframes curm{from{transform:translateX(0)}to{transform:translateX(260%)}}
+.wfx-belt{background:rgba(200,215,225,.35)}
+.wfx .mist{inset:20% -10%;background:radial-gradient(ellipse,rgba(255,255,255,.85),transparent 70%);filter:blur(14px);animation:mst 5s ease-in-out infinite alternate}
+.wfx .mist.m2{inset:40% -20% -10% 10%;animation-duration:7s}
+.wfx-zun{background:rgba(40,25,10,.5)}
+.wfx .quake{inset:0;background:radial-gradient(circle at 50% 100%,rgba(120,80,30,.75),transparent 60%);animation:shk .6s infinite}
+#evfx.wk-zun .evc{animation:shk .7s 2}
+#evfx.bnrfx .evc{background:rgba(20,16,12,.9);border:2px solid #f2b01e;box-shadow:0 0 40px rgba(242,176,30,.45)}
+#evfx.bnrfx .evi{font-size:64px;animation:finin .6s}
+#evfx.bnrfx .evt{font-size:30px;font-weight:900;letter-spacing:.04em}
+#evfx.bnrfx.bad .evc{border-color:#d9534f;box-shadow:0 0 40px rgba(217,83,79,.5)}
+#evfx.bnrfx.good .evc{border-color:#3ddc84;box-shadow:0 0 40px rgba(61,220,132,.45)}
+
 @media (prefers-reduced-motion:reduce){.ring{animation:none}}
 @media (max-width:900px){main{grid-template-columns:minmax(0,1fr)}#map{max-height:none}}
 svg text{font-family:var(--f-display)}
@@ -315,7 +382,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V16</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V17</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -612,7 +679,9 @@ function toastPush(s){
   if(!TOAST_TICK)TOAST_TICK=setInterval(toastTick,300);
   toastSync();
 }
-const log=s=>{logSnd(s);try{toastPush(s)}catch(e){}G.log.unshift(s);if(G.log.length>250)G.log.pop();if(LOGCAP)LOGCAP.push(s)};
+const BNR=[[/арестован дозором|садится в тюрьму|телепортируется в тюрьму/,'⚓','Дозор!','bad'],[/проиграл боссу: пираты/,'🏴‍☠️','Ограбление!','bad'],[/выполнил(?:а)? (?:задание|«)/,'✔','Задание выполнено','good'],[/побеждает «/,'⚔','Победа в бою','good']];
+function logBanner(t){if(window.__nor)return;for(const [re,ic,ti,tone] of BNR)if(re.test(t)){fxEvent({stage:'post',banner:1,tone,icon:ic,title:ti,desc:t,auto:2300,snd:null});return}}
+const log=s=>{logSnd(s);try{logBanner(s)}catch(e){}try{toastPush(s)}catch(e){}G.log.unshift(s);if(G.log.length>250)G.log.pop();if(LOGCAP)LOGCAP.push(s)};
 // V13: приватные записи журнала. Видны полностью только владельцу карты, остальным — обезличенный текст.
 const lgViewer=()=>NET.on?NET.me:(UI.viewer!=null&&UI.viewer>=0?UI.viewer:-1);
 const lgv=s=>{if(typeof s!=='string'||s.charCodeAt(0)!==1)return s;const a=s.slice(1).split('\u0002');return (+a[0]===lgViewer())?a[1]:a[2]};
@@ -828,7 +897,7 @@ function endRound(cb){
     (G.weatherDiscard=G.weatherDiscard||[]).push(w);
     G.lastWeather=w;log('Погода: '+w.n+'.');
     const WI=WEATHER_INFO[w.k];LOGCAP=[];
-    fxEvent({stage:'pre',cat:'Карта погоды',icon:WI.i,title:w.n,desc:WI.d});
+    fxEvent({stage:'pre',wk:w.k,cat:'Карта погоды',icon:WI.i,title:w.n,desc:WI.d});
     G.apMod=0;
     if(w.k==='zun')moveZunToSea(w.s);
     if(w.k==='tarai')G.apMod=1;
@@ -847,7 +916,7 @@ function endRound(cb){
     if(w.k==='tarai')wl.unshift('Все игроки получают +1 ОД на этот раунд.');
     if(w.k==='belt')wl.unshift('Все игроки теряют 1 ОД на этот раунд.');
     if(w.k==='zun'&&!wl.length)wl.push('Зунеша сменила место.');
-    if(w.k!=='still')fxEvent({snd:w.k,stage:'post',cat:'Карта погоды',icon:WI.i,title:w.n,lines:wl.length?wl:['Никто не пострадал.']});
+    if(w.k!=='still')fxEvent({snd:w.k,wk:w.k,stage:'post',cat:'Карта погоды',icon:WI.i,title:w.n,lines:wl.length?wl:['Никто не пострадал.']});
   }
   searchStep(cb);
 }
@@ -1498,11 +1567,14 @@ function eventFx(ev,done){
   const old=document.getElementById('evfx');if(old)old.remove();
   const o=document.createElement('div');o.id='evfx';
   const pre=ev.stage==='pre';
-  o.innerHTML='<div class="evc"><div class="evk">'+(pre?'Сейчас будет':'Что произошло')+' · '+esc(ev.cat)+'</div><div class="evi">'+(ev.icon||'')+'</div><div class="evt">'+esc(ev.title)+'</div>'
+  const WL={storm:'<i class="rain"></i><i class="rain r2"></i><i class="flash"></i>',buster:'<i class="bflash"></i><i class="ring"></i><i class="ring r2"></i><i class="smoke"></i>',aqua:'<svg class="wave" viewBox="0 0 1200 200" preserveAspectRatio="none"><path d="M0 100 Q150 20 300 100 T600 100 T900 100 T1200 100 V200 H0Z" fill="rgba(60,160,210,.6)"/></svg><svg class="wave w2" viewBox="0 0 1200 200" preserveAspectRatio="none"><path d="M0 110 Q150 40 300 110 T600 110 T900 110 T1200 110 V200 H0Z" fill="rgba(30,110,170,.6)"/></svg>',tarai:'<i class="cur"></i><i class="cur c2"></i><i class="cur c3"></i>',belt:'<i class="mist"></i><i class="mist m2"></i>',zun:'<i class="quake"></i>'};
+  if(ev.wk){o.className='wk-'+ev.wk+(ev.banner?' bnrfx '+(ev.tone||''):'')}else if(ev.banner)o.className='bnrfx '+(ev.tone||'');
+  if(ev.banner){o.innerHTML='<div class="evc"><div class="evi">'+(ev.icon||'')+'</div><div class="evt">'+esc(ev.title)+'</div><div class="evd">'+esc(ev.desc||'')+'</div></div>'}else
+  o.innerHTML=(ev.wk&&WL[ev.wk]?'<div class="wfx wfx-'+ev.wk+'">'+WL[ev.wk]+'</div>':'')+'<div class="evc"><div class="evk">'+(pre?'Сейчас будет':'Что произошло')+' · '+esc(ev.cat)+'</div><div class="evi">'+(ev.icon||'')+'</div><div class="evt">'+esc(ev.title)+'</div>'
    +(pre?'<div class="evd">'+esc(ev.desc)+'</div>':'<div class="evl">'+ev.lines.map(l=>'<div class="evr">'+esc(l)+'</div>').join('')+'</div>')
    +(pre?'<div class="dhint">нажмите, чтобы пропустить</div>':'<button class="btn primary">Понятно</button>')+'</div>';
   document.body.appendChild(o);
-  if(pre&&ev.title==='Buster Call')SFX.play('w_buster',0);else if(!(ev.snd==='buster'))SFX.play(pre?'alert':(ev.snd&&ev.snd!=='coin'?'w_'+ev.snd:'result'),0);if(!pre&&ev.snd==='coin')SFX.play('coin',0);
+  if(ev.banner){SFX.play(ev.tone==='good'?'result':'alert',0)}else if(pre&&ev.title==='Buster Call')SFX.play('w_buster',0);else if(!(ev.snd==='buster'))SFX.play(pre?'alert':(ev.snd&&ev.snd!=='coin'?'w_'+ev.snd:'result'),0);if(!pre&&ev.snd==='coin')SFX.play('coin',0);
   let fin=false;const end=()=>{if(fin)return;fin=true;o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},280)};
   o.onclick=end;setTimeout(end,ev.auto||(pre?2800:8000));
 }
@@ -1772,11 +1844,15 @@ function resultHtml(pe){
     const x=res.st[i],s0=x.s;
     const pas=s0.pas.map(c=>c.kind==='pas'?PAS[c.key].n:TRE[c.key].n);
     const blocked=s0.pas.length&&!x.keys.length;
-    return '<div class="card" style="flex:1;min-width:150px"><h3>'+esc(pe.names[i])+'</h3><div class="small">'+(s0.p?esc(CH[s0.ch].n)+' · ':'')+'атака '+s0.A+' / уклонение '+s0.U+'</div>'
+    const col=(s0.p&&s0.p.color)||'#8a8f98';
+    const por=(s0.p&&AVS[s0.ch])?av(s0.ch,'por'):'<div class="por boss">⚔</div>';
+    const last=Z.shown>0?res.rounds[Z.shown-1].out:-2;
+    return '<div class="dfc" style="--pcol:'+col+'">'+por+'<h3>'+esc(pe.names[i])+'</h3><div class="small">'+(s0.p?esc(CH[s0.ch].n)+' · ':'')+'атака '+s0.A+' / уклонение '+s0.U+'</div>'
       +'<div class="small">Пассивные: '+(pas.length?esc(pas.join(', ')):'нет')+(blocked?' (отключены Хенкок)':'')+'</div>'
-      +'<div style="font-size:22px;margin-top:4px">'+[0,1].map(k=>'<span style="color:'+(k<wins[i]?'var(--danger)':'var(--line)')+'">●</span>').join(' ')+'</div></div>';
+      +'<div style="margin-top:6px">'+[0,1].map(k=>'<span class="pip'+(k<wins[i]?' on'+((k===wins[i]-1&&last===i)?' pop':''):'')+'"></span>').join('')+'</div></div>';
   };
-  let h='<div class="ov"><div class="modal"><h2>'+esc(pe.title)+'</h2><div class="row" style="flex-wrap:nowrap">'+side(0)+side(1)+'</div>';
+  const shake=Z.shown>0&&Z.lastShk!==Z.shown;Z.lastShk=Z.shown;
+  let h='<div class="ov"><div class="modal"><h2>'+esc(pe.title)+'</h2><div class="arena'+(shake?' shake':'')+'">'+side(0)+'<div class="vs">VS</div>'+side(1)+'</div>';
   const line=(r)=>{
     const R=res.rounds[r],c=R.cur;
     const part=(x,k)=>{
@@ -1787,6 +1863,7 @@ function resultHtml(pe){
     return '<div class="card"><b>Раунд '+(r+1)+'</b><div class="row" style="flex-wrap:nowrap"><div style="flex:1;min-width:0">'+part(c[0],0)+'</div><div style="flex:1;min-width:0">'+part(c[1],1)+'</div></div><div>'+(R.nat&&(R.nat[0]||R.nat[1])?'Нацу даёт +20. ':'')+out+'</div></div>';
   };
   for(let r=0;r<Z.shown;r++)h+=line(r);
+  if(Z.shown>0&&Z.shown<n){const Rl=res.rounds[Z.shown-1];h+='<div class="rbn'+(Rl.out===-1?' draw':'')+'">'+(Rl.out===-1?'Ничья':'Раунд за '+esc(pe.names[Rl.out]))+'</div>'}
   if(Z.shown<n){
     const R=res.rounds[Z.shown],c=R.cur;
     const box=k=>{
@@ -1801,7 +1878,7 @@ function resultHtml(pe){
     h+='<div class="card"><b>Раунд '+(Z.shown+1)+'</b><div class="row" style="flex-wrap:nowrap;justify-content:space-around">'+box(0)+box(1)+'</div></div>';
     h+='<div class="row"><button class="btn" data-dz="skip">Показать всё сразу</button></div>';
   }
-  if(Z.shown>=n)h+='<div class="'+(res.winner===-1?'':'win')+'" style="font-size:18px">'+(res.winner===-1?'Боевая ничья':'Победа: '+esc(pe.names[res.winner]))+' ('+res.w[0]+' : '+res.w[1]+')</div><button class="btn primary" data-a="0">Продолжить</button>';
+  if(Z.shown>=n)h+='<div class="fin'+(res.winner===-1?'':' win')+'">'+(res.winner===-1?'Боевая ничья':'Победа: '+esc(pe.names[res.winner]))+' ('+res.w[0]+' : '+res.w[1]+')</div><button class="btn primary" data-a="0">Продолжить</button>';
   return h+'</div></div>';
 }
 
@@ -1923,18 +2000,18 @@ function nodePos(id){
   if(id==='L')return[G.laftel.x,G.laftel.y];
   return MAPD.nodes[id];
 }
-function mapBase(){
+function mapBase(fancy){
   const R=38;
   let s='';
   const BR='#5a3b1f';
-  s+='<defs><filter id="sh" x="-30%" y="-30%" width="170%" height="180%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#5a3b1f" flood-opacity=".35"/></filter></defs>';
-  s+='<rect x="0" y="0" width="1588" height="1123" fill="#fff"/><rect x="5" y="98" width="1578" height="872" fill="none" stroke="'+BR+'" stroke-width="3"/>';
+  s+='<defs><filter id="sh" x="-30%" y="-30%" width="170%" height="180%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#5a3b1f" flood-opacity=".35"/></filter><linearGradient id="ocean" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfeaf0"/><stop offset="1" stop-color="#9fd0dc"/></linearGradient><linearGradient id="seaP" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6fcfd"/><stop offset="1" stop-color="#dff1f5"/></linearGradient><linearGradient id="redl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e9b7ad"/><stop offset=".5" stop-color="#f7d9d3"/><stop offset="1" stop-color="#e9b7ad"/></linearGradient></defs>';
+  s+='<rect x="0" y="0" width="1588" height="1123" fill="'+(fancy?'url(#ocean)':'#fff')+'"/><rect x="5" y="98" width="1578" height="872" fill="none" stroke="'+BR+'" stroke-width="3"/>';
   const Z={N:[14,112,736,388],W:[14,590,736,372],E:[838,112,736,388],S:[838,590,736,372]};
-  for(const k in Z){const [x0,y0,w,h]=Z[k];s+='<rect x="'+x0+'" y="'+y0+'" width="'+w+'" height="'+h+'" rx="26" fill="#fff" stroke="'+BR+'" stroke-width="2.5"/><rect x="'+(x0+7)+'" y="'+(y0+7)+'" width="'+(w-14)+'" height="'+(h-14)+'" rx="20" fill="none" stroke="'+BR+'" stroke-width="1" stroke-dasharray="3 5" opacity=".6"/>'}
-  for(const [wx,wy] of WAVES)s+='<path d="M'+wx+' '+wy+' q6 -6 12 0 t12 0" fill="none" stroke="#7da8aa" stroke-width="1.4" opacity=".8"/>';
-  s+='<rect x="14" y="500" width="1560" height="90" fill="#fff"/><rect x="14" y="491" width="1560" height="18" fill="#d9e8f0"/><rect x="14" y="581" width="1560" height="18" fill="#d9e8f0"/>';
+  for(const k in Z){const [x0,y0,w,h]=Z[k];s+='<rect x="'+x0+'" y="'+y0+'" width="'+w+'" height="'+h+'" rx="26" fill="'+(fancy?'url(#seaP)':'#fff')+'" stroke="'+BR+'" stroke-width="2.5"/><rect x="'+(x0+7)+'" y="'+(y0+7)+'" width="'+(w-14)+'" height="'+(h-14)+'" rx="20" fill="none" stroke="'+BR+'" stroke-width="1" stroke-dasharray="3 5" opacity=".6"/>'}
+  WAVES.forEach(([wx,wy],wi)=>{s+='<path'+(fancy?' class="wv" style="animation-delay:-'+((wi*7)%6)+'s"':'')+' d="M'+wx+' '+wy+' q6 -6 12 0 t12 0" fill="none" stroke="#7da8aa" stroke-width="1.4" opacity=".8"/>'});
+  s+='<rect x="14" y="500" width="1560" height="90" fill="'+(fancy?'#e9f3f6':'#fff')+'"/>'+(fancy?'<ellipse class="mist" cx="400" cy="545" rx="320" ry="26" fill="#fff" opacity=".7"/><ellipse class="mist" cx="1150" cy="545" rx="380" ry="24" fill="#fff" opacity=".7" style="animation-delay:-4s"/>':'');s+='<rect x="14" y="491" width="1560" height="18" fill="#d9e8f0"/><rect x="14" y="581" width="1560" height="18" fill="#d9e8f0"/>';
   for(const [tx,ty,an] of [[34,504,'start'],[34,594,'start'],[1554,504,'end'],[1554,594,'end']])s+='<text x="'+tx+'" y="'+ty+'" text-anchor="'+an+'" font-family="Cinzel,Georgia,serif" font-size="12" font-weight="700" letter-spacing="3" fill="#2c5f78">CALM BELT</text>';
-  s+='<rect x="764" y="112" width="60" height="850" fill="#f7d9d3" stroke="'+BR+'" stroke-width="2.5"/>';
+  s+='<rect x="764" y="112" width="60" height="850" fill="'+(fancy?'url(#redl)':'#f7d9d3')+'" stroke="'+BR+'" stroke-width="2.5"/>';
   for(const ty of [330,790])s+='<text transform="translate(800,'+ty+') rotate(-90)" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-size="16" font-weight="800" letter-spacing="7" fill="#a63a28">RED LINE</text>';
   const lab={N:[34,142,'NORTH BLUE','start'],E:[858,142,'EAST BLUE','start'],W:[34,946,'WEST BLUE','start'],S:[1554,946,'SOUTH BLUE','end']};
   for(const k in lab)s+='<text x="'+lab[k][0]+'" y="'+lab[k][1]+'" text-anchor="'+lab[k][3]+'" font-family="Cinzel,Georgia,serif" font-size="26" font-weight="800" letter-spacing="4" fill="'+BR+'" fill-opacity=".8">'+lab[k][2]+'</text>';
@@ -1947,26 +2024,31 @@ function renderMap(){
   const R=38;
   let s='';
   const BR='#5a3b1f';
-  s+=mapBase();
+  s+=mapBase(true);
   if(G.laftel){for(const a of G.laftel.anch){const p=MAPD.nodes[a];s+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+G.laftel.x+'" y2="'+G.laftel.y+'" stroke="#d9a21b" stroke-width="3" stroke-dasharray="3 6"/>'}}
   const act=ACTS.filter(a=>a.loc&&!a.dis).map(a=>a.loc);
   const pickable=new Set([...act,...((G.pending&&G.pending.pick)||[])]);
   const ids=Object.keys(MAPD.nodes);
+  const PT=(UI.pt&&UI.pt.g===G)?UI.pt:(UI.pt={g:G,t:null,n:0});
+  const PTnext={};
   for(const id of ids){
     const [x,y]=MAPD.nodes[id];
     const t=G.type[id];
+    PTnext[id]=t;
     const isRed=REDL.includes(id);
     const fill=t?TYPES[t].c:(isRed?'#f5b5ab':'#fff');
-    s+='<g data-id="'+id+'" style="cursor:'+(pickable.has(id)?'pointer':'default')+'">';
+    const rvl=PT.t&&!PT.t[id]&&t&&t!=='base';
+    s+='<g data-id="'+id+'"'+(rvl?' class="rv"':'')+' style="cursor:'+(pickable.has(id)?'pointer':'default')+'">';
     s+='<circle cx="'+x+'" cy="'+y+'" r="'+(R+3)+'" fill="none" stroke="'+BR+'" stroke-width="1" opacity=".5"/><circle cx="'+x+'" cy="'+y+'" r="'+R+'" fill="'+fill+'" stroke="'+(isRed?'#a63a28':BR)+'" stroke-width="3" filter="url(#sh)"/>';
     if(t&&t!=='base'){const ic={start:'⚑',event:'!',dozor:'⚓',battle:'⚔',jail:'▦',market:'$'}[t]||'';s+='<text x="'+x+'" y="'+(y+27)+'" text-anchor="middle" font-size="22" font-weight="800" fill="'+(t==='market'?'#fff':BR)+'" opacity=".85" pointer-events="none">'+ic+'</text>'}
     s+='<text x="'+x+'" y="'+(y+3)+'" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-size="34" font-weight="800" fill="'+BR+'" pointer-events="none">'+numOf(id)+'</text>';
     if(!t)s+='<text x="'+x+'" y="'+(y+27)+'" text-anchor="middle" font-size="22" font-weight="700" fill="'+BR+'" opacity=".35" pointer-events="none">?</text>';
     if(pickable.has(id))s+='<circle class="ring" cx="'+x+'" cy="'+y+'" r="'+(R+8)+'" fill="none" stroke="#12a05a" stroke-width="6"/>';
     if(G.flags[id]!=null){const c=G.players[G.flags[id]].color;s+='<line x1="'+(x-R+2)+'" y1="'+(y-R-16)+'" x2="'+(x-R+2)+'" y2="'+(y-R+8)+'" stroke="#5a3b1f" stroke-width="3"/><polygon points="'+(x-R+2)+','+(y-R-16)+' '+(x-R+24)+','+(y-R-8)+' '+(x-R+2)+','+(y-R)+'" fill="'+c+'" stroke="#5a3b1f" stroke-width="1.5"/>'}
-    if(G.ponAt[id]){const px=x+R-2,py=y-R+2;s+='<circle cx="'+x+'" cy="'+y+'" r="'+(R+6)+'" fill="none" stroke="#d9a21b" stroke-width="3" stroke-dasharray="5 4" pointer-events="none"/><g pointer-events="none"><circle class="ring" cx="'+px+'" cy="'+py+'" r="22" fill="none" stroke="#d9a21b" stroke-width="3"/><rect x="'+(px-15)+'" y="'+(py-15)+'" width="30" height="30" rx="4" transform="rotate(45 '+px+' '+py+')" fill="#d9a21b" stroke="#2a2118" stroke-width="2.5"/><text x="'+px+'" y="'+(py+7)+'" text-anchor="middle" font-size="20" font-weight="800" fill="#2a2118">П</text></g><text x="'+x+'" y="'+(y+R+22)+'" text-anchor="middle" font-size="19" font-weight="800" fill="#8a5a00" pointer-events="none" stroke="#fff" stroke-width="5" paint-order="stroke">Понеглиф'+(G.ponAt[id].owner!=null?' · '+esc(G.players[G.ponAt[id].owner].name):'')+'</text>'}
+    if(G.ponAt[id]){const px=x+R-2,py=y-R+2;s+='<circle cx="'+x+'" cy="'+y+'" r="'+(R+6)+'" fill="none" stroke="#d9a21b" stroke-width="3" stroke-dasharray="5 4" pointer-events="none"/><g class="ponglow" pointer-events="none"><circle class="ring" cx="'+px+'" cy="'+py+'" r="22" fill="none" stroke="#d9a21b" stroke-width="3"/><rect x="'+(px-15)+'" y="'+(py-15)+'" width="30" height="30" rx="4" transform="rotate(45 '+px+' '+py+')" fill="#d9a21b" stroke="#2a2118" stroke-width="2.5"/><text x="'+px+'" y="'+(py+7)+'" text-anchor="middle" font-size="20" font-weight="800" fill="#2a2118">П</text></g><text x="'+x+'" y="'+(y+R+22)+'" text-anchor="middle" font-size="19" font-weight="800" fill="#8a5a00" pointer-events="none" stroke="#fff" stroke-width="5" paint-order="stroke">Понеглиф'+(G.ponAt[id].owner!=null?' · '+esc(G.players[G.ponAt[id].owner].name):'')+'</text>'}
     s+='</g>';
   }
+  PT.t=PTnext;PT.n++;
   // Laftel & Zunesha
   if(G.laftel){const {x,y}=G.laftel;const on=pickable.has('L');s+='<g data-id="L" style="cursor:pointer"><circle cx="'+x+'" cy="'+y+'" r="38" fill="#d9a21b" stroke="#5a3b1f" stroke-width="4"/><text x="'+x+'" y="'+(y+6)+'" text-anchor="middle" font-size="16" font-weight="700" fill="#2a2118">Лафтейл</text>'+(on?'<circle class="ring" cx="'+x+'" cy="'+y+'" r="48" fill="none" stroke="#12a05a" stroke-width="6"/>':'')+'</g>'}
   if(G.zun){const [x,y]=nodePos('Z');const on=pickable.has('Z');const c=MAPD.nodes[G.zun.cell];
@@ -1997,6 +2079,7 @@ function renderMap(){
     const dx=+g.dataset.dx,dy=+g.dataset.dy;
     if(Math.abs(dx)+Math.abs(dy)<2)return;
     g.style.transform='translate('+dx+'px,'+dy+'px)';SFX.play('move',250);
+    try{const NS='http://www.w3.org/2000/svg',mp=document.getElementById('map'),c0=g.querySelector('circle:not(.halo)');if(c0){const ex=+c0.getAttribute('cx'),ey=+c0.getAttribute('cy');for(let k=1;k<=6;k++){const w=document.createElementNS(NS,'circle');w.setAttribute('class','wake');w.setAttribute('r',String(7-k*.6));const wx=ex+dx*(1-k/7),wy=ey+dy*(1-k/7);w.setAttribute('cx',wx);w.setAttribute('cy',wy);w.style.transformOrigin=wx+'px '+wy+'px';w.style.animationDelay=(k*.08)+'s';mp.insertBefore(w,g);setTimeout(()=>w.remove(),1800)}}}catch(_){}
     void g.getBoundingClientRect();
     requestAnimationFrame(()=>{g.style.transition='transform .6s cubic-bezier(.4,.1,.2,1)';g.style.transform='translate(0,0)'});
   });
