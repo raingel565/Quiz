@@ -102,6 +102,9 @@ table.t td,table.t th{border:1px solid var(--line);padding:3px 6px;text-align:ce
 .rbn{font-size:24px;font-weight:900;text-align:center;letter-spacing:.05em;text-transform:uppercase;color:#f2b01e;text-shadow:0 0 16px rgba(242,176,30,.7);animation:bnin .55s}
 .rbn.draw{color:#aab3bd;text-shadow:none}
 .fin{font-size:30px;font-weight:900;text-align:center;animation:finin .8s;text-shadow:0 0 22px rgba(242,176,30,.8)}
+@keyframes ddrop{0%{transform:translateY(-120px) rotate(-360deg);opacity:0}60%{transform:translateY(8px) rotate(10deg);opacity:1}80%{transform:translateY(-6px)}100%{transform:none}}
+@keyframes cfly{0%{transform:translateY(160px) scale(.3) rotate(25deg);opacity:0}100%{transform:none;opacity:1}}
+.pd.drop{animation:ddrop .7s}.ccf{display:inline-block;animation:cfly .6s}
 @keyframes vsp{50%{transform:scale(1.18)}}
 @keyframes shk{10%,50%,90%{transform:translateX(-6px)}30%,70%{transform:translateX(6px)}}
 @keyframes pipp{0%{transform:scale(0)}60%{transform:scale(1.7)}100%{transform:scale(1)}}
@@ -1870,10 +1873,10 @@ function resultHtml(pe){
       const x=c[k],hi=res.st[k].keys.includes('jinwoo')?20:12;
       const cardTxt='Карта: '+(x.cs.length?x.cs.join(' + '):'нет')+(x.ann?' (аннулирована)':'');
       let mid;
-      if(Z.done[k])mid='<span class="pd s'+hi+'"><b>'+x.roll+'</b></span>';
+      if(Z.done[k])mid='<span class="pd drop s'+hi+'"><b>'+x.roll+'</b></span>';
       else if(Z.spin[k])mid='<span class="pd s'+hi+'" id="d'+k+'"><b>?</b></span>';
       else mid='<button class="btn primary" data-dz="die" data-k="'+k+'">Бросить d'+hi+(res.st[k].s.p?'':' за босса')+'</button>';
-      return '<div style="flex:1;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center"><b>'+esc(pe.names[k])+'</b><span class="small">'+cardTxt+'</span>'+mid+'</div>';
+      return '<div style="flex:1;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center"><b>'+esc(pe.names[k])+'</b><span class="small ccf">'+cardTxt+'</span>'+mid+'</div>';
     };
     h+='<div class="card"><b>Раунд '+(Z.shown+1)+'</b><div class="row" style="flex-wrap:nowrap;justify-content:space-around">'+box(0)+box(1)+'</div></div>';
     h+='<div class="row"><button class="btn" data-dz="skip">Показать всё сразу</button></div>';
@@ -2039,8 +2042,8 @@ function renderMap(){
     const fill=t?TYPES[t].c:(isRed?'#f5b5ab':'#fff');
     const rvl=PT.t&&!PT.t[id]&&t&&t!=='base';
     s+='<g data-id="'+id+'"'+(rvl?' class="rv"':'')+' style="cursor:'+(pickable.has(id)?'pointer':'default')+'">';
-    s+='<circle cx="'+x+'" cy="'+y+'" r="'+(R+3)+'" fill="none" stroke="'+BR+'" stroke-width="1" opacity=".5"/><circle cx="'+x+'" cy="'+y+'" r="'+R+'" fill="'+fill+'" stroke="'+(isRed?'#a63a28':BR)+'" stroke-width="3" filter="url(#sh)"/>';
-    if(t&&t!=='base'){const ic={start:'⚑',event:'!',dozor:'⚓',battle:'⚔',jail:'▦',market:'$'}[t]||'';s+='<text x="'+x+'" y="'+(y+27)+'" text-anchor="middle" font-size="22" font-weight="800" fill="'+(t==='market'?'#fff':BR)+'" opacity=".85" pointer-events="none">'+ic+'</text>'}
+    s+='<ellipse cx="'+x+'" cy="'+(y+6)+'" rx="'+(R+10)+'" ry="'+(R+6)+'" fill="#f1e0b0" stroke="#d6bd84" stroke-width="2" opacity=".9"/><ellipse cx="'+x+'" cy="'+(y+6)+'" rx="'+(R+15)+'" ry="'+(R+11)+'" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="4 7" opacity=".8"/><circle cx="'+x+'" cy="'+y+'" r="'+(R+3)+'" fill="none" stroke="'+BR+'" stroke-width="1" opacity=".5"/><circle cx="'+x+'" cy="'+y+'" r="'+R+'" fill="'+fill+'" stroke="'+(isRed?'#a63a28':BR)+'" stroke-width="3" filter="url(#sh)"/>';
+    if(t&&t!=='base'){const ic={start:'⚑',event:'❗',dozor:'⚓',battle:'⚔️',jail:'⛓️',market:'💰'}[t]||'';s+='<text x="'+x+'" y="'+(y+29)+'" text-anchor="middle" font-size="25" font-weight="800" fill="'+(t==='market'?'#fff':BR)+'" opacity=".95" pointer-events="none">'+ic+'</text>'}
     s+='<text x="'+x+'" y="'+(y+3)+'" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-size="34" font-weight="800" fill="'+BR+'" pointer-events="none">'+numOf(id)+'</text>';
     if(!t)s+='<text x="'+x+'" y="'+(y+27)+'" text-anchor="middle" font-size="22" font-weight="700" fill="'+BR+'" opacity=".35" pointer-events="none">?</text>';
     if(pickable.has(id))s+='<circle class="ring" cx="'+x+'" cy="'+y+'" r="'+(R+8)+'" fill="none" stroke="#12a05a" stroke-width="6"/>';
@@ -2081,7 +2084,7 @@ function renderMap(){
     g.style.transform='translate('+dx+'px,'+dy+'px)';SFX.play('move',250);
     try{const NS='http://www.w3.org/2000/svg',mp=document.getElementById('map'),c0=g.querySelector('circle:not(.halo)');if(c0){const ex=+c0.getAttribute('cx'),ey=+c0.getAttribute('cy');for(let k=1;k<=6;k++){const w=document.createElementNS(NS,'circle');w.setAttribute('class','wake');w.setAttribute('r',String(7-k*.6));const wx=ex+dx*(1-k/7),wy=ey+dy*(1-k/7);w.setAttribute('cx',wx);w.setAttribute('cy',wy);w.style.transformOrigin=wx+'px '+wy+'px';w.style.animationDelay=(k*.08)+'s';mp.insertBefore(w,g);setTimeout(()=>w.remove(),1800)}}}catch(_){}
     void g.getBoundingClientRect();
-    requestAnimationFrame(()=>{g.style.transition='transform .6s cubic-bezier(.4,.1,.2,1)';g.style.transform='translate(0,0)'});
+    g.style.transform='';try{g.animate([{transform:'translate('+dx+'px,'+dy+'px)'},{transform:'translate('+(dx*.5-dy*.16)+'px,'+(dy*.5+dx*.16-8)+'px) scale(1.12)',offset:.5},{transform:'translate(0,0)'}],{duration:750,easing:'cubic-bezier(.4,.1,.2,1)'})}catch(_){g.style.transition='transform .6s';g.style.transform='translate(0,0)'}
   });
   UI.pp=Object.assign({},UI.np);
   const sc=document.getElementById('mapscroll'),mz=document.getElementById('mapz');
