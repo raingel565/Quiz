@@ -109,7 +109,7 @@ body{background:radial-gradient(900px 600px at 12% 108%,rgba(40,140,80,.22),tran
 .pill{background:var(--sunk);border:0;box-shadow:var(--sh-in);padding:4px 12px}
 .pill .dot{box-shadow:0 0 6px currentColor}
 .dot{border:0;background:var(--accent);box-shadow:0 0 8px rgba(52,196,109,.7)}
-.dot.off{background:#3a4348;box-shadow:none;opacity:1}
+.dot.off{display:none!important}
 .btn{background:var(--raise);border:0;border-radius:14px;padding:8px 13px;box-shadow:var(--sh-out);transition:transform .12s,box-shadow .12s,filter .12s}
 .btn:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.12);box-shadow:var(--sh-out),0 0 0 1px rgba(52,196,109,.45)}
 .btn:active:not(:disabled){transform:translateY(1px);box-shadow:var(--sh-in)}
@@ -315,7 +315,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V14</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V15</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -1672,7 +1672,7 @@ function nowHtml(){
 function topHtml(){
   const p=P();
   const dots=Array.from({length:Math.max(3,G.apMax||3)},(_,i)=>i).map(i=>'<span class="dot'+(i<G.ap?'':' off')+'" style="background:var(--accent)"></span>').join('');
-  return '<span class="title">Гранд Лайн</span><span class="pill">Раунд '+G.round+'</span><span class="pill"><span class="avw sm" style="--pc:'+p.color+'">'+av(p.ch)+'</span>'+esc(pname(p))+'</span><span class="pill">ОД '+dots+'</span><span class="pill gold"><i class="coin"></i>'+((NET.on&&G.players[NET.me])?G.players[NET.me]:p).berries+' Б</span>'
+  return '<span class="title">Гранд Лайн</span><span class="pill">Раунд '+G.round+'</span><span class="pill"><span class="avw sm" style="--pc:'+p.color+'">'+av(p.ch)+'</span>'+esc(pname(p))+'</span><span class="pill">ОД '+dots+(G.ap>0?'':'<b>0</b>')+'</span><span class="pill gold"><i class="coin"></i>'+((NET.on&&G.players[NET.me])?G.players[NET.me]:p).berries+' Б</span>'
    +(G.roll?'<span class="pill">Кубики: '+G.roll[0]+' + '+G.roll[1]+' = '+(G.roll[0]+G.roll[1])+'</span>':'')
    +(G.lastWeather?'<span class="pill" title="'+esc(G.lastWeather.n)+'">Погода: '+esc(G.lastWeather.n.split(':')[0])+'</span>':'')
    +(NET.on&&NET.code?'<span class="pill">Комната '+NET.code+(NET.me>=0?' · вы: '+esc(G.players[NET.me].name):' · наблюдатель')+'</span>':'')
