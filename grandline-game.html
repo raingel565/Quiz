@@ -302,7 +302,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V9</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V10</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -1614,7 +1614,10 @@ function render(){
   else if(G.pending&&UI.viewer===need)m=pendingHtml();
   else if(UI.showRules)m=helpHtml();
   try{document.title=(NET.on&&need===NET.me&&G.winner==null?'▶ Ваш ход · ':'')+'Гранд Лайн: настольная игра'}catch(e){}
+  // V10: при перерисовке окна (например, раунды дуэли) не сбрасывать прокрутку, если это то же самое окно
+  const mo=document.querySelector('#modal .modal'),mt=mo&&mo.querySelector('h2'),ms=mo?mo.scrollTop:0,mh=mt?mt.textContent:null;
   $('#modal').innerHTML=m;
+  if(mh!=null){const mn=document.querySelector('#modal .modal'),nt=mn&&mn.querySelector('h2');if(mn&&nt&&nt.textContent===mh)mn.scrollTop=ms}
   bind();
   botSchedule();
 }
