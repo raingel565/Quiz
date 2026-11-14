@@ -303,7 +303,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V12</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V13</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -601,6 +601,10 @@ function toastPush(s){
   toastSync();
 }
 const log=s=>{logSnd(s);try{toastPush(s)}catch(e){}G.log.unshift(s);if(G.log.length>250)G.log.pop();if(LOGCAP)LOGCAP.push(s)};
+// V13: приватные записи журнала. Видны полностью только владельцу карты, остальным — обезличенный текст.
+const lgViewer=()=>NET.on?NET.me:(UI.viewer!=null&&UI.viewer>=0?UI.viewer:-1);
+const lgv=s=>{if(typeof s!=='string'||s.charCodeAt(0)!==1)return s;const a=s.slice(1).split('\u0002');return (+a[0]===lgViewer())?a[1]:a[2]};
+const logP=(o,priv,pub)=>{const t='\u0001'+o+'\u0002'+priv+'\u0002'+pub;logSnd(pub);try{toastPush(lgv(t))}catch(e){}G.log.unshift(t);if(G.log.length>250)G.log.pop();if(LOGCAP)LOGCAP.push(pub)};
 const pname=p=>p.name+' ('+CH[p.ch].n+')';
 function typeOf(id){return G.type[id]||null}
 function isCombat(id){const t=G.type[id];return t==='dozor'||t==='battle'}
@@ -927,7 +931,7 @@ function checkTasks(){
   }
 }
 function giveCards(p,kind,n){
-  for(let i=0;i<n;i++)drawFor(p,kind,c=>{if(!c)return;if(p[kind].length<10){p[kind].push(c);fxCard(p,c);log(p.name+' получает '+(kind==='atk'?'карту атаки '+c.v:'пассивку «'+PAS[c.key].n+'»')+'.')}else{G.discard.push(c);log(p.name+': рука полна, карта ушла в сброс.')}});
+  for(let i=0;i<n;i++)drawFor(p,kind,c=>{if(!c)return;if(p[kind].length<10){p[kind].push(c);fxCard(p,c);logP(p.i,p.name+' получает '+(kind==='atk'?'карту атаки '+c.v:'пассивку «'+PAS[c.key].n+'»')+'.',p.name+' получает '+(kind==='atk'?'карту атаки':'пассивную способность')+'.')}else{G.discard.push(c);log(p.name+': рука полна, карта ушла в сброс.')}});
 }
 function applyOpt(p,o,def){
   if(o.r){p.berries+=o.r;log(p.name+' получает +'+o.r+' Берри.')}
@@ -1174,7 +1178,7 @@ function startNpcFight(p,type,cb,fromJail){
         taskEvent(p,'npcWin',{pasUsed});
         if(p.ltask&&p.ltask.def.k==='lvl5'&&p.ltask.paid&&b.lv===5)p.ltask.done=true;
         const sks=SPECIAL_PAY[type][b.lv]||[];
-        for(const sk of sks){const i=G.specials.findIndex(c=>c.key===sk);if(i>=0&&p.tre.length<3){const c=G.specials.splice(i,1)[0];p.tre.push(c);fxCard(p,c);log(p.name+' получает особую карту «'+TRE[sk].n+'»!');break}}
+        for(const sk of sks){const i=G.specials.findIndex(c=>c.key===sk);if(i>=0&&p.tre.length<3){const c=G.specials.splice(i,1)[0];p.tre.push(c);fxCard(p,c);logP(p.i,p.name+' получает особую карту «'+TRE[sk].n+'»!',p.name+' получает особую карту сокровищ.');break}}
         if(b.lv<=2&&type==='pirate'){const sh=p.tre.find(c=>c.key==='shears'&&activeC(c));if(sh){discardCard(p,sh);p.bA+=2;log(p.name+' применил Ножницы Похитителя Теней: +2 к атаке навсегда.')}}
         cb&&cb();
       }else if(w===1){
@@ -1352,10 +1356,10 @@ function actions(){
     const price=Math.max(0,30-disc);
     add('market','Купить карту сокровищ ('+price+' Берри)',()=>{
       pay(p,price);G.tm.buy++;
-      drawFor(p,'tre',c=>{if(c){p.tre.push(c);fxCard(p,c);log(p.name+' покупает карту сокровищ: «'+TRE[c.key].n+'».')}});
+      drawFor(p,'tre',c=>{if(c){p.tre.push(c);fxCard(p,c);logP(p.i,p.name+' покупает карту сокровищ: «'+TRE[c.key].n+'».',p.name+' покупает карту сокровищ.')}});
     },p.berries<price||p.tre.length>=3||(!G.decks.tre.length&&!G.discard.some(c=>c.kind==='tre')));
   }
-  if(atMarket&&!G.guestBought)add('market','Купить гостевого персонажа (50 Берри)',()=>{pay(p,50);G.tm.buy++;G.guestBought=true;const c=card('tre',{key:G.guest});p.tre.push(c);fxCard(p,c);log(p.name+' нанимает гостя: «'+TRE[c.key].n+'».')},p.berries<50||p.tre.length>=3);
+  if(atMarket&&!G.guestBought)add('market','Купить гостевого персонажа (50 Берри)',()=>{pay(p,50);G.tm.buy++;G.guestBought=true;const c=card('tre',{key:G.guest});p.tre.push(c);fxCard(p,c);logP(p.i,p.name+' нанимает гостя: «'+TRE[c.key].n+'».',p.name+' нанимает гостя.')},p.berries<50||p.tre.length>=3);
   if(p.ltask){
     const lt2=p.ltask,kk=lt2.def.k,atL=p.loc==='L';
     const payCube=()=>{p.pon.pop();log(p.name+' сбрасывает куб роад-понеглифа.')};
@@ -1650,7 +1654,7 @@ function nowHtml(){
     const last=G.cur===G.players.length-1;
     next='После хода: бросок дохода 2d6 у следующего игрока'+(last?', перед этим — карта погоды раунда':'')+'.';
   }
-  const lg=G.log&&G.log.length?G.log[0]:'';
+  const lg=G.log&&G.log.length?lgv(G.log[0]):'';
   return (mine?'<span><b style="color:var(--accent)">▶ Ваш ход</b></span>':NET.on?'<span class="nx">Ожидаем: '+esc(pname(G.players[viewerNeeded()]))+'</span>':'')+'<span><b>Сейчас:</b> '+esc(now)+'</span>'+(next?'<span class="nx"><b>Дальше:</b> '+esc(next)+'</span>':'')+(lg?'<span class="nx"><b>Только что:</b> '+esc(lg)+'</span>':'');
 }
 function topHtml(){
@@ -1685,7 +1689,7 @@ function sideHtml(){
   h+='</div>';
   if(showHand)h+=handHtml(NET.on?meP:p);
   h+=hPlayers;
-  h+='<div class="card pr4"><h3><span class="pn">4</span>Журнал</h3><div id="log">'+G.log.slice(0,60).map(l=>'<div>'+esc(l)+'</div>').join('')+'</div></div>';
+  h+='<div class="card pr4"><h3><span class="pn">4</span>Журнал</h3><div id="log">'+G.log.slice(0,60).map(l=>'<div>'+esc(lgv(l))+'</div>').join('')+'</div></div>';
   return h;
 }
 function handHtml(p){
@@ -1709,7 +1713,7 @@ function curtainHtml(need){
 }
 function winHtml(){
   const p=G.players[G.winner];
-  return '<div class="ov"><div class="modal" style="text-align:center;align-items:center"><h2>Король Пиратов: '+esc(pname(p))+'</h2><div>'+esc(G.log[0])+'</div><button class="btn primary" data-ui="new">Новая игра</button></div></div>';
+  return '<div class="ov"><div class="modal" style="text-align:center;align-items:center"><h2>Король Пиратов: '+esc(pname(p))+'</h2><div>'+esc(lgv(G.log[0]))+'</div><button class="btn primary" data-ui="new">Новая игра</button></div></div>';
 }
 function pendingHtml(){
   const pe=G.pending;
