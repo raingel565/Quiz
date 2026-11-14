@@ -91,6 +91,28 @@ table.t td,table.t th{border:1px solid var(--line);padding:3px 6px;text-align:ce
 #map .pawn image{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 90%}
 @keyframes bob{50%{transform:translateY(-3px) rotate(2deg)}}
 /* V20 */
+
+/* V21 */
+.think i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-left:2px;animation:thk 1.2s infinite}
+.think i:nth-child(2){animation-delay:.2s}.think i:nth-child(3){animation-delay:.4s}
+@keyframes thk{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+.turnme{background:var(--accent)!important;color:var(--accent-ink)!important;border-color:var(--accent)!important;animation:tme 1.6s ease-in-out infinite}
+@keyframes tme{50%{box-shadow:0 0 0 5px rgba(79,179,184,.35)}}
+#qoov{position:fixed;inset:0;z-index:9800;display:flex;align-items:center;justify-content:center;padding:12px;background:rgba(5,8,7,.62);backdrop-filter:blur(6px)}
+#qoov .modal{max-width:560px;width:100%;max-height:calc(100vh - 24px);overflow:auto;display:flex;flex-direction:column;gap:10px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:16px}
+#qoov h2{margin:0}
+#qoov .tgrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:12px}
+#qoov .seg{display:flex;gap:4px}
+#qoov .seg .btn.on,#qoov .tg.on{background:var(--accent);color:var(--accent-ink)}
+#qoov .rp{border-left:3px solid var(--line);padding:2px 0 2px 10px;font-size:13px}
+#qoov .rph{margin-top:8px;font-weight:800;color:var(--accent)}
+#qoov .ach{display:flex;gap:8px;align-items:center;padding:4px 0;font-size:13px}
+#qoov .ach.lock{opacity:.45}
+.hintbar{flex-basis:100%;padding:6px 10px;border-radius:8px;background:rgba(79,179,184,.14);border:1px dashed var(--accent);font-size:13px}
+#side .hl{animation:hlp 1.2s ease-in-out infinite;outline:2px solid var(--gold)}
+@keyframes hlp{50%{box-shadow:0 0 0 6px rgba(224,181,82,.4)}}
+.stt{border-collapse:collapse;width:100%;font-size:13px}.stt th,.stt td{padding:4px 6px;border-bottom:1px solid var(--line);text-align:center}.stt td:first-child,.stt th:first-child{text-align:left}
+.awd{font-size:13px;margin:2px 0}
 /* V20: реакции */
 #reactw{position:fixed;left:10px;bottom:10px;z-index:9000;display:none;font-family:inherit}
 #reactw.on{display:block}
@@ -212,6 +234,23 @@ body{background:radial-gradient(900px 600px at 12% 108%,rgba(40,140,80,.22),tran
 .toast button:hover{background:rgba(255,255,255,.3)}
 #toasts .tclear{pointer-events:auto;align-self:flex-start;border:0;border-radius:10px;background:rgba(22,27,30,.8);color:#cfc8b6;font:600 11px var(--f-body);padding:3px 9px;cursor:pointer}
 @keyframes toastin{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+
+/* V21: светлая тема */
+:root[data-theme="light"]:root:root{
+  --bg:#e8eef2; --panel:#ffffff; --ink:#1d2730; --muted:#5e6b76; --line:rgba(30,50,70,.16);
+  --accent:#1f8f55; --accent-ink:#ffffff; --gold:#b87a00; --danger:#c8402b; --good:#2d7a45;
+  --raise:linear-gradient(150deg,#ffffff 0%,#edf1f4 100%); --sunk:#e1e8ed;
+  --sh-out:4px 6px 14px rgba(40,60,80,.18),-2px -2px 8px rgba(255,255,255,.9),inset 0 1px 0 #fff;
+  --sh-in:inset 2px 3px 6px rgba(40,60,80,.2),inset -2px -2px 5px rgba(255,255,255,.9);
+  color-scheme:light}
+:root[data-theme="light"] html,:root[data-theme="light"] body{background:#e8eef2}
+:root[data-theme="light"] body{background:radial-gradient(900px 600px at 12% 108%,rgba(60,170,110,.16),transparent 60%),radial-gradient(800px 500px at 100% -10%,rgba(60,140,170,.14),transparent 60%),#e8eef2}
+:root[data-theme="light"] .btn.primary{background:linear-gradient(150deg,#3fcf7a,#1b9a4e);color:#04170c}
+:root[data-theme="light"] #qoov .modal,:root[data-theme="light"] .modal{background:#fff;color:var(--ink)}
+:root[data-theme="light"] .ov{background:rgba(220,230,238,.65)}
+:root[data-theme="light"] .legend,:root[data-theme="light"] .legend span{color:#5a3b1f}
+:root[data-theme="light"] .pill.gold,:root[data-theme="light"] .gold{color:#8a5a00}
+
 /* ===== блоки и микроблоки ===== */
 .card{padding:16px 16px 18px;gap:12px}
 .card h3{font-size:17px;margin:0 0 2px}
@@ -400,7 +439,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V20</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V21</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -704,11 +743,11 @@ function toastPush(s){
 }
 const BNR=[[/арестован дозором|садится в тюрьму|телепортируется в тюрьму/,'⚓','Дозор!','bad'],[/проиграл боссу: пираты/,'🏴‍☠️','Ограбление!','bad'],[/выполнил(?:а)? (?:задание|«)/,'✔','Задание выполнено','good'],[/побеждает «/,'⚔','Победа в бою','good']];
 function logBanner(t){if(window.__nor)return;for(const [re,ic,ti,tone] of BNR)if(re.test(t)){fxEvent({stage:'post',banner:1,tone,icon:ic,title:ti,desc:t,auto:2300,snd:null});return}}
-const log=s=>{logSnd(s);try{logBanner(s)}catch(e){}try{toastPush(s)}catch(e){}G.log.unshift(s);if(G.log.length>250)G.log.pop();if(LOGCAP)LOGCAP.push(s)};
+const log=s=>{statLine(s);if(G)G.logN=(G.logN||0)+1;logSnd(s);try{logBanner(s)}catch(e){}try{toastPush(s)}catch(e){}G.log.unshift(s);if(G.log.length>250)G.log.pop();if(LOGCAP)LOGCAP.push(s)};
 // V13: приватные записи журнала. Видны полностью только владельцу карты, остальным — обезличенный текст.
 const lgViewer=()=>NET.on?NET.me:(UI.viewer!=null&&UI.viewer>=0?UI.viewer:-1);
 const lgv=s=>{if(typeof s!=='string'||s.charCodeAt(0)!==1)return s;const a=s.slice(1).split('\u0002');return (+a[0]===lgViewer())?a[1]:a[2]};
-const logP=(o,priv,pub)=>{const t='\u0001'+o+'\u0002'+priv+'\u0002'+pub;logSnd(pub);try{toastPush(lgv(t))}catch(e){}G.log.unshift(t);if(G.log.length>250)G.log.pop();if(LOGCAP)LOGCAP.push(pub)};
+const logP=(o,priv,pub)=>{const t='\u0001'+o+'\u0002'+priv+'\u0002'+pub;statLine(pub);if(G)G.logN=(G.logN||0)+1;logSnd(pub);try{toastPush(lgv(t))}catch(e){}G.log.unshift(t);if(G.log.length>250)G.log.pop();if(LOGCAP)LOGCAP.push(pub)};
 const pname=p=>p.name+' ('+CH[p.ch].n+')';
 function typeOf(id){return G.type[id]||null}
 function isCombat(id){const t=G.type[id];return t==='dozor'||t==='battle'}
@@ -890,6 +929,7 @@ function incomeRoll(){
 // ---------- turns ----------
 function beginTurn(){
   const p=P();
+  (G.marks=G.marks||[]).push({pi:p.i,n:G.logN||0,r:G.round,name:p.name});if(G.marks.length>80)G.marks.shift();
   G.ap=Math.max(1,3+(p.ch==='nami'?Math.max(0,G.apMod):G.apMod));G.apMax=G.ap;G.duels=0;G.turnNo=(G.turnNo||0)+1;G.tm={mv0:p.cnt.moves,buy:0,pvp:0};G.stolen=false;G.cardBought=false;G.endAfter=false;
   if(p.skip>0){p.skip--;log(pname(p)+' пропускает ход (травма).');return endTurn()}
   if(p.jail>0){
@@ -1705,6 +1745,7 @@ function render(){
   const need=viewerNeeded();
   if(G.turnNo!==SNDT){SNDT=G.turnNo;if(!window.__nor&&(!NET.on||need===NET.me))fxSnd('turn')}
   if(G.pending&&G.pending.type==='duelResult'&&SNDD!==G.pending){SNDD=G.pending;fxSnd('duel')}
+  if(G.winner!=null)achCheck();
   if(G.winner!=null&&!SNDW){SNDW=1;fxSnd('win')}else if(G.winner==null)SNDW=0;
   $('#top').innerHTML=topHtml();
   $('#now').innerHTML=nowHtml();
@@ -1712,6 +1753,7 @@ function render(){
   renderMap();
   ACTS=actions();
   $('#side').innerHTML=sideHtml();
+  { const hh=hintHtml();if(hh)$('#now').insertAdjacentHTML('beforeend',hh);hintMark() }
   $('#legend').innerHTML=Object.entries(TYPES).map(([k,t])=>'<span><i style="background:'+t.c+'"></i>'+t.n+'</span>').join('')+'<span><i style="background:#cdbdee;border-color:#5b3f99!important"></i>⛰ переход между морями</span><span><i style="background:#fff"></i>«?» — фишка не вскрыта</span><span><i style="background:var(--gold);transform:rotate(45deg);border-radius:2px"></i><b>П</b> — остров понеглифа</span>';
   {const hum=G.players.filter(q=>!q.bot);if(!NET.on&&hum.length===1&&hum.length<G.players.length&&need!=null&&!G.players[need].bot)UI.viewer=hum[0].i}
   let m='';
@@ -1731,6 +1773,7 @@ function render(){
   $('#modal').innerHTML=m;
   if(mh!=null){const mn=document.querySelector('#modal .modal'),nt=mn&&mn.querySelector('h2');if(mn&&nt&&nt.textContent===mh)mn.scrollTop=ms}
   bind();
+  notifyTurn();
   botSchedule();
 }
 function nowHtml(){
@@ -1764,14 +1807,23 @@ function nowHtml(){
   const lg=G.log&&G.log.length?lgv(G.log[0]):'';
   return (mine?'<span><b style="color:var(--accent)">▶ Ваш ход</b></span>':NET.on?'<span class="nx">Ожидаем: '+esc(pname(G.players[viewerNeeded()]))+'</span>':'')+'<span><b>Сейчас:</b> '+esc(now)+'</span>'+(next?'<span class="nx"><b>Дальше:</b> '+esc(next)+'</span>':'')+(lg?'<span class="nx"><b>Только что:</b> '+esc(lg)+'</span>':'');
 }
+function turnPill(){
+  try{
+    if(G.winner!=null)return '';
+    const need=viewerNeeded(),w=G.players[need];if(!w)return '';
+    if(NET.on){return need===NET.me?'<span class="pill turnme">▶ Ваш ход</span>':'<span class="pill think">'+esc(w.name)+' ходит <i></i><i></i><i></i></span>'}
+    if(w.bot)return '<span class="pill think">бот думает <i></i><i></i><i></i></span>';
+  }catch(e){}
+  return '';
+}
 function topHtml(){
   const p=P();
   const dots=Array.from({length:Math.max(3,G.apMax||3)},(_,i)=>i).map(i=>'<span class="dot'+(i<G.ap?'':' off')+'" style="background:var(--accent)"></span>').join('');
-  return '<span class="title">Гранд Лайн</span><span class="pill">Раунд '+G.round+'</span><span class="pill"><span class="avw sm" style="--pc:'+p.color+'">'+av(p.ch)+'</span>'+esc(pname(p))+'</span><span class="pill">ОД '+dots+(G.ap>0?'':'<b>0</b>')+'</span><span class="pill gold"><i class="coin"></i>'+((NET.on&&G.players[NET.me])?G.players[NET.me]:p).berries+' Б</span>'
+  return '<span class="title">Гранд Лайн</span><span class="pill">Раунд '+G.round+'</span><span class="pill"><span class="avw sm" style="--pc:'+p.color+'">'+av(p.ch)+'</span>'+esc(pname(p))+'</span>'+turnPill()+'<span class="pill">ОД '+dots+(G.ap>0?'':'<b>0</b>')+'</span><span class="pill gold"><i class="coin"></i>'+((NET.on&&G.players[NET.me])?G.players[NET.me]:p).berries+' Б</span>'
    +(G.roll?'<span class="pill">Кубики: '+G.roll[0]+' + '+G.roll[1]+' = '+(G.roll[0]+G.roll[1])+'</span>':'')
    +(G.lastWeather?'<span class="pill" title="'+esc(G.lastWeather.n)+'">Погода: '+esc(G.lastWeather.n.split(':')[0])+'</span>':'')
    +(NET.on&&NET.code?'<span class="pill">Комната '+NET.code+(NET.me>=0?' · вы: '+esc(G.players[NET.me].name):' · наблюдатель')+'</span>':'')
-   +'<span class="sp"></span><button class="btn" id="sndbtn" title="Звук">'+(SFX.on?'🔊':'🔇')+'</button><button class="btn" data-guide>❓ Гайд</button><button class="btn primary" data-rules>📖 Правила</button><button class="btn" data-ui="rules">Справка и допущения</button>';
+   +'<span class="sp"></span><button class="btn" id="sndbtn" title="Звук">'+(SFX.on?'🔊':'🔇')+'</button><button class="btn" data-qo="replay" title="Что произошло">📜 Что было</button><button class="btn" data-qo="settings" title="Настройки">⚙</button><button class="btn" data-guide>❓ Гайд</button><button class="btn primary" data-rules>📖 Правила</button><button class="btn" data-ui="rules">Справка и допущения</button>';
 }
 function sideHtml(){
   const p=P();
@@ -1820,7 +1872,7 @@ function curtainHtml(need){
 }
 function winHtml(){
   const p=G.players[G.winner];
-  return '<div class="ov"><div class="modal" style="text-align:center;align-items:center"><h2>Король Пиратов: '+esc(pname(p))+'</h2><div>'+esc(lgv(G.log[0]))+'</div><button class="btn primary" data-ui="new">Новая игра</button></div></div>';
+  return '<div class="ov"><div class="modal" style="text-align:center;align-items:center;max-height:calc(100vh - 24px);overflow:auto"><h2>Король Пиратов: '+esc(pname(p))+'</h2><div>'+esc(lgv(G.log[0]))+'</div>'+statsHtml()+(G.achNew&&G.achNew.length?'<div style="margin-top:6px">🏆 Новые достижения: <b>'+G.achNew.map(esc).join(', ')+'</b></div>':'')+'<button class="btn primary" data-ui="new">Новая игра</button></div></div>';
 }
 function pendingHtml(){
   const pe=G.pending;
@@ -1954,6 +2006,141 @@ function helpHtml(){
   +'<li>В тюрьму после ареста вы не переноситесь: остаётесь на месте и пропускаете 2 хода (или платите 15 / играете «Побег»). Игроков за столом до 4 (по одному на море).</li>'
   +'<li>Карты атаки и пассивные способности покупаются за Берри (10 за карту) и не тратят ОД. За ход можно купить только одну такую карту, в руке не больше 10 карт атаки и 10 пассивок. Мусорщики стоят 1 ОД. Вивр-карты и Дэн-Дэн Муси бесплатны.</li>'
   +'</ul><button class="btn primary" data-ui="close">Закрыть</button></div></div>';
+}
+// ---------- V21: настройки, повтор хода, статистика, достижения ----------
+const SET={theme:'dark',hints:false,notif:false};
+(function(){try{Object.assign(SET,JSON.parse(localStorage.getItem('gl_set')||'{}'))}catch(e){}})();
+function setSave(){try{localStorage.setItem('gl_set',JSON.stringify(SET))}catch(e){}}
+function applyTheme(){const r=document.documentElement;if(SET.theme==='light')r.setAttribute('data-theme','light');else r.setAttribute('data-theme','dark')}
+applyTheme();
+const ACH=[
+ {id:'king',n:'Король Пиратов',d:'Выиграть партию',ok:(i,s)=>G.winner===i},
+ {id:'blood',n:'Первая кровь',d:'Выиграть хотя бы одну дуэль или бой',ok:(i,s)=>s.bossW+s.pvpW>=1},
+ {id:'hunter',n:'Охотник на пиратов',d:'Победить 3 босса за партию',ok:(i,s)=>s.bossW>=3},
+ {id:'duelist',n:'Дуэлянт',d:'Выиграть 2 дуэли у игроков',ok:(i,s)=>s.pvpW>=2},
+ {id:'unlucky',n:'Невезучий',d:'Быть ограбленным 2 раза за партию',ok:(i,s)=>s.robbed>=2},
+ {id:'jail',n:'Узник Импел Дауна',d:'Попасть в тюрьму или быть арестованным',ok:(i,s)=>s.arrests>=1},
+ {id:'doer',n:'Исполнитель',d:'Выполнить 3 задания за партию',ok:(i,s)=>s.tasks>=3},
+ {id:'rich',n:'Богач',d:'Закончить партию со 100+ Берри',ok:(i,s,q)=>q.berries>=100},
+ {id:'zun',n:'Буря Зунеш',d:'Увидеть 3 Зунеши за одну партию',ok:()=>(G.zunN||0)>=3},
+ {id:'flags',n:'Картограф',d:'Поставить 4 флага за партию',ok:(i,s)=>s.flags>=4}
+];
+function achLoad(){let o={ids:[],games:0,wins:0};try{Object.assign(o,JSON.parse(localStorage.getItem('gl_ach')||'{}'))}catch(e){}if(!Array.isArray(o.ids))o.ids=[];return o}
+const ST0=()=>({bossW:0,bossL:0,pvpW:0,pvpL:0,robbed:0,arrests:0,tasks:0,flags:0});
+function achCheck(){
+  if(!G||G.winner==null||G.achDone)return;G.achDone=true;G.achNew=[];
+  try{
+    const who=NET.on?(NET.me>=0?[NET.me]:[]):G.players.filter(q=>!q.bot).map(q=>q.i);
+    const A=achLoad();const st=G.st||[];
+    for(const i of who){A.games++;if(G.winner===i)A.wins++;
+      const s=Object.assign(ST0(),st[i]||{});
+      for(const a of ACH){if(A.ids.indexOf(a.id)<0&&a.ok(i,s,G.players[i])){A.ids.push(a.id);G.achNew.push(a.n)}}}
+    localStorage.setItem('gl_ach',JSON.stringify(A));
+  }catch(e){}
+}
+function statLine(t){
+  try{
+    if(!G||!G.players||typeof t!=='string')return;
+    const st=G.st=G.st||G.players.map(ST0);
+    const pn=x=>{let b=null;for(const q of G.players)if(x.startsWith(q.name+' ')&&(!b||q.name.length>b.name.length))b=q;return b};
+    let m,q;
+    if(t.indexOf(' побеждает «')>0&&(q=pn(t)))st[q.i].bossW++;
+    else if(t.indexOf(' проиграл боссу')>0&&(q=pn(t))){st[q.i].bossL++;if(/пираты (ограбили|забрали)|грабить нечего/.test(t))st[q.i].robbed++}
+    else if((m=/^Дуэль (.+) vs (.+): \d+:\d+\. (.+) побеждает\.$/.exec(t))){const w=G.players.find(z=>z.name===m[3]),l=G.players.find(z=>(z.name===m[1]||z.name===m[2])&&z!==w);if(w)st[w.i].pvpW++;if(l)st[l.i].pvpL++}
+    else if(/ выполнил(а)? /.test(t)&&(q=pn(t)))st[q.i].tasks++;
+    else if(t.indexOf(' ставит флаг ')>0&&(q=pn(t)))st[q.i].flags++;
+    else if(/арестован дозором|садится в тюрьму/.test(t)&&(q=pn(t)))st[q.i].arrests++;
+    else if(t.indexOf('Погода: Зунеша')===0)G.zunN=(G.zunN||0)+1;
+  }catch(e){}
+}
+function statsHtml(){
+  const st=G.st||[];
+  const row=(q,i)=>{const s=Object.assign(ST0(),st[i]||{});return '<tr><td><b>'+esc(q.name)+'</b></td><td>'+(s.bossW+s.pvpW)+' / '+(s.bossL+s.pvpL)+'</td><td>'+s.bossW+'</td><td>'+s.tasks+'</td><td>'+s.flags+'</td><td>'+s.robbed+'</td><td>'+q.cnt.moves+'</td><td>'+q.berries+'</td></tr>'};
+  let h='<table class="stt"><tr><th></th><th>Дуэли В/П</th><th>Боссы</th><th>Задания</th><th>Флаги</th><th>Ограблен</th><th>Ходов</th><th>Берри</th></tr>'+G.players.map(row).join('')+'</table>';
+  const best=(f)=>{let bi=-1,bv=0;G.players.forEach((q,i)=>{const v=f(Object.assign(ST0(),st[i]||{}),q);if(v>bv){bv=v;bi=i}});return bi<0?null:[G.players[bi].name,bv]};
+  const aw=[['⚔ Лучший дуэлянт',best(s=>s.bossW+s.pvpW)],['💸 Самый невезучий',best(s=>s.robbed+s.arrests)],['📜 Больше всех заданий',best(s=>s.tasks)],['🪙 Самый богатый',best((s,q)=>q.berries)]].filter(x=>x[1]);
+  return h+aw.map(x=>'<div class="awd">'+x[0]+': <b>'+esc(x[1][0])+'</b> ('+x[1][1]+')</div>').join('');
+}
+function replayHtml(){
+  if(!G)return '<h2>Что было</h2><div>Партия ещё не началась.</div>';
+  const v=NET.on?NET.me:(UI.viewer>=0?UI.viewer:P().i);
+  const M=G.marks||[];let k=-1;
+  for(let i=M.length-1;i>=0;i--)if(M[i].pi===v){k=i;break}
+  if(k>=0&&k===M.length-1){let j=-1;for(let i=k-1;i>=0;i--)if(M[i].pi===v){j=i;break}if(j>=0)k=j}
+  const start=k>=0?M[k]:(M[0]||{n:0});
+  const cnt=Math.min((G.logN||0)-start.n,G.log.length);
+  const lines=G.log.slice(0,Math.max(0,cnt)).reverse();
+  const heads={};for(const m of M)if(m.n>=start.n)heads[m.n-start.n]=m;
+  let h='<h2>Что было</h2><div class="small">События с начала вашего прошлого хода (если вы ещё не ходили — с начала партии).</div>';
+  if(!lines.length)h+='<div>Пока ничего не происходило.</div>';
+  lines.forEach((l,i)=>{const hd=heads[i];if(hd)h+='<div class="rph">Раунд '+hd.r+' · ходит '+esc(hd.name)+'</div>';h+='<div class="rp">'+esc(lgv(l))+'</div>'});
+  return h;
+}
+function setHtml(){
+  const A=achLoad();
+  const seg=(k,v,l)=>'<button class="btn'+(SET[k]===v?' on':'')+'" data-qo="'+k+'" data-v="'+v+'">'+l+'</button>';
+  const tg=(k,l,sub)=>'<div class="tgrow"><div><b>'+l+'</b>'+(sub?'<div class="small">'+sub+'</div>':'')+'</div><button class="btn tg'+(SET[k]?' on':'')+'" data-qo="'+k+'">'+(SET[k]?'Вкл':'Выкл')+'</button></div>';
+  const nsup=typeof Notification==='undefined';
+  let h='<h2>Настройки</h2>'
+   +'<div class="tgrow"><b>Тема</b><div class="seg">'+seg('theme','dark','Тёмная')+seg('theme','light','Светлая')+'</div></div>'
+   +tg('hints','Подсказка «что могу сделать»','Строка над картой подсказывает доступные действия и подсвечивает «Закончить ход».')
+   +tg('notif','Уведомление «ваш ход»','В онлайн-партии, когда вкладка свёрнута. '+(nsup?'<span style="color:var(--danger)">Браузер не поддерживает.</span>':(Notification.permission==='denied'?'<span style="color:var(--danger)">Уведомления запрещены в настройках браузера.</span>':'')))
+   +'<h3 style="margin:6px 0 0">Достижения · '+A.ids.length+' из '+ACH.length+'</h3><div class="small">Партий: '+A.games+', побед: '+A.wins+' (на этом устройстве)</div>'
+   +ACH.map(a=>{const o=A.ids.indexOf(a.id)>=0;return '<div class="ach'+(o?'':' lock')+'"><span style="font-size:20px">'+(o?'🏆':'🔒')+'</span><div><b>'+a.n+'</b><div class="small">'+a.d+'</div></div></div>'}).join('');
+  return h;
+}
+function qoOpen(k){
+  qoClose();const o=document.createElement('div');o.id='qoov';o.dataset.k=k;
+  o.innerHTML='<div class="modal">'+(k==='replay'?replayHtml():setHtml())+'<button class="btn primary" data-qo="close">Закрыть</button></div>';
+  document.body.appendChild(o);
+}
+function qoClose(){const o=document.getElementById('qoov');if(o)o.remove()}
+document.addEventListener('click',async ev=>{
+  const bt=ev.target.closest&&ev.target.closest('[data-qo]');
+  if(!bt){const o=document.getElementById('qoov');if(o&&ev.target===o)qoClose();return}
+  const k=bt.dataset.qo,o=document.getElementById('qoov');
+  if(k==='replay'||k==='settings'){qoOpen(k);return}
+  if(k==='close'){qoClose();return}
+  if(k==='theme'){SET.theme=bt.dataset.v;setSave();applyTheme()}
+  else if(k==='hints'){SET.hints=!SET.hints;setSave();try{render()}catch(e){}}
+  else if(k==='notif'){
+    if(!SET.notif){
+      if(typeof Notification!=='undefined'){let p=Notification.permission;if(p==='default'){try{p=await Notification.requestPermission()}catch(e){}}SET.notif=(p==='granted')}
+    }else SET.notif=false;
+    setSave();
+  }
+  if(o&&o.dataset.k==='settings'){const sc=o.querySelector('.modal').scrollTop;qoOpen('settings');document.querySelector('#qoov .modal').scrollTop=sc}
+});
+let NOT_LAST=null;
+function notifyTurn(){
+  try{
+    if(!SET.notif||!NET.on||!G||G.winner!=null){return}
+    const mine=viewerNeeded()===NET.me;const key=G.turnNo+'/'+(G.pending?G.pending.type:'');
+    if(!mine){NOT_LAST=null;return}
+    if(NOT_LAST===key)return;NOT_LAST=key;
+    if(document.hidden&&typeof Notification!=='undefined'&&Notification.permission==='granted'){
+      const n=new Notification('Гранд Лайн: ваш ход',{body:'Раунд '+G.round+' · '+(G.players[NET.me]?G.players[NET.me].name:''),tag:'gl-turn'});
+      n.onclick=()=>{try{window.focus();n.close()}catch(e){}};
+    }
+  }catch(e){}
+}
+function hintHtml(){
+  if(!SET.hints||!G||G.winner!=null||G.pending)return '';
+  const need=viewerNeeded();
+  if(NET.on?need!==NET.me:(UI.viewer!==need||G.players[need].bot))return '';
+  const A=(typeof ACTS!=='undefined'?ACTS:[]).filter(a=>!a.dis);
+  if(G.ap<=0)return '<div class="hintbar">💡 Очки действий закончились — нажмите «Закончить ход».</div>';
+  const mv=A.filter(a=>a.loc).length,has=g=>A.some(a=>a.g===g);
+  const parts=[];
+  if(mv)parts.push('идти ('+mv+' '+(mv===1?'путь':'пути')+', зелёные кольца на карте)');
+  if(has('flag'))parts.push('поставить флаг');if(has('cards'))parts.push('купить карту');
+  if(has('duel'))parts.push('вызвать на дуэль');if(has('market'))parts.push('Чёрный рынок');
+  if(has('task'))parts.push('действия с заданием');if(has('tre'))parts.push('сыграть карту сокровищ');
+  return '<div class="hintbar">💡 Осталось ОД: <b>'+G.ap+'</b>. Можно: '+(parts.length?parts.join(', '):'только закончить ход')+'. Каждое действие тратит ОД.</div>';
+}
+function hintMark(){
+  try{if(!SET.hints||!G||G.winner!=null||G.pending||G.ap>0)return;
+    document.querySelectorAll('#side [data-a]').forEach(b=>{const a=ACTS[+b.dataset.a];if(a&&a.g==='end'&&!a.dis)b.classList.add('hl')})}catch(e){}
 }
 function bind(){
   document.querySelectorAll('#modal [data-a],#side [data-a]').forEach(b=>b.onclick=()=>{submit({t:'a',i:+b.dataset.a})});
@@ -2252,7 +2439,7 @@ function renderSetup(){
     h+='<div class="row"><label>Игроков: <select id="cnt">'+[2,3,4].map(n=>'<option'+(S.n===n?' selected':'')+'>'+n+'</option>').join('')+'</select></label></div>';
     h+='<div class="grp">'+[0,1,2,3].slice(0,S.n).map(i=>'<div class="row"><input id="nm'+i+'" value="'+esc(S.names[i])+'" maxlength="14" style="padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)"><label class="small" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="bt'+i+'"'+(S.bots[i]?' checked':'')+'> 🤖 бот</label></div>').join('')+'</div><div class="small">Бот играет сам: собирает понеглифы, выполняет задания и идёт на Лафтейл. Остальные ходят по очереди на этом экране.</div>';
     h+='<button class="btn primary" id="go">Бросить кубики на очерёдность</button>';
-    h+='<button class="btn" data-ui="net">Играть по сети: каждый на своём устройстве</button><button class="btn" data-rules>📖 Правила игры</button>';
+    h+='<button class="btn" data-ui="net">Играть по сети: каждый на своём устройстве</button><button class="btn" data-rules>📖 Правила игры</button><button class="btn" data-qo="settings">⚙ Настройки</button>';
   }else if(S.step==='roll'){
     h+='<h2>Очерёдность хода</h2><table class="t"><tr><th>Игрок</th><th>2d6</th></tr>'+S.order.map(o=>'<tr><td>'+esc(o.name)+'</td><td>'+o.r+'</td></tr>').join('')+'</table><div class="small">Больше сумма — раньше ход. Ничьи перебрасываются. Персонажей и море выбирают по порядку, и карту вы увидите заранее.</div><button class="btn primary" id="go2">Выбирать персонажей</button>';
   }else{
@@ -3011,7 +3198,7 @@ function botSchedule(){
 }
 
 // ---------- test API ----------
-window.__g={reactSub,reactSend,
+window.__g={statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
