@@ -90,6 +90,19 @@ table.t td,table.t th{border:1px solid var(--line);padding:3px 6px;text-align:ce
 #map .halo{animation:pulse 1.4s ease-in-out infinite}
 #map .pawn image{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 90%}
 @keyframes bob{50%{transform:translateY(-3px) rotate(2deg)}}
+/* V20 */
+/* V20: реакции */
+#reactw{position:fixed;left:10px;bottom:10px;z-index:9000;display:none;font-family:inherit}
+#reactw.on{display:block}
+#reactb{width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(28,31,38,.85);backdrop-filter:blur(10px);font-size:24px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+#reactp{position:absolute;left:0;bottom:54px;display:none;flex-wrap:wrap;gap:4px;width:228px;padding:8px;border-radius:16px;background:rgba(28,31,38,.92);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);box-shadow:0 8px 24px rgba(0,0,0,.45)}
+#reactp.open{display:flex}
+#reactp button{width:40px;height:40px;border-radius:12px;border:0;background:rgba(255,255,255,.08);font-size:22px;cursor:pointer}
+#reactp button:active{transform:scale(.88)}
+.rfloat{position:fixed;z-index:9500;pointer-events:none;text-align:center;animation:rfl 3s ease-out forwards}
+.rfloat b{display:block;font-size:46px;line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
+.rfloat span{display:inline-block;margin-top:2px;padding:1px 8px;border-radius:9px;background:rgba(28,31,38,.85);color:#fff;font-size:12px;font-weight:700}
+@keyframes rfl{0%{opacity:0;transform:translateY(20px) scale(.4)}12%{opacity:1;transform:translateY(0) scale(1.25)}25%{transform:scale(1)}100%{opacity:0;transform:translateY(-190px) scale(1)}}
 /* V17: визуал — дуэль, карта, погода, баннеры */
 .arena{display:flex;align-items:stretch;gap:6px;position:relative;flex-shrink:0;min-height:170px}.modal>*{flex-shrink:0}
 .arena .dfc{flex:1;min-width:0;overflow:hidden;border:2px solid var(--pcol,#8a8f98);border-radius:18px;padding:10px 8px;text-align:center;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(0,0,0,.12))}
@@ -387,7 +400,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V19</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V20</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2427,12 +2440,45 @@ async function netJoin(code,create){
       NET.meta=sn.exists?sn.data():null;
       if(NET.meta&&NET.meta.status==='playing'&&!NET.started){NET.started=true;startOnline(NET.meta)}else render();
     },e=>netErr(e,'Связь с комнатой')));
+    reactSub(code);
     NET.unsub.push(NET.db.collection('games/'+code+'/seats').onSnapshot(sn=>{
       NET.seats=sn.docs.map(d=>d.data()).sort((a,b)=>a.ts-b.ts);if(!G)render();
     },e=>netErr(e,'Список игроков')));
   }catch(e){NET.err='Не удалось войти: '+(e&&e.message||e)}
   NET.busy=false;render();
 }
+
+const REACTS=['❤️','😂','😮','👍','🔥','😭','😡','🏴‍☠️','🍖','👏','💀','🎉'];
+function reactShow(e,name){
+  try{const o=document.createElement('div');o.className='rfloat';o.style.left=(8+Math.random()*(Math.min(innerWidth,700)-90))+'px';o.style.bottom=(70+Math.random()*60)+'px';
+  o.innerHTML='<b>'+esc(e)+'</b><span>'+esc(name||'')+'</span>';document.body.appendChild(o);setTimeout(()=>o.remove(),3100)}catch(_){}
+}
+let REACT_LAST=0;
+async function reactSend(e){
+  if(!NET.db||!NET.code||Date.now()-REACT_LAST<1200)return;REACT_LAST=Date.now();
+  const n=((NET.rn=(NET.rn||0)+1));
+  reactShow(e,'Вы');
+  try{await NET.db.doc('games/'+NET.code+'/reacts/'+NET.uid).set({uid:NET.uid,name:NET.name||'Игрок',e,n,ts:Date.now(),k:Math.random()})}catch(_){}
+}
+function reactSub(code){
+  NET.rseen=null;
+  NET.unsub.push(NET.db.collection('games/'+code+'/reacts').onSnapshot(sn=>{
+    const first=!NET.rseen;NET.rseen=NET.rseen||{};
+    for(const d of sn.docs){const v=d.data();if(!v||!v.uid)continue;const key=v.k+':'+v.n;
+      if(NET.rseen[v.uid]===key)continue;NET.rseen[v.uid]=key;
+      if(first||v.uid===NET.uid||Date.now()-(v.ts||0)>10000)continue;
+      reactShow(v.e,v.name)}
+  },()=>{}));
+}
+(function reactInit(){
+  const w=document.createElement('div');w.id='reactw';
+  w.innerHTML='<div id="reactp">'+REACTS.map(x=>'<button data-re="'+x+'" aria-label="Реакция">'+x+'</button>').join('')+'</div><button id="reactb" aria-label="Реакции">😊</button>';
+  const add=()=>{document.body.appendChild(w);
+    w.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;if(b.id==='reactb'){document.getElementById('reactp').classList.toggle('open');return}
+      if(b.dataset.re){reactSend(b.dataset.re);document.getElementById('reactp').classList.remove('open')}};
+    setInterval(()=>{w.classList.toggle('on',!!(NET.db&&NET.code&&(NET.stage==='room'||NET.on)));if(!w.classList.contains('on'))document.getElementById('reactp').classList.remove('open')},600)};
+  if(document.body)add();else document.addEventListener('DOMContentLoaded',add);
+})();
 async function setSeat(patch){
   const me=NET.seats.find(x=>x.uid===NET.uid);if(!me)return;
   try{await NET.db.doc('games/'+NET.code+'/seats/'+NET.uid).set(Object.assign({},me,patch))}catch(e){netErr(e,'Не удалось выбрать')}
@@ -2965,7 +3011,7 @@ function botSchedule(){
 }
 
 // ---------- test API ----------
-window.__g={
+window.__g={reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
