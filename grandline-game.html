@@ -302,7 +302,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V8</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V9</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -317,11 +317,11 @@ const WAVES=[[369,239],[442,186],[112,436],[134,349],[634,191],[557,271],[76,206
 const COLORS=['#d94b3d','#2f6fdb','#e0a21a','#7a45c9','#1f9d8a','#d1569a'];
 const TYPES={start:{n:'Старт',c:'#c4e8cf'},event:{n:'Ивентовая (задания)',c:'#fbd7a0'},base:{n:'Базовая',c:'#ffffff'},dozor:{n:'База Дозора',c:'#bcd3f5'},battle:{n:'Поле битвы',c:'#f5b0a6'},jail:{n:'Тюрьма',c:'#d0d3da'},market:{n:'Чёрный рынок',c:'#3a3a44'}};
 const CH={
- zoro:{n:'Зоро',A:4,U:2,d:'Две карты атаки в одном слоте'},
- kata:{n:'Катакури',A:4,U:7,d:'Самое высокое уклонение'},
- luffy:{n:'Луффи',A:4,U:3,d:'+3 ко всем выложенным картам атаки'},
+ zoro:{n:'Зоро',A:6,U:3,d:'Две карты атаки в одном слоте'},
+ kata:{n:'Катакури',A:5,U:6,d:'Самое высокое уклонение'},
+ luffy:{n:'Луффи',A:6,U:3,d:'+3 ко всем выложенным картам атаки'},
  hancock:{n:'Хенкок',A:4,U:5,d:'Соперник не может использовать пассивные способности'},
- law:{n:'Трафальгар Ло',A:5,U:3,d:'Раз в ход крадёт случайную карту у игрока из того же моря'},
+ law:{n:'Трафальгар Ло',A:5,U:4,d:'Раз в ход крадёт случайную карту у игрока из того же моря'},
  nami:{n:'Нами',A:4,U:4,d:'Иммунитет к погоде; +5 к каждой выплате дохода'},
  olesya:{n:'Олеся Д. Мося',A:4,U:4,d:'При взятии карты смотрит две верхние и выбирает одну'},
  robin:{n:'Нико Робин',A:4,U:4,d:'Сама выбирает задание Лафтейла; для победы по понеглифам хватает трёх'}
@@ -603,7 +603,10 @@ const log=s=>{logSnd(s);try{toastPush(s)}catch(e){}G.log.unshift(s);if(G.log.len
 const pname=p=>p.name+' ('+CH[p.ch].n+')';
 function typeOf(id){return G.type[id]||null}
 function isCombat(id){const t=G.type[id];return t==='dozor'||t==='battle'}
-function stats(p){return{A:CH[p.ch].A+p.bA,U:CH[p.ch].U+p.bU}}
+// V9: новые базовые статы персонажей; старые онлайн-комнаты (без флага top) играют по прежним значениям, чтобы не рассинхронизироваться
+const CH_OLD={zoro:[4,2],kata:[4,7],luffy:[4,3],law:[5,3]};
+function baseStat(ch){const o=NET.on&&!(NET.meta&&NET.meta.top===1)&&CH_OLD[ch];return o?{A:o[0],U:o[1]}:CH[ch]}
+function stats(p){const b=baseStat(p.ch);return{A:b.A+p.bA,U:b.U+p.bU}}
 function newGame(cfg){
   try{SFX.stopVoice()}catch(e){}
   CID=1;
