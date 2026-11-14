@@ -387,7 +387,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V18</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V19</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -1699,7 +1699,7 @@ function render(){
   renderMap();
   ACTS=actions();
   $('#side').innerHTML=sideHtml();
-  $('#legend').innerHTML=Object.entries(TYPES).map(([k,t])=>'<span><i style="background:'+t.c+'"></i>'+t.n+'</span>').join('')+'<span><i style="background:#fff"></i>«?» — фишка не вскрыта</span><span><i style="background:var(--gold);transform:rotate(45deg);border-radius:2px"></i><b>П</b> — остров понеглифа</span>';
+  $('#legend').innerHTML=Object.entries(TYPES).map(([k,t])=>'<span><i style="background:'+t.c+'"></i>'+t.n+'</span>').join('')+'<span><i style="background:#cdbdee;border-color:#5b3f99!important"></i>⛰ переход между морями</span><span><i style="background:#fff"></i>«?» — фишка не вскрыта</span><span><i style="background:var(--gold);transform:rotate(45deg);border-radius:2px"></i><b>П</b> — остров понеглифа</span>';
   {const hum=G.players.filter(q=>!q.bot);if(!NET.on&&hum.length===1&&hum.length<G.players.length&&need!=null&&!G.players[need].bot)UI.viewer=hum[0].i}
   let m='';
   if(G.winner!=null)m=winHtml();
@@ -2026,7 +2026,7 @@ function mapBase(fancy){
   const lab={N:[34,142,'NORTH BLUE','start'],E:[858,142,'EAST BLUE','start'],W:[34,946,'WEST BLUE','start'],S:[1554,946,'SOUTH BLUE','end']};
   for(const k in lab)s+='<text x="'+lab[k][0]+'" y="'+lab[k][1]+'" text-anchor="'+lab[k][3]+'" font-family="Cinzel,Georgia,serif" font-size="26" font-weight="800" letter-spacing="4" fill="'+BR+'" fill-opacity=".8">'+lab[k][2]+'</text>';
   for(const [a,b] of MAPD.edges){const p=MAPD.nodes[a],q=MAPD.nodes[b];s+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+q[0]+'" y2="'+q[1]+'" stroke="'+BR+'" stroke-width="2.6" stroke-dasharray="9 6" stroke-linecap="round"/>'}
-  for(const r of REDL){const p=MAPD.nodes[r];s+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+MT[0]+'" y2="'+MT[1]+'" stroke="#c0392b" stroke-width="3" stroke-dasharray="2 6" stroke-linecap="round"/>'}
+  for(const r of REDL){const p=MAPD.nodes[r];s+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+MT[0]+'" y2="'+MT[1]+'" stroke="#6b4aa8" stroke-width="3" stroke-dasharray="2 6" stroke-linecap="round"/>'}
   s+='<polygon points="'+(MT[0]-37)+','+(MT[1]+24)+' '+MT[0]+','+(MT[1]-40)+' '+(MT[0]+37)+','+(MT[1]+24)+'" fill="#fff" stroke="'+BR+'" stroke-width="2.5" stroke-linejoin="round"/><polygon points="'+(MT[0]-14)+','+(MT[1]-8)+' '+MT[0]+','+(MT[1]-40)+' '+(MT[0]+14)+','+(MT[1]-8)+' '+(MT[0]+6)+','+(MT[1]-3)+' '+MT[0]+','+(MT[1]-10)+' '+(MT[0]-6)+','+(MT[1]-3)+'" fill="#fff" stroke="'+BR+'" stroke-width="1.5"/><rect x="'+(MT[0]-66)+'" y="'+(MT[1]+24)+'" width="132" height="22" rx="3" fill="#fff" stroke="'+BR+'" stroke-width="2"/><text x="'+MT[0]+'" y="'+(MT[1]+39)+'" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-size="10.5" font-weight="800" fill="'+BR+'">REVERSE MOUNTAIN</text>';
   return s;
 }
@@ -2046,13 +2046,13 @@ function renderMap(){
     const t=G.type[id];
     PTnext[id]=t;
     const isRed=REDL.includes(id);
-    const fill=t?TYPES[t].c:(isRed?'#f5b5ab':'#fff');
+    const fill=t?TYPES[t].c:(isRed?'#cdbdee':'#fff');
     const rvl=PT.t&&!PT.t[id]&&t&&t!=='base';
     s+='<g data-id="'+id+'"'+(rvl?' class="rv"':'')+' style="cursor:'+(pickable.has(id)?'pointer':'default')+'">';
-    s+='<ellipse cx="'+x+'" cy="'+(y+6)+'" rx="'+(R+10)+'" ry="'+(R+6)+'" fill="#f1e0b0" stroke="#d6bd84" stroke-width="2" opacity=".9"/><ellipse cx="'+x+'" cy="'+(y+6)+'" rx="'+(R+15)+'" ry="'+(R+11)+'" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="4 7" opacity=".8"/><circle cx="'+x+'" cy="'+y+'" r="'+(R+3)+'" fill="none" stroke="'+BR+'" stroke-width="1" opacity=".5"/><circle cx="'+x+'" cy="'+y+'" r="'+R+'" fill="'+fill+'" stroke="'+(isRed?'#a63a28':BR)+'" stroke-width="3" filter="url(#sh)"/>';
+    s+='<ellipse cx="'+x+'" cy="'+(y+6)+'" rx="'+(R+10)+'" ry="'+(R+6)+'" fill="#f1e0b0" stroke="#d6bd84" stroke-width="2" opacity=".9"/><ellipse cx="'+x+'" cy="'+(y+6)+'" rx="'+(R+15)+'" ry="'+(R+11)+'" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="4 7" opacity=".8"/><circle cx="'+x+'" cy="'+y+'" r="'+(R+3)+'" fill="none" stroke="'+BR+'" stroke-width="1" opacity=".5"/><circle cx="'+x+'" cy="'+y+'" r="'+R+'" fill="'+fill+'" stroke="'+(isRed?'#5b3f99':BR)+'" stroke-width="3" filter="url(#sh)"/>';
     if(t&&t!=='base'){const ic={start:'⚑',event:'❗',dozor:'⚓',battle:'⚔️',jail:'⛓️',market:'💰'}[t]||'';s+='<text x="'+x+'" y="'+(y+29)+'" text-anchor="middle" font-size="25" font-weight="800" fill="'+(t==='market'?'#fff':BR)+'" opacity=".95" pointer-events="none">'+ic+'</text>'}
     s+='<text x="'+x+'" y="'+(y+3)+'" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-size="34" font-weight="800" fill="'+BR+'" pointer-events="none">'+numOf(id)+'</text>';
-    if(!t)s+='<text x="'+x+'" y="'+(y+27)+'" text-anchor="middle" font-size="22" font-weight="700" fill="'+BR+'" opacity=".35" pointer-events="none">?</text>';
+    if(!t)s+='<text x="'+x+'" y="'+(y+(isRed?29:27))+'" text-anchor="middle" font-size="'+(isRed?24:22)+'" font-weight="700" fill="'+(isRed?'#5b3f99':BR)+'" opacity="'+(isRed?'.9':'.35')+'" pointer-events="none">'+(isRed?'⛰':'?')+'</text>';
     if(pickable.has(id))s+='<circle class="ring" cx="'+x+'" cy="'+y+'" r="'+(R+8)+'" fill="none" stroke="#12a05a" stroke-width="6"/>';
     if(G.flags[id]!=null){const c=G.players[G.flags[id]].color;s+='<line x1="'+(x-R+2)+'" y1="'+(y-R-16)+'" x2="'+(x-R+2)+'" y2="'+(y-R+8)+'" stroke="#5a3b1f" stroke-width="3"/><polygon points="'+(x-R+2)+','+(y-R-16)+' '+(x-R+24)+','+(y-R-8)+' '+(x-R+2)+','+(y-R)+'" fill="'+c+'" stroke="#5a3b1f" stroke-width="1.5"/>'}
     if(G.ponAt[id]){const px=x+R-2,py=y-R+2;s+='<circle cx="'+x+'" cy="'+y+'" r="'+(R+6)+'" fill="none" stroke="#d9a21b" stroke-width="3" stroke-dasharray="5 4" pointer-events="none"/><g class="ponglow" pointer-events="none"><circle class="ring" cx="'+px+'" cy="'+py+'" r="22" fill="none" stroke="#d9a21b" stroke-width="3"/><rect x="'+(px-15)+'" y="'+(py-15)+'" width="30" height="30" rx="4" transform="rotate(45 '+px+' '+py+')" fill="#d9a21b" stroke="#2a2118" stroke-width="2.5"/><text x="'+px+'" y="'+(py+7)+'" text-anchor="middle" font-size="20" font-weight="800" fill="#2a2118">П</text></g><text x="'+x+'" y="'+(y+R+22)+'" text-anchor="middle" font-size="19" font-weight="800" fill="#8a5a00" pointer-events="none" stroke="#fff" stroke-width="5" paint-order="stroke">Понеглиф'+(G.ponAt[id].owner!=null?' · '+esc(G.players[G.ponAt[id].owner].name):'')+'</text>'}
@@ -2115,10 +2115,10 @@ function worldPreviewHtml(W,o){
   let s=mapBase();
   for(const id of Object.keys(MAPD.nodes)){
     const [x,y]=MAPD.nodes[id],isRed=REDL.includes(id),isStart=numOf(id)===1&&!isRed,sea=seaOf(id),pon=W.pon[sea]&&numOf(id)===W.pon[sea];
-    const fill=isStart?'#c4e8cf':(isRed?'#f5b5ab':'#fff');
+    const fill=isStart?'#c4e8cf':(isRed?'#cdbdee':'#fff');
     s+='<g>';
     if(isStart&&o.sel===sea)s+='<circle cx="'+x+'" cy="'+y+'" r="'+(R+14)+'" fill="none" stroke="#12a05a" stroke-width="7"/>';
-    s+='<circle cx="'+x+'" cy="'+y+'" r="'+(R+3)+'" fill="none" stroke="'+BR+'" stroke-width="1" opacity=".5"/><circle cx="'+x+'" cy="'+y+'" r="'+R+'" fill="'+fill+'" stroke="'+(isRed?'#a63a28':BR)+'" stroke-width="3" filter="url(#sh)"/>';
+    s+='<circle cx="'+x+'" cy="'+y+'" r="'+(R+3)+'" fill="none" stroke="'+BR+'" stroke-width="1" opacity=".5"/><circle cx="'+x+'" cy="'+y+'" r="'+R+'" fill="'+fill+'" stroke="'+(isRed?'#5b3f99':BR)+'" stroke-width="3" filter="url(#sh)"/>';
     if(isStart){
       const dd=worldDist(W,sea),tk=o.taken&&o.taken[sea];
       const lbl=tk?tk.slice(0,7):(dd==null?'':'→'+dd);
