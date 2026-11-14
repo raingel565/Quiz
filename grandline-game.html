@@ -302,7 +302,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V5</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V6</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -1686,7 +1686,7 @@ function handHtml(p){
   h+='<div class="blk"><div class="bt">Пассивные способности <em>'+p.pas.length+'/10</em></div>'+(p.pas.length?p.pas.map(c=>mc(PAS[c.key].n,PAS[c.key].d)).join(''):'<span class="small">нет карт</span>')+'</div>';
   h+='<div class="blk"><div class="bt">Сокровища <em>'+p.tre.length+'/3</em></div>'+(p.tre.length?p.tre.map(c=>mc(TRE[c.key].n,TRE[c.key].d,activeC(c)?'':'не активна')).join(''):'<span class="small">нет карт</span>')+'</div>';
   const tk=[p.task&&['Задание',p.task],p.ltask&&['Лафтейл',p.ltask]].filter(Boolean);
-  h+='<div class="blk"><div class="bt">Задания</div>'+(tk.length?tk.map(([n,t])=>mc(n+': '+t.def.t,t.def.d+(t.target?' (цель №'+t.target+')':'')+(t.def.rt?' · награда: '+t.def.rt:'')+(t.paid?' [куб сброшен]':'')+(t.moved?' [Зунеша переместилась]':''))).join(''):'<span class="small">нет активного задания</span>')+'</div>';
+  h+='<div class="blk"><div class="bt">Задания</div>'+(tk.length?tk.map(([n,t])=>(t.def.k==='world'&&t.target?'<div data-wroll="'+p.i+'" style="cursor:pointer">'+mc(n+': '+t.def.t,t.def.d+(t.def.rt?' · награда: '+t.def.rt:''),'🎲 выпало '+t.target)+'<div class="small" style="padding:0 4px 6px">Нужны 2 флага на локациях №'+t.target+' в двух морях. Нажмите, чтобы показать бросок ещё раз.</div></div>':mc(n+': '+t.def.t,t.def.d+(t.target?' (цель №'+t.target+')':'')+(t.def.rt?' · награда: '+t.def.rt:'')+(t.paid?' [куб сброшен]':'')+(t.moved?' [Зунеша переместилась]':'')))).join(''):'<span class="small">нет активного задания</span>')+'</div>';
   h+='<div class="small" style="padding:2px 4px">Особые ходы: нажмите на соседнюю локацию на карте.</div></div>';
   return h;
 }
@@ -1709,7 +1709,7 @@ function pendingHtml(){
 }
 function prepHtml(pe){
   const p=G.players[pe.who];
-  if(!UI.prep||UI.prep.key!==pe){UI.prep={key:pe,slots:[[],[],[]],pas:[]}}
+  if(!UI.prep||UI.prep.key!==pe){UI.prep={key:pe,slots:[[],[],[]],pas:[],act:null}}
   const S=UI.prep,per=p.ch==='zoro'?2:1;
   const used=new Set(S.slots.flat());
   const opp=pe.opp;
@@ -1726,8 +1726,8 @@ function prepHtml(pe){
     h+='<button class="crd'+(sel?' sel':'')+'" data-pas="'+c.cid+'" title="'+esc(ds)+'"><span>'+esc(nm)+'</span></button>';
   }
   if(!pl.length)h+='<span class="small">нет</span>';
-  h+='</div></div><div class="grp"><b>Карты атаки по раундам (нажмите карту, затем она встанет в первый свободный слот; нажмите на слот, чтобы вернуть)</b><div class="row">';
-  S.slots.forEach((sl,i)=>{h+='<div class="slot" data-slot="'+i+'"><span class="small">Раунд '+(i+1)+':</span> '+sl.map(id=>'<span class="tag">'+p.atk.find(c=>c.cid===id).v+'</span>').join('')+'</div>'});
+  h+='</div></div><div class="grp"><b>Карты атаки по раундам (чтобы поставить карту в нужный раунд — сначала нажмите на пустой слот, потом на карту; без выбора карта встанет в первый свободный слот. Слоты можно оставлять пустыми. Нажмите на заполненный слот, чтобы вернуть карту)</b><div class="row">';
+  S.slots.forEach((sl,i)=>{h+='<div class="slot" data-slot="'+i+'"'+(S.act===i&&sl.length<per?' style="border-color:#e0a21a;background:rgba(224,162,26,.16)"':'')+'><span class="small">Раунд '+(i+1)+(S.act===i&&sl.length<per?' ◀ сюда':'')+(sl.length?'':' (пусто)')+':</span> '+sl.map(id=>'<span class="tag">'+p.atk.find(c=>c.cid===id).v+'</span>').join('')+'</div>'});
   h+='</div><div class="row">';
   for(const c of p.atk.slice().sort((a,b)=>a.v-b.v)){if(used.has(c.cid))continue;h+='<button class="crd" data-atk="'+c.cid+'"><span class="num">'+c.v+'</span></button>'}
   h+='</div></div><div class="row"><button class="btn primary" data-prepok="1">Готово</button><button class="btn" data-a="0">Случайно</button></div></div></div>';
@@ -1798,6 +1798,7 @@ function rulesOpen(i){
 }
 function rulesClose(){const el=document.getElementById('rulesov');if(el)el.classList.remove('on')}
 document.addEventListener('click',e=>{
+  {const w=e.target.closest&&e.target.closest('[data-wroll]');if(w){const q=G&&G.players[+w.dataset.wroll];if(q&&q.task&&q.task.target){fxRoll('Кругосветная Экспедиция · '+q.name+' — выпало',[q.task.target],12);flushFx()}return}}
   if(e.target.closest&&e.target.closest('[data-pvz]')){UI.pvfit=!UI.pvfit;render();return}
   if(e.target.closest&&e.target.closest('[data-mapz]')){UI.mapfit=!UI.mapfit;UI.mapFor=null;render();return}
   const b=e.target.closest&&e.target.closest('[data-rules],[data-rclose],[data-rsec],[data-rnav]');
@@ -1872,9 +1873,9 @@ function bind(){
       render();
     });
     document.querySelectorAll('[data-atk]').forEach(b=>b.onclick=()=>{
-      const id=+b.dataset.atk;const sl=S.slots.find(s=>s.length<per);if(sl){sl.push(id);render()}
+      const id=+b.dataset.atk;const sl=(S.act!=null&&S.slots[S.act].length<per)?S.slots[S.act]:S.slots.find(s=>s.length<per);if(sl){sl.push(id);S.act=null;render()}
     });
-    document.querySelectorAll('[data-slot]').forEach(b=>b.onclick=()=>{S.slots[+b.dataset.slot].pop();render()});
+    document.querySelectorAll('[data-slot]').forEach(b=>b.onclick=()=>{const i=+b.dataset.slot;if(S.slots[i].length){S.slots[i].pop();S.act=i}else S.act=(S.act===i?null:i);render()});
     const ok=document.querySelector('[data-prepok]');
     if(ok)ok.onclick=()=>{
       const pr={slots:S.slots.map(s=>s.slice()),pas:S.pas.slice()};
