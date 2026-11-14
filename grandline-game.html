@@ -302,7 +302,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V6</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V7</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -650,7 +650,7 @@ function drawFor(p,name,cb){ // returns card via cb (olesya picks 1 of 2)
   if(p.ch==='olesya'){
     const a=drawDeck(name),b=drawDeck(name);
     if(a&&b){
-      ask('pick',{who:p.i,title:'Олеся: выберите одну из двух карт',opts:[a,b].map(c=>({label:cfull(c),run:()=>{const o=c===a?b:a;G.decks[name].push(o);cb(c)}}))});
+      ask('pick',{who:p.i,title:'Олеся: выберите одну из двух карт',opts:[a,b].map(c=>({label:cfull(c),run:()=>{const o=c===a?b:a;if(!NET.on||(NET.meta&&NET.meta.top===1))G.decks[name].unshift(o);else G.decks[name].push(o);cb(c)}}))});
       return;
     }
     cb(a||b);return;
@@ -2107,7 +2107,12 @@ function onMoves(snap){
 }
 function drain(){
   if(!G||NET.desync)return;
-  const prev=window.__nor;window.__nor=true;
+  const prev=window.__nor;
+  // V7: чужие ходы раньше применялись полностью без анимаций (__nor), поэтому игрок, чей ход наступал после чужого «закончить ход»,
+  // не видел окна броска кубиков / карты погоды — только запись в журнале. Теперь, если пришли 1–3 новых хода (живая игра), анимации показываются;
+  // при догрузке длинной истории (вход в комнату, восстановление) они по-прежнему отключены.
+  let avail=0;for(let k=NET.log.length;avail<6;k++){const arr=NET.remote[Math.floor(k/CHUNK)];if(!arr||arr[k%CHUNK]==null)break;avail++}
+  window.__nor=!(avail>0&&avail<=3&&(G.turnNo||0)>0&&!prev);
   try{
     for(;;){
       const k=NET.log.length,arr=NET.remote[Math.floor(k/CHUNK)];
@@ -2218,7 +2223,7 @@ async function netStart(){
   if(S.length<2||S.some(x=>!x.ok||!x.ch||!x.sea)){NET.err='Все игроки должны подтвердить выбор персонажа и моря';render();return}
   if(new Set(S.map(x=>x.ch)).size<S.length||new Set(S.map(x=>x.sea)).size<S.length){NET.err='Персонажи и моря не должны повторяться';render();return}
   const seed=1+Math.floor(Math.random()*2e9);
-  try{await NET.db.doc('games/'+NET.code).update({status:'playing',seed,players:S.map(x=>({uid:x.uid,name:x.name,ch:x.ch,sea:x.sea}))})}
+  try{await NET.db.doc('games/'+NET.code).update({status:'playing',seed,top:1,players:S.map(x=>({uid:x.uid,name:x.name,ch:x.ch,sea:x.sea}))})}
   catch(e){netErr(e,'Не удалось начать')}
 }
 function netLeave(){
