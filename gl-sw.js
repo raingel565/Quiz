@@ -12,7 +12,8 @@ self.addEventListener('fetch', e => {
   const r = e.request;
   if (r.method !== 'GET') return;
   const u = new URL(r.url);
-  if (u.origin !== location.origin) return;                 // шрифты, Firebase и т.п. — мимо кэша
+  if (u.origin !== location.origin) return;
+  if (/music_/.test(u.pathname)) return;                    // музыку (Range-запросы) отдаёт сеть напрямую                 // шрифты, Firebase и т.п. — мимо кэша
   if (!/grandline-game\.html$|gl-|\/assets\//.test(u.pathname) && !(r.mode === 'navigate' && /grandline/.test(u.pathname))) return;
   e.respondWith(
     fetch(r).then(res => {
