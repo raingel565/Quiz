@@ -1,6 +1,6 @@
 // Гранд Лайн: service worker. Сеть в приоритете (чтобы всегда была свежая версия), кэш — на случай офлайна.
-const CACHE = 'gl-v2';
-const CORE = ['./grandline-game.html', './gl-manifest.json', './gl-icon-192.png', './gl-icon-512.png'];
+const CACHE = 'gl-v3';
+const CORE = ['./gl-manifest.json', './gl-icon-192.png', './gl-icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).catch(() => {}));
   self.skipWaiting();
@@ -13,7 +13,7 @@ self.addEventListener('fetch', e => {
   if (r.method !== 'GET') return;
   const u = new URL(r.url);
   if (u.origin !== location.origin) return;                 // шрифты, Firebase и т.п. — мимо кэша
-  if (!/grandline-game\.html$|gl-/.test(u.pathname) && !(r.mode === 'navigate' && /grandline/.test(u.pathname))) return;
+  if (!/grandline-game\.html$|gl-|\/assets\//.test(u.pathname) && !(r.mode === 'navigate' && /grandline/.test(u.pathname))) return;
   e.respondWith(
     fetch(r).then(res => {
       if (res && res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(r, copy)); }
