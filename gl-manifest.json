@@ -1,0 +1,16 @@
+{
+  "name": "Гранд Лайн: настольная игра",
+  "short_name": "Гранд Лайн",
+  "description": "One Piece: настольная игра «Гранд Лайн» — онлайн и на одном экране",
+  "start_url": "./grandline-game.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b100d",
+  "theme_color": "#0b100d",
+  "lang": "ru",
+  "icons": [
+    {"src": "gl-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "gl-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}

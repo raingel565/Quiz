@@ -3,6 +3,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Гранд Лайн: настольная игра</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<link rel="manifest" href="gl-manifest.json">
+<meta name="theme-color" content="#0b100d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Гранд Лайн">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon" href="gl-icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Philosopher:wght@400;700&display=swap">
 <style>
@@ -441,7 +448,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V22</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V23</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2009,6 +2016,21 @@ function helpHtml(){
   +'<li>Карты атаки и пассивные способности покупаются за Берри (10 за карту) и не тратят ОД. За ход можно купить только одну такую карту, в руке не больше 10 карт атаки и 10 пассивок. Мусорщики стоят 1 ОД. Вивр-карты и Дэн-Дэн Муси бесплатны.</li>'
   +'</ul><button class="btn primary" data-ui="close">Закрыть</button></div></div>';
 }
+
+// ---------- V23: PWA ----------
+let DEFER=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();DEFER=e});
+window.addEventListener('appinstalled',()=>{DEFER=null});
+if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))window.addEventListener('load',()=>{navigator.serviceWorker.register('gl-sw.js').catch(()=>{})});
+function isStandalone(){try{return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true}catch(e){return false}}
+function installRow(){
+  let body;
+  if(isStandalone())body='<span style="color:var(--good)">Приложение установлено ✓</span>';
+  else if(DEFER)body='<button class="btn primary" data-qo="install">Установить</button>';
+  else if(/iPhone|iPad|iPod/.test(navigator.userAgent))body='<span class="small">Safari: «Поделиться» → «На экран “Домой”»</span>';
+  else body='<span class="small">Меню браузера → «Установить приложение» или «Добавить на главный экран»</span>';
+  return '<div class="tgrow"><div><b>Приложение на телефон</b><div class="small">Иконка на экране, запуск без адресной строки, офлайн-запуск.</div></div><div style="text-align:right">'+body+'</div></div>';
+}
 // ---------- V21: настройки, повтор хода, статистика, достижения ----------
 const SET={theme:'dark',hints:false,notif:false};
 (function(){try{Object.assign(SET,JSON.parse(localStorage.getItem('gl_set')||'{}'))}catch(e){}})();
@@ -2083,7 +2105,7 @@ function setHtml(){
   const seg=(k,v,l)=>'<button class="btn'+(SET[k]===v?' on':'')+'" data-qo="'+k+'" data-v="'+v+'">'+l+'</button>';
   const tg=(k,l,sub)=>'<div class="tgrow"><div><b>'+l+'</b>'+(sub?'<div class="small">'+sub+'</div>':'')+'</div><button class="btn tg'+(SET[k]?' on':'')+'" data-qo="'+k+'">'+(SET[k]?'Вкл':'Выкл')+'</button></div>';
   const nsup=typeof Notification==='undefined';
-  let h='<h2>Настройки</h2>'
+  let h='<h2>Настройки</h2>'+installRow()
    +'<div class="tgrow"><b>Тема</b><div class="seg">'+seg('theme','dark','Тёмная')+seg('theme','light','Светлая')+'</div></div>'
    +tg('hints','Подсказка «что могу сделать»','Строка над картой подсказывает доступные действия и подсвечивает «Закончить ход».')
    +tg('notif','Уведомление «ваш ход»','В онлайн-партии, когда вкладка свёрнута. '+(nsup?'<span style="color:var(--danger)">Браузер не поддерживает.</span>':(Notification.permission==='denied'?'<span style="color:var(--danger)">Уведомления запрещены в настройках браузера.</span>':'')))
@@ -2104,6 +2126,7 @@ document.addEventListener('click',async ev=>{
   if(k==='replay'||k==='settings'){qoOpen(k);return}
   if(k==='close'){qoClose();return}
   if(k==='theme'){SET.theme=bt.dataset.v;setSave();applyTheme()}
+  else if(k==='install'){if(DEFER){try{DEFER.prompt();await DEFER.userChoice}catch(e){}DEFER=null}}
   else if(k==='hints'){SET.hints=!SET.hints;setSave();try{render()}catch(e){}}
   else if(k==='notif'){
     if(!SET.notif){
@@ -2121,8 +2144,9 @@ function notifyTurn(){
     if(!mine){NOT_LAST=null;return}
     if(NOT_LAST===key)return;NOT_LAST=key;
     if(document.hidden&&typeof Notification!=='undefined'&&Notification.permission==='granted'){
-      const n=new Notification('Гранд Лайн: ваш ход',{body:'Раунд '+G.round+' · '+(G.players[NET.me]?G.players[NET.me].name:''),tag:'gl-turn'});
-      n.onclick=()=>{try{window.focus();n.close()}catch(e){}};
+      const T='Гранд Лайн: ваш ход',O={body:'Раунд '+G.round+' · '+(G.players[NET.me]?G.players[NET.me].name:''),tag:'gl-turn',icon:'gl-icon-192.png'};
+      const direct=()=>{try{const n=new Notification(T,O);n.onclick=()=>{try{window.focus();n.close()}catch(e){}}}catch(e){}};
+      if(navigator.serviceWorker&&navigator.serviceWorker.getRegistration)navigator.serviceWorker.getRegistration().then(r=>{if(r&&r.showNotification)r.showNotification(T,O);else direct()}).catch(direct);else direct();
     }
   }catch(e){}
 }
