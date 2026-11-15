@@ -472,20 +472,21 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .chars .btn.cc.sel{outline:2px solid #e9b94a;box-shadow:0 0 18px #e9b94a66,6px 8px 16px #0006}
 .chars .btn.cc:disabled{opacity:.42;filter:grayscale(.7)}
 .chars .btn.cc.sel{grid-column:span 2;text-align:left}
+@keyframes cciin{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
 .cc.sel .ccg{background:radial-gradient(circle at 25% 38%,#e9b94a33,#0000 58%)}
-.cc.sel .ccfig{left:25%;width:58%}
+.cc.sel .ccfig{left:25%;width:46%}
 .cc.sel::after{right:50%}
 .cc.sel .ccn,.cc.sel .ccs{right:50%}
 .cc.sel .ccav{right:50%}
 .chars .btn.cc.sel{height:auto;min-height:184px}
-.cc .cci{position:relative;margin-left:50%;padding:14px 12px 14px 4px;z-index:4;display:flex;flex-direction:column;gap:8px;color:#e6eef0}
+.cc .cci{animation:cciin .4s .1s both;position:relative;margin-left:50%;padding:14px 12px 14px 4px;z-index:4;display:flex;flex-direction:column;gap:8px;color:#e6eef0}
 .cc .ccst{display:flex;gap:14px;font-size:11px;color:#9aa8ad}.cc .ccst b{color:#e9b94a;font-size:14px;margin-left:3px}
 .cc .ccd{font-size:11.5px;line-height:1.38;color:#dfe7ea;padding-left:10px;border-left:2px solid #e9b94a88}
 .cc.sel .ccv{right:50%;width:50%}
 .cc .ccv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;opacity:0;transition:opacity .4s}
 .cc.vplay .ccv{opacity:1}.cc.vplay .ccfig{opacity:0;transition:opacity .4s}
 </style>
-<div id="ver" title="Версия игры">V42</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V43</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2615,9 +2616,21 @@ const charBtn=k=>(k===SECRET&&!secretOk())?'<button class="btn" data-secret="1">
 const CHW={zoro:1,sanji:1,nami:1,robin:1,hancock:1,kata:1,law:1,luffy:1},CHV={zoro:1,hancock:1}; // CHV: есть видео assets/ch/<id>.mp4 // персонажи с фото по пояс: assets/ch/<id>.webp
 const chBtn=(k,attr,dis,sel)=>charBtn(k)||'<button class="btn cc'+(sel?' sel':'')+'" '+attr+'="'+k+'"'+(dis?' disabled':'')+'><span class="ccg"></span>'+(CHW[k]?'<img class="ccfig" loading="lazy" src="assets/ch/'+k+'.webp" alt="">'+(CHV[k]&&sel?'<canvas class="ccv" data-k="'+k+'" width="260" height="360"></canvas>':''):'<span class="ccav">'+av(k)+'</span>')+'<span class="ccn">'+CH[k].n+'</span><span class="ccs">атака '+CH[k].A+' · уклонение '+CH[k].U+'</span>'+(sel?'<span class="cci"><span class="ccst"><span>Атака <b>'+CH[k].A+'</b></span><span>Уклонение <b>'+CH[k].U+'</b></span></span><span class="ccd">'+esc(CH[k].d)+'</span></span>':'')+'</button>';
 // видео выбранного персонажа: белый фон роликов убирается на лету (canvas), чтобы фигура «жила» на тёмной карточке
+// плавное раскрытие/перестановка карточек: запоминаем положение до перерисовки и «доезжаем» после неё (FLIP)
+let CH_SNAP=null;
+function chSnap(){CH_SNAP={};document.querySelectorAll('.chars .cc').forEach(e=>{CH_SNAP[e.dataset.ch||e.dataset.nch]=e.getBoundingClientRect()})}
+function chFlip(){
+  const sn=CH_SNAP;CH_SNAP=null;if(!sn)return;
+  document.querySelectorAll('.chars .cc').forEach(e=>{
+    const o=sn[e.dataset.ch||e.dataset.nch];if(!o||!e.animate)return;
+    const n=e.getBoundingClientRect(),dx=o.left-n.left,dy=o.top-n.top,sel=e.classList.contains('sel');
+    if(!sel&&Math.abs(dx)+Math.abs(dy)<2)return;
+    e.animate([{transform:'translate('+dx+'px,'+dy+'px)',clipPath:sel?'inset(0 50% 0 0 round 20px)':'inset(0 round 20px)'},{transform:'none',clipPath:'inset(0 round 20px)'}],{duration:340,easing:'cubic-bezier(.2,.8,.2,1)'});
+  });
+}
 const CHVID={};let CHV_RAF=0;
 function chVid(){
-  cancelAnimationFrame(CHV_RAF);
+  chFlip();cancelAnimationFrame(CHV_RAF);
   const cv=document.querySelector('.cc.sel canvas.ccv');
   Object.keys(CHVID).forEach(k=>{if(!cv||cv.dataset.k!==k){try{CHVID[k].pause()}catch(e){}}});
   if(!cv)return;
@@ -2698,7 +2711,7 @@ function renderSetup(){
   }else if(S.step==='roll'){g('go2').onclick=()=>{S.step='pick';renderSetup()}}
   else{
     document.querySelectorAll('[data-secret]').forEach(b=>b.onclick=()=>secretAsk(()=>renderSetup()));
-    document.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{S.selCh=b.dataset.ch;SFX.stopVoice();if(S.selCh==='zoro')SFX.play('zoro',0);if(S.selCh==='luffy')SFX.play('luffy',0);if(S.selCh==='law')SFX.play('law',0);renderSetup()});
+    document.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{chSnap();S.selCh=b.dataset.ch;SFX.stopVoice();if(S.selCh==='zoro')SFX.play('zoro',0);if(S.selCh==='luffy')SFX.play('luffy',0);if(S.selCh==='law')SFX.play('law',0);renderSetup()});
     chVid();
     document.querySelectorAll('[data-sea]').forEach(b=>b.onclick=()=>{S.selSea=b.dataset.sea;renderSetup()});
     g('pick').onclick=()=>{
@@ -2966,7 +2979,7 @@ function renderLobby(){
   if(g('njoin'))g('njoin').onclick=()=>{nm();netJoin(g('ncode').value,false)};
   if(g('nback'))g('nback').onclick=()=>{NET.on=false;render()};
   document.querySelectorAll('[data-secret]').forEach(b=>b.onclick=()=>secretAsk(()=>render()));
-  document.querySelectorAll('[data-nch]').forEach(b=>b.onclick=()=>{SFX.stopVoice();if(b.dataset.nch==='zoro')SFX.play('zoro',0);if(b.dataset.nch==='luffy')SFX.play('luffy',0);if(b.dataset.nch==='law')SFX.play('law',0);setSeat({ch:b.dataset.nch})});
+  document.querySelectorAll('[data-nch]').forEach(b=>b.onclick=()=>{chSnap();SFX.stopVoice();if(b.dataset.nch==='zoro')SFX.play('zoro',0);if(b.dataset.nch==='luffy')SFX.play('luffy',0);if(b.dataset.nch==='law')SFX.play('law',0);setSeat({ch:b.dataset.nch})});
   chVid();
   document.querySelectorAll('[data-nsea]').forEach(b=>b.onclick=()=>setSeat({sea:b.dataset.nsea}));
   if(g('nstart'))g('nstart').onclick=netStart;
