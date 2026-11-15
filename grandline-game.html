@@ -457,7 +457,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V29</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V30</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -465,7 +465,8 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 const MAPD={"nodes": {"N6": [230, 246], "N1": [348, 244], "N4": [468, 261], "N5": [531, 175], "N8": [570, 268], "N3": [680, 265], "N12": [201, 367], "N2": [75, 395], "N7": [318, 405], "N11": [468, 390], "N9": [608, 366], "N10": [542, 450], "W10": [214, 665], "W6": [172, 749], "W4": [75, 716], "W1": [306, 702], "W5": [283, 795], "W7": [465, 698], "W12": [591, 708], "W2": [647, 640], "W9": [680, 778], "W3": [572, 850], "W11": [424, 888], "W8": [288, 905], "E10": [1031, 190], "E2": [1150, 217], "E5": [1333, 248], "E12": [1452, 242], "E1": [1233, 298], "E8": [1371, 334], "E3": [1500, 331], "E6": [984, 291], "E4": [905, 419], "E7": [1126, 443], "E11": [1265, 455], "E9": [1421, 431], "S2": [1044, 645], "S5": [1213, 675], "S9": [1472, 661], "S10": [1120, 717], "S7": [1359, 727], "S4": [936, 742], "S6": [1050, 821], "S12": [1500, 778], "S3": [1412, 872], "S11": [1290, 874], "S8": [1145, 892], "S1": [905, 905]}, "edges": [["N6", "N1"], ["N6", "N2"], ["N1", "N4"], ["N4", "N5"], ["N5", "N8"], ["N4", "N8"], ["N8", "N3"], ["N3", "N9"], ["N9", "N10"], ["N10", "N11"], ["N11", "N7"], ["N7", "N12"], ["N12", "N2"], ["W10", "W1"], ["W1", "W7"], ["W7", "W12"], ["W12", "W2"], ["W12", "W9"], ["W9", "W3"], ["W3", "W11"], ["W11", "W8"], ["W1", "W5"], ["W5", "W6"], ["W6", "W4"], ["W6", "W10"], ["E10", "E2"], ["E2", "E1"], ["E1", "E5"], ["E5", "E12"], ["E12", "E3"], ["E3", "E8"], ["E8", "E9"], ["E9", "E11"], ["E11", "E7"], ["E7", "E6"], ["E6", "E10"], ["E6", "E4"], ["S2", "S5"], ["S2", "S10"], ["S5", "S7"], ["S7", "S9"], ["S9", "S12"], ["S12", "S3"], ["S3", "S11"], ["S11", "S8"], ["S8", "S6"], ["S6", "S4"], ["S6", "S1"], ["S4", "S10"], ["S4", "S1"]], "mt": [794, 567]};
 const SEAS={N:'Норт Блю',W:'Вест Блю',E:'Ист Блю',S:'Саус Блю'};
 const SEAK=['N','W','E','S'];
-const REDS={N:'N10',W:'W2',E:'E4',S:'S2'};
+const REDB={N:'N10',W:'W2',E:'E4',S:'S2'}; // исходные места проходов (позиции у Рэд Лайн)
+const REDS=Object.assign({},REDB); // номера проходов в текущей партии (случайные)
 const REDL=Object.values(REDS);
 const MT=MAPD.mt;
 const WAVES=[[369,239],[442,186],[112,436],[134,349],[634,191],[557,271],[76,206],[482,376],[109,285],[130,444],[472,192],[617,225],[266,460],[101,457],[637,365],[88,275],[85,447],[174,310],[467,235],[591,222],[622,319],[611,254],[143,937],[622,736],[419,689],[598,672],[615,670],[671,745],[546,912],[475,800],[514,872],[408,793],[292,732],[287,681],[626,793],[575,893],[389,869],[332,677],[158,902],[466,724],[388,717],[538,855],[78,679],[609,933],[1183,336],[1220,466],[1370,458],[1329,197],[957,300],[1347,195],[924,320],[1453,390],[1153,359],[1217,173],[1334,343],[1034,474],[981,414],[922,273],[1156,228],[1115,365],[1262,416],[944,247],[1321,367],[1424,304],[1002,382],[1425,304],[1287,823],[1251,758],[1016,682],[1042,717],[1099,759],[874,888],[1465,733],[1131,784],[866,714],[1291,913],[1240,929],[1188,704],[1389,667],[1329,926],[1263,843],[1270,841],[968,886],[1511,845],[925,737],[930,746],[1313,723],[974,814]];
@@ -604,9 +605,11 @@ let GEN_FALLBACK=0;
 function genWorld(wseed){
   const rn=mulb((wseed|0)^0x5bd1e995);
   const sh=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(rn()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-  const nodes={},edges=[],R=38;
+  const nodes={},edges=[],R=38,red2={};
+  const pon={};
+  for(const s of ['W','N','S'])pon[s]=1+Math.floor(rn()*6)+1+Math.floor(rn()*6);
   for(const s of SEAK){
-    const slots=Object.keys(BASEN).filter(k=>k[0]===s),red=REDS[s];
+    const slots=Object.keys(BASEN).filter(k=>k[0]===s),red=REDB[s];
     const [x0,y0,w,h]=SEAZ[s];
     let pos={},E=null;
     const lo=[x0+R+16,y0+R+16],hi=[x0+w-R-16,y0+h-R-16];
@@ -646,20 +649,20 @@ function genWorld(wseed){
         E=ch;pos=P;
       }
     }
-    if(!E){for(const k of slots)pos[k]=BASEN[k].slice();E=BASEE.filter(e=>e[0][0]===s);GEN_FALLBACK++}
-    const nums=sh([1,2,3,4,5,6,7,8,9,10,11,12].filter(n=>n!==numOf(red)));
-    const lab={};lab[red]=red;slots.filter(k=>k!==red).forEach((k,i)=>lab[k]=s+nums[i]);
+    let fb=false;if(!E){fb=true;for(const k of slots)pos[k]=BASEN[k].slice();E=BASEE.filter(e=>e[0][0]===s);GEN_FALLBACK++}
+    // номер красного прохода тоже случайный (не 1 — это старт моря, и не номер понеглифа)
+    const rnum=fb?numOf(red):sh([2,3,4,5,6,7,8,9,10,11,12].filter(n=>n!==pon[s]))[0];
+    const nums=sh([1,2,3,4,5,6,7,8,9,10,11,12].filter(n=>n!==rnum));
+    const lab={};lab[red]=s+rnum;red2[s]=s+rnum;slots.filter(k=>k!==red).forEach((k,i)=>lab[k]=s+nums[i]);
     for(const k of slots)nodes[lab[k]]=pos[k];
     for(const e of E)edges.push([lab[e[0]],lab[e[1]]]);
   }
-  const pon={};
-  for(const s of ['W','N','S'])pon[s]=1+Math.floor(rn()*6)+1+Math.floor(rn()*6);
-  return {seed:wseed|0,nodes,edges,pon};
+  return {seed:wseed|0,nodes,edges,pon,red:red2};
 }
 let WCUR=null;
 function setWorld(W){
   if(WCUR===W||(WCUR&&WCUR.seed===W.seed))return;
-  WCUR=W;MAPD.nodes=W.nodes;MAPD.edges=W.edges;rebuildAdj();
+  WCUR=W;MAPD.nodes=W.nodes;MAPD.edges=W.edges;Object.assign(REDS,W.red||REDB);REDL.length=0;REDL.push(...Object.values(REDS));rebuildAdj();
 }
 function worldFor(wseed){const W=genWorld(wseed);setWorld(W);return W}
 function worldDist(W,s){ // шагов от старта моря до понеглифа этого моря
