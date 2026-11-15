@@ -478,7 +478,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .cc .ccv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;opacity:0;transition:opacity .4s}
 .cc.vplay .ccv{opacity:1}.cc.vplay .ccf{opacity:0;transition:opacity .4s}
 </style>
-<div id="ver" title="Версия игры">V38</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V39</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2605,7 +2605,7 @@ function secretAsk(done){
   else alert('Неверный пароль.');
 }
 const charBtn=k=>(k===SECRET&&!secretOk())?'<button class="btn" data-secret="1"><span class="avw" style="--pc:#555;font-size:28px;font-weight:800;display:flex;align-items:center;justify-content:center">?</span><b>???</b><span>Секретный персонаж</span><span class="small">Нужен пароль</span></button>':null;
-const CHW={zoro:1,sanji:1,nami:1,robin:1},CHV={zoro:1}; // CHV: есть видео assets/ch/<id>.mp4 // персонажи с фото по пояс: assets/ch/<id>.webp
+const CHW={zoro:1,sanji:1,nami:1,robin:1,hancock:1,kata:1,law:1},CHV={zoro:1}; // CHV: есть видео assets/ch/<id>.mp4 // персонажи с фото по пояс: assets/ch/<id>.webp
 const chBtn=(k,attr,dis,sel)=>charBtn(k)||'<button class="btn cc'+(sel?' sel':'')+'" '+attr+'="'+k+'"'+(dis?' disabled':'')+'><span class="ccg"></span>'+(CHW[k]?'<img class="ccf" loading="lazy" src="assets/ch/'+k+'.webp" alt="">'+(CHV[k]&&sel?'<canvas class="ccv" data-k="'+k+'" width="260" height="360"></canvas>':''):'<span class="ccav">'+av(k)+'</span>')+'<span class="ccn">'+CH[k].n+'</span><span class="ccs">атака '+CH[k].A+' · уклонение '+CH[k].U+'</span></button>';
 // видео выбранного персонажа: белый фон роликов убирается на лету (canvas), чтобы фигура «жила» на тёмной карточке
 const CHVID={};let CHV_RAF=0;
