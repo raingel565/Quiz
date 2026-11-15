@@ -475,8 +475,10 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .ccinfo>b{display:block;font-size:17px;text-align:center}
 .ccst{display:flex;justify-content:center;gap:22px;margin:6px 0;font-size:12px;color:#9aa8ad}.ccst b{color:#e9b94a;font-size:14px}
 .ccd{font-size:12.5px;line-height:1.4;text-align:center;color:#dfe7ea}
+.cc .ccv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;opacity:0;transition:opacity .4s}
+.cc.vplay .ccv{opacity:1}.cc.vplay .ccf{opacity:0;transition:opacity .4s}
 </style>
-<div id="ver" title="Версия игры">V37</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V38</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2603,8 +2605,35 @@ function secretAsk(done){
   else alert('Неверный пароль.');
 }
 const charBtn=k=>(k===SECRET&&!secretOk())?'<button class="btn" data-secret="1"><span class="avw" style="--pc:#555;font-size:28px;font-weight:800;display:flex;align-items:center;justify-content:center">?</span><b>???</b><span>Секретный персонаж</span><span class="small">Нужен пароль</span></button>':null;
-const CHW={zoro:1,sanji:1,nami:1,robin:1}; // персонажи с фото по пояс: assets/ch/<id>.webp
-const chBtn=(k,attr,dis,sel)=>charBtn(k)||'<button class="btn cc'+(sel?' sel':'')+'" '+attr+'="'+k+'"'+(dis?' disabled':'')+'><span class="ccg"></span>'+(CHW[k]?'<img class="ccf" loading="lazy" src="assets/ch/'+k+'.webp" alt="">':'<span class="ccav">'+av(k)+'</span>')+'<span class="ccn">'+CH[k].n+'</span><span class="ccs">атака '+CH[k].A+' · уклонение '+CH[k].U+'</span></button>';
+const CHW={zoro:1,sanji:1,nami:1,robin:1},CHV={zoro:1}; // CHV: есть видео assets/ch/<id>.mp4 // персонажи с фото по пояс: assets/ch/<id>.webp
+const chBtn=(k,attr,dis,sel)=>charBtn(k)||'<button class="btn cc'+(sel?' sel':'')+'" '+attr+'="'+k+'"'+(dis?' disabled':'')+'><span class="ccg"></span>'+(CHW[k]?'<img class="ccf" loading="lazy" src="assets/ch/'+k+'.webp" alt="">'+(CHV[k]&&sel?'<canvas class="ccv" data-k="'+k+'" width="260" height="360"></canvas>':''):'<span class="ccav">'+av(k)+'</span>')+'<span class="ccn">'+CH[k].n+'</span><span class="ccs">атака '+CH[k].A+' · уклонение '+CH[k].U+'</span></button>';
+// видео выбранного персонажа: белый фон роликов убирается на лету (canvas), чтобы фигура «жила» на тёмной карточке
+const CHVID={};let CHV_RAF=0;
+function chVid(){
+  cancelAnimationFrame(CHV_RAF);
+  const cv=document.querySelector('.cc.sel canvas.ccv');
+  Object.keys(CHVID).forEach(k=>{if(!cv||cv.dataset.k!==k){try{CHVID[k].pause()}catch(e){}}});
+  if(!cv)return;
+  const k=cv.dataset.k;let v=CHVID[k];
+  if(!v){v=CHVID[k]=document.createElement('video');v.muted=true;v.loop=true;v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.src='assets/ch/'+k+'.mp4'}
+  const card=cv.closest('.cc'),ctx=cv.getContext('2d',{willReadFrequently:true}),W=cv.width,H=cv.height;
+  const p=v.play();if(p&&p.catch)p.catch(()=>{});
+  (function draw(){
+    if(!cv.isConnected)return;
+    if(v.readyState>=2&&!v.paused){
+      ctx.drawImage(v,0,0,W,H);
+      let im;try{im=ctx.getImageData(0,0,W,H)}catch(e){return} // file:// — canvas «грязный», остаётся статичное фото
+      const d=im.data;
+      for(let i=0;i<d.length;i+=4){
+        const r=d[i],g=d[i+1],b=d[i+2],m=r<g?(r<b?r:b):(g<b?g:b);
+        let a=(246-m)/34;a=a<0?0:a>1?1:a;
+        if(a<1){d[i+3]=a*255;if(a>0.02){const f=1-a;d[i]=Math.max(0,(r-255*f)/a);d[i+1]=Math.max(0,(g-255*f)/a);d[i+2]=Math.max(0,(b-255*f)/a)}}
+      }
+      ctx.putImageData(im,0,0);card.classList.add('vplay');
+    }
+    CHV_RAF=requestAnimationFrame(draw);
+  })();
+}
 const chInfo=k=>k&&CH[k]?'<div class="ccinfo"><b>'+CH[k].n+'</b><div class="ccst"><span>Атака <b>'+CH[k].A+'</b></span><span>Уклонение <b>'+CH[k].U+'</b></span></div><div class="ccd">'+esc(CH[k].d)+'</div></div>':'';
 // V12: перерисовка экрана выбора (персонаж/море) не должна сбрасывать прокрутку окна
 const modalKey=m=>{const a=m.querySelector('h2'),b=m.querySelector('.grp b,.small b');return (a?a.textContent:'')+'|'+(b?b.textContent:'')};
@@ -2663,6 +2692,7 @@ function renderSetup(){
   else{
     document.querySelectorAll('[data-secret]').forEach(b=>b.onclick=()=>secretAsk(()=>renderSetup()));
     document.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{S.selCh=b.dataset.ch;SFX.stopVoice();if(S.selCh==='zoro')SFX.play('zoro',0);if(S.selCh==='luffy')SFX.play('luffy',0);if(S.selCh==='law')SFX.play('law',0);renderSetup()});
+    chVid();
     document.querySelectorAll('[data-sea]').forEach(b=>b.onclick=()=>{S.selSea=b.dataset.sea;renderSetup()});
     g('pick').onclick=()=>{
       SFX.stopVoice();
@@ -2930,6 +2960,7 @@ function renderLobby(){
   if(g('nback'))g('nback').onclick=()=>{NET.on=false;render()};
   document.querySelectorAll('[data-secret]').forEach(b=>b.onclick=()=>secretAsk(()=>render()));
   document.querySelectorAll('[data-nch]').forEach(b=>b.onclick=()=>{SFX.stopVoice();if(b.dataset.nch==='zoro')SFX.play('zoro',0);if(b.dataset.nch==='luffy')SFX.play('luffy',0);if(b.dataset.nch==='law')SFX.play('law',0);setSeat({ch:b.dataset.nch})});
+  chVid();
   document.querySelectorAll('[data-nsea]').forEach(b=>b.onclick=()=>setSeat({sea:b.dataset.nsea}));
   if(g('nstart'))g('nstart').onclick=netStart;
   if(g('nroll'))g('nroll').onclick=netRollOrder;
