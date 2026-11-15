@@ -458,7 +458,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V34</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V35</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -1049,7 +1049,7 @@ function moveZunToSea(s){
 }
 function setZun(cell){
   const passengers=G.players.filter(q=>q.loc==='Z');
-  for(const q of passengers)if(q.ltask&&q.ltask.def.k==='zun'){q.ltask.moved=true;log(q.name+': Зунеша переместилась с ним на борту.')}
+  for(const q of passengers)if(q.ltask&&q.ltask.def.k==='zun'){q.ltask.moved=true;if(G.mode==='easy')q.ltask.done=true;log(q.name+': Зунеша переместилась с ним на борту.')}
   G.zun={cell};
   for(const q of G.players){if(q.loc===cell){q.loc='Z';passengers.push(q)}}
   log('Зунеша встала на '+locName(cell)+'.'+(passengers.length?' На борту: '+passengers.map(q=>q.name).join(', ')+'.':''));
@@ -1059,6 +1059,16 @@ const MODES={easy:{n:'Упрощённый',need:1,d:'Достаточно на�
   mid:{n:'Средний',need:2,d:'Нужно найти 2 роад-понеглифа и получить согласие их владельцев: Лафтейл появляется между двумя случайными локациями. Для победы нужны 2 куба.'},
   std:{n:'Стандартный',need:4,d:'Все 4 роад-понеглифа, поиск по броскам кубиков в каждом море. Для победы нужны 4 куба.'}};
 const modeOf=()=>MODES[(typeof G!=='undefined'&&G&&G.mode)||'std']||MODES.std;
+// сколько кубов понеглифа сбрасывают задания Лафтейла: упрощённый — 0, средний — 1 везде, стандартный — как на карте
+function cubeCost(k){const m=(G&&G.mode)||'std';return m==='easy'?0:m==='mid'?1:(k==='heritage'?2:1)}
+function lafDef(def){
+  if(def.cat==='laf-x')return def;
+  const m=(G&&G.mode)||'std';if(m==='std')return def;
+  let d=def.d;
+  if(m==='easy')d=d.replace('сбросьте 2 куба понеглифа и любые','сбросьте любые').replace('сбросьте 1 куб понеглифа и ','').replace(/\. После перемещения сбросьте 1 куб понеглифа/,'');
+  else d=d.replace('сбросьте 2 куба понеглифа','сбросьте 1 куб понеглифа');
+  return Object.assign({},def,{d,cat:'laf-x'});
+}
 // ---------- Laftel search ----------
 function ownersKey(){return G.players.map(p=>p.pon.length).join(',')+'|'+G.players.map(p=>p.pon.join('+')).join(';')}
 function searchStep(cb){
@@ -1125,8 +1135,10 @@ function checkLaftelArrival(p){
 function win(p,why){G.winner=p.i;G.pending=null;log(pname(p)+' '+why+' и становится Королём Пиратов!')}
 // ---------- tasks ----------
 function giveTask(p,cat,def,loc){
+  if(cat==='laf')def=lafDef(def);
   const t={cat,def,loc:loc||null,base:Object.assign({},p.cnt),seas:new Set([p.sea]),startSea:p.sea,target:null,done:false,takeAp:G.ap,turnNo:G.turnNo};
   if(def.k==='world'){do{t.target=d(12)}while(t.target===1);log(p.name+': выпало '+t.target+' — нужны 2 флага на локациях №'+t.target+' в двух морях и доход с них.')}
+  if(cat==='laf'&&G.mode==='easy'&&(def.k==='duelP'||def.k==='lvl5'))t.paid=true;
   return t;
 }
 function taskDone(p,t){
@@ -1574,9 +1586,9 @@ function actions(){
     const dis=ap<2||p.pon.length<1;
     if(p.ch==='robin')add('task','Выбрать задание Лафтейла (2 ОД)',()=>{
       G.ap-=2;
-      ask('pick',{who:p.i,title:'Нико Робин: задание Лафтейла',opts:G.decks.tlaf.map(def=>({label:def.t+' — '+def.d,run:()=>{G.decks.tlaf.splice(G.decks.tlaf.indexOf(def),1);p.ltask=giveTask(p,'laf',def);fxCard(p,{kind:'task',def});log(p.name+' выбирает задание Лафтейла «'+def.t+'».')}}))});
+      ask('pick',{who:p.i,title:'Нико Робин: задание Лафтейла',opts:G.decks.tlaf.map(def=>({label:def.t+' — '+lafDef(def).d,run:()=>{G.decks.tlaf.splice(G.decks.tlaf.indexOf(def),1);p.ltask=giveTask(p,'laf',def);fxCard(p,{kind:'task',def:p.ltask.def});log(p.name+' выбирает задание Лафтейла «'+def.t+'».')}}))});
     },dis);
-    else add('task','Карта Лафтейла (2 ОД)',()=>{G.ap-=2;const def=G.decks.tlaf.shift();p.ltask=giveTask(p,'laf',def);fxCard(p,{kind:'task',def});log(p.name+' тянет задание Лафтейла: «'+def.t+'».')},dis);
+    else add('task','Карта Лафтейла (2 ОД)',()=>{G.ap-=2;const def=G.decks.tlaf.shift();p.ltask=giveTask(p,'laf',def);fxCard(p,{kind:'task',def:p.ltask.def});log(p.name+' тянет задание Лафтейла: «'+def.t+'».')},dis);
   }
   // draw cards
   add('cards','Купить карту атаки ('+CARD_PRICE+' Берри)',()=>{pay(p,CARD_PRICE);G.cardBought=true;G.tm.buy++;drawFor(p,'atk',c=>{if(c){p.atk.push(c);fxCard(p,c);log(p.name+' покупает карту атаки.')}})},p.berries<CARD_PRICE||p.atk.length>=10||!!G.cardBought);
@@ -1609,11 +1621,12 @@ function actions(){
       const hand=()=>[...p.atk.map(c=>['atk',c]),...p.pas.map(c=>['pas',c]),...p.tre.map(c=>['tre',c])];
       const pen=c=>c.kind==='tre'?(c.key==='trap'?15:c.key==='debt'?10:0):0;
       const canN=()=>{let b=p.berries,n=0;for(const [k,c] of hand().sort((x,y)=>pen(x[1])-pen(y[1]))){if(pen(c)<=b){b-=pen(c);n++}}return n};
-      add('task','Сбросить 2 куба понеглифа и 5 карт с руки («'+lt2.def.t+'»)',()=>{
-        payCube();payCube();
+      const hc=cubeCost('heritage');
+      add('task','Сбросить '+(hc?hc+(hc===1?' куб':' куба')+' понеглифа и ':'')+'5 карт с руки («'+lt2.def.t+'»)',()=>{
+        for(let i=0;i<hc;i++)payCube();
         const step=n=>{if(n===0){lt2.done=true;return}
           ask('pick',{who:p.i,title:'Наследие Джой Боя: сбросьте карту (осталось '+n+')',opts:hand().map(([k,c])=>({label:(k==='atk'?'Атака '+c.v:cname(c))+(pen(c)?' (штраф '+pen(c)+' Берри)':''),dis:pen(c)>p.berries,run:()=>{if(k==='tre'){if(pen(c))pay(p,pen(c));discardCard(p,c)}else{p[k].splice(p[k].indexOf(c),1);G.discard.push(c)}step(n-1)}}))})};
-        step(5)},p.pon.length<2||canN()<5);
+        step(5)},p.pon.length<hc||canN()<5);
     }
     if((kk==='duelP'||kk==='lvl5')&&atL&&!lt2.paid)add('task','Сбросить 1 куб понеглифа («'+lt2.def.t+'»)',()=>{payCube();lt2.paid=true},p.pon.length<1);
     if(kk==='zun'&&lt2.moved)add('task','Сбросить 1 куб понеглифа после перемещения («'+lt2.def.t+'»)',()=>{payCube();lt2.done=true},p.pon.length<1);
@@ -3159,7 +3172,7 @@ function bPend(p,pe,A){
       const cards=p.atk.length+p.pas.length+p.tre.length;
       const find=re=>A.findIndex(a=>!a.dis&&re.test(a.label));
       const holders=bHolders(p).length>0;
-      if(p.pon.length>=2&&cards>=5&&find(/Наследие/)>=0)return find(/Наследие/);
+      if(p.pon.length>=cubeCost('heritage')&&cards>=5&&find(/Наследие/)>=0)return find(/Наследие/);
       if(holders&&find(/Путь сильнейшего/)>=0)return find(/Путь сильнейшего/);
       if(find(/Последнее испытание/)>=0)return find(/Последнее испытание/);
       if(find(/Путь сильнейшего/)>=0)return find(/Путь сильнейшего/);
