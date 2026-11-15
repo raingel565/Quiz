@@ -4028,7 +4028,7 @@ window.__g={ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAka
 // ---------- V68: заставка с розыскными листовками (?splash=wanted) ----------
 (function(){
   try{if(window.__nor||/[?&]nosplash/.test(location.search)||!/[?&]splash=wanted/.test(location.search))return}catch(e){}
-  const keys=Object.keys(CH).filter(k=>AVS[k]);
+  const keys=Object.keys(CH).filter(k=>AVS[k]&&k!=='olesya');
   const o=document.createElement('div');o.id='splash';o.className='wt';
   const fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' ');
   const sc=window.innerWidth,hh=window.innerHeight;
