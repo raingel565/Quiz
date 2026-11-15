@@ -614,8 +614,16 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 .pickbar{position:sticky;bottom:-2px;z-index:5;display:flex;flex-direction:column;gap:6px;padding:10px 0 4px;margin-top:4px;background:linear-gradient(180deg,rgba(35,41,45,0),var(--panel) 30%)}
 .pickbar .pbh{text-align:center}
 .pickbar .btn{width:100%;min-height:50px}
+
+/* ===== V47: счётчик «в игре сейчас» ===== */
+.onl{display:inline-flex;align-items:center;gap:6px;height:42px;padding:0 12px;border-radius:15px;background:var(--sunk);box-shadow:var(--sh-in);font-size:14px;color:var(--ink);white-space:nowrap}
+.onl[hidden]{display:none}
+.onl i{width:9px;height:9px;border-radius:50%;background:#58d68d;box-shadow:0 0 8px #58d68d;animation:onlp 2s ease-in-out infinite}
+@keyframes onlp{50%{opacity:.45}}
+#top>.onl{height:34px;margin-left:8px}
+.h2o{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.h2o .onl{height:30px;font-size:13px;font-family:inherit;font-weight:600}
 </style>
-<div id="ver" title="Версия игры">V46</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V47</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2022,7 +2030,34 @@ function diceFx(rows,done){
 }
 function splitDice(n){const lo=Math.max(1,n-6),hi=Math.min(6,n-1);const a=lo+Math.floor(Math.random()*(hi-lo+1));return [a,n-a]}
 let SNDT=-1,SNDW=0,SNDD=null;
+
+// ===== сколько человек сейчас в игре (Firebase presence) =====
+const PRES={n:0,rooms:0,ok:false,last:null,ref:null};
+function presBadge(){return '<span class="onl" title="Сейчас в игре'+(PRES.rooms?' (в комнатах: '+PRES.rooms+')':'')+'"'+(PRES.ok?'':' hidden')+'><i></i><b>'+PRES.n+'</b></span>'}
+function presPaint(){document.querySelectorAll('.onl').forEach(e=>{e.hidden=!PRES.ok;const b=e.querySelector('b');if(b)b.textContent=PRES.n;e.title='Сейчас в игре'+(PRES.rooms?' (в комнатах: '+PRES.rooms+')':'')})}
+function presSet(){
+  if(!PRES.ref)return;const room=(typeof NET!=='undefined'&&NET.on&&NET.code)?NET.code:'';
+  if(PRES.last===room)return;PRES.last=room;
+  const d={ts:Date.now()};if(room)d.room=room;
+  try{PRES.ref.set(d)}catch(e){}
+}
+async function presInit(){
+  if(PRES.ref||!/^https?:/.test(location.protocol))return;
+  try{
+    const rdb=await fbLoad(),uid=safeId(localUid());
+    PRES.ref=rdb.ref('presence/'+uid);
+    rdb.ref('.info/connected').on('value',sn=>{
+      if(sn.val()===true){PRES.ok=true;PRES.last=null;PRES.ref.onDisconnect().remove().then(()=>presSet()).catch(()=>{});presPaint()}
+      else{PRES.ok=false;presPaint()}
+    });
+    rdb.ref('presence').on('value',sn=>{
+      let n=0,r=0;sn.forEach(c=>{n++;const v=c.val();if(v&&v.room)r++});
+      PRES.n=n;PRES.rooms=r;presPaint();
+    },()=>{PRES.ok=false;presPaint()});
+  }catch(e){PRES.ok=false;presPaint()}
+}
 function render(){
+  presSet();
   musicSync();
   document.body.classList.toggle('ingame',!!G);
   if(!G){if(NET.on)renderLobby();else renderSetup();return}
@@ -2119,7 +2154,7 @@ function topHtml(){
     +(NET.on&&NET.code?'<span class="pill">Комната '+NET.code+(NET.me>=0?' · вы: '+esc(G.players[NET.me].name):' · наблюдатель')+'</span>':'');
   return '<div class="tp-l"><span class="title">Гранд Лайн</span><span class="pill rnd">Раунд '+G.round+'</span>'+(G.mode&&G.mode!=='std'?'<span class="pill" title="'+esc(modeOf().d)+'">'+esc(modeOf().n)+'</span>':'')+'</div>'
     +'<div class="tp-st">'+st+'</div>'
-    +'<div class="tp-r"><button class="btn ico" id="sndbtn" title="Звук">'+(SFX.on?'🔊':'🔇')+'</button>'+menu+'</div>';
+    +'<div class="tp-r">'+presBadge()+'<button class="btn ico" id="sndbtn" title="Звук">'+(SFX.on?'🔊':'🔇')+'</button>'+menu+'</div>';
 }
 function actLbl(l){const m=/^(.*?)\s*\(([^()]*)\)\s*$/.exec(l);return m&&m[1]?'<span class="al">'+esc(m[1])+'</span><span class="ac">'+esc(m[2])+'</span>':'<span class="al">'+esc(l)+'</span>'}
 function sideHtml(){
@@ -2829,14 +2864,14 @@ const chInfo=()=>''; // описание теперь внутри карточ�
 const modalKey=m=>{const a=m.querySelector('h2'),b=m.querySelector('.grp b,.small b');return (a?a.textContent:'')+'|'+(b?b.textContent:'')};
 function setModalKeep(h){const m=document.querySelector('#modal .modal'),k=m?modalKey(m):null,st=m?m.scrollTop:0,ws=window.scrollY;$('#modal').innerHTML=h;const n=document.querySelector('#modal .modal');if(n&&k!=null&&modalKey(n)===k){n.scrollTop=st;if(window.scrollY!==ws)window.scrollTo(0,ws)}}
 function renderSetup(){
-  $('#top').innerHTML='<span class="title">Гранд Лайн</span><span class="sp"></span>';
+  $('#top').innerHTML='<span class="title">Гранд Лайн</span><span class="sp"></span>'+presBadge();
   $('#side').innerHTML='';$('#map').innerHTML='';$('#legend').innerHTML='';
   if(!UI.setup)UI.setup={step:'count',n:2,names:['Игрок 1','Игрок 2','Игрок 3','Игрок 4'],bots:[false,false,false,false],order:[],picks:[],cur:0};
   const S=UI.setup;
   const WP=S.wseed!=null?worldFor(S.wseed):null;
   let h='<div class="ov solid"><div class="modal" style="max-width:900px">';
   if(S.step==='count'){
-    h+=heroHtml()+'<h2>Гранд Лайн: новая партия</h2><div class="small">Один экран, ходите по очереди. Играют от 2 до 4 человек, по одному в каждом море.</div>';
+    h+=heroHtml()+'<h2 class="h2o">Гранд Лайн: новая партия'+presBadge()+'</h2><div class="small">Один экран, ходите по очереди. Играют от 2 до 4 человек, по одному в каждом море.</div>';
     h+='<div class="row"><label>Игроков: <select id="cnt">'+[2,3,4].map(n=>'<option'+(S.n===n?' selected':'')+'>'+n+'</option>').join('')+'</select></label></div>';
     h+='<div class="row"><label>Режим: <select id="mode">'+Object.keys(MODES).map(k=>'<option value="'+k+'"'+((S.mode||'std')===k?' selected':'')+'>'+MODES[k].n+'</option>').join('')+'</select></label></div><div class="small" id="modeD">'+esc(MODES[S.mode||'std'].d)+'</div>';
     h+='<div class="grp">'+[0,1,2,3].slice(0,S.n).map(i=>'<div class="row"><input id="nm'+i+'" value="'+esc(S.names[i])+'" maxlength="14" style="padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)"><label class="small" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="bt'+i+'"'+(S.bots[i]?' checked':'')+'> 🤖 бот</label></div>').join('')+'</div><div class="small">Бот играет сам: собирает понеглифы, выполняет задания и идёт на Лафтейл. Остальные ходят по очереди на этом экране.</div>';
@@ -3101,13 +3136,13 @@ function netBanner(){
   return h;
 }
 function renderLobby(){
-  $('#top').innerHTML='<span class="title">Гранд Лайн</span><span class="sp"></span>';
+  $('#top').innerHTML='<span class="title">Гранд Лайн</span><span class="sp"></span>'+presBadge();
   $('#now').innerHTML='';$('#side').innerHTML='';$('#map').innerHTML='';$('#legend').innerHTML='';
   let name='';try{name=NET.name||localStorage.getItem('gl_name')||''}catch(e){}
   let last='';try{last=localStorage.getItem('gl_room')||''}catch(e){}
   let h='<div class="ov solid"><div class="modal" style="max-width:820px">';
   if(NET.stage==='menu'){
-    h+=heroHtml()+'<h2>Игра по сети</h2><div class="small">Каждый открывает эту страницу на своём устройстве.</div>';
+    h+=heroHtml()+'<h2 class="h2o">Игра по сети'+presBadge()+'</h2><div class="small">Каждый открывает эту страницу на своём устройстве.</div>';
     h+='<div class="row"><label>Ваше имя: <input id="nname" value="'+esc(name)+'" maxlength="14" placeholder="Имя"></label></div>';
     h+='<div class="row"><button class="btn primary" id="ncreate"'+(NET.busy?' disabled':'')+'>Создать комнату</button></div>';
     h+='<div class="row"><label>Код комнаты: <input id="ncode" maxlength="6" style="width:90px;text-transform:uppercase" value="'+esc(last)+'"></label><button class="btn" id="njoin"'+(NET.busy?' disabled':'')+'>Войти</button></div>';
@@ -3657,5 +3692,6 @@ window.__g={statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   }
 };
 render();
+setTimeout(presInit,1200);
 })();
 </script>
