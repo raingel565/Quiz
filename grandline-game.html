@@ -746,7 +746,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V75</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V76</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -771,7 +771,7 @@ const CH={
  olesya:{n:'Олеся Д. Мося',A:4,U:4,d:'При взятии карты смотрит две верхние и выбирает одну'},
  robin:{n:'Нико Робин',A:4,U:4,d:'Сама выбирает задание Лафтейла; для победы по понеглифам хватает трёх'},
  ace:{n:'Портгас Д. Эйс',A:6,U:3,d:'«Огненная стена»: раз за ход всех игроков (1 ОД) окружает огнём свой или соседний остров (в т.ч. понеглиф и Лафтейл). Другие игроки не могут туда войти, пока стена не погаснет в начале следующего хода Эйса'},
- kid:{n:'Юстас Кид',A:6,U:2,d:'Попав на один остров с другим игроком, сразу начинает с ним дуэль. В тюрьме нельзя откупиться или сбежать: вместо этого сразу начинается дуэль с дозорным'},
+ kid:{n:'Юстас Кид',A:6,U:2,d:'Если Кид и другой игрок оказываются на одном острове (кто бы ни пришёл), Кид сразу начинает дуэль. В тюрьме нельзя откупиться или сбежать: вместо этого сразу начинается дуэль с дозорным'},
  sanji:{n:'Винсмок Санджи',A:4,U:5,d:'Против девушек (Нами, Хенкок, Олеся, Робин) не бросает кубик и наносит максимум 1 урона. «Небесная походка»: раз в ход перелёт через один остров за 1 ОД'}
 };
 const GIRLS=['nami','hancock','olesya','robin'];
@@ -1234,19 +1234,21 @@ function locName(id){if(id==='Z')return'Зунеша (остров Зоя)';if(i
 function flagCount(p){return 4-p.fl}
 function playersAt(id){return G.players.filter(q=>q.loc===id)}
 // ---------- arrival ----------
-function kidDuel(p){
-  if(G.winner!=null||p.ch!=='kid'||p.jail>0||G.duels>=3)return;
-  const q=G.players.find(x=>x!==p&&x.loc===p.loc&&x.jail<=0);
-  if(!q)return;
-  G.tm.pvp++;
-  if(p.task&&p.task.def.k==='bribe')cancelTask(p,'дуэль с игроком');
-  log(pname(p)+' оказывается на одном острове с '+q.name+' и сразу нападает!');
-  fxEvent({banner:true,tone:'bad',icon:'⚔',title:'Кид нападает!',desc:p.name+' против '+q.name,auto:2400});
-  startPvp(p.i,q.i);
+function kidDuel(p,loc){
+  if(G.winner!=null||p.loc!==loc||p.jail>0||G.duels>=3)return;
+  let k,q;
+  if(p.ch==='kid'){k=p;q=G.players.find(x=>x!==p&&x.loc===loc&&x.jail<=0)}
+  else{k=G.players.find(x=>x.ch==='kid'&&x!==p&&x.loc===loc&&x.jail<=0);q=p}
+  if(!k||!q)return;
+  if(k===P())G.tm.pvp++;
+  if(k.task&&k.task.def.k==='bribe')cancelTask(k,'дуэль с игроком');
+  log(pname(k)+' и '+q.name+' оказываются на одном острове: Кид сразу нападает!');
+  fxEvent({banner:true,tone:'bad',icon:'⚔',title:'Кид нападает!',desc:k.name+' против '+q.name,auto:2400});
+  startPvp(k.i,q.i);
 }
 function arrive(p,loc,o,cb){
   o=o||{};
-  if(p.ch==='kid'&&!o.quiet){const cb0=cb;cb=()=>{cb0&&cb0();kidDuel(p)}}
+  if(!o.quiet){const cb0=cb;cb=()=>{cb0&&cb0();kidDuel(p,loc)}}
   p.prev=p.loc;
   p.loc=loc;
   if(loc!=='Z'&&loc!=='L')p.sea=seaOf(loc);
@@ -1771,7 +1773,7 @@ function afterPvp(p,q,res){
   W.berries+=20;
   const buggy=res.st[w===0?1:0].keys.includes('buggy');
   const finish=()=>{
-    retreat(L,()=>{if(L===p)G.endAfter=true});
+    retreat(L,()=>{if(L===p&&p.i===G.cur)G.endAfter=true});
   };
   if(buggy){log('Клоун Багги: '+W.name+' получает только 20 Берри.');finish();return}
   const hasP=L.pon.length>0,hasT=L.tre.length>0;
