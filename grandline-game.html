@@ -380,7 +380,14 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 #akfx .aks{font-size:15px;font-weight:700;color:#ff9a7a;letter-spacing:.14em;opacity:0;animation:akfi .8s 2.9s both}
 #akfx .akd{font-size:14px;max-width:420px;color:#f0d6cc;line-height:1.45;opacity:0;animation:akfi .8s 3.4s both}
 #akfx .akd b{color:#ffd07a}
-#akfx .akh{font-size:11px;color:#c9a99d;opacity:0;animation:akfi .8s 4.2s both}
+#akfx .akh{font-size:11px;color:#c9a99d;opacity:0;animation:akfi .8s 6.8s both}
+#akfx .akbox{max-height:100%;overflow-y:auto}
+#akfx .aklv{display:flex;flex-direction:column;gap:3px;margin-top:4px;max-width:440px}
+#akfx .aklt{font-size:12px;letter-spacing:.3em;font-weight:900;color:#ffb02a;opacity:0;animation:akfi .6s 4.1s both}
+#akfx .aklr{font-size:12.5px;color:#ffe3d0;opacity:0;animation:akfi .5s both}
+#akfx .aklr b{color:#ffd07a}#akfx .aklr i{color:#ff9a7a;font-style:normal;font-weight:700}
+#akfx .akmet{position:absolute;top:-30px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle,#fff6c0,#ff9a1a 50%,#d1330a);box-shadow:0 0 14px 6px rgba(255,110,30,.7),-10px -22px 14px 2px rgba(255,90,20,.45);opacity:0;animation:akmet 1.1s linear both}
+@keyframes akmet{0%{opacity:0;transform:translate(-60px,0)}10%{opacity:1}100%{opacity:1;transform:translate(60px,105vh)}}
 @keyframes akfi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 #map .akm.born{animation:akb 2s ease-in-out infinite,akborn 3s ease-out 1}
 @keyframes akborn{0%{filter:drop-shadow(0 0 0 #ff3a1a)}25%{filter:drop-shadow(0 0 22px #ff5a1a) drop-shadow(0 0 40px #ff3a1a)}100%{filter:none}}
@@ -670,7 +677,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V59</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V60</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -1129,7 +1136,8 @@ function ask(type,data){
   if(G.pending.who==null)G.pending.who=G.cur;
 }
 const optsOf=()=>G.pending.opts||[];
-function walled(loc,p){return !!(G.fire&&G.fire.loc===loc&&G.fire.by!==p.i)}
+function deadAt(l){return !!(G.dead&&G.dead[l])}
+function walled(loc,p){return deadAt(loc)||!!(G.fire&&G.fire.loc===loc&&G.fire.by!==p.i)}
 function nbrsOf(p){
   let from=p.loc,base;
   if(from==='Z')base=(ADJ[G.zun.cell]||[]).slice();
@@ -1261,7 +1269,7 @@ function plocOf(q){return q.loc==='Z'&&G.zun?G.zun.cell:q.loc}
 function akPath(from,to){ // кратчайший путь по карте (без Зунеши)
   if(from===to)return[];
   const prev={},seen=new Set([from]);let fr=[from];
-  while(fr.length){const nx=[];for(const a of fr)for(const b of (ADJ[a]||[])){if(seen.has(b))continue;seen.add(b);prev[b]=a;if(b===to){const path=[];let c=b;while(c!==from){path.unshift(c);c=prev[c]}return path}nx.push(b)}fr=nx}
+  while(fr.length){const nx=[];for(const a of fr)for(const b of (ADJ[a]||[])){if(seen.has(b)||deadAt(b))continue;seen.add(b);prev[b]=a;if(b===to){const path=[];let c=b;while(c!==from){path.unshift(c);c=prev[c]}return path}nx.push(b)}fr=nx}
   return null;
 }
 function hardJail(p){
@@ -1277,13 +1285,45 @@ function akainuDuels(list,cb){
   log('Акаину вызывает на дуэль: '+pname(q)+'.');fxSnd('enemy');
   startNpcFight(q,'akainu',()=>akainuDuels(list,cb));
 }
+// ---------- град лавы при появлении Акаину ----------
+function lavaRain(){
+  G.dead=G.dead||{};
+  const safe=new Set(['L'].concat(G.laftel?G.laftel.anch:[]));
+  if(G.zun)safe.add(G.zun.cell);if(G.akainu)safe.add(G.akainu.loc);
+  const comps=(skip)=>{const seen=new Set();let c=0;
+    for(const a of Object.keys(ADJ)){if(seen.has(a)||deadAt(a)||a===skip)continue;c++;const st=[a];seen.add(a);
+      while(st.length){const x=st.pop();for(const y of (ADJ[x]||[])){if(seen.has(y)||deadAt(y)||y===skip)continue;seen.add(y);st.push(y)}}}
+    return c};
+  const hits=[];
+  for(const sea of SEAK){
+    const list=[];for(let n=1;n<=12;n++){const id=sea+n;if(safe.has(id)||deadAt(id)||!ADJ[id])continue;if(['jail','start','base'].includes(G.type[id]))continue;list.push(id)}
+    const c0=comps(null);let pick=null;
+    while(list.length&&!pick){const i=d(list.length)-1;const id=list.splice(i,1)[0];if(comps(id)<=c0)pick=id}
+    if(!pick)continue;
+    G.dead[pick]=1;
+    const h={name:locName(pick),jailed:[],flag:null};
+    const ow=G.flags[pick];
+    if(ow!=null){const o=G.players[ow];delete G.flags[pick];o.fl++;h.flag=o.name;log('Флаг '+o.name+' на '+locName(pick)+' сгорел в лаве.')}
+    for(const q of G.players){
+      if(q.loc!==pick)continue;
+      const to=bfsNear(pick,l=>G.type[l]==='jail'&&!deadAt(l))||bfsNear(pick,l=>G.type[l]&&!deadAt(l));
+      if(to){q.prev=q.loc;q.loc=to;q.sea=seaOf(to)}
+      q.jail=3;q.hardJail=false;h.jailed.push(q.name);
+      log(q.name+' накрыт градом лавы на '+locName(pick)+' и отправлен в тюрьму на 3 хода.');
+    }
+    hits.push(h);
+  }
+  log('Град лавы навсегда уничтожает: '+(hits.length?hits.map(h=>h.name).join(', '):'ничего')+'. Эти острова больше непроходимы.');
+  return hits;
+}
 function akainuPhase(cb){
   if(G.winner!=null)return cb();
   if(!G.akainu){
     if(!G.laftel)return cb();
     const loc=REDL[d(REDL.length)-1];
-    G.akainu={loc,stun:0};fxAkainu(locName(loc));
+    G.akainu={loc,stun:0};
     log('☠ Лафтейл найден: на карту выходит адмирал Акаину (атака '+AKAINU.a+', уклонение '+AKAINU.u+') и появляется на '+locName(loc)+'! Он идёт к ближайшему игроку, проигравший сядет в тюрьму Импел Даун на 3 хода.');
+    fxAkainu(locName(loc),lavaRain());
     return cb();
   }
   const A=G.akainu;
@@ -1331,7 +1371,7 @@ function endRound(cb){
 // ---------- Zunesha ----------
 function moveZunToSea(s){
   let n,guard=0;
-  do{n=d(12);guard++}while(guard<30&&['jail','dozor','battle'].includes(G.type[s+n]));
+  do{n=d(12);guard++}while(guard<30&&(['jail','dozor','battle'].includes(G.type[s+n])||deadAt(s+n)));
   setZun(s+n);
 }
 function setZun(cell){
@@ -1765,16 +1805,16 @@ function useTre(p,c){
   const done=()=>{};
   if(c.key==='vivre'){
     const cell=G.zun.cell;
-    const o=(ADJ[cell]||[]).filter(x=>x!=='L'&&!['jail','dozor','battle'].includes(G.type[x])).map(x=>({label:locName(x),loc:x,run:()=>{discardCard(p,c);setZun(x)}}));
+    const o=(ADJ[cell]||[]).filter(x=>x!=='L'&&!deadAt(x)&&!['jail','dozor','battle'].includes(G.type[x])).map(x=>({label:locName(x),loc:x,run:()=>{discardCard(p,c);setZun(x)}}));
     o.push({label:'Отмена',run:()=>{G.ap+=T.ap||0}});
     ask('pickloc',{who:p.i,title:'Вивр-карта',text:'Куда переместить Зунешу?',opts:o,pick:o.filter(x=>x.loc).map(x=>x.loc)});
   }else if(c.key==='ancient'){
     const n=numOf(G.zun.cell);
-    const o=SEAK.filter(s=>!['jail','dozor','battle'].includes(G.type[s+n])&&s+n!==G.zun.cell).map(s=>({label:SEAS[s]+' №'+n,loc:s+n,run:()=>{discardCard(p,c);setZun(s+n)}}));
+    const o=SEAK.filter(s=>!deadAt(s+n)&&!['jail','dozor','battle'].includes(G.type[s+n])&&s+n!==G.zun.cell).map(s=>({label:SEAS[s]+' №'+n,loc:s+n,run:()=>{discardCard(p,c);setZun(s+n)}}));
     o.push({label:'Отмена',run:()=>{}});
     ask('pickloc',{who:p.i,title:'Древняя вивр-карта',text:'В какое море?',opts:o,pick:o.filter(x=>x.loc).map(x=>x.loc)});
   }else if(c.key==='dandan'){
-    const cand=Object.keys(G.type).filter(l=>G.type[l]!=='start'&&G.type[l]!=='base');
+    const cand=Object.keys(G.type).filter(l=>G.type[l]!=='start'&&G.type[l]!=='base'&&!deadAt(l));
     const o=cand.map(l=>({label:locName(l)+' ('+TYPES[G.type[l]].n+')',loc:l,run:()=>{
       discardCard(p,c);G.type[l]='base';log(p.name+' превращает '+locName(l)+' в обычную базу (Дэн-Дэн Муси).');
       const near=bfsNear(l,x=>G.type[x]==='base');
@@ -2036,7 +2076,7 @@ function ponDie(){
 const FXQ=[];
 function fxRoll(label,vals,sides,opt){if(window.__nor)return;FXQ.push(Object.assign({t:'d',label,vals:vals.slice(),sides:sides||6},opt||{}))}
 function fxEvent(ev){if(window.__nor)return;FXQ.push(Object.assign({t:'e'},ev))}
-function fxAkainu(locn){if(window.__nor)return;FXQ.push({t:'k',loc:locn})}
+function fxAkainu(locn,hits){if(window.__nor)return;FXQ.push({t:'k',loc:locn,hits:hits||[]})}
 function akFx(ev,done){
   const fast=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(window.__nor||!document.body){done&&done();return}
@@ -2047,12 +2087,15 @@ function akFx(ev,done){
    +'<div class="akbox"><div class="akk">☠ ВНИМАНИЕ · ЛАФТЕЛЬ НАЙДЕН ☠</div><div class="akport"><img alt="" src="'+AVS.akainu+'"></div>'
    +'<div class="akt">АДМИРАЛ АКАИНУ</div><div class="aks">«АБСОЛЮТНАЯ СПРАВЕДЛИВОСТЬ»</div>'
    +'<div class="akd">Высаживается на <b>'+esc(ev.loc)+'</b>. Атака <b>'+AKAINU.a+'</b>, уклонение <b>'+AKAINU.u+'</b>. Идёт к ближайшему игроку; проигравший сядет в Импел Даун на 3 хода.</div>'
+   +(ev.hits&&ev.hits.length?'<div class="aklv"><div class="aklt">🔥 ГРАД ЛАВЫ</div>'+ev.hits.map((h,i)=>'<div class="aklr" style="animation-delay:'+(4.4+i*.55).toFixed(2)+'s"><b>'+esc(h.name)+'</b> уничтожена'+(h.flag?' · флаг сгорел':'')+(h.jailed.length?' · в тюрьму: <i>'+esc(h.jailed.join(', '))+'</i>':'')+'</div>').join('')+'</div>':'')
    +'<div class="akh">нажмите, чтобы продолжить</div></div>';
+  let mt='';for(let i=0;i<14;i++)mt+='<i class="akmet" style="left:'+(Math.random()*100).toFixed(1)+'%;animation-delay:'+(4+Math.random()*2.4).toFixed(2)+'s"></i>';
+  o.querySelector('.akscr').innerHTML=mt;
   document.body.appendChild(o);
   SFX.play('akent',0);
   let fin=false;const end=()=>{if(fin)return;fin=true;o.classList.add('out');setTimeout(()=>{o.remove();window.__akborn=Date.now();try{render()}catch(e){}done&&done()},fast?10:480)};
   o.onclick=()=>{if(Date.now()-t0>900)end()};const t0=Date.now();
-  setTimeout(end,fast?1500:7500);
+  setTimeout(end,fast?1500:(ev.hits&&ev.hits.length?12500:7500));
 }
 let FXBUSY=false;
 function eventFx(ev,done){
@@ -2803,6 +2846,7 @@ function renderMap(){
     if(!t)s+='<text x="'+x+'" y="'+(y+(isRed?29:27))+'" text-anchor="middle" font-size="'+(isRed?24:22)+'" font-weight="700" fill="'+(isRed?'#5b3f99':BR)+'" stroke="#fff6df" stroke-width="4" paint-order="stroke" opacity="'+(isRed?'.95':'.7')+'" pointer-events="none">'+(isRed?'⛰':'?')+'</text>';
     if(pickable.has(id))s+='<circle class="ring" cx="'+x+'" cy="'+y+'" r="'+(R+8)+'" fill="none" stroke="#12a05a" stroke-width="6"/>';
     if(G.flags[id]!=null){const c=G.players[G.flags[id]].color;s+='<line x1="'+(x-R+2)+'" y1="'+(y-R-16)+'" x2="'+(x-R+2)+'" y2="'+(y-R+8)+'" stroke="#5a3b1f" stroke-width="3"/><polygon points="'+(x-R+2)+','+(y-R-16)+' '+(x-R+24)+','+(y-R-8)+' '+(x-R+2)+','+(y-R)+'" fill="'+c+'" stroke="#5a3b1f" stroke-width="1.5"/>'}
+    if(G.dead&&G.dead[id])s+='<g pointer-events="none"><circle cx="'+x+'" cy="'+y+'" r="'+(R+6)+'" fill="#1c1411" fill-opacity=".93" stroke="#ff5a1a" stroke-width="5"/><path d="M'+(x-R*.6)+' '+(y-R*.3)+' L'+x+' '+(y+R*.1)+' L'+(x+R*.5)+' '+(y-R*.5)+' M'+x+' '+(y+R*.1)+' L'+(x+R*.2)+' '+(y+R*.7)+'" stroke="#ff7a1a" stroke-width="4" fill="none" stroke-linecap="round"/><text x="'+x+'" y="'+(y+R*.2)+'" text-anchor="middle" font-size="30" opacity=".9">🌋</text></g>';
     if(G.fire&&G.fire.loc===id)s+='<g class="firew" pointer-events="none"><circle cx="'+x+'" cy="'+y+'" r="'+(R+11)+'" fill="rgba(255,120,30,.14)" stroke="#ff7a1a" stroke-width="6" stroke-dasharray="10 6"/><text x="'+(x-R-4)+'" y="'+(y-R+6)+'" font-size="26">🔥</text><text x="'+(x+R-12)+'" y="'+(y+R+8)+'" font-size="26">🔥</text></g>';
     if(G.ponAt[id]){const px=x+R-2,py=y-R+2;s+='<circle cx="'+x+'" cy="'+y+'" r="'+(R+6)+'" fill="none" stroke="#d9a21b" stroke-width="3" stroke-dasharray="5 4" pointer-events="none"/><g class="ponglow" pointer-events="none"><circle class="ring" cx="'+px+'" cy="'+py+'" r="22" fill="none" stroke="#d9a21b" stroke-width="3"/><rect x="'+(px-15)+'" y="'+(py-15)+'" width="30" height="30" rx="4" transform="rotate(45 '+px+' '+py+')" fill="#d9a21b" stroke="#2a2118" stroke-width="2.5"/><text x="'+px+'" y="'+(py+7)+'" text-anchor="middle" font-size="20" font-weight="800" fill="#2a2118">П</text></g><text x="'+x+'" y="'+(y+R+22)+'" text-anchor="middle" font-size="19" font-weight="800" fill="#8a5a00" pointer-events="none" stroke="#fff" stroke-width="5" paint-order="stroke">Понеглиф'+(G.ponAt[id].owner!=null?' · '+esc(G.players[G.ponAt[id].owner].name):'')+'</text>'}
     s+='</g>';
@@ -3107,7 +3151,7 @@ const CHUNK=20,chunkId=i=>'c'+String(i).padStart(4,'0');
 const safeId=x=>String(x).replace(/[^A-Za-z0-9_\-.~:@+]/g,'_').slice(0,100);
 const genCode=()=>Array.from({length:4},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ'[Math.floor(Math.random()*24)]).join('');
 function hashState(){
-  const s=[G.round,G.cur,G.ap,G.duels,G.winner,G.players.map(p=>[p.berries,p.loc,p.atk.length,p.pas.length,p.tre.length,p.pon.length,p.fl,p.jail,p.skip,p.bA,p.bU].join(',')).join(';'),(G.fire?G.fire.loc+G.fire.by:''),(G.akainu?G.akainu.loc+G.akainu.stun:''),G.decks.atk.length,G.decks.pas.length,G.decks.tre.length,G.discard.length,Object.keys(G.flags).length].join('|');
+  const s=[G.round,G.cur,G.ap,G.duels,G.winner,G.players.map(p=>[p.berries,p.loc,p.atk.length,p.pas.length,p.tre.length,p.pon.length,p.fl,p.jail,p.skip,p.bA,p.bU].join(',')).join(';'),(G.fire?G.fire.loc+G.fire.by:''),(G.akainu?G.akainu.loc+G.akainu.stun:''),(G.dead?Object.keys(G.dead).sort().join('.'):''),G.decks.atk.length,G.decks.pas.length,G.decks.tre.length,G.discard.length,Object.keys(G.flags).length].join('|');
   let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}
   return (h>>>0).toString(36);
 }
@@ -3814,7 +3858,7 @@ function botSchedule(){
 }
 
 // ---------- test API ----------
-window.__g={akainuPhase,fxAkainu,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
+window.__g={lavaRain,akainuPhase,fxAkainu,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
