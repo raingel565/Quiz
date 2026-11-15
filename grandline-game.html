@@ -642,7 +642,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V55</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V56</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -875,17 +875,19 @@ const LUFFY_MP3='assets/sfx_luffy.mp3';
 const ACE_MP3='assets/sfx_ace.mp3';
 const SANJI_MP3='assets/sfx_sanji.mp3';
 const OLESYA_MP3='assets/sfx_olesya.mp3';
+const HANCOCK_MP3='assets/sfx_hancock.mp3';
 const LAW_MP3='assets/sfx_law.mp3';
 const BUSTER_MP3='assets/sfx_buster.mp3';
 const SFX=(()=>{
   let XB=null,XBP=false;
   function loadSnd(url,ok,fail){fetch(url).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(ab=>{const p=ctx.decodeAudioData(ab,ok,fail);if(p&&p.catch)p.catch(fail)}).catch(fail)}
   function loadBuster(){if(XB||XBP||!ctx)return;XBP=true;try{loadSnd(BUSTER_MP3,b=>{XB=b},()=>{XBP=false})}catch(e){XBP=false}}
-  let KB=null,KBP=false,AB=null,ABP=false,AV=null,NB=null,NBP=false,NV=null,OB=null,OBP=false,OV=[];
+  let KB=null,KBP=false,AB=null,ABP=false,AV=null,NB=null,NBP=false,NV=null,OB=null,OBP=false,OV=[],HB=null,HBP=false,HV=null;
   let ctx=null,master=null,on=true,EB=null,EBP=false,WB=null,WBP=false,ZB=null,ZBP=false,LB=null,LBP=false,LV=null;const last={};
   function loadLuffy(){if(LB||LBP||!ctx)return;LBP=true;try{loadSnd(LUFFY_MP3,b=>{LB=b},()=>{LBP=false})}catch(e){LBP=false}}
   function loadLaw(){if(KB||KBP||!ctx)return;KBP=true;try{loadSnd(LAW_MP3,b=>{KB=b},()=>{KBP=false})}catch(e){KBP=false}}
-  function stopLuffy(){if(LV){try{LV.stop()}catch(e){}LV=null}if(AV){try{AV.stop()}catch(e){}AV=null}if(NV){try{NV.stop()}catch(e){}NV=null}OV.forEach(x=>{try{x.stop()}catch(e){}});OV=[]}
+  function stopLuffy(){if(LV){try{LV.stop()}catch(e){}LV=null}if(AV){try{AV.stop()}catch(e){}AV=null}if(NV){try{NV.stop()}catch(e){}NV=null}OV.forEach(x=>{try{x.stop()}catch(e){}});OV=[];if(HV){try{HV.stop()}catch(e){}HV=null}}
+  function loadHancock(){if(HB||HBP||!ctx)return;HBP=true;try{loadSnd(HANCOCK_MP3,b=>{HB=b},()=>{HBP=false})}catch(e){HBP=false}}
   function loadOlesya(){if(OB||OBP||!ctx)return;OBP=true;try{loadSnd(OLESYA_MP3,b=>{OB=b},()=>{OBP=false})}catch(e){OBP=false}}
   function loadSanji(){if(NB||NBP||!ctx)return;NBP=true;try{loadSnd(SANJI_MP3,b=>{NB=b},()=>{NBP=false})}catch(e){NBP=false}}
   function loadAce(){if(AB||ABP||!ctx)return;ABP=true;try{loadSnd(ACE_MP3,b=>{AB=b},()=>{ABP=false})}catch(e){ABP=false}}
@@ -893,7 +895,7 @@ const SFX=(()=>{
   function loadWtf(){if(WB||WBP||!ctx)return;WBP=true;try{loadSnd(WTF_MP3,b=>{WB=b},()=>{WBP=false})}catch(e){WBP=false}}
   function loadEnemy(){if(EB||EBP||!ctx)return;EBP=true;try{loadSnd(ENEMY_MP3,b=>{EB=b},()=>{EBP=false})}catch(e){EBP=false}}
   try{on=localStorage.getItem('gl_snd')!=='0'}catch(e){}
-  const init=()=>{if(ctx)return ctx;try{const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;ctx=new A();master=ctx.createGain();master.gain.value=.55;master.connect(ctx.destination);loadEnemy();loadWtf();loadZoro();setTimeout(loadLuffy,1500);setTimeout(loadAce,2200);setTimeout(loadSanji,2800);setTimeout(loadOlesya,3400);loadLaw();loadBuster()}catch(e){ctx=null}return ctx};
+  const init=()=>{if(ctx)return ctx;try{const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;ctx=new A();master=ctx.createGain();master.gain.value=.55;master.connect(ctx.destination);loadEnemy();loadWtf();loadZoro();setTimeout(loadLuffy,1500);setTimeout(loadAce,2200);setTimeout(loadSanji,2800);setTimeout(loadOlesya,3400);setTimeout(loadHancock,4000);loadLaw();loadBuster()}catch(e){ctx=null}return ctx};
   const tone=(t0,f,d,type,v,f2)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t0);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+d);g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(v||.15,t0+.012);g.gain.exponentialRampToValueAtTime(0.0001,t0+d);o.connect(g);g.connect(master);o.start(t0);o.stop(t0+d+.05)};
   let nb=null;const nbuf=()=>{if(nb)return nb;nb=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);const a=nb.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1;return nb};
   const noise=(t0,d,v,ft,f0,f1,q)=>{const s=ctx.createBufferSource();s.buffer=nbuf();const fl=ctx.createBiquadFilter();fl.type=ft||'bandpass';fl.frequency.setValueAtTime(f0,t0);if(f1)fl.frequency.exponentialRampToValueAtTime(f1,t0+d);fl.Q.value=q||1;const g=ctx.createGain();g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(v,t0+Math.min(.04,d/3));g.gain.exponentialRampToValueAtTime(0.0001,t0+d);s.connect(fl);fl.connect(g);g.connect(master);s.start(t0,Math.random());s.stop(t0+d+.05)};
@@ -902,6 +904,7 @@ const SFX=(()=>{
     wtf:t=>{if(!WB){loadWtf();return}const s=ctx.createBufferSource();s.buffer=WB;const g=ctx.createGain();g.gain.value=1.3;s.connect(g);g.connect(master);s.start(t)},
     zoro:t=>{if(!ZB){loadZoro();return}const s=ctx.createBufferSource();s.buffer=ZB;const g=ctx.createGain();g.gain.value=1.3;s.connect(g);g.connect(master);s.start(t)},
     luffy:t=>{stopLuffy();if(!LB){loadLuffy();return}const s=ctx.createBufferSource();s.buffer=LB;const g=ctx.createGain();g.gain.value=1.1;s.connect(g);g.connect(master);s.start(t);LV=s;s.onended=()=>{if(LV===s)LV=null}},
+    hancock:t=>{stopLuffy();if(!HB){loadHancock();return}const s=ctx.createBufferSource();s.buffer=HB;const g=ctx.createGain();g.gain.value=1.3;s.connect(g);g.connect(master);s.start(t);HV=s;s.onended=()=>{if(HV===s)HV=null}},
     olesya:t=>{stopLuffy();if(!OB){loadOlesya();return}const g=ctx.createGain();g.gain.value=1.1;g.connect(master);const t0=Math.max(t||0,ctx.currentTime);[0,1].forEach(k=>{const s=ctx.createBufferSource();s.buffer=OB;s.connect(g);s.start(t0+k*(OB.duration+.12));OV.push(s)})},
     sanji:t=>{stopLuffy();if(!NB){loadSanji();return}const s=ctx.createBufferSource();s.buffer=NB;const g=ctx.createGain();g.gain.value=1.3;s.connect(g);g.connect(master);s.start(t);NV=s;s.onended=()=>{if(NV===s)NV=null}},
     ace:t=>{stopLuffy();if(!AB){loadAce();return}const s=ctx.createBufferSource();s.buffer=AB;const g=ctx.createGain();g.gain.value=1.3;s.connect(g);g.connect(master);s.start(t);AV=s;s.onended=()=>{if(AV===s)AV=null}},
@@ -2458,7 +2461,7 @@ function musicSync(){
 document.addEventListener('pointerdown',()=>{if(!MUS.unlocked){MUS.unlocked=true;musicSync()}},{passive:true});
 document.addEventListener('visibilitychange',()=>musicSync());
 // ---------- V23: PWA ----------
-window.addEventListener('load',()=>setTimeout(()=>{try{['enemy','wtf','zoro','luffy','law','buster','ace','sanji','olesya'].forEach(n=>fetch('assets/sfx_'+n+'.mp3').catch(()=>{}))}catch(e){}},2500));
+window.addEventListener('load',()=>setTimeout(()=>{try{['enemy','wtf','zoro','luffy','law','buster','ace','sanji','olesya','hancock'].forEach(n=>fetch('assets/sfx_'+n+'.mp3').catch(()=>{}))}catch(e){}},2500));
 let DEFER=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();DEFER=e});
 window.addEventListener('appinstalled',()=>{DEFER=null});
@@ -3036,7 +3039,7 @@ function renderSetup(){
   }else if(S.step==='roll'){g('go2').onclick=()=>{S.step='pick';renderSetup()}}
   else{
     document.querySelectorAll('[data-secret]').forEach(b=>b.onclick=()=>secretAsk(()=>renderSetup()));
-    document.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{chSnap();S.selCh=b.dataset.ch;SFX.stopVoice();if(S.selCh==='zoro')SFX.play('zoro',0);if(S.selCh==='luffy')SFX.play('luffy',0);if(S.selCh==='law')SFX.play('law',0);if(S.selCh==='ace')SFX.play('ace',0);if(S.selCh==='sanji')SFX.play('sanji',0);if(S.selCh==='olesya')SFX.play('olesya',0);renderSetup()});
+    document.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{chSnap();S.selCh=b.dataset.ch;SFX.stopVoice();if(S.selCh==='zoro')SFX.play('zoro',0);if(S.selCh==='luffy')SFX.play('luffy',0);if(S.selCh==='law')SFX.play('law',0);if(S.selCh==='ace')SFX.play('ace',0);if(S.selCh==='sanji')SFX.play('sanji',0);if(S.selCh==='olesya')SFX.play('olesya',0);if(S.selCh==='hancock')SFX.play('hancock',0);renderSetup()});
     chVid();
     document.querySelectorAll('[data-sea]').forEach(b=>b.onclick=()=>{S.selSea=b.dataset.sea;renderSetup()});
     g('pick').onclick=()=>{
@@ -3306,7 +3309,7 @@ function renderLobby(){
   if(g('njoin'))g('njoin').onclick=()=>{nm();netJoin(g('ncode').value,false)};
   if(g('nback'))g('nback').onclick=()=>{NET.on=false;render()};
   document.querySelectorAll('[data-secret]').forEach(b=>b.onclick=()=>secretAsk(()=>render()));
-  document.querySelectorAll('[data-nch]').forEach(b=>b.onclick=()=>{chSnap();SFX.stopVoice();if(b.dataset.nch==='zoro')SFX.play('zoro',0);if(b.dataset.nch==='luffy')SFX.play('luffy',0);if(b.dataset.nch==='law')SFX.play('law',0);if(b.dataset.nch==='ace')SFX.play('ace',0);if(b.dataset.nch==='sanji')SFX.play('sanji',0);if(b.dataset.nch==='olesya')SFX.play('olesya',0);setSeat({ch:b.dataset.nch})});
+  document.querySelectorAll('[data-nch]').forEach(b=>b.onclick=()=>{chSnap();SFX.stopVoice();if(b.dataset.nch==='zoro')SFX.play('zoro',0);if(b.dataset.nch==='luffy')SFX.play('luffy',0);if(b.dataset.nch==='law')SFX.play('law',0);if(b.dataset.nch==='ace')SFX.play('ace',0);if(b.dataset.nch==='sanji')SFX.play('sanji',0);if(b.dataset.nch==='olesya')SFX.play('olesya',0);if(b.dataset.nch==='hancock')SFX.play('hancock',0);setSeat({ch:b.dataset.nch})});
   chVid();
   document.querySelectorAll('[data-nsea]').forEach(b=>b.onclick=()=>setSeat({sea:b.dataset.nsea}));
   if(g('nstart'))g('nstart').onclick=netStart;
