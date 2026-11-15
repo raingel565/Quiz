@@ -391,6 +391,32 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 @keyframes spfl{to{transform:scaleY(.55)}}
 #splash .spf{position:absolute;left:0;right:0;bottom:96px;font-size:12px;color:#7f9199;display:flex;gap:14px;justify-content:center;align-items:center;opacity:0;animation:spup .8s 3.2s ease both}
 #splash .spo{display:inline-flex;gap:6px;align-items:center}#splash .spo i{width:8px;height:8px;border-radius:50%;background:#3ddc84;box-shadow:0 0 8px #3ddc84}
+/* --- заставка: розыскные листовки --- */
+#splash.wt{background:radial-gradient(ellipse at 50% 40%,#2a2218 0,#120e09 60%,#070504 100%)}
+#splash .wtw{position:absolute;inset:0;margin:0 auto;max-width:1060px;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:10px;padding:14px;transition:filter 1s ease,opacity 1s ease}
+#splash.dim .wtw{filter:blur(5px) brightness(.35) saturate(.8)}
+#splash .wtp{container-type:inline-size;width:clamp(92px,29vw,190px);aspect-ratio:563/789;position:relative;flex:none;overflow:hidden;color:#3b2412;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' seed='4'/><feColorMatrix values='0 0 0 0 .35 0 0 0 0 .22 0 0 0 0 .08 0 0 0 .55 0'/></filter><rect width='220' height='220' filter='url(%23n)' opacity='.55'/></svg>"),radial-gradient(ellipse at 50% 40%,#e3cd9b 0,#d6bb82 60%,#bf9f64 100%);box-shadow:inset 0 0 9cqw rgba(110,70,20,.5),0 10px 22px rgba(0,0,0,.6);opacity:0;transform:translate(var(--fx),var(--fy)) rotate(var(--fr)) scale(1.6);animation:wtin .55s cubic-bezier(.2,.85,.3,1.15) var(--d) both}
+#splash .wtp .wtq{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding:5cqw 7cqw 4cqw}
+#splash .wtk{position:absolute;top:0;bottom:0;width:3.2cqw;background:repeating-linear-gradient(to bottom,transparent 0 13cqw,rgba(70,42,14,.75) 13cqw 14cqw);background-position:0 7cqw}
+#splash .wtk.l{left:0}#splash .wtk.r{right:0}
+#splash .wtp .wt1{font-family:Georgia,'Times New Roman',serif;font-weight:900;font-size:18cqw;letter-spacing:-.01em;line-height:1;transform:scaleY(1.15);transform-origin:50% 0;margin-bottom:3cqw;white-space:nowrap}
+#splash .wtp .wti{flex:none;align-self:stretch;aspect-ratio:1.5;border:.8cqw solid #3b2412;overflow:hidden;background:#b89a64}
+#splash .wtp .wti img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;filter:sepia(.28) saturate(1.05);display:block}
+#splash .wtp .wt2{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:7.4cqw;letter-spacing:.12em;margin-top:3.5cqw;line-height:1;white-space:nowrap;display:flex;align-items:center;gap:2.5cqw}
+#splash .wtp .wt2::before,#splash .wtp .wt2::after{content:"";width:3.5cqw;height:7.5cqw;border:.7cqw solid #3b2412;border-width:.7cqw 0 .7cqw .7cqw;border-radius:3cqw 0 0 3cqw}
+#splash .wtp .wt2::after{border-width:.7cqw .7cqw .7cqw 0;border-radius:0 3cqw 3cqw 0}
+#splash .wtp .wt3{font-family:Georgia,'Times New Roman',serif;font-weight:800;line-height:1.05;margin-top:1.5cqw;white-space:nowrap;letter-spacing:.01em}
+#splash .wtp .wt4{display:flex;align-items:center;gap:3cqw;margin-top:2.5cqw;font-family:Georgia,'Times New Roman',serif;white-space:nowrap}
+#splash .wtp .wt4 i{font-style:normal;font-weight:900;font-size:8cqw;border:.7cqw solid #3b2412;border-radius:50%;width:9cqw;height:9cqw;display:flex;align-items:center;justify-content:center;line-height:1}
+#splash .wtp .wt4 span{font-weight:700;font-size:7.4cqw;letter-spacing:.18em}
+#splash .wtp .wt5{margin-top:auto;align-self:stretch;display:flex;justify-content:space-between;align-items:flex-end;gap:2cqw}
+#splash .wtp .wt5 small{font-size:2.5cqw;line-height:1.25;letter-spacing:.02em;font-weight:700;max-width:52%;text-align:left}
+#splash .wtp .wt5 b{font-family:Georgia,'Times New Roman',serif;font-weight:900;font-size:8cqw;letter-spacing:.02em;transform:scaleY(1.12);transform-origin:100% 100%}
+
+@keyframes wtin{0%{opacity:0}30%{opacity:1}70%{transform:rotate(var(--r)) scale(.96)}100%{opacity:1;transform:rotate(var(--r)) scale(1)}}
+#splash.wt .wtc{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;opacity:0;animation:spup 1s var(--cd,3.4s) ease both;text-shadow:0 2px 16px #000}
+#splash.wt .spt{opacity:1;animation:spsh 3.2s infinite ease-in-out;font-size:clamp(34px,11vw,72px)}
+#splash.wt .sps2{opacity:1;animation:none;color:#d8c9a4}
 @media(prefers-reduced-motion:reduce){#splash *{animation-duration:.01s!important;animation-delay:0s!important}}
 #akvid{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.92);animation:dfin .25s ease both;padding:12px}
 #akvid.out{animation:dfout .26s ease both}
@@ -719,7 +745,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V67</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V69</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -3975,7 +4001,7 @@ window.__g={ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAka
 };
 // ---------- V67: заставка при входе ----------
 (function(){
-  try{if(window.__nor||/[?&]nosplash/.test(location.search))return}catch(e){}
+  try{if(window.__nor||/[?&]nosplash/.test(location.search)||/[?&]splash=wanted/.test(location.search))return}catch(e){}
   const o=document.createElement('div');o.id='splash';
   let st='';for(let i=0;i<46;i++)st+='<i style="left:'+(Math.random()*100).toFixed(1)+'%;top:'+(Math.random()*70).toFixed(1)+'%;animation-delay:'+(Math.random()*3).toFixed(2)+'s;animation-duration:'+(2+Math.random()*3).toFixed(1)+'s"></i>';
   let tk='';for(let i=0;i<36;i++){const a=i*10,l=i%9===0?12:6;tk+='<line x1="100" y1="'+(10)+'" x2="100" y2="'+(10+l)+'" transform="rotate('+a+' 100 100)" stroke="#e9b94a" stroke-width="'+(i%9===0?3:1.5)+'" opacity=".85"/>'}
@@ -3996,6 +4022,31 @@ window.__g={ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAka
   const iv=setInterval(()=>{const e=o.querySelector('.spo');if(!e)return;if(PRES.ok){e.hidden=false;e.querySelector('b').textContent=PRES.n}},800);
   const go=()=>{if(gone||!o.classList.contains('rdy'))return;gone=true;clearInterval(iv);try{SFX.unlock();SFX.play('splash',0)}catch(e){}o.classList.add('out');setTimeout(()=>o.remove(),900)};
   setTimeout(()=>o.classList.add('rdy'),3100);
+  o.addEventListener('click',go);
+  document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go()});
+})();
+// ---------- V68: заставка с розыскными листовками (?splash=wanted) ----------
+(function(){
+  try{if(window.__nor||/[?&]nosplash/.test(location.search)||!/[?&]splash=wanted/.test(location.search))return}catch(e){}
+  const keys=Object.keys(CH).filter(k=>AVS[k]&&k!=='olesya');
+  const o=document.createElement('div');o.id='splash';o.className='wt';
+  const fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+  const sc=window.innerWidth,hh=window.innerHeight;
+  const pos=keys.map((k,i)=>{const h=CH[k],bounty=(h.A*10+h.U*8)*1500000+i*1000000;
+    const ang=Math.random()*Math.PI*2,dist=Math.max(sc,hh)*.9;
+    const nm=h.n.toUpperCase().replace(/\.\s*/g,'·').replace(/\s+/g,'·'),fs=Math.min(9.6,114/nm.length);
+    return '<div class="wtp" style="--d:'+(.25+i*.27).toFixed(2)+'s;--r:'+((Math.random()*10-5).toFixed(1))+'deg;--fr:'+((Math.random()*160-80)|0)+'deg;--fx:'+((Math.cos(ang)*dist)|0)+'px;--fy:'+((Math.sin(ang)*dist)|0)+'px"><i class="wtk l"></i><i class="wtk r"></i><div class="wtq"><div class="wt1">WANTED</div><div class="wti"><img alt="" src="'+AVS[k]+'"></div><div class="wt2">DEAD OR ALIVE</div><div class="wt3" style="font-size:'+fs.toFixed(1)+'cqw">'+esc(nm)+'</div><div class="wt4"><i>Б</i><span>'+fmt(bounty).replace(/ /g,',')+'-</span></div><div class="wt5"><small>GRAND LINE KEIHOU · FICTION<br>GURANDO RAIN BOODO GEEMU</small><b>MARINE</b></div></div></div>'}).join('');
+  const L=.25+keys.length*.27+.6,T=L+1.5;
+  o.style.setProperty('--cd',T.toFixed(2)+'s');
+  o.innerHTML='<div class="wtw">'+pos+'</div><div class="wtc"><div class="spt">ГРАНД ЛАЙН</div><div class="sps2">Все они ищут Лафтейл</div><button class="spb" type="button">⚓ Выйти в море</button></div>'
+   +'<div class="spf" style="animation-delay:'+(T+.6).toFixed(2)+'s;bottom:18px"><span class="spv"></span><span class="spo" hidden><i></i>сейчас в игре: <b>0</b></span></div>';
+  document.body.appendChild(o);
+  const v=document.getElementById('ver');if(v)o.querySelector('.spv').textContent=v.textContent;
+  setTimeout(()=>o.classList.add('dim'),(T-.3)*1000);
+  let gone=false;
+  const iv=setInterval(()=>{const e=o.querySelector('.spo');if(!e)return;if(PRES.ok){e.hidden=false;e.querySelector('b').textContent=PRES.n}},800);
+  const go=()=>{if(gone||!o.classList.contains('rdy'))return;gone=true;clearInterval(iv);try{SFX.unlock();SFX.play('splash',0)}catch(e){}o.classList.add('out');setTimeout(()=>o.remove(),900)};
+  setTimeout(()=>o.classList.add('rdy'),T*1000+700);
   o.addEventListener('click',go);
   document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go()});
 })();
