@@ -684,7 +684,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V61</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V62</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -1178,7 +1178,7 @@ function arrive(p,loc,o,cb){
   if(p.task&&p.task.seas)p.task.seas.add(p.sea);if(p.ltask&&p.ltask.seas)p.ltask.seas.add(p.sea);
   const t=loc==='Z'||loc==='L'?null:drawToken(loc);
   if(loc==='L'){log(pname(p)+' прибыл на Лафтейл!');checkLaftelArrival(p)}
-  if(G.akainu&&G.akainu.loc===loc&&G.akainu.stun<=0&&!o.noBoss){log(pname(p)+' встретил на '+locName(loc)+' адмирала Акаину!');fxSnd('enemy');startNpcFight(p,'akainu',cb);return}
+  if(G.akainu&&G.akainu.loc===loc&&G.akainu.stun<=0&&!o.noBoss){log(pname(p)+' встретил на '+locName(loc)+' адмирала Акаину!');fxSnd('enemy');fxEvent({banner:true,tone:'bad',icon:'☠',title:'Встреча с Акаину!',desc:pname(p)+' · атака '+AKAINU.a+' / уклонение '+AKAINU.u,auto:2800});startNpcFight(p,'akainu',cb);return}
   if(o.quiet||!t){cb&&cb();return}
   if((t==='dozor'||t==='battle')&&G.duels>=3){
     const back=p.prev;log(pname(p)+': лимит 3 дуэли за ход исчерпан, бой не начинается — возврат на '+locName(back)+'.');
@@ -1284,12 +1284,14 @@ function hardJail(p){
   if(j&&j!==p.loc){p.prev=p.loc;p.loc=j;p.sea=seaOf(j)}
   p.jail=3;p.hardJail=true;G.endAfter=true;
   log(pname(p)+' проиграл Акаину и брошен в тюрьму Импел Даун на 3 хода: откупиться и сбежать нельзя.');
+  fxEvent({banner:true,tone:'bad',icon:'⛓',title:'Поражение от Акаину',desc:pname(p)+' в Импел Даун на 3 хода без выкупа',auto:3200});
 }
 function akainuDuels(list,cb){
   const q=list.shift();
   if(!q||!G.akainu||G.winner!=null)return cb&&cb();
   if(q.jail>0||G.akainu.stun>0)return akainuDuels(list,cb);
   log('Акаину вызывает на дуэль: '+pname(q)+'.');fxSnd('enemy');
+  fxEvent({banner:true,tone:'bad',icon:'☠',title:'Акаину вызывает на дуэль!',desc:pname(q)+' · атака '+AKAINU.a+' / уклонение '+AKAINU.u,auto:2800});
   startNpcFight(q,'akainu',()=>akainuDuels(list,cb));
 }
 // ---------- град лавы при появлении Акаину ----------
@@ -1744,7 +1746,7 @@ function startNpcFight(p,type,cb,fromJail){
     log('Бой '+p.name+' vs '+b.n+': '+res.w[0]+':'+res.w[1]+'.');
     ask('duelResult',{who:p.i,res,names:[p.name,b.n],title:'Итог боя',opts:[{label:'Продолжить',run:()=>{
       if(type==='akainu'){
-        if(w===0){p.berries+=20;p.cnt.winAny++;G.akainu.stun=G.akPhase?1:2;log(p.name+' побеждает Акаину (+20 Берри)! Адмирал оглушён.')}
+        if(w===0){p.berries+=20;p.cnt.winAny++;G.akainu.stun=G.akPhase?1:2;log(p.name+' побеждает Акаину (+20 Берри)! Адмирал оглушён.');fxEvent({banner:true,tone:'good',icon:'🏆',title:'Победа над Акаину!',desc:p.name+': +20 Берри, адмирал оглушён',auto:3200})}
         else if(w===1)hardJail(p);
         else log('Ничья с Акаину.');
         cb&&cb();return}
@@ -2090,7 +2092,7 @@ function akFx(ev,done){
   if(window.__nor||fast||!document.body||!Element.prototype.animate){return akScene(ev,done)}
   const old=document.getElementById('akvid');if(old)old.remove();
   const o=document.createElement('div');o.id='akvid';
-  o.innerHTML='<div class="avbox"><video playsinline preload="auto" src="'+AKVID+'"></video><button class="avx" aria-label="Закрыть">✕ Закрыть</button><button class="avm" hidden>🔇 Включить звук</button><div class="avc">☠ Адмирал Акаину · Метеоритный вулкан</div></div>';
+  o.innerHTML='<div class="avbox"><video playsinline preload="auto" src="'+AKVID+'"></video><button class="avx" aria-label="Закрыть">✕ Закрыть</button><button class="avm" hidden>🔇 Включить звук</button><div class="avc">☠ Адмирал Акаину вступает в бой!</div></div>';
   document.body.appendChild(o);
   const v=o.querySelector('video'),mb=o.querySelector('.avm');
   let fin=false;const end=()=>{if(fin)return;fin=true;try{v.pause()}catch(e){}o.classList.add('out');setTimeout(()=>{o.remove();akScene(ev,done)},260)};
@@ -3884,7 +3886,7 @@ function botSchedule(){
 }
 
 // ---------- test API ----------
-window.__g={lavaRain,akainuPhase,fxAkainu,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
+window.__g={actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
