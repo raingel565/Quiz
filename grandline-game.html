@@ -357,6 +357,13 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 @keyframes dpulse{70%{box-shadow:0 0 0 14px #3ddc8400}100%{box-shadow:0 0 0 0 #3ddc8400}}
 #evfx{position:fixed;inset:0;z-index:99998;display:flex;align-items:center;justify-content:center;background:rgba(5,10,8,.6);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);animation:dfin .2s ease both;cursor:pointer;padding:16px}
 
+#akvid{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.92);animation:dfin .25s ease both;padding:12px}
+#akvid.out{animation:dfout .26s ease both}
+#akvid .avbox{position:relative;width:min(100%,960px);max-height:100%;border-radius:14px;overflow:hidden;background:#000;box-shadow:0 0 0 2px rgba(255,110,60,.7),0 0 60px rgba(255,70,20,.45)}
+#akvid video{display:block;width:100%;max-height:calc(100vh - 24px);background:#000}
+#akvid .avx,#akvid .avm{position:absolute;top:10px;right:10px;z-index:2;border:0;border-radius:99px;padding:9px 16px;font:700 14px/1 inherit;color:#fff;background:rgba(20,12,10,.78);box-shadow:0 0 0 1px rgba(255,255,255,.25);cursor:pointer;backdrop-filter:blur(4px)}
+#akvid .avm{right:auto;left:10px}
+#akvid .avc{position:absolute;left:0;right:0;bottom:0;padding:22px 14px 10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#ffd0b8;background:linear-gradient(transparent,rgba(0,0,0,.75));pointer-events:none}
 #akfx{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(ellipse at 50% 120%,#7a1408 0,#2a0a06 45%,#050202 100%);cursor:pointer;animation:dfin .35s ease both;color:#fff}
 #akfx.out{animation:dfout .5s ease both}
 #akfx .akscr{position:absolute;inset:0;animation:akshake 2.4s .1s both}
@@ -677,7 +684,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V60</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V61</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -1004,7 +1011,7 @@ const TOAST_SKIP=/^Доход:|^Погода:|бросает 2d6|^Бросок 1
 let TOAST_TICK=null;
 function toastTick(){
   const h=document.getElementById('toasts');if(!h){return}
-  const paused=!!document.querySelector('#dicefx,#cardfx,#evfx,#modal .ov');
+  const paused=!!document.querySelector('#dicefx,#cardfx,#evfx,#akfx,#akvid,#modal .ov');
   const list=h.querySelectorAll('.toast:not(.out)');
   if(!list.length){clearInterval(TOAST_TICK);TOAST_TICK=null;return}
   if(paused)return;
@@ -2077,7 +2084,25 @@ const FXQ=[];
 function fxRoll(label,vals,sides,opt){if(window.__nor)return;FXQ.push(Object.assign({t:'d',label,vals:vals.slice(),sides:sides||6},opt||{}))}
 function fxEvent(ev){if(window.__nor)return;FXQ.push(Object.assign({t:'e'},ev))}
 function fxAkainu(locn,hits){if(window.__nor)return;FXQ.push({t:'k',loc:locn,hits:hits||[]})}
+const AKVID='assets/akainu.mp4'+SFXV;
 function akFx(ev,done){
+  const fast=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(window.__nor||fast||!document.body||!Element.prototype.animate){return akScene(ev,done)}
+  const old=document.getElementById('akvid');if(old)old.remove();
+  const o=document.createElement('div');o.id='akvid';
+  o.innerHTML='<div class="avbox"><video playsinline preload="auto" src="'+AKVID+'"></video><button class="avx" aria-label="Закрыть">✕ Закрыть</button><button class="avm" hidden>🔇 Включить звук</button><div class="avc">☠ Адмирал Акаину · Метеоритный вулкан</div></div>';
+  document.body.appendChild(o);
+  const v=o.querySelector('video'),mb=o.querySelector('.avm');
+  let fin=false;const end=()=>{if(fin)return;fin=true;try{v.pause()}catch(e){}o.classList.add('out');setTimeout(()=>{o.remove();akScene(ev,done)},260)};
+  o.querySelector('.avx').onclick=e=>{e.stopPropagation();end()};
+  o.onclick=e=>{if(e.target===o)end()};
+  v.onended=end;v.onerror=end;
+  mb.onclick=e=>{e.stopPropagation();v.muted=false;v.play().catch(()=>{});mb.hidden=true};
+  const go=()=>{const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{v.muted=true;v.play().then(()=>{mb.hidden=false}).catch(end)})};
+  v.volume=1;go();
+  setTimeout(()=>{if(!fin&&v.readyState<2&&v.currentTime===0)end()},6000); // не загрузилось: не держим игру
+}
+function akScene(ev,done){
   const fast=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(window.__nor||!document.body){done&&done();return}
   const old=document.getElementById('akfx');if(old)old.remove();
@@ -2553,6 +2578,7 @@ function musicSync(){
 document.addEventListener('pointerdown',()=>{if(!MUS.unlocked){MUS.unlocked=true;musicSync()}},{passive:true});
 document.addEventListener('visibilitychange',()=>musicSync());
 // ---------- V23: PWA ----------
+window.addEventListener('load',()=>setTimeout(()=>{try{fetch(AKVID).catch(()=>{})}catch(e){}},9000));
 window.addEventListener('load',()=>setTimeout(()=>{try{['enemy','wtf','zoro','luffy','law','buster','ace','sanji','olesya','hancock'].forEach(n=>fetch('assets/sfx_'+n+'.mp3'+SFXV).catch(()=>{}))}catch(e){}},2500));
 let DEFER=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();DEFER=e});
@@ -3019,7 +3045,7 @@ setInterval(()=>{
     let off=false;try{off=localStorage.getItem('gl_guide_off')==='1'}catch(_){}
     if(off){GDASKED=G;return}
     if(NET.on&&!(NET.me>=0))return;
-    if(FXBUSY||FXQ.length||document.querySelector('#dicefx,#cardfx,#evfx,#modal .ov,#gd-askw'))return;
+    if(FXBUSY||FXQ.length||document.querySelector('#dicefx,#cardfx,#evfx,#akfx,#akvid,#modal .ov,#gd-askw'))return;
     GDASKED=G;gdAsk();
   }catch(e){}
 },900);
