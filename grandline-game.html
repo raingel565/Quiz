@@ -684,7 +684,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V63</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V64</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -708,7 +708,7 @@ const CH={
  nami:{n:'Нами',A:4,U:4,d:'Иммунитет к погоде; +5 к каждой выплате дохода'},
  olesya:{n:'Олеся Д. Мося',A:4,U:4,d:'При взятии карты смотрит две верхние и выбирает одну'},
  robin:{n:'Нико Робин',A:4,U:4,d:'Сама выбирает задание Лафтейла; для победы по понеглифам хватает трёх'},
- ace:{n:'Портгас Д. Эйс',A:6,U:3,d:'«Огненная стена»: раз за ход всех игроков (1 ОД) окружает огнём свой или соседний остров (в т.ч. понеглиф и Лафтейл). Другие игроки не могут туда войти, пока стена не погаснет в начале следующего хода Эйса'},
+ ace:{n:'Портгас Д. Эйс',A:6,U:3,d:'«Огненная стена»: раз за ход всех игроков (1 ОД) окружает огнём свой или соседний остров (в т.ч. понеглиф и Лафтейл). Другие игроки и адмирал Акаину не могут туда войти, пока стена не погаснет в начале следующего хода Эйса'},
  sanji:{n:'Винсмок Санджи',A:4,U:5,d:'Против девушек (Нами, Хенкок, Олеся, Робин) не бросает кубик и наносит максимум 1 урона. «Небесная походка»: раз в ход перелёт через один остров за 1 ОД'}
 };
 const GIRLS=['nami','hancock','olesya','robin'];
@@ -1276,7 +1276,7 @@ function plocOf(q){return q.loc==='Z'&&G.zun?G.zun.cell:q.loc}
 function akPath(from,to){ // кратчайший путь по карте (без Зунеши)
   if(from===to)return[];
   const prev={},seen=new Set([from]);let fr=[from];
-  while(fr.length){const nx=[];for(const a of fr)for(const b of (ADJ[a]||[])){if(seen.has(b)||deadAt(b))continue;seen.add(b);prev[b]=a;if(b===to){const path=[];let c=b;while(c!==from){path.unshift(c);c=prev[c]}return path}nx.push(b)}fr=nx}
+  while(fr.length){const nx=[];for(const a of fr)for(const b of (ADJ[a]||[])){if(seen.has(b)||deadAt(b)||(G.fire&&G.fire.loc===b))continue;seen.add(b);prev[b]=a;if(b===to){const path=[];let c=b;while(c!==from){path.unshift(c);c=prev[c]}return path}nx.push(b)}fr=nx}
   return null;
 }
 function hardJail(p){
@@ -1341,6 +1341,7 @@ function akainuPhase(cb){
   const targets=G.players.filter(q=>q.jail<=0&&q.loc!=='Z');
   let best=null;
   for(const q of targets){const pa=akPath(A.loc,q.loc);if(pa&&(!best||pa.length<best.length))best=pa}
+  if(!best&&G.fire&&targets.length)log('Огненная стена Эйса не пропускает Акаину: он стоит на месте.');
   if(best&&best.length){const st=best.slice(0,2);A.loc=st[st.length-1];log('Акаину идёт к ближайшему игроку и выходит на '+locName(A.loc)+'.')}
   const here=G.players.filter(q=>q.loc===A.loc&&q.jail<=0);
   akainuDuels(here,()=>{G.akPhase=false;cb()});
@@ -1746,7 +1747,7 @@ function startNpcFight(p,type,cb,fromJail){
     log('Бой '+p.name+' vs '+b.n+': '+res.w[0]+':'+res.w[1]+'.');
     ask('duelResult',{who:p.i,res,names:[p.name,b.n],title:'Итог боя',opts:[{label:'Продолжить',run:()=>{
       if(type==='akainu'){
-        if(w===0){p.berries+=20;p.cnt.winAny++;G.akainu.stun=G.akPhase?1:2;log(p.name+' побеждает Акаину (+20 Берри)! Адмирал оглушён.');fxEvent({banner:true,tone:'good',icon:'🏆',title:'Победа над Акаину!',desc:p.name+': +20 Берри, адмирал оглушён',auto:3200})}
+        if(w===0){p.berries+=50;p.cnt.winAny++;G.akainu.stun=G.akPhase?1:2;log(p.name+' побеждает Акаину (+50 Берри)! Адмирал оглушён.');fxEvent({banner:true,tone:'good',icon:'🏆',title:'Победа над Акаину!',desc:p.name+': +50 Берри, адмирал оглушён',auto:3200})}
         else if(w===1)hardJail(p);
         else log('Ничья с Акаину.');
         cb&&cb();return}
@@ -3886,7 +3887,7 @@ function botSchedule(){
 }
 
 // ---------- test API ----------
-window.__g={actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
+window.__g={ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
