@@ -622,8 +622,17 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 @keyframes onlp{50%{opacity:.45}}
 #top>.onl{height:34px;margin-left:8px}
 .h2o{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.h2o .onl{height:30px;font-size:13px;font-family:inherit;font-weight:600}
+
+/* ===== V48: зал славы ===== */
+.hall-top,.hall-list{display:flex;flex-direction:column;gap:8px}
+.hall-r{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;padding:8px 12px;border-radius:16px;background:var(--sunk);box-shadow:var(--sh-in)}
+.hall-r .hm{width:28px;text-align:center;font-weight:800;color:var(--gold)}
+.hall-r .hn{display:flex;flex-direction:column;min-width:0;font-weight:700;overflow-wrap:anywhere}
+.hall-r small{font-weight:500;font-size:11.5px;color:var(--muted)}
+.hall-r .hw{font-weight:800;font-size:18px;color:var(--gold)}
+.hall-r .hd{display:flex;flex-direction:column;align-items:flex-end;text-align:right;font-size:12px;color:var(--ink)}
 </style>
-<div id="ver" title="Версия игры">V47</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V48</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2064,7 +2073,7 @@ function render(){
   const need=viewerNeeded();
   if(G.turnNo!==SNDT){SNDT=G.turnNo;if(!window.__nor&&(!NET.on||need===NET.me))fxSnd('turn')}
   if(G.pending&&G.pending.type==='duelResult'&&SNDD!==G.pending){SNDD=G.pending;fxSnd('duel')}
-  if(G.winner!=null)achCheck();
+  if(G.winner!=null){achCheck();hallSave()}
   if(G.winner!=null&&!SNDW){SNDW=1;fxSnd('win')}else if(G.winner==null)SNDW=0;
   $('#top').innerHTML=topHtml();
   $('#now').innerHTML=nowHtml();
@@ -2142,6 +2151,7 @@ function topHtml(){
   const item=(attr,icon,label)=>'<button class="mnui" role="menuitem" '+attr+'>'+ic(icon)+'<span>'+label+'</span></button>';
   const menu='<span class="mnuw"><button class="btn ico" id="mnubtn" title="Меню" aria-haspopup="menu" aria-expanded="'+(window.__mnu?'true':'false')+'">'+ic('<path d="M4 7h16M4 12h16M4 17h16"/>')+'</button><div class="mnu'+(window.__mnu?' open':'')+'" id="mnu" role="menu">'
     +item('data-qo="replay"','<path d="M6 4h9l3 3v13H6zM9 11h6M9 15h6"/>','Что было')
+    +item('data-qo="hall"','<path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 20h8M10 17h4"/>','Зал славы')
     +item('data-qo="settings"','<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/>','Настройки')
     +item('data-guide','<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17v.1"/>','Гайд')
     +item('data-rules','<path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM8 8h7M8 12h7"/>','Правила игры')
@@ -2464,17 +2474,42 @@ function setHtml(){
    +ACH.map(a=>{const o=A.ids.indexOf(a.id)>=0;return '<div class="ach'+(o?'':' lock')+'"><span style="font-size:20px">'+(o?'🏆':'🔒')+'</span><div><b>'+a.n+'</b><div class="small">'+a.d+'</div></div></div>'}).join('');
   return h;
 }
+
+// ===== Зал славы (Firebase hall/) =====
+function hallSave(){
+  if(!G||G.winner==null||G.hallDone||!NET.on||!NET.code)return;G.hallDone=true;
+  const p=G.players[G.winner];if(!p)return;
+  const id=NET.code+'-'+((NET.meta&&(NET.meta.seed|0))||0);
+  fbLoad().then(rdb=>rdb.ref('hall/'+id).set({name:String(p.name||'Игрок').slice(0,24),ch:p.ch,mode:G.mode||'std',n:G.players.length,ts:Date.now(),code:NET.code})).catch(()=>{});
+}
+function hallHtml(){return '<h2>🏆 Зал славы</h2><div id="hallbody" class="small">Загрузка…</div>'}
+async function hallLoad(){
+  const box=()=>document.getElementById('hallbody');
+  try{
+    const rdb=await fbLoad();
+    const sn=await rdb.ref('hall').orderByChild('ts').limitToLast(80).once('value');
+    const arr=[];sn.forEach(c=>{const v=c.val();if(v&&v.name)arr.push(v)});arr.sort((a,b)=>b.ts-a.ts);
+    const b=box();if(!b)return;
+    if(!arr.length){b.innerHTML='<div class="small">Пока никто не стал Королём Пиратов в сетевой игре. Станьте первым!</div>';return}
+    const cnt={};arr.forEach(v=>{const k=String(v.name).trim().toLowerCase();(cnt[k]=cnt[k]||{name:v.name,w:0}).w++});
+    const top=Object.values(cnt).sort((a,b)=>b.w-a.w).slice(0,5);
+    const medal=['🥇','🥈','🥉','4','5'];
+    const dt=ts=>{try{return new Date(ts).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}catch(e){return''}};
+    b.innerHTML='<div class="grp"><b>Больше всего побед</b></div><div class="hall-top">'+top.map((t,i)=>'<div class="hall-r"><span class="hm">'+medal[i]+'</span><span class="hn">'+esc(t.name)+'</span><span class="hw">'+t.w+'</span></div>').join('')+'</div>'
+      +'<div class="grp"><b>Последние победители</b></div><div class="hall-list">'+arr.slice(0,25).map(v=>'<div class="hall-r"><span class="avw sm" style="--pc:var(--accent)">'+(AVS[v.ch]?av(v.ch):'')+'</span><span class="hn">'+esc(v.name)+'<small>'+esc((CH[v.ch]&&CH[v.ch].n)||'')+'</small></span><span class="hd">'+esc((MODES[v.mode]&&MODES[v.mode].n)||'')+' · '+(v.n|0)+' игр.<small>'+dt(v.ts)+'</small></span></div>').join('')+'</div>';
+  }catch(e){const b=box();if(b)b.textContent='Не удалось загрузить зал славы: нет связи с сервером.'}
+}
 function qoOpen(k){
   qoClose();const o=document.createElement('div');o.id='qoov';o.dataset.k=k;
-  o.innerHTML='<div class="modal">'+(k==='replay'?replayHtml():setHtml())+'<button class="btn primary" data-qo="close">Закрыть</button></div>';
-  document.body.appendChild(o);
+  o.innerHTML='<div class="modal">'+(k==='replay'?replayHtml():k==='hall'?hallHtml():setHtml())+'<button class="btn primary" data-qo="close">Закрыть</button></div>';
+  document.body.appendChild(o);if(k==='hall')hallLoad();
 }
 function qoClose(){const o=document.getElementById('qoov');if(o)o.remove()}
 document.addEventListener('click',async ev=>{
   const bt=ev.target.closest&&ev.target.closest('[data-qo]');
   if(!bt){const o=document.getElementById('qoov');if(o&&ev.target===o)qoClose();return}
   const k=bt.dataset.qo,o=document.getElementById('qoov');
-  if(k==='replay'||k==='settings'){qoOpen(k);return}
+  if(k==='replay'||k==='settings'||k==='hall'){qoOpen(k);return}
   if(k==='close'){qoClose();return}
   if(k==='theme'){SET.theme=bt.dataset.v;setSave();applyTheme()}
   else if(k==='install'){if(DEFER){try{DEFER.prompt();await DEFER.userChoice}catch(e){}DEFER=null}}
@@ -2876,7 +2911,7 @@ function renderSetup(){
     h+='<div class="row"><label>Режим: <select id="mode">'+Object.keys(MODES).map(k=>'<option value="'+k+'"'+((S.mode||'std')===k?' selected':'')+'>'+MODES[k].n+'</option>').join('')+'</select></label></div><div class="small" id="modeD">'+esc(MODES[S.mode||'std'].d)+'</div>';
     h+='<div class="grp">'+[0,1,2,3].slice(0,S.n).map(i=>'<div class="row"><input id="nm'+i+'" value="'+esc(S.names[i])+'" maxlength="14" style="padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)"><label class="small" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="bt'+i+'"'+(S.bots[i]?' checked':'')+'> 🤖 бот</label></div>').join('')+'</div><div class="small">Бот играет сам: собирает понеглифы, выполняет задания и идёт на Лафтейл. Остальные ходят по очереди на этом экране.</div>';
     h+='<button class="btn primary" id="go">Бросить кубики на очерёдность</button>';
-    h+='<button class="btn" data-ui="net">Играть по сети: каждый на своём устройстве</button><button class="btn" data-rules>📖 Правила игры</button><button class="btn" data-qo="settings">⚙ Настройки</button>';
+    h+='<button class="btn" data-ui="net">Играть по сети: каждый на своём устройстве</button><button class="btn" data-rules>📖 Правила игры</button><button class="btn" data-qo="hall">🏆 Зал славы</button><button class="btn" data-qo="settings">⚙ Настройки</button>';
   }else if(S.step==='roll'){
     h+='<h2>Очерёдность хода</h2><table class="t"><tr><th>Игрок</th><th>2d6</th></tr>'+S.order.map(o=>'<tr><td>'+esc(o.name)+'</td><td>'+o.r+'</td></tr>').join('')+'</table><div class="small">Больше сумма — раньше ход. Ничьи перебрасываются. Персонажей и море выбирают по порядку, и карту вы увидите заранее.</div><button class="btn primary" id="go2">Выбирать персонажей</button>';
   }else{
