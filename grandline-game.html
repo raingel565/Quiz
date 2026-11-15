@@ -577,8 +577,24 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
   #now{flex-direction:column;flex-wrap:nowrap;gap:5px}
   .pill .tx{max-width:none}
 }
+
+/* ===== V45: окно дуэли — ровная сетка ===== */
+.arena{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:stretch}
+.arena .dfc{display:flex;flex-direction:column;align-items:center;height:100%}
+.arena .dfc h3{min-height:2.5em;display:flex;align-items:center;justify-content:center;line-height:1.25;text-wrap:balance;overflow-wrap:anywhere;hyphens:auto;margin:8px 0 4px;width:100%}
+.arena .dfc .small{width:100%;text-wrap:balance}
+.arena .dfc>div:last-child{margin-top:auto!important;padding-top:8px}
+.arena .vs{justify-self:center}
+.rt{display:block;text-align:center;margin-bottom:10px}
+.rgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px 14px;align-items:stretch}
+.rbx{display:grid;grid-template-rows:auto auto 1fr;justify-items:center;text-align:center;gap:6px;min-width:0}
+.rbx .rn{min-height:2.5em;display:flex;align-items:center;justify-content:center;line-height:1.25;text-wrap:balance;overflow-wrap:anywhere}
+.rbx .rc{min-height:1.4em}
+.rbx .rm{display:flex;align-items:center;justify-content:center;width:100%;align-self:end}
+.rbx .rm .btn{width:100%;min-height:52px;line-height:1.25;text-wrap:balance}
+@media(max-width:520px){.arena .por{width:64px;height:64px}.arena .dfc h3{font-size:15px}.arena .vs{font-size:22px}}
 </style>
-<div id="ver" title="Версия игры">V44</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V45</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2195,7 +2211,7 @@ function resultHtml(pe){
       return '<div class="small">атака '+res.st[k].s.A+' + карта '+x.val+(x.ann?' (аннулирована)':'')+(x.nodice?' + без кубика':' + кубик <b>'+x.roll+'</b>')+(o?' + эффекты '+(o>0?'+':'')+o:'')+' = <b>'+x.att+'</b>; уклонение соперника −'+c[1-k].ev+' → <span class="num">'+R.sc[k]+'</span>'+(x.nodice?' <span class="small">(Санджи не бьёт девушек: урон не больше 1)</span>':'')+'</div>';
     };
     const out=R.out===-1?'Ничья'+(R.marco?' (Феникс Марко)':''):'<span class="win">Раунд за '+esc(pe.names[R.out])+'</span>';
-    return '<div class="card"><b>Раунд '+(r+1)+'</b><div class="row" style="flex-wrap:nowrap"><div style="flex:1;min-width:0">'+part(c[0],0)+'</div><div style="flex:1;min-width:0">'+part(c[1],1)+'</div></div><div>'+(R.nat&&(R.nat[0]||R.nat[1])?'Нацу даёт +20. ':'')+out+'</div></div>';
+    return '<div class="card"><b class="rt">Раунд '+(r+1)+'</b><div class="rgrid"><div style="min-width:0">'+part(c[0],0)+'</div><div style="min-width:0">'+part(c[1],1)+'</div></div><div style="text-align:center">'+(R.nat&&(R.nat[0]||R.nat[1])?'Нацу даёт +20. ':'')+out+'</div></div>';
   };
   for(let r=0;r<Z.shown;r++)h+=line(r);
   if(Z.shown>0&&Z.shown<n){const Rl=res.rounds[Z.shown-1];h+='<div class="rbn'+(Rl.out===-1?' draw':'')+'">'+(Rl.out===-1?'Ничья':'Раунд за '+esc(pe.names[Rl.out]))+'</div>'}
@@ -2210,10 +2226,10 @@ function resultHtml(pe){
       else if(Z.done[k])mid='<span class="pd drop s'+hi+'"><b>'+x.roll+'</b></span>';
       else if(Z.spin[k])mid='<span class="pd s'+hi+'" id="d'+k+'"><b>?</b></span>';
       else mid='<button class="btn primary" data-dz="die" data-k="'+k+'">Бросить d'+hi+(res.st[k].s.p?'':' за босса')+'</button>';
-      return '<div style="flex:1;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center"><b>'+esc(pe.names[k])+'</b><span class="small ccf">'+cardTxt+'</span>'+mid+'</div>';
+      return '<div class="rbx"><b class="rn">'+esc(pe.names[k])+'</b><span class="small rc">'+cardTxt+'</span><div class="rm">'+mid+'</div></div>';
     };
-    h+='<div class="card"><b>Раунд '+(Z.shown+1)+'</b><div class="row" style="flex-wrap:nowrap;justify-content:space-around">'+box(0)+box(1)+'</div></div>';
-    h+='<div class="row"><button class="btn" data-dz="skip">Показать всё сразу</button></div>';
+    h+='<div class="card rcur"><b class="rt">Раунд '+(Z.shown+1)+'</b><div class="rgrid">'+box(0)+box(1)+'</div></div>';
+    h+='<div class="row" style="justify-content:center"><button class="btn" data-dz="skip">Показать всё сразу</button></div>';
   }
   if(Z.shown>=n)h+='<div class="fin'+(res.winner===-1?'':' win')+'">'+(res.winner===-1?'Боевая ничья':'Победа: '+esc(pe.names[res.winner]))+' ('+res.w[0]+' : '+res.w[1]+')</div><button class="btn primary" data-a="0">Продолжить</button>';
   return h+'</div></div>';
