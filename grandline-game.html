@@ -746,7 +746,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V71</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V72</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2313,6 +2313,55 @@ let SNDT=-1,SNDW=0,SNDD=null;
 const PRES={n:0,rooms:0,ok:false,last:null,ref:null,adm:null};
 const ADM_H='daf1f90f3dc710e6cd4c31d2'; // sha256('gl-adm:<пароль>')[:24]: ключ закрытой ветки adm/ в Firebase
 const DEVT=(()=>{try{return(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&Math.min(screen.width,screen.height)<900))?'m':'d'}catch(e){return'd'}})();
+// модель устройства и страна (только для закрытой статистики)
+const TZCC={'Asia/Almaty':'KZ','Asia/Qostanay':'KZ','Asia/Aqtobe':'KZ','Asia/Aqtau':'KZ','Asia/Oral':'KZ','Asia/Atyrau':'KZ','Asia/Qyzylorda':'KZ','Europe/Moscow':'RU','Europe/Samara':'RU','Asia/Yekaterinburg':'RU','Asia/Novosibirsk':'RU','Asia/Krasnoyarsk':'RU','Asia/Irkutsk':'RU','Asia/Vladivostok':'RU','Europe/Kaliningrad':'RU','Europe/Kiev':'UA','Europe/Kyiv':'UA','Europe/Minsk':'BY','Asia/Tashkent':'UZ','Asia/Samarkand':'UZ','Asia/Bishkek':'KG','Asia/Dushanbe':'TJ','Asia/Ashgabat':'TM','Asia/Tbilisi':'GE','Asia/Yerevan':'AM','Asia/Baku':'AZ','Europe/Istanbul':'TR','Europe/Berlin':'DE','Europe/Warsaw':'PL','Europe/London':'GB','Europe/Paris':'FR','Europe/Madrid':'ES','Europe/Rome':'IT','Asia/Dubai':'AE','Asia/Seoul':'KR','Asia/Tokyo':'JP','Asia/Shanghai':'CN','Asia/Urumqi':'CN','America/New_York':'US','America/Chicago':'US','America/Denver':'US','America/Los_Angeles':'US'};
+function ccGuess(){
+  try{const z=Intl.DateTimeFormat().resolvedOptions().timeZone;if(TZCC[z])return TZCC[z]}catch(e){}
+  try{const m=/[-_]([A-Za-z]{2})$/.exec(navigator.language||'');if(m)return m[1].toUpperCase()}catch(e){}
+  return '';
+}
+async function ccGet(){
+  try{const c=localStorage.getItem('gl-cc');if(/^[A-Z]{2}$/.test(c||''))return c}catch(e){}
+  let cc='';
+  try{
+    const ac=typeof AbortController!=='undefined'?new AbortController():null,tm=setTimeout(()=>{try{ac&&ac.abort()}catch(e){}},4000);
+    const r=await fetch('https://api.country.is/',{signal:ac?ac.signal:undefined,cache:'no-store'});clearTimeout(tm);
+    const j=await r.json();if(j&&/^[A-Za-z]{2}$/.test(j.country||''))cc=j.country.toUpperCase();
+  }catch(e){}
+  if(!cc)cc=ccGuess();
+  if(cc){try{localStorage.setItem('gl-cc',cc)}catch(e){}}
+  return cc;
+}
+async function modelGet(){
+  const ua=navigator.userAgent||'',clip=x=>String(x||'').replace(/[^\w .+\-\/()×·]/g,'').trim().slice(0,40);
+  let mdl='',plat='';
+  try{
+    const u=navigator.userAgentData;
+    if(u&&u.getHighEntropyValues){const h=await u.getHighEntropyValues(['model','platform','platformVersion']);
+      if(h.model)mdl=h.model;
+      else if(!u.mobile&&h.platform&&!/Android|iOS/.test(h.platform))plat=h.platform+(h.platform==='Windows'&&h.platformVersion?(parseInt(h.platformVersion)>=13?' 11':' 10'):'');
+    }
+  }catch(e){}
+  if(!mdl&&plat&&!/Android|iPhone|iPad/.test(ua))mdl=plat;
+  if(!mdl){
+    let m=/Android[^;)]*;\s*([^;)]+?)(?:\sBuild|\))/.exec(ua);
+    if(m&&m[1]&&m[1]!=='K'&&!/^(Linux|U)$/.test(m[1]))mdl=m[1];
+    else if(/iPhone/.test(ua))mdl='iPhone '+Math.min(screen.width,screen.height)+'×'+Math.max(screen.width,screen.height);
+    else if(/iPad/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1))mdl='iPad '+Math.min(screen.width,screen.height)+'×'+Math.max(screen.width,screen.height);
+    else if(/Android/.test(ua))mdl='Android';
+    else if(/Windows/.test(ua))mdl='Windows';
+    else if(/Mac OS X/.test(ua))mdl='Mac';
+    else if(/Linux/.test(ua))mdl='Linux';
+  }
+  let br='';
+  if(!/iPhone|iPad|Android/.test(ua+mdl)){br=/Edg\//.test(ua)?'Edge':/OPR\//.test(ua)?'Opera':/Firefox\//.test(ua)?'Firefox':/Chrome\//.test(ua)?'Chrome':/Safari\//.test(ua)?'Safari':'';}
+  return clip(mdl+(br?' · '+br:''));
+}
+let DEVI=null;
+function devInfo(){
+  if(!DEVI)DEVI=Promise.all([modelGet().catch(()=>''),ccGet().catch(()=>'')]).then(a=>{const o={};if(a[0])o.mdl=a[0];if(/^[A-Z]{2}$/.test(a[1]))o.cc=a[1];return o});
+  return DEVI;
+}
 function presBadge(){return '<span class="onl" title="Сейчас в игре'+(PRES.rooms?' (в комнатах: '+PRES.rooms+')':'')+'"'+(PRES.ok?'':' hidden')+'><i></i><b>'+PRES.n+'</b></span>'}
 function presPaint(){document.querySelectorAll('.onl').forEach(e=>{e.hidden=!PRES.ok;const b=e.querySelector('b');if(b)b.textContent=PRES.n;e.title='Сейчас в игре'+(PRES.rooms?' (в комнатах: '+PRES.rooms+')':'')})}
 function presSet(){
@@ -2328,7 +2377,7 @@ async function presInit(){
     PRES.ref=rdb.ref('presence/'+uid);
     rdb.ref('.info/connected').on('value',sn=>{
       if(sn.val()===true){PRES.ok=true;PRES.last=null;PRES.ref.onDisconnect().remove().then(()=>presSet()).catch(()=>{});presPaint();
-        try{PRES.adm=rdb.ref('adm/'+ADM_H+'/'+uid);PRES.adm.onDisconnect().remove().then(()=>PRES.adm.set({dev:DEVT,t0:{'.sv':'timestamp'}})).catch(()=>{})}catch(e){}}
+        try{PRES.adm=rdb.ref('adm/'+ADM_H+'/'+uid);PRES.adm.onDisconnect().remove().then(()=>devInfo()).then(i=>PRES.adm.set(Object.assign({dev:DEVT,t0:{'.sv':'timestamp'}},i))).catch(()=>{})}catch(e){}}
       else{PRES.ok=false;presPaint()}
     });
     rdb.ref('presence').on('value',sn=>{
@@ -2803,11 +2852,14 @@ function admOpen(){
       try{ADMOFF=(await rdb.ref('.info/serverTimeOffset').once('value')).val()||0}catch(e){ADMOFF=0}
       let snap=null;
       const paint=()=>{
-        if(!snap)return;const now=Date.now()+ADMOFF,arr=[];snap.forEach(c=>{const v=c.val();if(v&&v.t0)arr.push({dev:v.dev==='m'?'m':'d',min:Math.max(0,(now-v.t0)/60000)})});
+        if(!snap)return;const now=Date.now()+ADMOFF,arr=[];snap.forEach(c=>{const v=c.val();if(v&&v.t0)arr.push({dev:v.dev==='m'?'m':'d',mdl:typeof v.mdl==='string'?v.mdl:'',cc:/^[A-Z]{2}$/.test(v.cc||'')?v.cc:'',min:Math.max(0,(now-v.t0)/60000)})});
         arr.sort((x,y)=>y.min-x.min);const m=arr.filter(x=>x.dev==='m').length,d=arr.length-m,avg=arr.length?arr.reduce((s,x)=>s+x.min,0)/arr.length:0;
+        const flag=c=>String.fromCodePoint(...[...c].map(ch=>127397+ch.charCodeAt(0))),cn=c=>{try{return new Intl.DisplayNames(['ru'],{type:'region'}).of(c)||c}catch(e){return c}};
+        const cm={};arr.forEach(x=>{if(x.cc)cm[x.cc]=(cm[x.cc]||0)+1});
+        const cc=Object.keys(cm).length?['<div class="grp"><b>Страны</b></div><div class="hall-list">'+Object.keys(cm).sort((a,b)=>cm[b]-cm[a]).map(c=>'<div class="hall-r"><span class="hm">'+flag(c)+'</span><span class="hn">'+esc(cn(c))+'</span><span class="hw" style="font-size:13px">'+cm[c]+'</span></div>').join('')+'</div>']:[];
         const fm=x=>x<1?'меньше минуты':x<60?Math.round(x)+' мин':Math.floor(x/60)+' ч '+Math.round(x%60)+' мин';
         b.innerHTML='<div class="hall-top"><div class="hall-r"><span class="hn">Сейчас онлайн</span><span class="hw">'+arr.length+'</span></div><div class="hall-r"><span class="hn">📱 Телефоны</span><span class="hw">'+m+'</span></div><div class="hall-r"><span class="hn">💻 Компьютеры</span><span class="hw">'+d+'</span></div><div class="hall-r"><span class="hn">Средняя сессия</span><span class="hw">'+(arr.length?fm(avg):'—')+'</span></div></div>'
-          +'<div class="grp"><b>Игроки</b></div><div class="hall-list">'+(arr.length?arr.map(x=>'<div class="hall-r"><span class="hm">'+(x.dev==='m'?'📱':'💻')+'</span><span class="hn">'+(x.dev==='m'?'Телефон':'Компьютер')+'</span><span class="hw" style="font-size:13px">'+fm(x.min)+'</span></div>').join(''):'<div class="small">Сейчас никого нет.</div>')+'</div>';
+          +cc.map(c=>c).join('')+'<div class="grp"><b>Игроки</b></div><div class="hall-list">'+(arr.length?arr.map(x=>'<div class="hall-r"><span class="hm">'+(x.dev==='m'?'📱':'💻')+'</span><span class="hn">'+(x.cc?flag(x.cc)+' ':'')+esc(x.mdl||(x.dev==='m'?'Телефон':'Компьютер'))+'</span><span class="hw" style="font-size:13px">'+fm(x.min)+'</span></div>').join(''):'<div class="small">Сейчас никого нет.</div>')+'</div>';
       };
       ADMREF=rdb.ref('adm/'+h);
       ADMREF.on('value',sn=>{snap=sn;paint()},()=>{b.innerHTML='<div class="small">Доступ запрещён: неверный пароль (или в Firebase ещё не обновлены правила).</div><button class="btn" id="admretry" type="button" style="margin-top:8px">Ещё раз</button>';const r=b.querySelector('#admretry');if(r)r.onclick=admOpen});
@@ -4000,7 +4052,7 @@ function botSchedule(){
 }
 
 // ---------- test API ----------
-window.__g={ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
+window.__g={devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
