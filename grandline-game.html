@@ -238,6 +238,11 @@ body{background:radial-gradient(900px 600px at 12% 108%,rgba(40,140,80,.22),tran
 #toasts{position:absolute;top:22px;left:22px;z-index:100000;display:flex;flex-direction:column;gap:6px;width:min(300px,calc(100% - 44px));pointer-events:none}
 .toast{pointer-events:auto;display:flex;align-items:flex-start;gap:8px;padding:7px 8px 7px 11px;border-radius:12px;background:rgba(22,27,30,.9);color:#f4efe2;font:600 12.5px/1.35 var(--f-body);box-shadow:0 6px 18px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px);animation:toastin .22s ease-out}
 .toast.out{opacity:0;transform:translateX(-12px);transition:.22s}
+#toasts.one{position:fixed;top:auto;bottom:14px;left:64px;right:64px;width:auto;align-items:center}
+#toasts.one .toast{width:100%;max-width:520px;padding:6px 12px;border-radius:999px;text-align:center;cursor:pointer;font-size:12px;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+#toasts.one .toast .tx{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;word-wrap:normal}
+#toasts.one .tclear{display:none}
+
 .toast .tx{flex:1;min-width:0;word-wrap:break-word}
 .toast button{flex:none;border:0;background:rgba(255,255,255,.14);color:#fff;width:20px;height:20px;border-radius:50%;font-size:12px;line-height:20px;cursor:pointer;padding:0}
 .toast button:hover{background:rgba(255,255,255,.3)}
@@ -450,7 +455,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V25</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V26</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -739,6 +744,24 @@ function toastSync(){const h=document.getElementById('toasts');if(!h)return;cons
 function toastPush(s){
   if(window.__nor||typeof document==='undefined'||TOAST_SKIP.test(s))return;
   const h=document.getElementById('toasts');if(!h)return;
+  const mode=(typeof SET!=='undefined'&&SET.toast)||'one';
+  if(mode==='off')return;
+  h.classList.toggle('one',mode==='one');
+  if(mode==='one'){
+    const imp=/ дуэль|побежда|задани|понеглиф|Королём/i.test(s);
+    const mv1=/^(.+?) идёт на (.+)\.$/.exec(s);
+    const old=[...h.querySelectorAll('.toast:not(.out)')];
+    const prev=old[old.length-1];
+    if(mv1&&prev&&prev.dataset.mv===mv1[1]){const path=JSON.parse(prev.dataset.path);path.push(mv1[2]);prev.dataset.path=JSON.stringify(path);prev.querySelector('.tx').textContent=mv1[1]+' идёт: '+path.join(' → ');prev._ttl=4500;return}
+    old.forEach(e=>e.remove());
+    const el=document.createElement('div');el.className='toast';
+    if(mv1){el.dataset.mv=mv1[1];el.dataset.path=JSON.stringify([mv1[2]])}
+    el.innerHTML='<span class="tx"></span>';el.querySelector('.tx').textContent=s;
+    el.onclick=()=>toastClose(el);h.appendChild(el);
+    el._ttl=imp?7000:4500;
+    if(!TOAST_TICK)TOAST_TICK=setInterval(toastTick,300);
+    toastSync();return;
+  }
   const mv=/^(.+?) идёт на (.+)\.$/.exec(s);
   const list=[...h.querySelectorAll('.toast:not(.out)')],last=list[list.length-1];
   if(mv&&last&&last.dataset.mv===mv[1]){const path=JSON.parse(last.dataset.path);path.push(mv[2]);last.dataset.path=JSON.stringify(path);last.querySelector('.tx').textContent=mv[1]+' идёт: '+path.join(' → ');last._ttl=12000;return}
@@ -754,7 +777,7 @@ function toastPush(s){
   toastSync();
 }
 const BNR=[[/арестован дозором|садится в тюрьму|телепортируется в тюрьму/,'⚓','Дозор!','bad'],[/проиграл боссу: пираты/,'🏴‍☠️','Ограбление!','bad'],[/выполнил(?:а)? (?:задание|«)/,'✔','Задание выполнено','good'],[/побеждает «/,'⚔','Победа в бою','good']];
-function logBanner(t){if(window.__nor)return;for(const [re,ic,ti,tone] of BNR)if(re.test(t)){fxEvent({stage:'post',banner:1,tone,icon:ic,title:ti,desc:t,auto:2300,snd:null});return}}
+function logBanner(t){if(window.__nor||(typeof SET!=='undefined'&&SET.toast==='off'))return;for(const [re,ic,ti,tone] of BNR)if(re.test(t)){fxEvent({stage:'post',banner:1,tone,icon:ic,title:ti,desc:t,auto:2300,snd:null});return}}
 const log=s=>{statLine(s);if(G)G.logN=(G.logN||0)+1;logSnd(s);try{logBanner(s)}catch(e){}try{toastPush(s)}catch(e){}G.log.unshift(s);if(G.log.length>250)G.log.pop();if(LOGCAP)LOGCAP.push(s)};
 // V13: приватные записи журнала. Видны полностью только владельцу карты, остальным — обезличенный текст.
 const lgViewer=()=>NET.on?NET.me:(UI.viewer!=null&&UI.viewer>=0?UI.viewer:-1);
@@ -2060,7 +2083,7 @@ function installRow(){
   return '<div class="tgrow"><div><b>Приложение на телефон</b><div class="small">Иконка на экране, запуск без адресной строки, офлайн-запуск.</div></div><div style="text-align:right">'+body+'</div></div>';
 }
 // ---------- V21: настройки, повтор хода, статистика, достижения ----------
-const SET={theme:'dark',hints:false,notif:false,music:true};
+const SET={theme:'dark',hints:false,notif:false,music:true,toast:'one'};
 (function(){try{Object.assign(SET,JSON.parse(localStorage.getItem('gl_set')||'{}'))}catch(e){}})();
 function setSave(){try{localStorage.setItem('gl_set',JSON.stringify(SET))}catch(e){}}
 function applyTheme(){const r=document.documentElement;if(SET.theme==='light')r.setAttribute('data-theme','light');else r.setAttribute('data-theme','dark')}
@@ -2135,6 +2158,7 @@ function setHtml(){
   const nsup=typeof Notification==='undefined';
   let h='<h2>Настройки</h2>'+installRow()
    +'<div class="tgrow"><b>Тема</b><div class="seg">'+seg('theme','dark','Тёмная')+seg('theme','light','Светлая')+'</div></div>'
+   +'<div class="tgrow"><div><b>Уведомления в игре</b><div class="small">«Строка» — одна короткая строка внизу; полный список всегда в «📜 Что было».</div></div><div class="seg">'+seg('toast','off','Выкл')+seg('toast','one','Строка')+seg('toast','all','Все')+'</div></div>'
    +tg('music','Музыка на стартовом экране','Играет до начала партии; в игре выключается.')
    +tg('hints','Подсказка «что могу сделать»','Строка над картой подсказывает доступные действия и подсвечивает «Закончить ход».')
    +tg('notif','Уведомление «ваш ход»','В онлайн-партии, когда вкладка свёрнута. '+(nsup?'<span style="color:var(--danger)">Браузер не поддерживает.</span>':(Notification.permission==='denied'?'<span style="color:var(--danger)">Уведомления запрещены в настройках браузера.</span>':'')))
@@ -2156,6 +2180,7 @@ document.addEventListener('click',async ev=>{
   if(k==='close'){qoClose();return}
   if(k==='theme'){SET.theme=bt.dataset.v;setSave();applyTheme()}
   else if(k==='install'){if(DEFER){try{DEFER.prompt();await DEFER.userChoice}catch(e){}DEFER=null}}
+  else if(k==='toast'){SET.toast=bt.dataset.v;setSave();const h=document.getElementById('toasts');if(h){h.classList.toggle('one',SET.toast==='one');if(SET.toast==='off')h.querySelectorAll('.toast').forEach(e=>e.remove())}}
   else if(k==='music'){SET.music=!(SET.music!==false);setSave();musicSync()}
   else if(k==='hints'){SET.hints=!SET.hints;setSave();try{render()}catch(e){}}
   else if(k==='notif'){
