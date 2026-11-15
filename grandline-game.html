@@ -458,7 +458,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V31</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V32</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2447,13 +2447,13 @@ function worldPreviewHtml(W,o){
     if(isStart){
       const dd=worldDist(W,sea),tk=o.taken&&o.taken[sea];
       const lbl=tk?tk.slice(0,7):(dd==null?'':'→'+dd);
-      s+='<text x="'+x+'" y="'+(y+26)+'" text-anchor="middle" font-size="'+(tk?15:20)+'" font-weight="800" fill="'+(tk?'#a63a28':BR)+'">⚑'+(lbl?' '+esc(lbl):'')+'</text>';
+      s+='<text x="'+x+'" y="'+(y+26)+'" text-anchor="middle" font-size="'+(tk?15:20)+'" font-weight="800" fill="'+(tk?'#a63a28':BR)+'" stroke="#fff6df" stroke-width="4" paint-order="stroke" stroke-linejoin="round">⚑'+(lbl?' '+esc(lbl):'')+'</text>';
     }
-    s+='<text x="'+x+'" y="'+(y+(isStart?-4:10))+'" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-size="'+(isStart?30:34)+'" font-weight="800" fill="'+BR+'">'+numOf(id)+'</text>';
+    s+='<text x="'+x+'" y="'+(y+(isStart?-4:10))+'" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-size="'+(isStart?30:34)+'" font-weight="800" fill="'+BR+'" stroke="#fff6df" stroke-width="5" paint-order="stroke" stroke-linejoin="round">'+numOf(id)+'</text>';
     if(pon){const px=x+R-2,py=y-R+2;s+='<circle cx="'+x+'" cy="'+y+'" r="'+(R+6)+'" fill="none" stroke="#d9a21b" stroke-width="3" stroke-dasharray="5 4"/><rect x="'+(px-15)+'" y="'+(py-15)+'" width="30" height="30" rx="4" transform="rotate(45 '+px+' '+py+')" fill="#d9a21b" stroke="#2a2118" stroke-width="2.5"/><text x="'+px+'" y="'+(py+7)+'" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-size="20" font-weight="800" fill="#2a2118">П</text>'}
     s+='</g>';
   }
-  return '<button class="btn pvz" data-pvz>'+(UI.pvfit?'🔍 Крупнее':'🗺 Вся карта')+'</button><div class="pvmap'+(UI.pvfit?' fit':'')+'"><svg viewBox="0 92 1588 880" xmlns="http://www.w3.org/2000/svg">'+s+'</svg></div><div class="small pvh">⚑ — старт моря · <b style="color:#b8860b">П</b> — понеглиф · красные локации — проходы между морями (на всех картах стоят на одном месте). В Ист Блю понеглифа нет: четвёртый лежит на острове Зоя (Зунеша). Число со стрелкой у флага — сколько шагов от старта до понеглифа этого моря. Листайте карту пальцем.</div>';
+  return '<button class="btn pvz" data-pvz>'+(UI.pvfit?'🔍 Крупнее':'🗺 Вся карта')+'</button><div class="pvmap'+(UI.pvfit?' fit':'')+'"><svg viewBox="0 92 1588 880" xmlns="http://www.w3.org/2000/svg">'+s+'</svg></div><div class="small pvh">⚑ — старт моря · <b style="color:#b8860b">П</b> — понеглиф · красные локации — проходы между морями (стоят у Рэд Лайн, номер каждый раз новый). В Ист Блю понеглифа нет: четвёртый лежит на острове Зоя (Зунеша). Число со стрелкой у флага — сколько шагов от старта до понеглифа этого моря. Листайте карту пальцем.</div>';
 }
 function seaInfo(W,s){if(!W)return'';const dd=worldDist(W,s);return dd==null?'понеглифа нет':dd+' ш. до понеглифа'}
 // ---------- setup ----------
