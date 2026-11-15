@@ -684,7 +684,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V62</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V63</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -1331,7 +1331,7 @@ function akainuPhase(cb){
     if(!G.laftel)return cb();
     const loc=REDL[d(REDL.length)-1];
     G.akainu={loc,stun:0};
-    log('☠ Лафтейл найден: на карту выходит адмирал Акаину (атака '+AKAINU.a+', уклонение '+AKAINU.u+') и появляется на '+locName(loc)+'! Он идёт к ближайшему игроку, проигравший сядет в тюрьму Импел Даун на 3 хода.');
+    log('☠ Лафтейл найден: на карту выходит адмирал Акаину (атака '+AKAINU.a+', уклонение '+AKAINU.u+') и появляется на '+locName(loc)+'! Он идёт к ближайшему игроку и за один ход проходит два острова; проигравший сядет в тюрьму Импел Даун на 3 хода.');
     fxAkainu(locName(loc),lavaRain());
     return cb();
   }
@@ -2113,7 +2113,7 @@ function akScene(ev,done){
   o.innerHTML='<div class="akscr"></div><div class="aklava"></div>'+em+'<i class="akring"></i><i class="akring r2"></i><div class="akflash"></div>'
    +'<div class="akbox"><div class="akk">☠ ВНИМАНИЕ · ЛАФТЕЛЬ НАЙДЕН ☠</div><div class="akport"><img alt="" src="'+AVS.akainu+'"></div>'
    +'<div class="akt">АДМИРАЛ АКАИНУ</div><div class="aks">«АБСОЛЮТНАЯ СПРАВЕДЛИВОСТЬ»</div>'
-   +'<div class="akd">Высаживается на <b>'+esc(ev.loc)+'</b>. Атака <b>'+AKAINU.a+'</b>, уклонение <b>'+AKAINU.u+'</b>. Идёт к ближайшему игроку; проигравший сядет в Импел Даун на 3 хода.</div>'
+   +'<div class="akd">Высаживается на <b>'+esc(ev.loc)+'</b>. Атака <b>'+AKAINU.a+'</b>, уклонение <b>'+AKAINU.u+'</b>. Идёт к ближайшему игроку и <b>за один ход проходит два острова</b>; проигравший сядет в Импел Даун на 3 хода.</div>'
    +(ev.hits&&ev.hits.length?'<div class="aklv"><div class="aklt">🔥 ГРАД ЛАВЫ</div>'+ev.hits.map((h,i)=>'<div class="aklr" style="animation-delay:'+(4.4+i*.55).toFixed(2)+'s"><b>'+esc(h.name)+'</b> уничтожена'+(h.flag?' · флаг сгорел':'')+(h.jailed.length?' · в тюрьму: <i>'+esc(h.jailed.join(', '))+'</i>':'')+'</div>').join('')+'</div>':'')
    +'<div class="akh">нажмите, чтобы продолжить</div></div>';
   let mt='';for(let i=0;i<14;i++)mt+='<i class="akmet" style="left:'+(Math.random()*100).toFixed(1)+'%;animation-delay:'+(4+Math.random()*2.4).toFixed(2)+'s"></i>';
@@ -2363,7 +2363,7 @@ function topHtml(){
     +'</div></span>';
   const st='<span class="pill pl-me"><span class="avw sm" style="--pc:'+p.color+'">'+av(p.ch)+'</span><span class="tx">'+esc(pname(p))+'</span></span>'+turnPill()
     +'<span class="pill">ОД '+dots+(G.ap>0?'':'<b>0</b>')+'</span><span class="pill gold"><i class="coin"></i>'+me.berries+' Б</span>'
-    +(G.akainu?'<span class="pill pill-ak" title="Босс на карте: идёт к ближайшему игроку"><span class="avw sm" style="--pc:#c0392b">'+av('akainu')+'</span>Акаину: '+esc(locName(G.akainu.loc))+(G.akainu.stun>0?' 💫':'')+'</span>':'')+(G.roll?'<span class="pill">Кубики '+G.roll[0]+' + '+G.roll[1]+' = '+(G.roll[0]+G.roll[1])+'</span>':'')
+    +(G.akainu?'<span class="pill pill-ak" title="Босс на карте: идёт к ближайшему игроку, проходя два острова за ход"><span class="avw sm" style="--pc:#c0392b">'+av('akainu')+'</span>Акаину: '+esc(locName(G.akainu.loc))+(G.akainu.stun>0?' 💫':'')+'</span>':'')+(G.roll?'<span class="pill">Кубики '+G.roll[0]+' + '+G.roll[1]+' = '+(G.roll[0]+G.roll[1])+'</span>':'')
     +(G.lastWeather?'<span class="pill" title="'+esc(G.lastWeather.n)+'">Погода: '+esc(G.lastWeather.n.split(':')[0])+'</span>':'')
     +(NET.on&&NET.code?'<span class="pill">Комната '+NET.code+(NET.me>=0?' · вы: '+esc(G.players[NET.me].name):' · наблюдатель')+'</span>':'');
   return '<div class="tp-l"><span class="title">Гранд Лайн</span><span class="pill rnd">Раунд '+G.round+'</span>'+(G.mode&&G.mode!=='std'?'<span class="pill" title="'+esc(modeOf().d)+'">'+esc(modeOf().n)+'</span>':'')+'</div>'
