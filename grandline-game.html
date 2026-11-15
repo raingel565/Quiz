@@ -462,7 +462,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .chars:has(.cc){grid-template-columns:repeat(auto-fill,minmax(132px,1fr))}
 .chars .btn.cc{position:relative;display:block;overflow:hidden;height:184px;padding:0;border-radius:20px;background:linear-gradient(165deg,#3a4247,#2a3135);border:1px solid #ffffff14;color:#e6eef0;box-shadow:6px 8px 16px #0006,inset 0 1px 0 #ffffff14}
 .cc .ccg{position:absolute;inset:0;background:radial-gradient(circle at 50% 36%,#e9b94a33,#0000 62%)}
-.cc .ccf{position:absolute;left:50%;top:8px;width:116%;max-width:none;transform:translateX(-50%);filter:drop-shadow(0 8px 8px #000a);pointer-events:none}
+.cc .ccfig{position:absolute;left:50%;top:8px;width:116%;max-width:none;transform:translateX(-50%);filter:drop-shadow(0 8px 8px #000a);pointer-events:none}
 .cc .ccav{position:absolute;left:0;right:0;top:20px;display:flex;justify-content:center}
 .cc .ccav .av{width:84px;height:84px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px #e9b94aaa,0 8px 16px #000a}
 .cc::after{content:"";position:absolute;left:0;right:0;bottom:0;height:60%;background:linear-gradient(0deg,#252b2f 14%,#252b2fcc 50%,#252b2f00);pointer-events:none}
@@ -476,9 +476,9 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .ccst{display:flex;justify-content:center;gap:22px;margin:6px 0;font-size:12px;color:#9aa8ad}.ccst b{color:#e9b94a;font-size:14px}
 .ccd{font-size:12.5px;line-height:1.4;text-align:center;color:#dfe7ea}
 .cc .ccv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;opacity:0;transition:opacity .4s}
-.cc.vplay .ccv{opacity:1}.cc.vplay .ccf{opacity:0;transition:opacity .4s}
+.cc.vplay .ccv{opacity:1}.cc.vplay .ccfig{opacity:0;transition:opacity .4s}
 </style>
-<div id="ver" title="Версия игры">V39</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V40</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2606,7 +2606,7 @@ function secretAsk(done){
 }
 const charBtn=k=>(k===SECRET&&!secretOk())?'<button class="btn" data-secret="1"><span class="avw" style="--pc:#555;font-size:28px;font-weight:800;display:flex;align-items:center;justify-content:center">?</span><b>???</b><span>Секретный персонаж</span><span class="small">Нужен пароль</span></button>':null;
 const CHW={zoro:1,sanji:1,nami:1,robin:1,hancock:1,kata:1,law:1},CHV={zoro:1,hancock:1}; // CHV: есть видео assets/ch/<id>.mp4 // персонажи с фото по пояс: assets/ch/<id>.webp
-const chBtn=(k,attr,dis,sel)=>charBtn(k)||'<button class="btn cc'+(sel?' sel':'')+'" '+attr+'="'+k+'"'+(dis?' disabled':'')+'><span class="ccg"></span>'+(CHW[k]?'<img class="ccf" loading="lazy" src="assets/ch/'+k+'.webp" alt="">'+(CHV[k]&&sel?'<canvas class="ccv" data-k="'+k+'" width="260" height="360"></canvas>':''):'<span class="ccav">'+av(k)+'</span>')+'<span class="ccn">'+CH[k].n+'</span><span class="ccs">атака '+CH[k].A+' · уклонение '+CH[k].U+'</span></button>';
+const chBtn=(k,attr,dis,sel)=>charBtn(k)||'<button class="btn cc'+(sel?' sel':'')+'" '+attr+'="'+k+'"'+(dis?' disabled':'')+'><span class="ccg"></span>'+(CHW[k]?'<img class="ccfig" loading="lazy" src="assets/ch/'+k+'.webp" alt="">'+(CHV[k]&&sel?'<canvas class="ccv" data-k="'+k+'" width="260" height="360"></canvas>':''):'<span class="ccav">'+av(k)+'</span>')+'<span class="ccn">'+CH[k].n+'</span><span class="ccs">атака '+CH[k].A+' · уклонение '+CH[k].U+'</span></button>';
 // видео выбранного персонажа: белый фон роликов убирается на лету (canvas), чтобы фигура «жила» на тёмной карточке
 const CHVID={};let CHV_RAF=0;
 function chVid(){
