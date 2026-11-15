@@ -457,7 +457,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 .rfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 18px;border-top:1px solid var(--line)}
 @media(max-width:600px){#rulesov{padding:0}.rbox{height:100vh;border-radius:0}.rbody{padding:4px 14px 20px;font-size:15px}}
 </style>
-<div id="ver" title="Версия игры">V28</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
+<div id="ver" title="Версия игры">V29</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div>
 <div id="modal"></div>
 <script>
 (function(){
@@ -593,13 +593,14 @@ function rebuildAdj(){
 rebuildAdj();
 // ---------- случайная карта ----------
 // Красные проходы (N10, W2, E4, S2) всегда на своих местах. Остальные 11 локаций каждого моря
-// получают случайные номера, лёгкий сдвиг и случайные дороги. Всё считается от одного числа wseed,
+// получают случайные номера, случайные места внутри моря и случайные дороги. Всё считается от одного числа wseed,
 // поэтому у всех игроков (и онлайн) карта одинаковая, а предпросмотр совпадает с игрой.
 const BASEN=JSON.parse(JSON.stringify(MAPD.nodes)),BASEE=MAPD.edges.map(e=>e.slice());
 const SEAZ={N:[14,112,736,388],W:[14,590,736,372],E:[838,112,736,388],S:[838,590,736,372]};
 function mulb(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function segX(a,b,c,d){const o=(p,q,r)=>(q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]);return o(a,b,c)*o(a,b,d)<0&&o(c,d,a)*o(c,d,b)<0}
 function segDist(p,a,b){const dx=b[0]-a[0],dy=b[1]-a[1];let u=((p[0]-a[0])*dx+(p[1]-a[1])*dy)/(dx*dx+dy*dy);u=Math.max(0,Math.min(1,u));return Math.hypot(p[0]-a[0]-u*dx,p[1]-a[1]-u*dy)}
+let GEN_FALLBACK=0;
 function genWorld(wseed){
   const rn=mulb((wseed|0)^0x5bd1e995);
   const sh=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(rn()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
@@ -607,36 +608,45 @@ function genWorld(wseed){
   for(const s of SEAK){
     const slots=Object.keys(BASEN).filter(k=>k[0]===s),red=REDS[s];
     const [x0,y0,w,h]=SEAZ[s];
-    const pos={};
-    for(const k of slots)pos[k]=BASEN[k].slice();
-    for(const k of slots){
-      if(k===red)continue;
-      for(let tr=0;tr<30;tr++){
-        const nx=Math.max(x0+R+16,Math.min(x0+w-R-16,BASEN[k][0]+(rn()*2-1)*22)),ny=Math.max(y0+R+16,Math.min(y0+h-R-16,BASEN[k][1]+(rn()*2-1)*22));
-        if(slots.every(o=>o===k||Math.hypot(pos[o][0]-nx,pos[o][1]-ny)>=88)){pos[k]=[Math.round(nx),Math.round(ny)];break}
+    let pos={},E=null;
+    const lo=[x0+R+16,y0+R+16],hi=[x0+w-R-16,y0+h-R-16];
+    const LB=s==='N'||s==='E'?[x0,y0,200,46]:s==='W'?[x0,y0+h-46,190,46]:[x0+w-190,y0+h-46,190,46]; // подпись моря
+    const inLb=p=>p[0]>LB[0]-34&&p[0]<LB[0]+LB[2]+34&&p[1]>LB[1]-34&&p[1]<LB[1]+LB[3]+34;
+    for(let pa=0;pa<60&&!E;pa++){
+      // полностью случайная расстановка в пределах моря (красный проход остаётся на месте)
+      const P={};P[red]=BASEN[red].slice();
+      for(const k of sh(slots.filter(o=>o!==red))){
+        let best=null,bd=-1;
+        for(let c=0;c<14;c++){
+          const p=[lo[0]+rn()*(hi[0]-lo[0]),lo[1]+rn()*(hi[1]-lo[1])];if(inLb(p))continue;
+          const d0=Math.min(...Object.values(P).map(q=>Math.hypot(q[0]-p[0],q[1]-p[1])));
+          if(d0>bd){bd=d0;best=p}
+        }
+        if(!best)best=[(lo[0]+hi[0])/2,(lo[1]+hi[1])/2];
+        P[k]=[Math.round(best[0]),Math.round(best[1])];
+      }
+      if(Math.min(...slots.flatMap((u,i)=>slots.slice(i+1).map(v=>Math.hypot(P[u][0]-P[v][0],P[u][1]-P[v][1]))))<92)continue;
+      // дороги: случайное остовное дерево без пересечений + 1–2 кольца
+      const cand=[];
+      for(let i=0;i<slots.length;i++)for(let j=i+1;j<slots.length;j++){
+        const a=slots[i],b=slots[j];if(Math.hypot(P[a][0]-P[b][0],P[a][1]-P[b][1])>250)continue;
+        if(slots.some(o=>o!==a&&o!==b&&segDist(P[o],P[a],P[b])<54))continue;
+        cand.push([a,b]);
+      }
+      for(let at=0;at<25&&!E;at++){
+        const par={};slots.forEach(k=>par[k]=k);
+        const find=k=>par[k]===k?k:(par[k]=find(par[k]));
+        const deg={};slots.forEach(k=>deg[k]=0);
+        const ch=[],order=sh(cand.slice());
+        const ok=e=>deg[e[0]]<4&&deg[e[1]]<4&&!ch.some(f=>f[0]!==e[0]&&f[0]!==e[1]&&f[1]!==e[0]&&f[1]!==e[1]&&segX(P[e[0]],P[e[1]],P[f[0]],P[f[1]]));
+        for(const e of order){if(find(e[0])!==find(e[1])&&ok(e)){ch.push(e);par[find(e[0])]=find(e[1]);deg[e[0]]++;deg[e[1]]++}}
+        if(ch.length!==slots.length-1)continue;
+        let extra=1+Math.floor(rn()*2);
+        for(const e of order){if(!extra)break;if(!ch.includes(e)&&ok(e)){ch.push(e);deg[e[0]]++;deg[e[1]]++;extra--}}
+        E=ch;pos=P;
       }
     }
-    // дороги: случайное остовное дерево без пересечений + 1–2 кольца
-    const cand=[];
-    for(let i=0;i<slots.length;i++)for(let j=i+1;j<slots.length;j++){
-      const a=slots[i],b=slots[j];if(Math.hypot(pos[a][0]-pos[b][0],pos[a][1]-pos[b][1])>235)continue;
-      if(slots.some(o=>o!==a&&o!==b&&segDist(pos[o],pos[a],pos[b])<54))continue;
-      cand.push([a,b]);
-    }
-    let E=null;
-    for(let at=0;at<80&&!E;at++){
-      const par={};slots.forEach(k=>par[k]=k);
-      const find=k=>par[k]===k?k:(par[k]=find(par[k]));
-      const deg={};slots.forEach(k=>deg[k]=0);
-      const ch=[],order=sh(cand.slice());
-      const ok=e=>deg[e[0]]<4&&deg[e[1]]<4&&!ch.some(f=>f[0]!==e[0]&&f[0]!==e[1]&&f[1]!==e[0]&&f[1]!==e[1]&&segX(pos[e[0]],pos[e[1]],pos[f[0]],pos[f[1]]));
-      for(const e of order){if(find(e[0])!==find(e[1])&&ok(e)){ch.push(e);par[find(e[0])]=find(e[1]);deg[e[0]]++;deg[e[1]]++}}
-      if(ch.length!==slots.length-1)continue;
-      let extra=1+Math.floor(rn()*2);
-      for(const e of order){if(!extra)break;if(!ch.includes(e)&&ok(e)){ch.push(e);deg[e[0]]++;deg[e[1]]++;extra--}}
-      E=ch;
-    }
-    if(!E){for(const k of slots)pos[k]=BASEN[k].slice();E=BASEE.filter(e=>e[0][0]===s)}
+    if(!E){for(const k of slots)pos[k]=BASEN[k].slice();E=BASEE.filter(e=>e[0][0]===s);GEN_FALLBACK++}
     const nums=sh([1,2,3,4,5,6,7,8,9,10,11,12].filter(n=>n!==numOf(red)));
     const lab={};lab[red]=red;slots.filter(k=>k!==red).forEach((k,i)=>lab[k]=s+nums[i]);
     for(const k of slots)nodes[lab[k]]=pos[k];
