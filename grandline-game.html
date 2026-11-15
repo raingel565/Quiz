@@ -357,6 +357,34 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 @keyframes dpulse{70%{box-shadow:0 0 0 14px #3ddc8400}100%{box-shadow:0 0 0 0 #3ddc8400}}
 #evfx{position:fixed;inset:0;z-index:99998;display:flex;align-items:center;justify-content:center;background:rgba(5,10,8,.6);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);animation:dfin .2s ease both;cursor:pointer;padding:16px}
 
+#akfx{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(ellipse at 50% 120%,#7a1408 0,#2a0a06 45%,#050202 100%);cursor:pointer;animation:dfin .35s ease both;color:#fff}
+#akfx.out{animation:dfout .5s ease both}
+#akfx .akscr{position:absolute;inset:0;animation:akshake 2.4s .1s both}
+@keyframes akshake{0%,100%{transform:none}8%{transform:translate(-9px,5px)}16%{transform:translate(8px,-7px)}24%{transform:translate(-7px,-4px)}32%{transform:translate(6px,6px)}45%{transform:translate(-4px,2px)}60%{transform:translate(3px,-2px)}80%{transform:translate(-1px,1px)}}
+#akfx .aklava{position:absolute;left:-10%;right:-10%;bottom:-6%;height:46%;background:radial-gradient(ellipse at 50% 100%,#ffb02a 0,#ff5a1a 30%,#b3200d 60%,transparent 75%);filter:blur(10px);opacity:0;animation:aklv 3.4s .2s ease-out both}
+@keyframes aklv{0%{opacity:0;transform:translateY(40%)}35%{opacity:.95}100%{opacity:.7;transform:translateY(0)}}
+#akfx .akember{position:absolute;bottom:-10px;width:6px;height:6px;border-radius:50%;background:#ffb02a;box-shadow:0 0 10px #ff7a1a;opacity:0;animation:akup 3.6s linear infinite}
+@keyframes akup{0%{opacity:0;transform:translateY(0) scale(1)}15%{opacity:1}100%{opacity:0;transform:translateY(-90vh) translateX(var(--dx)) scale(.3)}}
+#akfx .akflash{position:absolute;inset:0;background:#fff;opacity:0;animation:akfl 1.8s 1.5s ease-out both}
+@keyframes akfl{0%{opacity:.95}100%{opacity:0}}
+#akfx .akring{position:absolute;left:50%;top:48%;width:40px;height:40px;margin:-20px;border-radius:50%;border:3px solid #ff8a3a;box-shadow:0 0 18px #ff5a1a,inset 0 0 18px #ff5a1a;opacity:0;animation:akrg 1.8s 1.5s ease-out both}
+#akfx .akring.r2{animation-delay:1.75s;border-color:#ffd07a}
+@keyframes akrg{0%{opacity:.9;width:40px;height:40px;margin:-20px}100%{opacity:0;width:150vmax;height:150vmax;margin:-75vmax}}
+#akfx .akbox{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px;text-align:center}
+#akfx .akk{font-size:11px;letter-spacing:.2em;color:#ffb199;font-weight:800;opacity:0;animation:akfi .8s .2s both}
+#akfx .akport{position:relative;width:min(56vw,230px);aspect-ratio:1/1.02;border-radius:18px;overflow:hidden;opacity:0;transform:scale(1.5);filter:brightness(0) saturate(0);box-shadow:0 0 0 2px #ff7a4a,0 0 70px 14px rgba(255,90,30,.55);animation:akpt 1.5s 1.45s cubic-bezier(.2,.9,.2,1) both}
+#akfx .akport img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;display:block}
+@keyframes akpt{0%{opacity:0;transform:scale(1.5);filter:brightness(0)}25%{opacity:1;filter:brightness(0)}60%{transform:scale(.96);filter:brightness(1.6) saturate(1.2)}100%{opacity:1;transform:scale(1);filter:none}}
+#akfx .akt{font-size:clamp(30px,9vw,54px);font-weight:900;letter-spacing:.06em;line-height:1;margin-top:6px;color:#ffe3d0;text-shadow:0 0 22px #ff4a1a,0 0 3px #000;opacity:0;animation:akti .9s 2.2s cubic-bezier(.2,.9,.2,1) both}
+@keyframes akti{0%{opacity:0;transform:scale(2.2);letter-spacing:.3em}100%{opacity:1;transform:scale(1);letter-spacing:.06em}}
+#akfx .aks{font-size:15px;font-weight:700;color:#ff9a7a;letter-spacing:.14em;opacity:0;animation:akfi .8s 2.9s both}
+#akfx .akd{font-size:14px;max-width:420px;color:#f0d6cc;line-height:1.45;opacity:0;animation:akfi .8s 3.4s both}
+#akfx .akd b{color:#ffd07a}
+#akfx .akh{font-size:11px;color:#c9a99d;opacity:0;animation:akfi .8s 4.2s both}
+@keyframes akfi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#map .akm.born{animation:akb 2s ease-in-out infinite,akborn 3s ease-out 1}
+@keyframes akborn{0%{filter:drop-shadow(0 0 0 #ff3a1a)}25%{filter:drop-shadow(0 0 22px #ff5a1a) drop-shadow(0 0 40px #ff3a1a)}100%{filter:none}}
+@media(prefers-reduced-motion:reduce){#akfx *{animation-duration:.01s!important;animation-delay:0s!important}}
 #cardfx{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:rgba(5,10,8,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:dfin .2s ease both;padding:16px;color:#eaf3ee}
 #cardfx.out{animation:dfout .3s ease both}
 .cfk{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#9fb0a8;font-weight:700}
@@ -642,7 +670,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V58</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V59</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -915,6 +943,7 @@ const SFX=(()=>{
     diceEnd:t=>{tone(t,120,.18,'sine',.3,60);noise(t,.06,.3,'bandpass',2600,null,3);tone(t+.12,660,.25,'triangle',.08)},
     cardflip:t=>{noise(t,.28,.4,'bandpass',500,3200,1.2);tone(t+.34,1500,.07,'square',.05)},
     cardget:t=>{[659,880,1175].forEach((f,i)=>tone(t+i*.08,f,.35,'sine',.13))},
+    akent:t=>{tone(t,46,2.6,'sawtooth',.2,28);tone(t,92,2.2,'square',.07,50);noise(t,2.4,.3,'lowpass',260,70);noise(t+1.5,1.4,.22,'bandpass',2400,500,1.2);tone(t+1.55,58,1.3,'sine',.55,30);tone(t+1.6,180,.5,'sawtooth',.1,60);tone(t+2.5,330,.9,'triangle',.07,320)},
     alert:t=>{tone(t,440,.18,'triangle',.14);tone(t+.2,660,.28,'triangle',.14)},
     result:t=>{tone(t,520,.3,'sine',.14,780);tone(t+.12,780,.35,'sine',.1)},
     coin:t=>{tone(t,1320,.08,'square',.06);tone(t+.08,1760,.25,'square',.06)},
@@ -1253,7 +1282,7 @@ function akainuPhase(cb){
   if(!G.akainu){
     if(!G.laftel)return cb();
     const loc=REDL[d(REDL.length)-1];
-    G.akainu={loc,stun:0};
+    G.akainu={loc,stun:0};fxAkainu(locName(loc));
     log('☠ Лафтейл найден: на карту выходит адмирал Акаину (атака '+AKAINU.a+', уклонение '+AKAINU.u+') и появляется на '+locName(loc)+'! Он идёт к ближайшему игроку, проигравший сядет в тюрьму Импел Даун на 3 хода.');
     return cb();
   }
@@ -2007,6 +2036,24 @@ function ponDie(){
 const FXQ=[];
 function fxRoll(label,vals,sides,opt){if(window.__nor)return;FXQ.push(Object.assign({t:'d',label,vals:vals.slice(),sides:sides||6},opt||{}))}
 function fxEvent(ev){if(window.__nor)return;FXQ.push(Object.assign({t:'e'},ev))}
+function fxAkainu(locn){if(window.__nor)return;FXQ.push({t:'k',loc:locn})}
+function akFx(ev,done){
+  const fast=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(window.__nor||!document.body){done&&done();return}
+  const old=document.getElementById('akfx');if(old)old.remove();
+  const o=document.createElement('div');o.id='akfx';
+  let em='';for(let i=0;i<26;i++)em+='<i class="akember" style="left:'+(Math.random()*100).toFixed(1)+'%;--dx:'+((Math.random()*80-40)|0)+'px;animation-delay:'+(Math.random()*3.4).toFixed(2)+'s;animation-duration:'+(2.4+Math.random()*2).toFixed(2)+'s"></i>';
+  o.innerHTML='<div class="akscr"></div><div class="aklava"></div>'+em+'<i class="akring"></i><i class="akring r2"></i><div class="akflash"></div>'
+   +'<div class="akbox"><div class="akk">☠ ВНИМАНИЕ · ЛАФТЕЛЬ НАЙДЕН ☠</div><div class="akport"><img alt="" src="'+AVS.akainu+'"></div>'
+   +'<div class="akt">АДМИРАЛ АКАИНУ</div><div class="aks">«АБСОЛЮТНАЯ СПРАВЕДЛИВОСТЬ»</div>'
+   +'<div class="akd">Высаживается на <b>'+esc(ev.loc)+'</b>. Атака <b>'+AKAINU.a+'</b>, уклонение <b>'+AKAINU.u+'</b>. Идёт к ближайшему игроку; проигравший сядет в Импел Даун на 3 хода.</div>'
+   +'<div class="akh">нажмите, чтобы продолжить</div></div>';
+  document.body.appendChild(o);
+  SFX.play('akent',0);
+  let fin=false;const end=()=>{if(fin)return;fin=true;o.classList.add('out');setTimeout(()=>{o.remove();window.__akborn=Date.now();try{render()}catch(e){}done&&done()},fast?10:480)};
+  o.onclick=()=>{if(Date.now()-t0>900)end()};const t0=Date.now();
+  setTimeout(end,fast?1500:7500);
+}
 let FXBUSY=false;
 function eventFx(ev,done){
   const fast=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2080,7 +2127,8 @@ function flushFx(){
   if(FXBUSY||!FXQ.length||window.__nor||document.querySelector('[data-ui=ready]'))return;
   FXBUSY=true;const next=()=>{FXBUSY=false;flushFx()};
   if(FXQ[0].t==='s'){SFX.play(FXQ.shift().n,0);next();return}
-  if(FXQ[0].t==='e'){eventFx(FXQ.shift(),next)}
+  if(FXQ[0].t==='k'){akFx(FXQ.shift(),next)}
+  else if(FXQ[0].t==='e'){eventFx(FXQ.shift(),next)}
   else if(FXQ[0].t==='c'){const g=[],w=FXQ[0].who;while(FXQ.length&&FXQ[0].t==='c'&&FXQ[0].who===w)g.push(FXQ.shift());cardFx(g,next)}
   else{const g=[];while(FXQ.length&&FXQ[0].t==='d')g.push(FXQ.shift());diceFx(g,next)}
 }
@@ -2762,7 +2810,7 @@ function renderMap(){
   PT.t=PTnext;PT.n++;
   // Laftel & Zunesha
   if(G.laftel){const {x,y}=G.laftel;const on=pickable.has('L');s+='<g data-id="L" style="cursor:pointer"><circle cx="'+x+'" cy="'+y+'" r="38" fill="#d9a21b" stroke="#5a3b1f" stroke-width="4"/><text x="'+x+'" y="'+(y+6)+'" text-anchor="middle" font-size="16" font-weight="700" fill="#2a2118">Лафтейл</text>'+(on?'<circle class="ring" cx="'+x+'" cy="'+y+'" r="48" fill="none" stroke="#12a05a" stroke-width="6"/>':'')+'</g>'}
-  if(G.akainu){const L0=G.akainu.loc,pt=L0==='L'?(G.laftel?[G.laftel.x,G.laftel.y]:null):MAPD.nodes[L0];if(pt){const bx=pt[0],by=pt[1]-36;s+='<g class="akm" pointer-events="none"><ellipse cx="'+bx+'" cy="'+(by+8)+'" rx="46" ry="10" fill="rgba(200,30,20,.4)" stroke="#fff" stroke-width="2"/><image href="'+AKSHIP.u+'" x="'+(bx-AKSHIP.w/2)+'" y="'+(by+12-AKSHIP.h)+'" width="'+AKSHIP.w+'" height="'+AKSHIP.h+'"/><text x="'+bx+'" y="'+(by-AKSHIP.h-2)+'" text-anchor="middle" font-size="19" font-weight="800" fill="#a9271c" stroke="#fff6df" stroke-width="4" paint-order="stroke">Акаину'+(G.akainu.stun>0?' 💫':'')+'</text></g>'}}
+  if(G.akainu){const L0=G.akainu.loc,pt=L0==='L'?(G.laftel?[G.laftel.x,G.laftel.y]:null):MAPD.nodes[L0];if(pt){const bx=pt[0],by=pt[1]-36;s+='<g class="akm'+(window.__akborn&&Date.now()-window.__akborn<3500?' born':'')+'" pointer-events="none"><ellipse cx="'+bx+'" cy="'+(by+8)+'" rx="46" ry="10" fill="rgba(200,30,20,.4)" stroke="#fff" stroke-width="2"/><image href="'+AKSHIP.u+'" x="'+(bx-AKSHIP.w/2)+'" y="'+(by+12-AKSHIP.h)+'" width="'+AKSHIP.w+'" height="'+AKSHIP.h+'"/><text x="'+bx+'" y="'+(by-AKSHIP.h-2)+'" text-anchor="middle" font-size="19" font-weight="800" fill="#a9271c" stroke="#fff6df" stroke-width="4" paint-order="stroke">Акаину'+(G.akainu.stun>0?' 💫':'')+'</text></g>'}}
   if(G.laftel&&G.fire&&G.fire.loc==='L'){const {x,y}=G.laftel;s+='<g class="firew" pointer-events="none"><circle cx="'+x+'" cy="'+y+'" r="50" fill="rgba(255,120,30,.14)" stroke="#ff7a1a" stroke-width="6" stroke-dasharray="10 6"/><text x="'+(x-46)+'" y="'+(y-30)+'" font-size="28">🔥</text><text x="'+(x+22)+'" y="'+(y+46)+'" font-size="28">🔥</text></g>'}
   if(G.zun){const [x,y]=nodePos('Z');const on=pickable.has('Z');const c=MAPD.nodes[G.zun.cell];
     s+='<circle cx="'+c[0]+'" cy="'+c[1]+'" r="'+(R+6)+'" fill="none" stroke="#555" stroke-width="5" stroke-dasharray="6 4"/>';
@@ -3766,7 +3814,7 @@ function botSchedule(){
 }
 
 // ---------- test API ----------
-window.__g={statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
+window.__g={akainuPhase,fxAkainu,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
