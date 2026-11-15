@@ -234,7 +234,7 @@ body{background:radial-gradient(900px 600px at 12% 108%,rgba(40,140,80,.22),tran
 .btn.primary{background:linear-gradient(150deg,#47dc83,#1b9a4e);color:#04170c;box-shadow:6px 8px 18px rgba(0,0,0,.5),0 0 18px rgba(52,196,109,.35),inset 0 1px 0 rgba(255,255,255,.35)}
 .btn.warn{background:linear-gradient(150deg,#3a2923,#241915);color:var(--danger);box-shadow:var(--sh-out),inset 0 0 0 1px rgba(255,122,77,.35)}
 #mapwrap{background:radial-gradient(120% 120% at 50% 40%,#1c7a45 0%,#13552f 55%,#0d3a21 100%);border:0;border-radius:36px;padding:14px;box-shadow:0 0 0 10px #171c1f,0 0 0 11px rgba(255,255,255,.06),inset 0 6px 30px rgba(0,0,0,.55),10px 14px 30px rgba(0,0,0,.55);margin:6px 10px 10px 6px}
-#ver{position:fixed;right:10px;bottom:8px;z-index:100001;font:700 11px/1 var(--f-body);letter-spacing:.04em;color:#fff;background:rgba(22,27,30,.55);padding:4px 8px;border-radius:8px;pointer-events:none;user-select:none}
+#ver{position:fixed;right:10px;bottom:8px;z-index:100001;font:700 11px/1 var(--f-body);letter-spacing:.04em;color:#fff;background:rgba(22,27,30,.55);padding:4px 8px;border-radius:8px;pointer-events:auto;cursor:default;user-select:none;-webkit-tap-highlight-color:transparent}
 #mapwrap{align-self:start;position:relative}
 #toasts{position:absolute;top:22px;left:22px;z-index:100000;display:flex;flex-direction:column;gap:6px;width:min(300px,calc(100% - 44px));pointer-events:none}
 .toast{pointer-events:auto;display:flex;align-items:flex-start;gap:8px;padding:7px 8px 7px 11px;border-radius:12px;background:rgba(22,27,30,.9);color:#f4efe2;font:600 12.5px/1.35 var(--f-body);box-shadow:0 6px 18px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px);animation:toastin .22s ease-out}
@@ -418,6 +418,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 #splash.wt .spt{opacity:1;animation:spsh 3.2s infinite ease-in-out;font-size:clamp(34px,11vw,72px)}
 #splash.wt .sps2{opacity:1;animation:none;color:#d8c9a4}
 @media(prefers-reduced-motion:reduce){#splash *{animation-duration:.01s!important;animation-delay:0s!important}}
+#admov{position:fixed;inset:0;z-index:2147482000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);padding:16px}
 #akvid{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.92);animation:dfin .25s ease both;padding:12px}
 #akvid.out{animation:dfout .26s ease both}
 #akvid .avbox{position:relative;width:min(100%,960px);max-height:100%;border-radius:14px;overflow:hidden;background:#000;box-shadow:0 0 0 2px rgba(255,110,60,.7),0 0 60px rgba(255,70,20,.45)}
@@ -745,7 +746,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V70</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V71</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2309,7 +2310,9 @@ function splitDice(n){const lo=Math.max(1,n-6),hi=Math.min(6,n-1);const a=lo+Mat
 let SNDT=-1,SNDW=0,SNDD=null;
 
 // ===== сколько человек сейчас в игре (Firebase presence) =====
-const PRES={n:0,rooms:0,ok:false,last:null,ref:null};
+const PRES={n:0,rooms:0,ok:false,last:null,ref:null,adm:null};
+const ADM_H='daf1f90f3dc710e6cd4c31d2'; // sha256('gl-adm:<пароль>')[:24]: ключ закрытой ветки adm/ в Firebase
+const DEVT=(()=>{try{return(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&Math.min(screen.width,screen.height)<900))?'m':'d'}catch(e){return'd'}})();
 function presBadge(){return '<span class="onl" title="Сейчас в игре'+(PRES.rooms?' (в комнатах: '+PRES.rooms+')':'')+'"'+(PRES.ok?'':' hidden')+'><i></i><b>'+PRES.n+'</b></span>'}
 function presPaint(){document.querySelectorAll('.onl').forEach(e=>{e.hidden=!PRES.ok;const b=e.querySelector('b');if(b)b.textContent=PRES.n;e.title='Сейчас в игре'+(PRES.rooms?' (в комнатах: '+PRES.rooms+')':'')})}
 function presSet(){
@@ -2324,7 +2327,8 @@ async function presInit(){
     const rdb=await fbLoad(),uid=safeId(localUid());
     PRES.ref=rdb.ref('presence/'+uid);
     rdb.ref('.info/connected').on('value',sn=>{
-      if(sn.val()===true){PRES.ok=true;PRES.last=null;PRES.ref.onDisconnect().remove().then(()=>presSet()).catch(()=>{});presPaint()}
+      if(sn.val()===true){PRES.ok=true;PRES.last=null;PRES.ref.onDisconnect().remove().then(()=>presSet()).catch(()=>{});presPaint();
+        try{PRES.adm=rdb.ref('adm/'+ADM_H+'/'+uid);PRES.adm.onDisconnect().remove().then(()=>PRES.adm.set({dev:DEVT,t0:{'.sv':'timestamp'}})).catch(()=>{})}catch(e){}}
       else{PRES.ok=false;presPaint()}
     });
     rdb.ref('presence').on('value',sn=>{
@@ -2768,6 +2772,52 @@ async function hallLoad(){
       +'<div class="grp"><b>Последние победители</b></div><div class="hall-list">'+arr.slice(0,25).map(v=>'<div class="hall-r"><span class="avw sm" style="--pc:var(--accent)">'+(AVS[v.ch]?av(v.ch):'')+'</span><span class="hn">'+esc(v.name)+'<small>'+esc((CH[v.ch]&&CH[v.ch].n)||'')+'</small></span><span class="hd">'+esc((MODES[v.mode]&&MODES[v.mode].n)||'')+' · '+(v.n|0)+' игр.<small>'+dt(v.ts)+'</small></span></div>').join('')+'</div>';
   }catch(e){const b=box();if(b)b.textContent='Не удалось загрузить зал славы: нет связи с сервером.'}
 }
+// ---------- закрытая статистика игроков (нажать на номер версии, пароль) ----------
+function sha256hex(str){
+  const rr=(n,x)=>(x>>>n)|(x<<(32-n));const K=[];let pr=2;
+  const H=[];for(let n=0;K.length<64;pr++){let ok=true;for(let d=2;d*d<=pr;d++)if(pr%d===0){ok=false;break}if(ok){if(H.length<8)H.push((Math.pow(pr,.5)%1)*4294967296|0);K.push((Math.pow(pr,1/3)%1)*4294967296|0)}}
+  const b=unescape(encodeURIComponent(str));const l=b.length*8;const w=new Array((((l+64)>>9)<<4)+16).fill(0);
+  for(let i=0;i<b.length;i++)w[i>>2]|=b.charCodeAt(i)<<(24-(i%4)*8);
+  w[l>>5]|=0x80<<(24-l%32);w[(((l+64)>>9)<<4)+15]=l;
+  for(let i=0;i<w.length;i+=16){const a=w.slice(i,i+16);const t=H.slice();
+    for(let j=0;j<64;j++){if(j>=16){const g0=rr(7,a[j-15])^rr(18,a[j-15])^(a[j-15]>>>3),g1=rr(17,a[j-2])^rr(19,a[j-2])^(a[j-2]>>>10);a[j]=(a[j-16]+g0+a[j-7]+g1)|0}
+      const S1=rr(6,t[4])^rr(11,t[4])^rr(25,t[4]),ch=(t[4]&t[5])^(~t[4]&t[6]),t1=(t[7]+S1+ch+K[j]+a[j])|0;
+      const S0=rr(2,t[0])^rr(13,t[0])^rr(22,t[0]),mj=(t[0]&t[1])^(t[0]&t[2])^(t[1]&t[2]),t2=(S0+mj)|0;
+      t[7]=t[6];t[6]=t[5];t[5]=t[4];t[4]=(t[3]+t1)|0;t[3]=t[2];t[2]=t[1];t[1]=t[0];t[0]=(t1+t2)|0}
+    for(let j=0;j<8;j++)H[j]=(H[j]+t[j])|0}
+  return H.map(x=>('00000000'+(x>>>0).toString(16)).slice(-8)).join('');
+}
+let ADMREF=null,ADMTM=null,ADMOFF=0;
+function admClose(){const o=document.getElementById('admov');if(o)o.remove();if(ADMREF){try{ADMREF.off()}catch(e){}ADMREF=null}if(ADMTM){clearInterval(ADMTM);ADMTM=null}}
+function admOpen(){
+  admClose();const o=document.createElement('div');o.id='admov';
+  o.innerHTML='<div class="modal"><h2>🔒 Статистика игроков</h2><div id="admbody"><div class="small">Введите пароль.</div><input id="admpw" type="password" inputmode="numeric" autocomplete="off" placeholder="Пароль" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--line,#444);background:var(--sunk,#111);color:inherit;font:inherit;margin:8px 0"><button class="btn primary" id="admgo" type="button">Открыть</button></div><button class="btn" id="admx" type="button" style="margin-top:8px">Закрыть</button></div>';
+  document.body.appendChild(o);
+  o.addEventListener('click',e=>{if(e.target===o)admClose()});
+  o.querySelector('#admx').onclick=admClose;
+  const go=async()=>{
+    const pw=o.querySelector('#admpw').value,b=o.querySelector('#admbody');if(!pw)return;
+    b.innerHTML='<div class="small">Проверяю…</div>';
+    try{
+      const h=sha256hex('gl-adm:'+pw).slice(0,24),rdb=await fbLoad();
+      try{ADMOFF=(await rdb.ref('.info/serverTimeOffset').once('value')).val()||0}catch(e){ADMOFF=0}
+      let snap=null;
+      const paint=()=>{
+        if(!snap)return;const now=Date.now()+ADMOFF,arr=[];snap.forEach(c=>{const v=c.val();if(v&&v.t0)arr.push({dev:v.dev==='m'?'m':'d',min:Math.max(0,(now-v.t0)/60000)})});
+        arr.sort((x,y)=>y.min-x.min);const m=arr.filter(x=>x.dev==='m').length,d=arr.length-m,avg=arr.length?arr.reduce((s,x)=>s+x.min,0)/arr.length:0;
+        const fm=x=>x<1?'меньше минуты':x<60?Math.round(x)+' мин':Math.floor(x/60)+' ч '+Math.round(x%60)+' мин';
+        b.innerHTML='<div class="hall-top"><div class="hall-r"><span class="hn">Сейчас онлайн</span><span class="hw">'+arr.length+'</span></div><div class="hall-r"><span class="hn">📱 Телефоны</span><span class="hw">'+m+'</span></div><div class="hall-r"><span class="hn">💻 Компьютеры</span><span class="hw">'+d+'</span></div><div class="hall-r"><span class="hn">Средняя сессия</span><span class="hw">'+(arr.length?fm(avg):'—')+'</span></div></div>'
+          +'<div class="grp"><b>Игроки</b></div><div class="hall-list">'+(arr.length?arr.map(x=>'<div class="hall-r"><span class="hm">'+(x.dev==='m'?'📱':'💻')+'</span><span class="hn">'+(x.dev==='m'?'Телефон':'Компьютер')+'</span><span class="hw" style="font-size:13px">'+fm(x.min)+'</span></div>').join(''):'<div class="small">Сейчас никого нет.</div>')+'</div>';
+      };
+      ADMREF=rdb.ref('adm/'+h);
+      ADMREF.on('value',sn=>{snap=sn;paint()},()=>{b.innerHTML='<div class="small">Доступ запрещён: неверный пароль (или в Firebase ещё не обновлены правила).</div><button class="btn" id="admretry" type="button" style="margin-top:8px">Ещё раз</button>';const r=b.querySelector('#admretry');if(r)r.onclick=admOpen});
+      ADMTM=setInterval(paint,15000);
+    }catch(e){b.innerHTML='<div class="small">Нет связи с сервером.</div>'}
+  };
+  o.querySelector('#admgo').onclick=go;o.querySelector('#admpw').addEventListener('keydown',e=>{if(e.key==='Enter')go()});
+  setTimeout(()=>{const i=o.querySelector('#admpw');if(i)i.focus()},50);
+}
+document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#ver'))admOpen()});
 function qoOpen(k){
   qoClose();const o=document.createElement('div');o.id='qoov';o.dataset.k=k;
   o.innerHTML='<div class="modal">'+(k==='replay'?replayHtml():k==='hall'?hallHtml():setHtml())+'<button class="btn primary" data-qo="close">Закрыть</button></div>';
