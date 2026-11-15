@@ -357,6 +357,12 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 @keyframes dpulse{70%{box-shadow:0 0 0 14px #3ddc8400}100%{box-shadow:0 0 0 0 #3ddc8400}}
 #evfx{position:fixed;inset:0;z-index:99998;display:flex;align-items:center;justify-content:center;background:rgba(5,10,8,.6);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);animation:dfin .2s ease both;cursor:pointer;padding:16px}
 
+#onlpop{position:fixed;top:64px;right:12px;z-index:99990;width:min(92vw,340px);max-height:70vh;overflow:auto;padding:14px;border-radius:16px;background:var(--panel,#1c2226);color:var(--ink,#eef3f1);box-shadow:0 16px 50px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.08)}
+#onlpop .opt{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:15px}
+#onlpop .ops{font-size:13px;opacity:.75;margin:6px 0 8px}
+#onlpop .opr{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid rgba(255,255,255,.07);font-size:13px}
+#onlpop .opr.me{color:var(--accent,#e9b94a);font-weight:700}
+.onl{cursor:pointer}
 /* ===== V67: заставка при входе ===== */
 #splash{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;overflow:hidden;background:radial-gradient(ellipse at 50% 32%,#22323c 0,#0e1519 55%,#05080a 100%);color:#f3e7c6;cursor:pointer;transition:opacity .8s ease,transform .8s ease,filter .8s ease;padding:16px;text-align:center}
 #splash.out{opacity:0;transform:scale(1.12);filter:blur(6px);pointer-events:none}
@@ -745,7 +751,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V70</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V71</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2309,14 +2315,49 @@ function splitDice(n){const lo=Math.max(1,n-6),hi=Math.min(6,n-1);const a=lo+Mat
 let SNDT=-1,SNDW=0,SNDD=null;
 
 // ===== сколько человек сейчас в игре (Firebase presence) =====
-const PRES={n:0,rooms:0,ok:false,last:null,ref:null};
+const PRES={n:0,rooms:0,ok:false,last:null,ref:null,list:[],t0:Date.now(),basic:false};
+function devType(){
+  try{
+    const ua=navigator.userAgent||'',coarse=window.matchMedia&&matchMedia('(pointer:coarse)').matches,mn=Math.min(screen.width||0,screen.height||0);
+    if(/iPad|Tablet|PlayBook|Silk/i.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1))return 't';
+    if(/Android/i.test(ua)&&!/Mobile/i.test(ua))return 't';
+    if(/Mobi|iPhone|iPod|Android/i.test(ua)||(coarse&&mn<600))return 'm';
+    if(coarse&&mn>=600)return 't';
+  }catch(e){}
+  return 'd';
+}
+const DEVI={m:'📱 Телефон',t:'📟 Планшет',d:'💻 Компьютер'};
+function durTxt(ms){const m=Math.floor(ms/60000);if(m<1)return 'только что';if(m<60)return m+' мин';const h=Math.floor(m/60);return h+' ч'+(m%60?' '+(m%60)+' мин':'')}
+function presPopHtml(){
+  const me=safeId(localUid()),now=Date.now(),L=PRES.list.slice().sort((a,b)=>a.since-b.since);
+  const c={m:0,t:0,d:0};L.forEach(x=>c[x.dev]=(c[x.dev]||0)+1);
+  return '<div class="opt"><b>Сейчас в игре: '+PRES.n+'</b><button class="btn sm" id="onlx">✕</button></div>'
+   +'<div class="ops">'+['m','d','t'].filter(k=>c[k]).map(k=>DEVI[k].split(' ')[0]+' '+c[k]).join(' · ')+(PRES.rooms?' · в комнатах: '+PRES.rooms:'')+'</div>'
+   +'<div class="opl">'+(L.length?L.slice(0,30).map(x=>'<div class="opr'+(x.id===me?' me':'')+'"><span>'+(DEVI[x.dev]||'💻 Компьютер')+(x.id===me?' (вы)':'')+'</span><span>'+(x.since?durTxt(now-x.since):'—')+(x.room?' · комната':'')+'</span></div>').join(''):'<div class="small">Нет данных</div>')+'</div>';
+}
+function presPop(open){
+  let e=document.getElementById('onlpop');
+  if(open===false){if(e)e.remove();return}
+  if(!e){e=document.createElement('div');e.id='onlpop';document.body.appendChild(e)}
+  e.innerHTML=presPopHtml();
+}
+document.addEventListener('click',e=>{
+  if(e.target.closest&&e.target.closest('#onlx')){presPop(false);return}
+  const b=e.target.closest&&e.target.closest('.onl');
+  if(b&&PRES.ok){if(document.getElementById('onlpop'))presPop(false);else presPop(true);return}
+  if(document.getElementById('onlpop')&&!e.target.closest('#onlpop'))presPop(false);
+});
 function presBadge(){return '<span class="onl" title="Сейчас в игре'+(PRES.rooms?' (в комнатах: '+PRES.rooms+')':'')+'"'+(PRES.ok?'':' hidden')+'><i></i><b>'+PRES.n+'</b></span>'}
 function presPaint(){document.querySelectorAll('.onl').forEach(e=>{e.hidden=!PRES.ok;const b=e.querySelector('b');if(b)b.textContent=PRES.n;e.title='Сейчас в игре'+(PRES.rooms?' (в комнатах: '+PRES.rooms+')':'')})}
 function presSet(){
   if(!PRES.ref)return;const room=(typeof NET!=='undefined'&&NET.on&&NET.code)?NET.code:'';
   if(PRES.last===room)return;PRES.last=room;
   const d={ts:Date.now()};if(room)d.room=room;
-  try{PRES.ref.set(d)}catch(e){}
+  const full=Object.assign({},d,{dev:devType(),since:PRES.t0});
+  try{
+    if(PRES.basic){PRES.ref.set(d)}
+    else{const pr=PRES.ref.set(full);if(pr&&pr.catch)pr.catch(()=>{PRES.basic=true;try{PRES.ref.set(d)}catch(e){}})}
+  }catch(e){}
 }
 async function presInit(){
   if(PRES.ref||!/^https?:/.test(location.protocol))return;
@@ -2328,8 +2369,8 @@ async function presInit(){
       else{PRES.ok=false;presPaint()}
     });
     rdb.ref('presence').on('value',sn=>{
-      let n=0,r=0;sn.forEach(c=>{n++;const v=c.val();if(v&&v.room)r++});
-      PRES.n=n;PRES.rooms=r;presPaint();
+      let n=0,r=0;const L=[];sn.forEach(c=>{n++;const v=c.val();if(v&&v.room)r++;L.push({id:c.key,dev:(v&&v.dev)||'d',since:(v&&+v.since)||0,room:!!(v&&v.room)})});
+      PRES.n=n;PRES.rooms=r;PRES.list=L;presPaint();if(document.getElementById('onlpop'))presPop(true);
     },()=>{PRES.ok=false;presPaint()});
   }catch(e){PRES.ok=false;presPaint()}
 }
@@ -3950,7 +3991,7 @@ function botSchedule(){
 }
 
 // ---------- test API ----------
-window.__g={ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
+window.__g={PRES,presPaint,presPop,devType,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
