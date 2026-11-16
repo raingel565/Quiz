@@ -85,6 +85,7 @@ table.t td,table.t th{border:1px solid var(--line);padding:3px 6px;text-align:ce
 .ring{animation:pulse 1.2s ease-in-out infinite}
 @keyframes pulse{50%{opacity:.35}}
 /* V14: интерактивный гайд */
+body.gd-pause #gd-catch,body.gd-pause #gd-hl,body.gd-pause #gd-tip{display:none!important}
 #gd-catch{position:fixed;inset:0;z-index:200000;background:transparent}
 #gd-hl{position:fixed;z-index:200001;border:3px solid #f2b01e;border-radius:14px;box-shadow:0 0 0 100vmax rgba(8,12,16,.68);pointer-events:none;transition:all .25s ease;display:none}
 #gd-hl.full{inset:0!important;border:0;box-shadow:0 0 0 100vmax rgba(8,12,16,.72);left:50%!important;top:50%!important;width:0!important;height:0!important}
@@ -861,7 +862,7 @@ body.stream #now{font-size:clamp(14px,1.3vw,22px)}
 .stwait{display:grid;place-items:center;text-align:center;gap:12px;padding:34px 18px}
 
 </style>
-<div id="ver" title="Версия игры">V110</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V111</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -3436,7 +3437,7 @@ const heroHtml=()=>'<div class="hero"><i style="background-image:url('+HERO+')">
 // ---------- V14: гайд для новичков ----------
 const GD={on:false,i:0,steps:[]};
 const gdFind=(sel,txt)=>{const l=[...document.querySelectorAll(sel)];return txt?l.find(e=>e.textContent.trim().startsWith(txt)):l[0]};
-function gdSteps(){return[
+function gdSteps(){const co=!!(G&&G.coop),M=modeOf();const S=[
  {t:'Добро пожаловать в «Гранд Лайн»',x:'Цель: собрать 4 роад-понеглифа, найти остров Лафтейл и выполнить его задание. Игроки ходят по очереди. Сейчас коротко покажу, где что находится. Жмите «Далее», остальное кликать не нужно.'},
  {el:()=>gdFind('#top .pill','ОД'),t:'ОД: очки действий',x:'На каждый ход даётся 3 ОД, точки показывают остаток. Шаг на соседнюю локацию стоит 1 ОД, вызов на дуэль 1 ОД, флаг 2 ОД, карта понеглифа или Лафтейла 2 ОД. Покупка карт за Берри, Чёрный рынок и «Закончить ход» ОД не тратят.'},
  {el:()=>gdFind('#top .pill.gold'),t:'Берри: деньги',x:'Карта атаки или пассивка стоит 10 Берри (одна за ход), карта сокровищ 30. Берри дают доход, победы в боях и задания.'},
@@ -3450,8 +3451,24 @@ function gdSteps(){return[
  {el:()=>document.querySelector('.pr4'),t:'Журнал и уведомления',x:'В журнале все события партии. Самые важные ещё всплывают над картой слева сверху, их можно закрыть крестиком.'},
  {el:()=>document.querySelector('.pr1 .blk.g-end'),t:'Конец хода',x:'Когда ОД закончились или делать больше нечего, нажмите «Закончить ход». Следующий игрок бросит кубики и начнёт свой ход.'},
  {t:'Это всё!',x:'Гайд можно открыть снова кнопкой «❓ Гайд» вверху. Полные правила: «📖 Правила». Удачного плавания!'}
-]}
-function gdClose(rm){GD.on=false;['gd-catch','gd-hl','gd-tip'].forEach(i=>{const e=document.getElementById(i);if(e)e.remove()});if(rm){try{localStorage.setItem('gl_guide_off','1')}catch(e){}}}
+];
+  const at=t=>S.findIndex(z=>z.t===t);
+  if(co){
+    S[0].x='Это кооператив (бета): вы играете все вместе против Имы, дуэлей между игроками нет. Нужно собрать роад-понеглифы командой (в этой партии: '+M.need+'), выполнить их задания, найти Лафтейл, выполнить задание Лафтейла и собраться на нём для финального боя с Имой. Жмите «Далее», остальное кликать не нужно.';
+    S[at('ОД: очки действий')].x='На каждый ход даётся 3 ОД, точки показывают остаток. Шаг на соседнюю локацию стоит 1 ОД, вызов на бой с адмиралом на вашей локации 1 ОД, флаг 2 ОД, карта понеглифа или Лафтейла 2 ОД. Покупка карт за Берри, передача Берри напарнику, Чёрный рынок и «Закончить ход» ОД не тратят.';
+    const sp=at('Соперники');if(sp>=0){S[sp].t='Команда';S[sp].x='Берри, флаги, понеглифы и число карт у каждого игрока команды. Какие именно карты, никто не видит. Берри можно передавать напарникам в любой момент, кнопкой «Передать Берри» в действиях.'}
+    const ix=at('Доход в начале хода')+1;
+    S.splice(ix,0,
+      {el:()=>gdFind('#top .pill','🗿'),t:'Цели команды',x:'Сколько понеглифов уже найдено всей командой и что осталось: задание Лафтейла, затем сбор на Лафтейле. Рядом идёт таймер ожидания, когда он включён.'},
+      {t:'Общие задания и флаги',x:'Задания понеглифов и Лафтейла общие: выполнить может любой игрок команды, а флаги всех игроков считаются в «кругосветку». Платёж за задание можно покрыть Берри напарников.'},
+      {t:'Адмиралы Дозора',x:'С 10-го раунда в морях выходят адмиралы (по одному на каждого игрока, в случайных морях). Они ходят по карте, могут пересекать моря и нападать на игроков. Если двое стоят на одной локации и нападают на одного, бьются вместе: атака и карты суммируются. Проигравший отправляется в тюрьму. Аокидзи замораживает переходы между морями.'},
+      {t:'Финал: бой с Имой',x:'Когда задание Лафтейла выполнено и кто-то пришёл на Лафтейл, у остальных есть 3 раунда, чтобы дойти. Затем начинается бой по слотам: нужно выиграть 3 раунда из 5. Атака, уклонение и карты всех пришедших складываются, опоздавшие в бою не участвуют. Если раунды игры (счётчик в шапке) закончатся раньше, Има побеждает.'});
+  }else{
+    const o=S[0];
+    if(M.need<4)o.x='Режим «'+M.n+'». '+M.d+' Игроки ходят по очереди. Сейчас коротко покажу, где что находится. Жмите «Далее», остальное кликать не нужно.';
+  }
+  return S}
+function gdClose(rm){GD.on=false;document.body.classList.remove('gd-pause');['gd-catch','gd-hl','gd-tip'].forEach(i=>{const e=document.getElementById(i);if(e)e.remove()});if(rm){try{localStorage.setItem('gl_guide_off','1')}catch(e){}}}
 function gdDraw(){
   if(!GD.on)return;
   const st=GD.steps[GD.i];if(!st){gdClose();return}
@@ -3500,7 +3517,7 @@ document.addEventListener('click',e=>{
 let GDASKED=null;
 setInterval(()=>{
   try{
-    if(GD.on){gdDraw();return}
+    if(GD.on){const blk=FXBUSY||FXQ.length||document.querySelector('#dicefx,#cardfx,#evfx,#akfx,#akvid,#modal .ov,#gd-askw');document.body.classList.toggle('gd-pause',!!blk);if(!blk)gdDraw();return}
     if(typeof G==='undefined'||!G||G.winner!=null||window.__nor)return;
     if(GDASKED===G)return;
     if(G.round!==1)return;
