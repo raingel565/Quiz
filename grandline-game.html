@@ -746,7 +746,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V87</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V88</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -762,7 +762,7 @@ const WAVES=[[369,239],[442,186],[112,436],[134,349],[634,191],[557,271],[76,206
 const COLORS=['#d94b3d','#2f6fdb','#e0a21a','#7a45c9','#1f9d8a','#d1569a'];
 const TYPES={start:{n:'Старт',c:'#c4e8cf'},event:{n:'Ивентовая (задания)',c:'#fbd7a0'},base:{n:'Базовая',c:'#ffffff'},dozor:{n:'База Дозора',c:'#bcd3f5'},battle:{n:'Поле битвы',c:'#f5b0a6'},jail:{n:'Тюрьма',c:'#d0d3da'},market:{n:'Чёрный рынок',c:'#3a3a44'}};
 const CH={
- zoro:{n:'Зоро',A:6,U:3,d:'Две карты атаки в одном слоте'},
+ zoro:{n:'Зоро',A:7,U:5,d:'Две карты атаки в одном слоте. Антиплюс: раз за ход при переходе может заблудиться и выйти на другую соседнюю локацию'},
  kata:{n:'Катакури',A:5,U:6,d:'Самое высокое уклонение'},
  luffy:{n:'Луффи',A:6,U:3,d:'+3 ко всем выложенным картам атаки'},
  hancock:{n:'Хенкок',A:4,U:5,d:'Соперник не может использовать пассивные способности'},
@@ -1362,7 +1362,8 @@ function incomeRoll(){
 function beginTurn(){
   const p=P();
   (G.marks=G.marks||[]).push({pi:p.i,n:G.logN||0,r:G.round,name:p.name});if(G.marks.length>80)G.marks.shift();
-  G.ap=Math.max(1,3+(p.ch==='nami'?Math.max(0,G.apMod):G.apMod));G.apMax=G.ap;G.duels=0;G.turnNo=(G.turnNo||0)+1;G.tm={mv0:p.cnt.moves,buy:0,pvp:0};G.stolen=false;G.cardBought=false;G.endAfter=false;
+  G.ap=Math.max(1,3+(p.ch==='nami'?Math.max(0,G.apMod):G.apMod));G.apMax=G.ap;G.duels=0;G.turnNo=(G.turnNo||0)+1;G.tm={mv0:p.cnt.moves,buy:0,pvp:0};if(p.ch==='zoro')G.tm.lostN=d(G.apMax); // Зоро: в какой по счёту переход за ход он заблудится (каждый ход случайно)
+  G.stolen=false;G.cardBought=false;G.endAfter=false;
   if(G.fire&&G.fire.by===p.i){log('Огненная стена на '+locName(G.fire.loc)+' гаснет.');G.fire=null}
   if(p.skip>0){p.skip--;log(pname(p)+' пропускает ход (травма).');return endTurn()}
   if(p.jail>0&&p.hardJail){p.jail--;if(p.jail<=0)p.hardJail=false;log(pname(p)+' сидит в Импел Дауне'+(p.jail>0?' (осталось ходов: '+p.jail+')':': срок вышел')+'.');return endTurn()}
@@ -2008,8 +2009,15 @@ function actions(){
     const lab=(t==='Z'?'Зунеша':locName(t))+(t!=='Z'&&t!=='L'&&G.type[t]?' · '+TYPES[G.type[t]].n:'');
     A.push({g:'move',label:lab,loc:t,dis,run:()=>{
       G.ap-=1;p.cnt.moves++;
-      log(p.name+' идёт на '+locName(t)+'.');
-      arrive(p,t,{},null);
+      let dest=t;
+      if(p.ch==='zoro'&&G.tm&&G.tm.lostN&&!G.tm.lost&&p.cnt.moves-G.tm.mv0===G.tm.lostN&&t!=='Z'&&t!=='L'){
+        // антиплюс Зоро: теряется и приходит на другую соседнюю локацию (не Зунеша, не Лафтейл, не за стеной)
+        const alt=nbrsOf(p).filter(x=>x!==t&&x!=='Z'&&x!=='L'&&!walled(x,p)&&!(isCombat(x)&&G.duels>=3));
+        if(alt.length){G.tm.lost=true;dest=alt[d(alt.length)-1];log(p.name+' заблудился: хотел на '+locName(t)+', а вышел на '+locName(dest)+'.');
+          fxEvent({banner:true,tone:'bad',icon:'🧭',title:'Зоро заблудился!',desc:locName(dest)+' вместо '+locName(t),auto:2200})}
+      }
+      if(dest===t)log(p.name+' идёт на '+locName(t)+'.');
+      arrive(p,dest,{},null);
     }});
   }
   if(p.ch==='sanji'&&p.loc!=='Z'&&p.loc!=='L'&&!(G.tm&&G.tm.sky)){
