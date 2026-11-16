@@ -1281,7 +1281,7 @@ function newGame(cfg){
      guest:['laxus','natsu','jinwoo'][d(3)-1],guestBought:false,apMod:0,lastWeather:null,stolen:false,over:false,
      coop:true,admL:[],admS:null,frz:0,lafDone:false,lafAt:null,final:null,hallDone:true,achDone:true};
   const WW=cfg.wseed!=null?worldFor(cfg.wseed):worldFor(1+Math.floor(rnd()*2e9));G.wseed=WW.seed;G.adm=window.__adm||ADMK[(Math.imul((WW.seed|0)^0x2545F491,2654435761)>>>0)%3];G.grav={};
-  G.admOrder=admOrderFor(WW.seed);{const st=COOP.ADM[Math.max(2,Math.min(4,cfg.players.length))];G.admS={};for(const k of ADMK4)G.admS[k]=Object.assign({},ADMS[k],{a:st.a,u:st.u});const bs=COOP.BOSS[Math.max(2,Math.min(4,cfg.players.length))];G.admS.imu=Object.assign({},ADMS.imu,{a:bs.A,u:bs.U})}
+  G.admOrder=admOrderFor(WW.seed);G.admSeas=admSeasFor(WW.seed);{const st=COOP.ADM[Math.max(2,Math.min(4,cfg.players.length))];G.admS={};for(const k of ADMK4)G.admS[k]=Object.assign({},ADMS[k],{a:st.a,u:st.u});const bs=COOP.BOSS[Math.max(2,Math.min(4,cfg.players.length))];G.admS.imu=Object.assign({},ADMS.imu,{a:bs.A,u:bs.U})}
   {const gk=Object.keys(GUARD);let sd=(WW.seed>>>0)^0x9e3779b9;const rg=()=>{sd=(Math.imul(sd,1664525)+1013904223)>>>0;return sd/4294967296};
    for(let i=gk.length-1;i>0;i--){const j=Math.floor(rg()*(i+1));[gk[i],gk[j]]=[gk[j],gk[i]]}
    ['W','N','S'].forEach((s,i)=>{G.ponAt[s+WW.pon[s]]={owner:null,g:gk[i],ok:[]}});
@@ -1557,6 +1557,7 @@ ADMS.imu={n:'Има',short:'Има',lv:6,a:20,u:20,col:'#7a3fb0',vid:false,title
 const ADMK4=['akainu','kizaru','fujitora','aokiji'];
 const admDef=k=>(G&&G.admS&&G.admS[k])||ADMS[k];
 const admEntries=()=>G.coop?(G.admL||[]).filter(Boolean):(G.akainu?[{adm:G.adm||'akainu',loc:G.akainu.loc,stun:G.akainu.stun}]:[]);
+function admSeasFor(seed){let sd=(seed>>>0)^0x2b9d1f33;const rg=()=>{sd=(Math.imul(sd,1664525)+1013904223)>>>0;return sd/4294967296};const a=SEAK.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rg()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function admOrderFor(seed){let sd=(seed>>>0)^0x7f4a7c15;const rg=()=>{sd=(Math.imul(sd,1664525)+1013904223)>>>0;return sd/4294967296};const a=ADMK4.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rg()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 const ADMK=['akainu','kizaru','fujitora'];
 const adm=()=>admDef((G&&G.adm)||'akainu');
@@ -1718,9 +1719,9 @@ function coopAdmPhase(cb){
   if(G.winner!=null)return cb();
   const fresh=new Set(),done=new Set();
   const spawn=()=>{
-    const i=[0,1,2,3].find(j=>!G.admL[j]&&G.round>=COOP.ADM_START+j*COOP.ADM_GAP);
+    const i=[0,1,2,3].slice(0,G.players.length).find(j=>!G.admL[j]&&G.round>=COOP.ADM_START+j*COOP.ADM_GAP);
     if(i==null)return moveAll();
-    const sea=SEAK[i],k=G.admOrder[i],loc=REDS[sea];
+    const sea=G.admSeas[i],k=G.admOrder[i],loc=REDS[sea];
     const E={adm:k,loc,stun:0,sea,i};G.admL[i]=E;fresh.add(E);G.akainu=E;G.adm=k;
     const AD=adm();
     log('☠ В море '+SEAS[sea]+' выходит адмирал '+AD.short+' (атака '+AD.a+', уклонение '+AD.u+') и появляется на '+locName(loc)+'!');
