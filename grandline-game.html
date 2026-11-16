@@ -745,8 +745,79 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 .pill-ak{background:linear-gradient(150deg,rgba(169,39,28,.35),rgba(169,39,28,.12));color:#ffb4a8;box-shadow:inset 0 0 0 1px rgba(255,120,100,.4)}
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
+
+/* ===== стартовый экран (лобби) ===== */
+.ov.lb{align-items:flex-start;overflow:auto;padding:0;background:radial-gradient(1100px 620px at 85% -8%,rgba(242,184,74,.16),transparent 60%),radial-gradient(900px 600px at -5% 105%,rgba(79,179,184,.18),transparent 60%),radial-gradient(700px 500px at 50% 50%,rgba(107,87,184,.10),transparent 70%),var(--bg)}
+.modal.lobby{max-width:1020px;margin:0 auto;background:none;border:0;box-shadow:none;padding:18px 16px 40px;max-height:none;overflow:visible;gap:18px}
+.lbhero{position:relative;border-radius:26px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.1);background:#0d2a4a}
+.lbhero>i{position:absolute;inset:-30px;background-size:cover;background-position:center;filter:blur(22px) brightness(.7) saturate(1.2)}
+.lbhero img{position:relative;display:block;margin:0 auto;width:auto;max-width:100%;max-height:min(40vh,380px);object-fit:contain}
+.lbhero:after{content:"";position:absolute;inset:auto 0 0 0;height:46%;background:linear-gradient(transparent,rgba(8,12,16,.92))}
+.lbhero .onl{position:absolute;top:12px;right:12px;z-index:2;height:32px;background:rgba(10,16,22,.6);backdrop-filter:blur(10px);box-shadow:0 0 0 1px rgba(255,255,255,.14)}
+.lbtitle{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:0 22px 16px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.lbtitle small{display:block;font:700 11px/1 system-ui,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+.lbtitle h1{margin:0;font:800 clamp(30px,6vw,52px)/1 Georgia,'Times New Roman',serif;letter-spacing:.02em;background:linear-gradient(180deg,#fff 45%,#ffd978 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 10px rgba(0,0,0,.6))}
+.lbsub{display:block;margin-top:8px;font:500 14px/1.3 system-ui,sans-serif;font-style:normal;color:rgba(255,255,255,.8);text-shadow:0 1px 6px #000}
+.lbcard{background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:18px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 14px 40px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.1)}
+.lbh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+.lbh b{font:700 12px/1 system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.lbh .num{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:800 13px/1 system-ui;background:var(--gold);color:#201505}
+.lbh .sp{flex:1}
+.seg{display:inline-flex;padding:4px;border-radius:14px;background:rgba(0,0,0,.28);box-shadow:inset 0 2px 6px rgba(0,0,0,.4);gap:2px}
+.seg button{border:0;background:none;color:var(--muted);font:700 14px/1 system-ui,sans-serif;padding:9px 16px;border-radius:11px;cursor:pointer;transition:background .15s,color .15s,transform .1s}
+.seg button:hover{color:var(--ink)}
+.seg button.on{background:linear-gradient(160deg,#f6c85f,#d99a24);color:#241705;box-shadow:0 4px 14px rgba(242,184,74,.35)}
+.seg.sm button{padding:7px 11px;font-size:12px}
+.seg.sm button.on{background:linear-gradient(160deg,#5fd0d5,#2b8f95);color:#04191b;box-shadow:0 3px 10px rgba(79,179,184,.35)}
+.seats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.seat{--c:#f2b84a;position:relative;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center;padding:14px;border-radius:18px;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.08);overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.seat:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c);box-shadow:0 0 16px var(--c)}
+.seat:focus-within{border-color:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 22%,transparent)}
+.seat .badge{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font:800 20px/1 Georgia,serif;color:#171007;background:linear-gradient(160deg,color-mix(in srgb,var(--c) 70%,#fff),var(--c));box-shadow:0 6px 16px color-mix(in srgb,var(--c) 40%,transparent)}
+.seat .nm{min-width:0;width:100%;border:0;background:none;color:var(--ink);font:700 18px/1.2 system-ui,sans-serif;padding:4px 0;border-bottom:1px dashed rgba(255,255,255,.18);outline:none}
+.seat .nm:focus{border-bottom-color:var(--c)}
+.seat .sub{grid-column:1/-1;display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:34px}
+.sw{display:inline-flex;align-items:center;gap:9px;cursor:pointer;font:600 13px/1 system-ui,sans-serif;color:var(--muted);user-select:none}
+.sw input{position:absolute;opacity:0;pointer-events:none}
+.sw i{position:relative;width:42px;height:24px;border-radius:12px;background:rgba(255,255,255,.12);transition:background .2s;flex:none}
+.sw i:after{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.4);transition:transform .2s}
+.sw input:checked+i{background:var(--c)}
+.sw input:checked+i:after{transform:translateX(18px)}
+.sw input:focus-visible+i{outline:2px solid #fff}
+.sw input:checked~span{color:var(--ink)}
+.seat .lvl{display:none}
+.seat.isbot .lvl{display:inline-flex}
+.botnote{margin:12px 2px 0;font-size:12.5px;line-height:1.5;color:var(--muted)}
+.botnote b{color:var(--ink);font-weight:700}
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mode{position:relative;text-align:left;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.22);color:var(--ink);border-radius:18px;padding:14px 14px 15px;cursor:pointer;display:flex;flex-direction:column;gap:7px;transition:transform .15s,border-color .2s,background .2s,box-shadow .2s;font:inherit}
+.mode:hover{transform:translateY(-2px);border-color:rgba(242,184,74,.5)}
+.mode .mt{display:flex;align-items:center;justify-content:space-between;gap:8px;font:800 16px/1.1 system-ui,sans-serif}
+.mode .cubes{display:inline-flex;gap:3px}
+.mode .cubes i{width:11px;height:11px;border-radius:3px;background:rgba(255,255,255,.18);transform:rotate(45deg)}
+.mode .cubes i.f{background:var(--gold);box-shadow:0 0 8px rgba(242,184,74,.7)}
+.mode small{font-size:12px;line-height:1.45;color:var(--muted)}
+.mode.on{background:linear-gradient(160deg,rgba(242,184,74,.2),rgba(242,184,74,.05));border-color:var(--gold);box-shadow:0 10px 30px rgba(242,184,74,.16),inset 0 1px 0 rgba(255,255,255,.12)}
+.mode.on:after{content:"✓";position:absolute;right:12px;bottom:10px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:800 12px/1 system-ui;background:var(--gold);color:#241705}
+.lbgo{position:relative;border:0;cursor:pointer;width:100%;padding:20px 24px;border-radius:22px;font:800 20px/1 Georgia,serif;letter-spacing:.03em;color:#241705;background:linear-gradient(180deg,#ffd978,#e0a22a 60%,#c78914);box-shadow:0 14px 36px rgba(242,184,74,.34),inset 0 2px 0 rgba(255,255,255,.55),inset 0 -3px 0 rgba(120,70,0,.3);display:flex;align-items:center;justify-content:center;gap:14px;transition:transform .15s,filter .15s,box-shadow .15s;overflow:hidden}
+.lbgo:before{content:"";position:absolute;top:0;bottom:0;width:80px;left:-120px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-18deg);animation:lbsheen 3.6s ease-in-out infinite}
+@keyframes lbsheen{0%,55%{left:-120px}100%{left:120%}}
+.lbgo:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 18px 44px rgba(242,184,74,.45),inset 0 2px 0 rgba(255,255,255,.55),inset 0 -3px 0 rgba(120,70,0,.3)}
+.lbgo:active{transform:translateY(1px)}
+.lbgo .dice{font-size:26px}
+.lbtools{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.lbtools button{display:flex;flex-direction:column;align-items:center;gap:7px;padding:13px 8px;border-radius:16px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.045);color:var(--ink);font:600 12.5px/1.2 system-ui,sans-serif;cursor:pointer;text-align:center;transition:background .15s,transform .15s,border-color .15s}
+.lbtools button:hover{background:rgba(255,255,255,.1);transform:translateY(-2px);border-color:rgba(255,255,255,.22)}
+.lbtools button span{font-size:22px;line-height:1}
+.lbtools button.net{border-color:rgba(79,179,184,.45);background:linear-gradient(160deg,rgba(79,179,184,.2),rgba(79,179,184,.05))}
+@media(max-width:720px){.seats,.modes{grid-template-columns:1fr}.lbhero:after{display:none}.lbtitle{position:relative;padding:12px 16px 16px;background:linear-gradient(transparent,rgba(8,12,16,.85))}.lbtitle h1{font-size:34px}.lbtools{grid-template-columns:repeat(3,1fr)}.lbtools button.net{grid-column:span 3;flex-direction:row;justify-content:center}.lbcard{padding:14px;border-radius:20px}.lbgo{font-size:17px;padding:18px}}
+:root[data-theme="light"] .lbcard{background:rgba(255,255,255,.72);border-color:rgba(30,50,70,.12)}
+:root[data-theme="light"] .seat,:root[data-theme="light"] .mode{background:rgba(255,255,255,.7)}
+:root[data-theme="light"] .seg{background:rgba(30,50,70,.1)}
+:root[data-theme="light"] .lbtools button{background:rgba(255,255,255,.7)}
+:root[data-theme="light"] .seat .nm{border-bottom-color:rgba(30,50,70,.25)}
 </style>
-<div id="ver" title="Версия игры">V94</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V95</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2830,9 +2901,10 @@ function helpHtml(){
 
 // ---------- V25: музыка стартового экрана ----------
 const MUS={a:null,unlocked:false,t:null,vol:0};
+function musShort(){return SET.music!==false?'<span>🔊</span>Музыка: вкл':'<span>🔇</span>Музыка: выкл'}
 function musLabel(){return SET.music!==false?'🔊 Вступительная музыка: вкл':'🔇 Вступительная музыка: выкл'}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-mus]');if(!b)return;
-  SET.music=!(SET.music!==false);setSave();musicSync();document.querySelectorAll('[data-mus]').forEach(x=>x.textContent=musLabel())});
+  SET.music=!(SET.music!==false);setSave();musicSync();document.querySelectorAll('[data-mus]').forEach(x=>{if(x.hasAttribute('data-short'))x.innerHTML=musShort();else x.textContent=musLabel()})});
 function musicWant(){return !!(SET.music!==false&&SFX.on&&!document.hidden&&!G)}
 function musicSync(){
   try{
@@ -3427,14 +3499,23 @@ function renderSetup(){
   if(!UI.setup)UI.setup={step:'count',n:2,names:['Игрок 1','Игрок 2','Игрок 3','Игрок 4'],bots:[false,false,false,false],lv:[2,2,2,2],order:[],picks:[],cur:0};
   const S=UI.setup;
   const WP=S.wseed!=null?worldFor(S.wseed):null;
-  let h='<div class="ov solid"><div class="modal" style="max-width:900px">';
+  let h=S.step==='count'?'<div class="ov solid lb"><div class="modal lobby">':'<div class="ov solid"><div class="modal" style="max-width:900px">';
   if(S.step==='count'){
-    h+=heroHtml()+'<h2 class="h2o">Гранд Лайн: новая партия'+presBadge()+'</h2><div class="small">Один экран, ходите по очереди. Играют от 2 до 4 человек, по одному в каждом море.</div>';
-    h+='<div class="row"><label>Игроков: <select id="cnt">'+[2,3,4].map(n=>'<option'+(S.n===n?' selected':'')+'>'+n+'</option>').join('')+'</select></label></div>';
-    h+='<div class="row"><label>Режим: <select id="mode">'+Object.keys(MODES).map(k=>'<option value="'+k+'"'+((S.mode||'std')===k?' selected':'')+'>'+MODES[k].n+'</option>').join('')+'</select></label></div><div class="small" id="modeD">'+esc(MODES[S.mode||'std'].d)+'</div>';
-    h+='<div class="grp">'+[0,1,2,3].slice(0,S.n).map(i=>'<div class="row"><input id="nm'+i+'" value="'+esc(S.names[i])+'" maxlength="14" style="padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)"><label class="small" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="bt'+i+'"'+(S.bots[i]?' checked':'')+'> 🤖 бот</label><select id="bl'+i+'" title="Уровень бота" style="padding:5px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)">'+[[1,'Простой'],[2,'Средний'],[3,'Сложный']].map(o=>'<option value="'+o[0]+'"'+((S.lv&&S.lv[i]||2)===o[0]?' selected':'')+'>'+o[1]+'</option>').join('')+'</select></div>').join('')+'</div><div class="small">Бот играет сам. Простой: гуляет по карте, дерётся и покупает карты. Средний: ищет острова понеглифов, выполняет задания понеглифов и Лафтейла. Сложный: копит сильную руку, ставит флаги ради дохода и идёт к хранителю подготовленным. Остальные ходят по очереди на этом экране.</div>';
-    h+='<button class="btn primary" id="go">Бросить кубики на очерёдность</button>';
-    h+='<button class="btn" data-ui="net">Играть по сети: каждый на своём устройстве</button><button class="btn" data-rules>📖 Правила игры</button><button class="btn" data-qo="hall">🏆 Зал славы</button><button class="btn" data-qo="settings">⚙ Настройки</button><button class="btn" data-mus>'+musLabel()+'</button>';
+    const PC=['#f2b84a','#4fb3b8','#c78bff','#ff7a4d'],md=S.mode||'std';
+    h+='<div class="lbhero"><i style="background-image:url('+HERO+')"></i><img src="'+HERO+'" alt="One Piece Online Board Game">'+presBadge()
+      +'<div class="lbtitle"><div><small>One Piece · настольная игра</small><h1>Гранд Лайн</h1><em class="lbsub">Найдите Лафтейл раньше остальных</em></div></div></div>';
+    h+='<div class="lbcard"><div class="lbh"><span class="num">1</span><b>Экипаж</b><span class="sp"></span><div class="seg" role="group" aria-label="Число игроков">'+[2,3,4].map(n=>'<button type="button" data-n="'+n+'" class="'+(S.n===n?'on':'')+'">'+n+' игрока</button>').join('')+'</div></div>';
+    h+='<div class="seats">'+[0,1,2,3].slice(0,S.n).map(i=>{
+      const bot=!!S.bots[i],lv=(S.lv&&S.lv[i])||2;
+      return '<div class="seat'+(bot?' isbot':'')+'" style="--c:'+PC[i]+'"><div class="badge">'+(i+1)+'</div>'
+       +'<input class="nm" id="nm'+i+'" value="'+esc(S.names[i])+'" maxlength="14" aria-label="Имя игрока '+(i+1)+'" autocomplete="off">'
+       +'<div class="sub"><label class="sw"><input type="checkbox" id="bt'+i+'"'+(bot?' checked':'')+'><i></i><span>🤖 Бот</span></label>'
+       +'<input type="hidden" id="bl'+i+'" value="'+lv+'"><div class="seg sm lvl" role="group" aria-label="Уровень бота">'+[[1,'Простой'],[2,'Средний'],[3,'Сложный']].map(o=>'<button type="button" data-lv="'+i+':'+o[0]+'" class="'+(lv===o[0]?'on':'')+'">'+o[1]+'</button>').join('')+'</div></div></div>'}).join('')+'</div>';
+    if(S.bots.slice(0,S.n).some(Boolean))h+='<div class="botnote"><b>Простой</b>: гуляет по карте, дерётся и покупает карты. <b>Средний</b>: ищет острова понеглифов, выполняет задания понеглифов и Лафтейла. <b>Сложный</b>: копит сильную руку, ставит флаги ради дохода и идёт к хранителю подготовленным.</div>';
+    h+='</div>';
+    h+='<div class="lbcard"><div class="lbh"><span class="num">2</span><b>Режим партии</b></div><div class="modes">'+Object.keys(MODES).map(k=>{const m=MODES[k];return '<button type="button" class="mode'+(md===k?' on':'')+'" data-mode="'+k+'"><div class="mt">'+esc(m.n)+'<span class="cubes" title="Кубов понеглифа для победы">'+[1,2,3,4].map(c=>'<i class="'+(c<=m.need?'f':'')+'"></i>').join('')+'</span></div><small>'+esc(m.d)+'</small></button>'}).join('')+'</div></div>';
+    h+='<button class="lbgo" id="go"><span class="dice">🎲</span>Бросить кубики на очерёдность</button>';
+    h+='<div class="lbtools"><button class="net" data-ui="net"><span>🌐</span>Играть по сети</button><button data-rules><span>📖</span>Правила</button><button data-qo="hall"><span>🏆</span>Зал славы</button><button data-qo="settings"><span>⚙</span>Настройки</button><button data-mus data-short>'+musShort()+'</button></div>';
   }else if(S.step==='roll'){
     h+='<h2>Очерёдность хода</h2><table class="t"><tr><th>Игрок</th><th>2d6</th></tr>'+S.order.map(o=>'<tr><td>'+esc(o.name)+'</td><td>'+o.r+'</td></tr>').join('')+'</table><div class="small">Больше сумма — раньше ход. Ничьи перебрасываются. Персонажей и море выбирают по порядку, и карту вы увидите заранее.</div><button class="btn primary" id="go2">Выбирать персонажей</button>';
   }else{
@@ -3460,8 +3541,11 @@ function renderSetup(){
   const g=id=>document.getElementById(id);
   const nb=document.querySelector('#modal [data-ui="net"]');if(nb)nb.onclick=()=>{NET.on=true;NET.stage='menu';NET.err='';render()};
   if(S.step==='count'){
-    g('cnt').onchange=e=>{S.names=S.names.map((x,i)=>{const el=g('nm'+i);return el?(el.value.trim()||x):x});S.bots=S.bots.map((x,i)=>{const el=g('bt'+i);return el?el.checked:x});S.lv=(S.lv||[2,2,2,2]).map((x,i)=>{const el=g('bl'+i);return el?+el.value:x});S.n=+e.target.value;renderSetup()};
-    g('mode').onchange=e=>{S.mode=e.target.value;g('modeD').textContent=MODES[S.mode].d};
+    const collect=()=>{S.names=S.names.map((x,i)=>{const el=g('nm'+i);return el?(el.value.trim()||x):x});S.bots=S.bots.map((x,i)=>{const el=g('bt'+i);return el?el.checked:x});S.lv=(S.lv||[2,2,2,2]).map((x,i)=>{const el=g('bl'+i);return el?+el.value:x})};
+    document.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{collect();S.n=+b.dataset.n;renderSetup()});
+    document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{collect();S.mode=b.dataset.mode;renderSetup()});
+    document.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{const p=b.dataset.lv.split(':');g('bl'+p[0]).value=p[1];b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
+    [0,1,2,3].forEach(i=>{const c=g('bt'+i);if(c)c.onchange=()=>{collect();renderSetup()}});
     g('go').onclick=()=>{
       S.names=S.names.map((x,i)=>{const el=g('nm'+i);return el?(el.value.trim()||x):x});
       S.bots=S.bots.map((x,i)=>{const el=g('bt'+i);return el?el.checked:x});
