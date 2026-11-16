@@ -746,7 +746,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V83</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V84</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -1158,7 +1158,7 @@ function newGame(cfg){
    ['W','N','S'].forEach((s,i)=>{G.ponAt[s+WW.pon[s]]={owner:null,g:gk[i],ok:[]}});
    G.ponAt.Z={owner:null,g:gk[3],ok:[]}}
   cfg.players.forEach((c,i)=>{
-    const p={i,bot:!!c.bot,name:c.name,ch:c.ch,sea:c.sea,loc:c.sea+'1',berries:20,atk:[card('atk',{v:3}),card('atk',{v:5}),card('atk',{v:7})],pas:[],tre:[],task:null,ltask:null,pon:[],fl:4,skip:0,jail:0,bA:0,bU:0,guest:null,prev:c.sea+'1',
+    const p={i,bot:!!c.bot,lv:c.lv||2,name:c.name,ch:c.ch,sea:c.sea,loc:c.sea+'1',berries:20,atk:[card('atk',{v:3}),card('atk',{v:5}),card('atk',{v:7})],pas:[],tre:[],task:null,ltask:null,pon:[],fl:4,skip:0,jail:0,bA:0,bU:0,guest:null,prev:c.sea+'1',
       cnt:{winP:0,winB:0,winD:0,winAny:0,moves:0},color:COLORS[i],poseidonUsed:false};
     p.pas.push(decks.pas.pop(),decks.pas.pop());
     G.players.push(p);
@@ -3337,7 +3337,7 @@ function setModalKeep(h){const m=document.querySelector('#modal .modal'),k=m?mod
 function renderSetup(){
   $('#top').innerHTML='<span class="title">Гранд Лайн</span><span class="sp"></span>'+presBadge();
   $('#side').innerHTML='';$('#map').innerHTML='';$('#legend').innerHTML='';
-  if(!UI.setup)UI.setup={step:'count',n:2,names:['Игрок 1','Игрок 2','Игрок 3','Игрок 4'],bots:[false,false,false,false],order:[],picks:[],cur:0};
+  if(!UI.setup)UI.setup={step:'count',n:2,names:['Игрок 1','Игрок 2','Игрок 3','Игрок 4'],bots:[false,false,false,false],lv:[2,2,2,2],order:[],picks:[],cur:0};
   const S=UI.setup;
   const WP=S.wseed!=null?worldFor(S.wseed):null;
   let h='<div class="ov solid"><div class="modal" style="max-width:900px">';
@@ -3345,7 +3345,7 @@ function renderSetup(){
     h+=heroHtml()+'<h2 class="h2o">Гранд Лайн: новая партия'+presBadge()+'</h2><div class="small">Один экран, ходите по очереди. Играют от 2 до 4 человек, по одному в каждом море.</div>';
     h+='<div class="row"><label>Игроков: <select id="cnt">'+[2,3,4].map(n=>'<option'+(S.n===n?' selected':'')+'>'+n+'</option>').join('')+'</select></label></div>';
     h+='<div class="row"><label>Режим: <select id="mode">'+Object.keys(MODES).map(k=>'<option value="'+k+'"'+((S.mode||'std')===k?' selected':'')+'>'+MODES[k].n+'</option>').join('')+'</select></label></div><div class="small" id="modeD">'+esc(MODES[S.mode||'std'].d)+'</div>';
-    h+='<div class="grp">'+[0,1,2,3].slice(0,S.n).map(i=>'<div class="row"><input id="nm'+i+'" value="'+esc(S.names[i])+'" maxlength="14" style="padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)"><label class="small" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="bt'+i+'"'+(S.bots[i]?' checked':'')+'> 🤖 бот</label></div>').join('')+'</div><div class="small">Бот играет сам: собирает понеглифы, выполняет задания и идёт на Лафтейл. Остальные ходят по очереди на этом экране.</div>';
+    h+='<div class="grp">'+[0,1,2,3].slice(0,S.n).map(i=>'<div class="row"><input id="nm'+i+'" value="'+esc(S.names[i])+'" maxlength="14" style="padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)"><label class="small" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="bt'+i+'"'+(S.bots[i]?' checked':'')+'> 🤖 бот</label><select id="bl'+i+'" title="Уровень бота" style="padding:5px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)">'+[[1,'Простой'],[2,'Средний'],[3,'Сложный']].map(o=>'<option value="'+o[0]+'"'+((S.lv&&S.lv[i]||2)===o[0]?' selected':'')+'>'+o[1]+'</option>').join('')+'</select></div>').join('')+'</div><div class="small">Бот играет сам. Простой: гуляет по карте, дерётся и покупает карты. Средний: ищет острова понеглифов, выполняет задания понеглифов и Лафтейла. Сложный: копит сильную руку, ставит флаги ради дохода и идёт к хранителю подготовленным. Остальные ходят по очереди на этом экране.</div>';
     h+='<button class="btn primary" id="go">Бросить кубики на очерёдность</button>';
     h+='<button class="btn" data-ui="net">Играть по сети: каждый на своём устройстве</button><button class="btn" data-rules>📖 Правила игры</button><button class="btn" data-qo="hall">🏆 Зал славы</button><button class="btn" data-qo="settings">⚙ Настройки</button><button class="btn" data-mus>'+musLabel()+'</button>';
   }else if(S.step==='roll'){
@@ -3356,7 +3356,7 @@ function renderSetup(){
       const tk=S.picks.map(p=>p.ch),ts=S.picks.map(p=>p.sea);
       const sea=SEAK.filter(s=>!ts.includes(s))[0];
       const ch=BCH_RANK.find(k=>!tk.includes(k)&&k!==SECRET);
-      S.picks.push({name:S.order[S.cur].name,ch,sea,bot:true});S.cur++;
+      S.picks.push({name:S.order[S.cur].name,ch,sea,bot:true,lv:S.order[S.cur].lv||2});S.cur++;
     }
     if(S.cur>=S.order.length){const cfg={players:S.picks.slice(),wseed:S.wseed,mode:S.mode||'std'};UI.setup=null;newGame(cfg);render();return}
     const pl=S.order[S.cur];
@@ -3373,13 +3373,14 @@ function renderSetup(){
   const g=id=>document.getElementById(id);
   const nb=document.querySelector('#modal [data-ui="net"]');if(nb)nb.onclick=()=>{NET.on=true;NET.stage='menu';NET.err='';render()};
   if(S.step==='count'){
-    g('cnt').onchange=e=>{S.n=+e.target.value;renderSetup()};
+    g('cnt').onchange=e=>{S.names=S.names.map((x,i)=>{const el=g('nm'+i);return el?(el.value.trim()||x):x});S.bots=S.bots.map((x,i)=>{const el=g('bt'+i);return el?el.checked:x});S.lv=(S.lv||[2,2,2,2]).map((x,i)=>{const el=g('bl'+i);return el?+el.value:x});S.n=+e.target.value;renderSetup()};
     g('mode').onchange=e=>{S.mode=e.target.value;g('modeD').textContent=MODES[S.mode].d};
     g('go').onclick=()=>{
       S.names=S.names.map((x,i)=>{const el=g('nm'+i);return el?(el.value.trim()||x):x});
       S.bots=S.bots.map((x,i)=>{const el=g('bt'+i);return el?el.checked:x});
+      S.lv=(S.lv||[2,2,2,2]).map((x,i)=>{const el=g('bl'+i);return el?+el.value:x});
       S.names=S.names.map((x,i)=>S.bots[i]&&/^Игрок \d$/.test(x)?'Бот '+(i+1):x);
-      let list=S.names.slice(0,S.n).map((n,i)=>({name:n,r:0,bot:!!S.bots[i]}));
+      let list=S.names.slice(0,S.n).map((n,i)=>({name:n,r:0,bot:!!S.bots[i],lv:(S.lv&&S.lv[i])||2}));
       let ok=false,guard=0;
       while(!ok&&guard++<50){list.forEach(o=>o.r=d(6)+d(6));ok=new Set(list.map(o=>o.r)).size===list.length}
       list.sort((a,b)=>b.r-a.r);S.order=list;S.step='roll';S.wseed=1+Math.floor(Math.random()*2e9);renderSetup();diceFx(list.map(o=>({label:o.name,vals:splitDice(o.r)})));
@@ -3826,13 +3827,21 @@ function bPvpWin(p,q){
 }
 const BGW={};
 // бот идёт к хранителю, только если рассчитывает хотя бы на раунд
+const bL=p=>p.lv||2; // уровень бота: 1 простой, 2 средний, 3 сложный
 function bGuardReady(p,po){
   if(guardOk(p,po))return true;
   const key=G.turnNo+'/'+p.i+'/'+p.atk.length+'/'+p.pas.length+'/'+p.bA+'/'+p.bU;
   if(BGW[key]==null){BGW[key]=bPrep(p,{npc:true,A:GUARD_A,U:GUARD_U},420,{N:28}).wp;const ks=Object.keys(BGW);if(ks.length>40)delete BGW[ks[0]]}
-  return BGW[key]>=0.12;
+  return BGW[key]>=(bL(p)===3?0.42:0.2); // сложный идёт к хранителю только с сильной рукой
 }
 function bFreePons(p){return Object.keys(G.ponAt).filter(k=>G.ponAt[k].owner==null&&(k!=='Z'||G.zun)&&revealed(k)&&(!p||bGuardReady(p,G.ponAt[k])))} // Z недостижим, пока Зунеша не появилась
+const FLAGT=['base','event','market'];
+function bFlagSpot(p,l){
+  const t=G.type[l];
+  if(!t||!FLAGT.includes(t)||G.flags[l]!=null)return false;
+  const n=numOf(l);if(n===2||n===12)return false; // редкие числа почти не дают дохода
+  return !Object.keys(G.flags).some(x=>G.flags[x]===p.i&&numOf(x)===n); // разные числа — ровный доход
+}
 function bAllFreePons(){return Object.keys(G.ponAt).filter(k=>G.ponAt[k].owner==null)}
 // ---------- цели ----------
 function bGoal(p){
@@ -3862,7 +3871,18 @@ function bGoal(p){
       return res(nodes,'world');
     }
   }
-  if(!(tk&&tk.cat==='pon')){const fp=bFreePons(p);if(fp.length)return res(fp,'pon')}
+  const fpAll=!(tk&&tk.cat==='pon')?bFreePons(p):[];
+  if(fpAll.length)return res(fpAll,'pon');
+  if(bL(p)===3&&!(tk&&tk.cat==='pon')){
+    // сложный бот: сначала доход (флаги на разных числах), затем подготовка к хранителю
+    if(p.fl>0&&G.round<=14){const sp=Object.keys(MAPD.nodes).filter(l=>l!=='L'&&bFlagSpot(p,l));if(sp.length)return res(sp,'flag')}
+    if(bAllFreePons().some(k=>k!=='Z'&&G.type[k])){ // понеглифы найдены, но рука ещё слабая
+      const nd=[];const strong=bAvgWin(p)>=.55;
+      if(p.berries>=50&&p.tre.length<3)nd.push(...bTypeNodes('market'));
+      if(strong)nd.push(...bTypeNodes('battle','dozor'));
+      if(nd.length)return res(nd,'build',{combat:strong});
+    }
+  }
   if(tk&&tk.cat==='ev'){
     const k=tk.def.k;
     if(k==='bribe'||k==='contra')return res(bTypeNodes('market'),'ev');
@@ -3930,7 +3950,14 @@ function bPend(p,pe,A){
     const veto=mx>=3&&mine<=1;
     const i=idx(veto?/Отказываюсь/:/Согласен/);return i>=0?i:first();
   }
-  if(T==='trap'){const i=idx(/Отмена/);return i>=0?i:first()}
+  if(T==='trap'){
+    // раньше бот всегда жал «Отмена» и мог бесконечно повторять сброс. Платим, если денег хватает; повторная попытка за ход — всегда платим или сбрасываем
+    const k=G.turnNo+'/'+p.i;BTRAP[k]=(BTRAP[k]||0)+1;
+    const pay=idx(/Заплатить/),dis=idx(/Сбросить вместо этого/);
+    if(p.berries>=60&&pay>=0)return pay;
+    if(BTRAP[k]>=2){if(pay>=0)return pay;if(dis>=0)return dis}
+    const i=idx(/Отмена/);return i>=0?i:first();
+  }
   if(T==='pick'){
     if(/Нико Робин/.test(title)){
       const cards=p.atk.length+p.pas.length+p.tre.length;
@@ -3965,7 +3992,36 @@ function bFromNode(a,b){ // число шагов между узлами (бе�
   return 99;
 }
 // ---------- ход ----------
+const BROAM={},BTRAP={};
+function bTurnSimple(p,A){
+  // простой бот: гуляет по карте, вступает в дуэли, покупает карты. Без заданий, понеглифов и хранителей.
+  const ap=G.ap;
+  const find=(re,g)=>A.findIndex(a=>!a.dis&&(!g||a.g===g)&&re.test(a.label));
+  if(!G.cardBought&&p.berries>=25){
+    const cA=find(/Купить карту атаки/),cP=find(/Купить пассивную/);
+    if(p.atk.length<7&&cA>=0)return cA;
+    if(p.pas.length<3&&cP>=0)return cP;
+    if(cA>=0&&p.atk.length<9)return cA;
+  }
+  const duelI=A.findIndex(a=>!a.dis&&a.g==='duel');
+  if(duelI>=0&&G.duels<3){const q=G.players.find(x=>x!==p&&x.loc===p.loc);if(q&&bPvpWin(p,q)>=.4)return duelI}
+  if(ap>=1){
+    let r=BROAM[p.i];
+    if(!r||r.t===p.loc||!MAPD.nodes[r.t]||r.n++>7){
+      const unk=bUnknown().filter(x=>x!==p.loc);
+      const pool=unk.length?unk:Object.keys(MAPD.nodes).filter(x=>x!=='L'&&x!==p.loc);
+      r=BROAM[p.i]={t:pool[Math.floor(Math.random()*pool.length)],n:0};
+    }
+    const st=bStepToward(p,[r.t],{combat:true});
+    if(st){const mi=A.findIndex(a=>!a.dis&&a.g==='move'&&a.loc===st.step);if(mi>=0)return mi}
+    BROAM[p.i]=null;
+    const any=A.findIndex(a=>!a.dis&&a.g==='move'&&a.loc!=='L');
+    if(any>=0)return any;
+  }
+  return A.findIndex(a=>a.g==='end');
+}
 function bTurn(p,A){
+  if(bL(p)===1)return bTurnSimple(p,A);
   const ap=G.ap,need=bNeed(p),here=p.loc!=='Z'&&p.loc!=='L';
   const loc=p.loc,lt=here?G.type[loc]:null;
   const find=(re,g)=>A.findIndex(a=>!a.dis&&(!g||a.g===g)&&re.test(a.label));
@@ -4034,6 +4090,7 @@ function bTurn(p,A){
     if(preferPas&&canP>=0)return canP;
     if(canA>=0&&p.atk.length<9)return canA;
   }
+  if(bL(p)===3&&lt==='market'&&p.tre.length<3&&p.berries-30>=20){const j=find(/Купить карту сокровищ/);if(j>=0)return j}
   // 6. задание-событие на ивентовой локации
   if(lt==='event'&&!p.task){
     const fp=bFreePons(p);
@@ -4056,6 +4113,8 @@ function bTurn(p,A){
       if(want)return duelI;
     }
   }
+  // 8а. сложный бот: ставит флаги ради дохода при первой возможности
+  if(bL(p)===3&&here&&ap>=2&&p.fl>0&&G.round<=30&&bFlagSpot(p,loc)){const j=find(/Поставить флаг/);if(j>=0)return j}
   // 8. флаги
   if(here&&lt&&!['jail','dozor','battle','start'].includes(lt)&&ap>=2&&p.fl>0&&G.flags[loc]==null){
     const placed=4-p.fl;
