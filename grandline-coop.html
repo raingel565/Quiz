@@ -2022,7 +2022,7 @@ function mergeSides(L){
   const R=Math.max(...L.map(x=>x.slots.length)),slots=[];
   for(let r=0;r<R;r++)slots.push([].concat(...L.map(x=>x.slots[r]||[])));
   const owner=new Map();L.forEach(x=>{for(const sl of x.slots)for(const c of sl)owner.set(c,x.p);for(const c of x.pas)owner.set(c,x.p)});
-  return{p:L[0].p,ps:L.map(x=>x.p),owner,A:L.reduce((q,x)=>q+x.A,0),U:Math.max(...L.map(x=>x.U)),slots,pas:[].concat(...L.map(x=>x.pas)),ch:L[0].ch,name:L.map(x=>x.name).join(' + ')};
+  return{p:L[0].p,ps:L.map(x=>x.p),owner,A:L.reduce((q,x)=>q+x.A,0),U:L.reduce((q,x)=>q+x.U,0),slots,pas:[].concat(...L.map(x=>x.pas)),ch:L[0].ch,name:L.map(x=>x.name).join(' + ')};
 }
 function runDuel(S1,S2,full){
   const RR=S1.R||3,WW=S1.W||2;
@@ -2045,7 +2045,7 @@ function runDuel(S1,S2,full){
       if(cards.length&&opp.has('barto')&&!x.annul){x.annul=true;cards.shift();ann=true}
       used[i].push(...(x.s.slots[r]||[]));
       let val=0;
-      for(const c of cards){val+=c.v;if(x.s.ch==='luffy')val+=3;if(x.has('mihawk')&&c.v>=7)val+=4}
+      for(const c of cards){val+=c.v;if((x.s.owner?(x.s.owner.get(c)||x.s.p).ch:x.s.ch)==='luffy')val+=3;if(x.has('mihawk')&&c.v>=7)val+=4}
       const nodice=x.s.ch==='sanji'&&GIRLS.includes(opp.s.ch);
       const roll=nodice?0:(x.keys.includes('jinwoo')?d(20):d(12));
       let pa=0;if(x.has('will'))pa+=2;if(x.rumble)pa+=3;
@@ -3003,9 +3003,10 @@ function resultHtml(pe){
     const pas=s0.pas.map(c=>c.kind==='pas'?PAS[c.key].n:TRE[c.key].n);
     const blocked=s0.pas.length&&!x.keys.length;
     const col=(s0.p&&s0.p.color)||(ADMS[s0.ch]?ADMS[s0.ch].col:'#8a8f98');
-    const por=(AVS[s0.ch]&&(s0.p||ADMS[s0.ch]))?av(s0.ch,'por'):'<div class="por boss">⚔</div>';
+    const team=s0.ps&&s0.ps.length>1;
+    const por=team?'<div style="display:flex;justify-content:center;gap:4px">'+s0.ps.map(q=>av(q.ch,'por')).join('')+'</div>':((AVS[s0.ch]&&(s0.p||ADMS[s0.ch]))?av(s0.ch,'por'):'<div class="por boss">⚔</div>');
     const last=Z.shown>0?res.rounds[Z.shown-1].out:-2;
-    return '<div class="dfc" style="--pcol:'+col+'">'+por+'<h3>'+esc(pe.names[i])+'</h3><div class="small">'+(s0.p?esc(CH[s0.ch].n)+' · ':'')+'атака '+s0.A+' / уклонение '+s0.U+'</div>'
+    return '<div class="dfc" style="--pcol:'+col+'">'+por+'<h3>'+esc(pe.names[i])+'</h3><div class="small">'+(team?esc(s0.ps.map(q=>q.name+' ('+CH[q.ch].n+')').join(' + '))+'<br>Сумма команды: ':(s0.p?esc(CH[s0.ch].n)+' · ':''))+'атака '+s0.A+' / уклонение '+s0.U+'</div>'
       +'<div class="small">Пассивные: '+(pas.length?esc(pas.join(', ')):'нет')+(blocked?' (отключены Хенкок)':'')+'</div>'
       +'<div style="margin-top:6px">'+Array.from({length:res.W||2},(_,k)=>k).map(k=>'<span class="pip'+(k<wins[i]?' on'+((k===wins[i]-1&&last===i)?' pop':''):'')+'"></span>').join('')+'</div></div>';
   };
