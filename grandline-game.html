@@ -746,7 +746,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V81</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V82</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -973,6 +973,7 @@ let G=null, UI={viewer:-1,showRules:false,showHelp:false,prepSel:null,setup:null
 const P=()=>G.players[G.cur];
 let LOGCAP=null;
 // ---------- звуки (синтез WebAudio, без файлов; на ход игры не влияют) ----------
+const MAPV='?v=1'; // менять при замене assets/map.webp
 const SFXV='?v=58'; // менять при замене любого звука: иначе браузер/GitHub Pages отдают старую копию из кэша
 const ENEMY_MP3='assets/sfx_enemy.mp3'+SFXV;
 const WTF_MP3='assets/sfx_wtf.mp3'+SFXV;
@@ -3070,19 +3071,9 @@ function mapBase(fancy){
   let s='';
   const BR='#5a3b1f';
   s+='<defs><filter id="sh" x="-30%" y="-30%" width="170%" height="180%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#5a3b1f" flood-opacity=".35"/></filter><linearGradient id="ocean" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfeaf0"/><stop offset="1" stop-color="#9fd0dc"/></linearGradient><linearGradient id="seaP" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6fcfd"/><stop offset="1" stop-color="#dff1f5"/></linearGradient><linearGradient id="redl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e9b7ad"/><stop offset=".5" stop-color="#f7d9d3"/><stop offset="1" stop-color="#e9b7ad"/></linearGradient></defs>';
-  s+='<rect x="0" y="0" width="1588" height="1123" fill="'+(fancy?'url(#ocean)':'#fff')+'"/><rect x="5" y="98" width="1578" height="872" fill="none" stroke="'+BR+'" stroke-width="3"/>';
-  const Z={N:[14,112,736,388],W:[14,590,736,372],E:[838,112,736,388],S:[838,590,736,372]};
-  for(const k in Z){const [x0,y0,w,h]=Z[k];s+='<rect x="'+x0+'" y="'+y0+'" width="'+w+'" height="'+h+'" rx="26" fill="'+(fancy?'url(#seaP)':'#fff')+'" stroke="'+BR+'" stroke-width="2.5"/><rect x="'+(x0+7)+'" y="'+(y0+7)+'" width="'+(w-14)+'" height="'+(h-14)+'" rx="20" fill="none" stroke="'+BR+'" stroke-width="1" stroke-dasharray="3 5" opacity=".6"/>'}
-  WAVES.forEach(([wx,wy],wi)=>{s+='<path'+(fancy?' class="wv" style="animation-delay:-'+((wi*7)%6)+'s"':'')+' d="M'+wx+' '+wy+' q6 -6 12 0 t12 0" fill="none" stroke="#7da8aa" stroke-width="1.4" opacity=".8"/>'});
-  s+='<rect x="14" y="500" width="1560" height="90" fill="'+(fancy?'#e9f3f6':'#fff')+'"/>'+(fancy?'<ellipse class="mist" cx="400" cy="545" rx="320" ry="26" fill="#fff" opacity=".7"/><ellipse class="mist" cx="1150" cy="545" rx="380" ry="24" fill="#fff" opacity=".7" style="animation-delay:-4s"/>':'');s+='<rect x="14" y="491" width="1560" height="18" fill="#d9e8f0"/><rect x="14" y="581" width="1560" height="18" fill="#d9e8f0"/>';
-  for(const [tx,ty,an] of [[34,504,'start'],[34,594,'start'],[1554,504,'end'],[1554,594,'end']])s+='<text x="'+tx+'" y="'+ty+'" text-anchor="'+an+'" font-family="Cinzel,Georgia,serif" font-size="12" font-weight="700" letter-spacing="3" fill="#2c5f78">CALM BELT</text>';
-  s+='<rect x="764" y="112" width="60" height="850" fill="'+(fancy?'url(#redl)':'#f7d9d3')+'" stroke="'+BR+'" stroke-width="2.5"/>';
-  for(const ty of [330,790])s+='<text transform="translate(800,'+ty+') rotate(-90)" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-size="16" font-weight="800" letter-spacing="7" fill="#a63a28">RED LINE</text>';
-  const lab={N:[34,142,'NORTH BLUE','start'],E:[858,142,'EAST BLUE','start'],W:[34,946,'WEST BLUE','start'],S:[1554,946,'SOUTH BLUE','end']};
-  for(const k in lab)s+='<text x="'+lab[k][0]+'" y="'+lab[k][1]+'" text-anchor="'+lab[k][3]+'" font-family="Cinzel,Georgia,serif" font-size="26" font-weight="800" letter-spacing="4" fill="'+BR+'" fill-opacity=".8">'+lab[k][2]+'</text>';
-  for(const [a,b] of MAPD.edges){const p=MAPD.nodes[a],q=MAPD.nodes[b];s+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+q[0]+'" y2="'+q[1]+'" stroke="'+BR+'" stroke-width="2.6" stroke-dasharray="9 6" stroke-linecap="round"/>'}
-  for(const r of REDL){const p=MAPD.nodes[r];s+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+MT[0]+'" y2="'+MT[1]+'" stroke="#6b4aa8" stroke-width="3" stroke-dasharray="2 6" stroke-linecap="round"/>'}
-  s+='<polygon points="'+(MT[0]-37)+','+(MT[1]+24)+' '+MT[0]+','+(MT[1]-40)+' '+(MT[0]+37)+','+(MT[1]+24)+'" fill="#fff" stroke="'+BR+'" stroke-width="2.5" stroke-linejoin="round"/><polygon points="'+(MT[0]-14)+','+(MT[1]-8)+' '+MT[0]+','+(MT[1]-40)+' '+(MT[0]+14)+','+(MT[1]-8)+' '+(MT[0]+6)+','+(MT[1]-3)+' '+MT[0]+','+(MT[1]-10)+' '+(MT[0]-6)+','+(MT[1]-3)+'" fill="#fff" stroke="'+BR+'" stroke-width="1.5"/><rect x="'+(MT[0]-66)+'" y="'+(MT[1]+24)+'" width="132" height="22" rx="3" fill="#fff" stroke="'+BR+'" stroke-width="2"/><text x="'+MT[0]+'" y="'+(MT[1]+39)+'" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-size="10.5" font-weight="800" fill="'+BR+'">REVERSE MOUNTAIN</text>';
+  s+='<image href="assets/map.webp'+MAPV+'" x="8.23" y="105.97" width="1571.27" height="859.73" preserveAspectRatio="none"/>';
+  for(const [a,b] of MAPD.edges){const p=MAPD.nodes[a],q=MAPD.nodes[b],d='x1="'+p[0]+'" y1="'+p[1]+'" x2="'+q[0]+'" y2="'+q[1]+'"';s+='<line '+d+' stroke="#2a1c10" stroke-opacity=".55" stroke-width="6" stroke-linecap="round"/><line '+d+' stroke="#f4e4bb" stroke-width="3" stroke-dasharray="9 6" stroke-linecap="round"/>'}
+  for(const r of REDL){const p=MAPD.nodes[r],dx=MT[0]-p[0],dy=MT[1]-p[1],dl=Math.hypot(dx,dy)||1,k=Math.max(0,dl-54)/dl;s+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+(p[0]+dx*k).toFixed(1)+'" y2="'+(p[1]+dy*k).toFixed(1)+'" stroke="#fff" stroke-opacity=".55" stroke-width="6" stroke-linecap="round"/><line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+(p[0]+dx*k).toFixed(1)+'" y2="'+(p[1]+dy*k).toFixed(1)+'" stroke="#6b4aa8" stroke-width="3" stroke-dasharray="2 6" stroke-linecap="round"/>'}
   return s;
 }
 function renderMap(){
@@ -3163,7 +3154,7 @@ function renderMap(){
     const key=G.cur+'|'+G.round+'|'+!!UI.mapfit;
     if(!UI.mapfit&&sc.scrollWidth>sc.clientWidth+4&&UI.mapFor!==key){
       UI.mapFor=key;const pp=P(),np=nodePos(pp.loc)||[794,500];
-      sc.scrollLeft=Math.max(0,np[0]/1588*sc.scrollWidth-sc.clientWidth/2);
+      sc.scrollLeft=Math.max(0,(np[0]-8)/1572*sc.scrollWidth-sc.clientWidth/2);
     }
   }
 }
@@ -3187,7 +3178,7 @@ function worldPreviewHtml(W,o){
     if(pon){const px=x+R-2,py=y-R+2;s+='<circle cx="'+x+'" cy="'+y+'" r="'+(R+6)+'" fill="none" stroke="#d9a21b" stroke-width="3" stroke-dasharray="5 4"/><rect x="'+(px-15)+'" y="'+(py-15)+'" width="30" height="30" rx="4" transform="rotate(45 '+px+' '+py+')" fill="#d9a21b" stroke="#2a2118" stroke-width="2.5"/><text x="'+px+'" y="'+(py+7)+'" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-size="20" font-weight="800" fill="#2a2118">П</text>'}
     s+='</g>';
   }
-  return '<button class="btn pvz" data-pvz>'+(UI.pvfit?'🔍 Крупнее':'🗺 Вся карта')+'</button><div class="pvmap'+(UI.pvfit?' fit':'')+'"><svg viewBox="0 92 1588 880" xmlns="http://www.w3.org/2000/svg">'+s+'</svg></div><div class="small pvh">⚑ — старт моря · красные локации — проходы между морями (стоят у Рэд Лайн, номер каждый раз новый). Где лежат роад-понеглифы, неизвестно: они скрыты под фишками локаций, их придётся искать. Листайте карту пальцем.</div>';
+  return '<button class="btn pvz" data-pvz>'+(UI.pvfit?'🔍 Крупнее':'🗺 Вся карта')+'</button><div class="pvmap'+(UI.pvfit?' fit':'')+'"><svg viewBox="8 106 1572 860" xmlns="http://www.w3.org/2000/svg">'+s+'</svg></div><div class="small pvh">⚑ — старт моря · красные локации — проходы между морями (стоят у Рэд Лайн, номер каждый раз новый). Где лежат роад-понеглифы, неизвестно: они скрыты под фишками локаций, их придётся искать. Листайте карту пальцем.</div>';
 }
 function seaInfo(W,s){return W?'старт №1':''}
 function pickSteps(ch,sea){
