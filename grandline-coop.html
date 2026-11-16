@@ -858,8 +858,9 @@ body.stream #now{font-size:clamp(14px,1.3vw,22px)}
 .stwin div{padding:40px 60px;border-radius:30px;background:linear-gradient(160deg,#ffd978,#c78914);color:#241705;font-weight:800;font-size:clamp(26px,4vw,64px);box-shadow:0 30px 90px rgba(0,0,0,.6)}
 .stwin small{display:block;font-size:.4em;margin-top:12px;opacity:.8}
 .stwait{display:grid;place-items:center;text-align:center;gap:12px;padding:34px 18px}
+html,body{overscroll-behavior-y:none}
 </style>
-<div id="ver" title="Версия кооператива">C10 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия кооператива">C13 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -1299,6 +1300,7 @@ function baseStat(ch){const o=NET.on&&!(NET.meta&&NET.meta.top===1)&&CH_OLD[ch];
 function stats(p){const b=baseStat(p.ch);return{A:b.A+p.bA,U:b.U+p.bU}}
 function newGame(cfg){
   try{SFX.stopVoice()}catch(e){}
+  if(!NET.on&&!window.__nor&&!window.__rep)saveBegin(seedv,cfg);
   CID=1;
   const decks={atk:[],pas:[],tre:[],weather:shuffle(WEATHER.map(w=>Object.assign({},w))),
     tev:shuffle(T_EVENT.flatMap(x=>Array.from({length:x.c},()=>Object.assign({},x)))),tpon:shuffle(T_PON.map(x=>Object.assign({},x))),tlaf:shuffle(T_LAF.map(x=>Object.assign({},x)))};
@@ -3412,7 +3414,7 @@ function bind(){
     if(k==='ready'){UI.viewer=+b.dataset.p;render()}
     else if(k==='rules'){UI.showRules=true;render()}
     else if(k==='close'){UI.showRules=false;render()}
-    else if(k==='new'){if(NET.on){netLeave()}else{G=null;UI.setup=null}render()}
+    else if(k==='new'){if(NET.on){netLeave()}else{saveClear();G=null;UI.setup=null}render()}
     else if(k==='resync'){netRebuild()}
     else if(k==='net'){NET.on=true;NET.stage='menu';NET.err='';render()}
   });
@@ -3857,7 +3859,7 @@ function doMove(m,strict){
   UI.prep=null;const cb=pe.cb;G.pending=null;cb(m.pr);after();return true;
 }
 function submit(m){
-  if(!NET.on||!G){doMove(m);return}
+  if(!NET.on||!G){if(doMove(m)&&G&&!NET.on&&!window.__rep)saveMove(m);return}
   if(G.winner!=null||NET.desync||NET.me<0||viewerNeeded()!==NET.me)return;
   if(!doMove(m))return;
   const s=encMove(m,hashState());NET.log.push(s);pushMove(NET.log.length-1);
@@ -4811,6 +4813,46 @@ window.__g={akScene,coopAdmPhase,coopFinalCheck,startFinal,mergeSides,aokijiFree
   setTimeout(()=>o.classList.add('rdy'),T*1000+700);
   o.addEventListener('click',go);
   document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go()});
+})();
+
+// ---------- автосохранение партии (против ботов / за одним устройством): переживёт случайное обновление страницы ----------
+const SAVEKEY='gl_save_coop';
+let SAVE=null;
+function saveWrite(){try{localStorage.setItem(SAVEKEY,JSON.stringify(SAVE))}catch(e){}}
+function saveClear(){SAVE=null;try{localStorage.removeItem(SAVEKEY)}catch(e){}}
+function saveBegin(sd,cfg){try{SAVE={v:1,sd,cfg:JSON.parse(JSON.stringify(cfg)),log:[],ts:Date.now()};saveWrite()}catch(e){SAVE=null}}
+function saveMove(m){if(!SAVE)return;SAVE.log.push(encMove(m,hashState()));SAVE.ts=Date.now();if(G.winner!=null)saveClear();else saveWrite()}
+function saveRestore(){
+  const S0=SAVE;if(!S0)return false;
+  let ok=false;window.__rep=true;window.__nor=true;
+  try{
+    seedv=S0.sd|0;newGame(S0.cfg);
+    for(const str of S0.log){const {m,h}=decMove(str);doMove(m,true);if(hashState()!==h)throw new Error('desync')}
+    ok=true;
+  }catch(e){ok=false}
+  window.__nor=false;window.__rep=false;
+  if(!ok){saveClear();G=null;UI.setup=null;render();return false}
+  SAVE=S0;render();return true;
+}
+(function(){
+  try{
+    if(/[?&](stream|nosave)/.test(location.search))return;
+    const raw=localStorage.getItem(SAVEKEY);if(!raw)return;
+    const S0=JSON.parse(raw);if(!S0||S0.v!==1||!Array.isArray(S0.log)||!S0.cfg||!S0.cfg.players)return;
+    SAVE=S0;
+    const ago=Math.max(1,Math.round((Date.now()-(S0.ts||0))/60000));
+    const agoT=ago<60?ago+' мин назад':ago<1440?Math.round(ago/60)+' ч назад':Math.round(ago/1440)+' дн назад';
+    const o=document.createElement('div');o.id='resumeask';
+    o.style.cssText='position:fixed;inset:0;z-index:300000;display:flex;align-items:center;justify-content:center;background:rgba(6,9,12,.82);padding:16px';
+    o.innerHTML='<div style="max-width:380px;width:100%;background:#fffdf7;color:#1c1f26;border:2px solid #5a3b1f;border-radius:16px;padding:18px;text-align:center;font-family:inherit">'
+     +'<h3 style="margin:0 0 6px;font-size:19px">Незавершённая партия</h3>'
+     +'<div style="font-size:14px;opacity:.8;margin-bottom:14px">'+S0.cfg.players.map(p=>esc(p.name)).join(', ')+'<br>ходов сделано: '+S0.log.length+' · '+agoT+'</div>'
+     +'<button id="rs-go" style="width:100%;padding:12px;border-radius:12px;border:0;background:#1c1f26;color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:8px">Продолжить партию</button>'
+     +'<button id="rs-new" style="width:100%;padding:10px;border-radius:12px;border:1px solid #5a3b1f;background:#fff;color:#1c1f26;font-size:14px;font-weight:600;cursor:pointer">Начать новую</button></div>';
+    document.body.appendChild(o);
+    o.querySelector('#rs-go').onclick=()=>{const sp=document.getElementById('splash');if(sp)sp.remove();o.remove();if(!saveRestore())alert('Не удалось восстановить партию, начните новую.')};
+    o.querySelector('#rs-new').onclick=()=>{saveClear();o.remove()};
+  }catch(e){}
 })();
 render();
 try{const sm=/[?&]stream=([A-Za-z0-9]{4,6})/.exec(location.search);if(sm){NET.on=true;NET.stage='stream';netWatch(sm[1])}}catch(e){}
