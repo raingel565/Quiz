@@ -674,8 +674,9 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 }
 @media(max-width:700px){
   #top{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"l r" "st st";gap:8px;padding:10px 12px}
-  .tp-l{grid-area:l;flex-wrap:wrap;min-width:0}.tp-r{grid-area:r;margin-left:0}.tp-st{grid-area:st;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .tp-l{grid-area:l;flex-wrap:wrap;min-width:0}.tp-r{grid-area:r;margin-left:0}.tp-st{grid-area:st;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;min-width:0}
   .tp-st .pill{height:34px;width:100%;justify-content:center}
+  #top{min-width:0;max-width:100%}.tp-st .pill{min-width:0;max-width:100%;box-sizing:border-box}.tp-st .pill-ak,.tp-st .pill:not(.pl-me):not(.gold):not(.turnme){white-space:normal;height:auto;min-height:34px;padding-top:4px;padding-bottom:4px;line-height:1.15;text-align:left}.tp-st .pill-ak{justify-content:flex-start}
   .tp-st .pl-me,.tp-st .turnme,.tp-st .think,.tp-st .pill:last-child:nth-child(odd){grid-column:1/-1}
   .tp-st .pl-me{justify-content:flex-start}
   #now{flex-direction:column;flex-wrap:nowrap;gap:5px}
