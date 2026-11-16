@@ -1279,7 +1279,7 @@ function newGame(cfg){
   G={players:[],cur:0,round:1,ap:3,duels:0,decks,discard:[],specials,bossD,type,boxes,flags:{},ponAt:{},zun:null,
      log:[],pending:null,winner:null,endAfter:false,roll:null,search:{phase:'idle',rolls:[],veto:null},laftel:null,mode:MODES[cfg.mode]?cfg.mode:'std',
      guest:['laxus','natsu','jinwoo'][d(3)-1],guestBought:false,apMod:0,lastWeather:null,stolen:false,over:false,
-     coop:true,admL:[],admS:null,frz:0,lafDone:false,lafAt:null,final:null,hallDone:true,achDone:true};
+     coop:true,admL:[],admS:null,frz:0,lafDone:false,lafAt:null,lafNote:false,final:null,hallDone:true,achDone:true};
   const WW=cfg.wseed!=null?worldFor(cfg.wseed):worldFor(1+Math.floor(rnd()*2e9));G.wseed=WW.seed;G.adm=window.__adm||ADMK[(Math.imul((WW.seed|0)^0x2545F491,2654435761)>>>0)%3];G.grav={};
   G.admOrder=admOrderFor(WW.seed);{const st=COOP.ADM[Math.max(2,Math.min(4,cfg.players.length))];G.admS={};for(const k of ADMK4)G.admS[k]=Object.assign({},ADMS[k],{a:st.a,u:st.u});const bs=COOP.BOSS[Math.max(2,Math.min(4,cfg.players.length))];G.admS.imu=Object.assign({},ADMS.imu,{a:bs.A,u:bs.U})}
   {const gk=Object.keys(GUARD);let sd=(WW.seed>>>0)^0x9e3779b9;const rg=()=>{sd=(Math.imul(sd,1664525)+1013904223)>>>0;return sd/4294967296};
@@ -1769,6 +1769,7 @@ function coopFinalCheck(cb){
   if(G.winner!=null)return cb();
   const at=G.players.filter(q=>q.loc==='L'&&q.jail<=0);
   if(G.lafDone&&at.length){
+    if(G.lafAt==null){G.lafAt=G.round;log('⚔ Задание Лафтейла выполнено! У остальных '+COOP.WAIT+' раунда, чтобы дойти до Лафтейла, затем начнётся бой с Имой.');fxEvent({banner:true,tone:'good',icon:'⏳',title:'Има ждёт на Лафтейле',desc:'Остальным нужно успеть за '+COOP.WAIT+' раунда',auto:3600})}
     if(at.length>=G.players.length||(G.lafAt!=null&&G.round-G.lafAt>=COOP.WAIT))return startFinal(cb);
   }
   if(G.round>=COOP.ROUND_MAX){coopEnd(false,'time');return cb()}
@@ -1904,7 +1905,7 @@ function doSearchRoll(){
   }
 }
 function checkLaftelArrival(p){
-  if(G.coop){if(G.lafAt==null){G.lafAt=G.round;log('⚓ '+p.name+' первым достиг Лафтейла! У остальных '+COOP.WAIT+' раунда, чтобы добраться: потом начнётся бой с Имой.');fxEvent({banner:true,tone:'good',icon:'⚓',title:'Лафтейл достигнут!',desc:'Остальным нужно успеть за '+COOP.WAIT+' раунда',auto:3200})}return}
+  if(G.coop){if(!G.lafDone&&!G.lafNote){G.lafNote=true;log('⚓ '+p.name+' достиг Лафтейла! Сначала нужно выполнить общее задание Лафтейла (его может сделать любой из команды). Когда оно будет выполнено, у собравшихся есть '+COOP.WAIT+' раунда, чтобы дойти до Лафтейла, затем начнётся бой с Имой.');fxEvent({banner:true,tone:'good',icon:'⚓',title:'Лафтейл достигнут!',desc:'Сначала выполните задание Лафтейла — после него появится Има',auto:4200})}return}
   const base=modeOf().need,need=p.ch==='robin'?Math.max(1,base-1):base;
   if(p.pon.length>=need){win(p,'собрал все роад-понеглифы и добрался до Лафтейла');}
 }
