@@ -805,19 +805,60 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 .lbgo:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 18px 44px rgba(242,184,74,.45),inset 0 2px 0 rgba(255,255,255,.55),inset 0 -3px 0 rgba(120,70,0,.3)}
 .lbgo:active{transform:translateY(1px)}
 .lbgo .dice{font-size:26px}
-.lbtools{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.lbtools{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
 .lbtools button{display:flex;flex-direction:column;align-items:center;gap:7px;padding:13px 8px;border-radius:16px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.045);color:var(--ink);font:600 12.5px/1.2 system-ui,sans-serif;cursor:pointer;text-align:center;transition:background .15s,transform .15s,border-color .15s}
 .lbtools button:hover{background:rgba(255,255,255,.1);transform:translateY(-2px);border-color:rgba(255,255,255,.22)}
 .lbtools button span{font-size:22px;line-height:1}
 .lbtools button.net{border-color:rgba(79,179,184,.45);background:linear-gradient(160deg,rgba(79,179,184,.2),rgba(79,179,184,.05))}
-@media(max-width:720px){.seats,.modes{grid-template-columns:1fr}.lbhero:after{display:none}.lbtitle{position:relative;padding:12px 16px 16px;background:linear-gradient(transparent,rgba(8,12,16,.85))}.lbtitle h1{font-size:34px}.lbtools{grid-template-columns:repeat(3,1fr)}.lbtools button.net{grid-column:span 3;flex-direction:row;justify-content:center}.lbcard{padding:14px;border-radius:20px}.lbgo{font-size:17px;padding:18px}}
+@media(max-width:720px){.seats,.modes{grid-template-columns:1fr}.lbtools button.net{grid-column:span 3;flex-direction:row;justify-content:center}.lbhero:after{display:none}.lbtitle{position:relative;padding:12px 16px 16px;background:linear-gradient(transparent,rgba(8,12,16,.85))}.lbtitle h1{font-size:34px}.lbtools{grid-template-columns:repeat(3,1fr)}.lbtools button.net{grid-column:span 3;flex-direction:row;justify-content:center}.lbcard{padding:14px;border-radius:20px}.lbgo{font-size:17px;padding:18px}}
 :root[data-theme="light"] .lbcard{background:rgba(255,255,255,.72);border-color:rgba(30,50,70,.12)}
 :root[data-theme="light"] .seat,:root[data-theme="light"] .mode{background:rgba(255,255,255,.7)}
 :root[data-theme="light"] .seg{background:rgba(30,50,70,.1)}
 :root[data-theme="light"] .lbtools button{background:rgba(255,255,255,.7)}
 :root[data-theme="light"] .seat .nm{border-bottom-color:rgba(30,50,70,.25)}
+
+/* ===== режим трансляции (ТВ): карта и журнал ===== */
+.spulse{transform-box:fill-box;transform-origin:center;animation:spulse 1.6s ease-out infinite}
+.spulse.s2{animation-delay:.8s}
+.sspin{transform-box:fill-box;transform-origin:center;animation:sspin 5s linear infinite}
+@keyframes spulse{0%{transform:scale(.7);opacity:.95}100%{transform:scale(2.6);opacity:0}}
+@keyframes sspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spulse,.sspin{animation:none}}
+
+body.stream #bnav,body.stream .pvz,body.stream #mapme,body.stream #reactb,body.stream #toasts{display:none!important}
+body.stream #app{height:100vh;padding:10px 14px;gap:10px;overflow:hidden}
+body.stream main{grid-template-columns:minmax(0,1fr) clamp(340px,27vw,560px);align-items:stretch;min-height:0}
+body.stream #mapwrap{align-self:stretch;display:flex;flex-direction:column;min-height:0;padding:10px}
+body.stream #mapscroll{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+body.stream #mapscroll #map{min-width:0!important;width:100%;height:100%;max-height:none}
+body.stream #legend{font-size:clamp(11px,.9vw,15px)}
+body.stream #side{overflow:hidden;min-height:0}
+body.stream #top{padding:10px 18px}
+body.stream #top .title{font-size:clamp(18px,1.8vw,30px)}
+body.stream #now{font-size:clamp(14px,1.3vw,22px)}
+.sttop{display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1}
+.sttop .pill{font-size:clamp(13px,1.15vw,19px);padding:6px 14px}
+.sttop .code{font-weight:800;letter-spacing:.18em;color:var(--gold)}
+.splist{display:grid;gap:8px}
+.spl{--pc:#888;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-left:5px solid var(--pc);transition:background .3s,box-shadow .3s}
+.spl.act{background:linear-gradient(100deg,color-mix(in srgb,var(--pc) 28%,transparent),rgba(255,255,255,.04));box-shadow:0 0 0 2px var(--pc),0 8px 24px rgba(0,0,0,.35)}
+.spl .avw{width:clamp(36px,3.2vw,58px);height:clamp(36px,3.2vw,58px)}
+.spl b{display:block;font-size:clamp(14px,1.35vw,22px);line-height:1.15}
+.spl small{display:block;color:var(--muted);font-size:clamp(11px,.95vw,15px)}
+.spl .st{display:flex;gap:10px;font-weight:700;font-size:clamp(13px,1.2vw,20px);white-space:nowrap}
+.spl .st span{display:inline-flex;gap:4px;align-items:center}
+.slog{flex:1;min-height:0;overflow:hidden;position:relative;border-radius:18px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.08);padding:12px 14px}
+.slog h3{margin:0 0 8px;font-size:clamp(12px,1vw,16px);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.slog .ll{font-size:clamp(14px,1.25vw,21px);line-height:1.32;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.06);opacity:.72}
+.slog .ll:first-of-type{opacity:1;color:var(--gold);font-weight:700;opacity:1}
+.slog .ll:nth-of-type(2){opacity:.92}
+.slog:after{content:"";position:absolute;left:0;right:0;bottom:0;height:60px;background:linear-gradient(transparent,rgba(12,16,18,.9));pointer-events:none;border-radius:0 0 18px 18px}
+.stwin{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(5,8,10,.78);backdrop-filter:blur(6px);text-align:center}
+.stwin div{padding:40px 60px;border-radius:30px;background:linear-gradient(160deg,#ffd978,#c78914);color:#241705;font-weight:800;font-size:clamp(26px,4vw,64px);box-shadow:0 30px 90px rgba(0,0,0,.6)}
+.stwin small{display:block;font-size:.4em;margin-top:12px;opacity:.8}
+.stwait{display:grid;place-items:center;text-align:center;gap:12px;padding:34px 18px}
 </style>
-<div id="ver" title="Версия игры">V99</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V101</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2616,6 +2657,7 @@ function render(){
   musicSync();
   document.body.classList.toggle('ingame',!!G);
   if(!G){if(NET.on)renderLobby();else renderSetup();return}
+  if(STREAM.on){renderStream();return}
   const need=viewerNeeded();
   if(G.turnNo!==SNDT){SNDT=G.turnNo;if(!window.__nor&&(!NET.on||need===NET.me))fxSnd('turn')}
   if(G.pending&&G.pending.type==='duelResult'&&SNDD!==G.pending){SNDD=G.pending;fxSnd('duel')}
@@ -3285,6 +3327,7 @@ function renderMap(){
       const op=(UI.pp||{})[p.i];const dx=op?op[0]-px:0,dy=op?op[1]-py:0;
       const me=(NET.on?NET.me:(UI.viewer>=0?UI.viewer:P().i))===p.i,cur=p===P();
       s+='<g class="pawn" data-pi="'+p.i+'" data-dx="'+dx+'" data-dy="'+dy+'" pointer-events="none" filter="url(#sh)">'
+        +(STREAM.on&&cur&&G.winner==null?'<circle class="spulse" cx="'+px+'" cy="'+py+'" r="30" fill="'+p.color+'" fill-opacity=".35" stroke="'+p.color+'" stroke-width="4"/><circle class="spulse s2" cx="'+px+'" cy="'+py+'" r="30" fill="none" stroke="#fff" stroke-width="3"/><circle cx="'+px+'" cy="'+py+'" r="34" fill="none" stroke="'+p.color+'" stroke-width="5" stroke-dasharray="9 6" class="sspin"/>':'')
         +(me?'<circle class="halo" cx="'+px+'" cy="'+py+'" r="30" fill="'+p.color+'" fill-opacity=".28" stroke="'+p.color+'" stroke-width="3"/>':'')
         +(cur?'<circle cx="'+px+'" cy="'+py+'" r="23" fill="none" stroke="#f2b01e" stroke-width="4" stroke-dasharray="5 4"/>':'')
         +(SHIPS[p.ch]
@@ -3292,6 +3335,7 @@ function renderMap(){
             +'<circle cx="'+(px+32)+'" cy="'+(py+16)+'" r="14" fill="'+p.color+'" stroke="#fff" stroke-width="2.5"/><text x="'+(px+32)+'" y="'+(py+22)+'" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" stroke="#1c1f26" stroke-width=".8" paint-order="stroke">'+esc(p.name[0]||'?')+'</text>'
           :'<circle cx="'+px+'" cy="'+py+'" r="19.5" fill="#1c1f26"/><circle cx="'+px+'" cy="'+py+'" r="17" fill="'+p.color+'" stroke="#fff" stroke-width="3"/><circle cx="'+px+'" cy="'+py+'" r="17" fill="url(#gloss)"/><text x="'+px+'" y="'+(py+6)+'" text-anchor="middle" font-size="17" font-weight="800" fill="#fff" stroke="#1c1f26" stroke-width=".8" paint-order="stroke">'+esc(p.name[0]||'?')+'</text>')
         +(me?'<g transform="translate('+px+','+(py-34)+')"><rect x="-18" y="-10" width="36" height="16" rx="8" fill="#1c1f26"/><text y="2" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">ВЫ</text></g>':'')
+        +(STREAM.on?(()=>{const fs=cur?21:17,w=p.name.length*fs*.62+22,h=fs+10;return '<g transform="translate('+px+','+(py-(cur?54:46))+')"><rect x="'+(-w/2)+'" y="'+(-h/2-2)+'" width="'+w+'" height="'+h+'" rx="'+(h/2)+'" fill="'+p.color+'" stroke="#fff" stroke-width="3"/><text y="'+(fs*.36-1)+'" text-anchor="middle" font-size="'+fs+'" font-weight="800" fill="#1c1f26">'+esc(p.name)+'</text></g>'})():'')
         +'</g>';
     });
   }
@@ -3524,7 +3568,7 @@ function renderSetup(){
     h+='</div>';
     h+='<div class="lbcard"><div class="lbh"><span class="num">2</span><b>Режим партии</b></div><div class="modes">'+Object.keys(MODES).map(k=>{const m=MODES[k];return '<button type="button" class="mode'+(md===k?' on':'')+'" data-mode="'+k+'"><div class="mt">'+esc(m.n)+'<span class="cubes" title="Кубов понеглифа для победы">'+[1,2,3,4].map(c=>'<i class="'+(c<=m.need?'f':'')+'"></i>').join('')+'</span></div><small>'+esc(m.d)+'</small></button>'}).join('')+'</div></div>';
     h+='<button class="lbgo" id="go"><span class="dice">🎲</span>Бросить кубики на очерёдность</button>';
-    h+='<div class="lbtools"><button class="net" data-ui="net"><span>🌐</span>Играть по сети</button><button data-rules><span>📖</span>Правила</button><button data-qo="hall"><span>🏆</span>Зал славы</button><button data-qo="settings"><span>⚙</span>Настройки</button><button data-mus data-short>'+musShort()+'</button></div>';
+    h+='<div class="lbtools"><button class="net" data-ui="net"><span>🌐</span>Играть по сети</button><button data-ui="stream"><span>📺</span>Трансляция</button><button data-rules><span>📖</span>Правила</button><button data-qo="hall"><span>🏆</span>Зал славы</button><button data-qo="settings"><span>⚙</span>Настройки</button><button data-mus data-short>'+musShort()+'</button></div>';
   }else if(S.step==='roll'){
     h+='<h2>Очерёдность хода</h2><table class="t"><tr><th>Игрок</th><th>2d6</th></tr>'+S.order.map(o=>'<tr><td>'+esc(o.name)+'</td><td>'+o.r+'</td></tr>').join('')+'</table><div class="small">Больше сумма — раньше ход. Ничьи перебрасываются. Персонажей и море выбирают по порядку, и карту вы увидите заранее.</div><button class="btn primary" id="go2">Выбирать персонажей</button>';
   }else{
@@ -3549,6 +3593,7 @@ function renderSetup(){
   setModalKeep(h);
   const g=id=>document.getElementById(id);
   const nb=document.querySelector('#modal [data-ui="net"]');if(nb)nb.onclick=()=>{NET.on=true;NET.stage='menu';NET.err='';render()};
+  const sb=document.querySelector('#modal [data-ui="stream"]');if(sb)sb.onclick=()=>{NET.on=true;NET.stage='stream';NET.err='';render()};
   if(S.step==='count'){
     const collect=()=>{S.names=S.names.map((x,i)=>{const el=g('nm'+i);return el?(el.value.trim()||x):x});S.bots=S.bots.map((x,i)=>{const el=g('bt'+i);return el?el.checked:x});S.lv=(S.lv||[2,2,2,2]).map((x,i)=>{const el=g('bl'+i);return el?+el.value:x})};
     document.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{collect();S.n=+b.dataset.n;renderSetup()});
@@ -3582,6 +3627,7 @@ function renderSetup(){
 // ---------- online (каждый на своём устройстве) ----------
 // Схема: у всех одинаковый seed и одинаковые стартовые данные; по сети ходят только решения игроков
 // (индекс действия или выкладка карт перед дуэлью). Каждое устройство пересчитывает партию само.
+const STREAM={on:false,fix:0};
 const NET={on:false,stage:'menu',code:null,uid:null,me:-1,db:null,meta:null,seats:[],remote:{},log:[],started:false,wq:Promise.resolve(),desync:false,err:'',unsub:[],name:''};
 const CHUNK=20,chunkId=i=>'c'+String(i).padStart(4,'0');
 const safeId=x=>String(x).replace(/[^A-Za-z0-9_\-.~:@+]/g,'_').slice(0,100);
@@ -3625,11 +3671,12 @@ function onMoves(snap){
 function drain(){
   if(!G||NET.desync)return;
   const prev=window.__nor;
+  if(STREAM.on)window.__nor=true;
   // V7: чужие ходы раньше применялись полностью без анимаций (__nor), поэтому игрок, чей ход наступал после чужого «закончить ход»,
   // не видел окна броска кубиков / карты погоды — только запись в журнале. Теперь, если пришли 1–3 новых хода (живая игра), анимации показываются;
   // при догрузке длинной истории (вход в комнату, восстановление) они по-прежнему отключены.
   let avail=0;for(let k=NET.log.length;avail<6;k++){const arr=NET.remote[Math.floor(k/CHUNK)];if(!arr||arr[k%CHUNK]==null)break;avail++}
-  window.__nor=!(avail>0&&avail<=3&&(G.turnNo||0)>0&&!prev);
+  window.__nor=STREAM.on?true:!(avail>0&&avail<=3&&(G.turnNo||0)>0&&!prev);
   try{
     for(;;){
       const k=NET.log.length,arr=NET.remote[Math.floor(k/CHUNK)];
@@ -3640,7 +3687,7 @@ function drain(){
     }
     for(let k=0;k<NET.log.length&&!NET.desync;k++){const arr=NET.remote[Math.floor(k/CHUNK)];const e=arr&&arr[k%CHUNK];if(e!=null&&e!==NET.log[k])NET.desync=true}
   }catch(e){NET.desync=true;NET.err='Ошибка при применении хода: '+(e&&e.message||e)}
-  window.__nor=prev;
+  window.__nor=STREAM.on?true:prev;
   render();
 }
 function netRebuild(){
@@ -3651,15 +3698,68 @@ function netRebuild(){
   UI.viewer=NET.me;
   try{for(const str of all){const {m,h}=decMove(str);doMove(m,true);NET.log.push(str);if(hashState()!==h){NET.desync=true;break}}}
   catch(e){NET.desync=true;NET.err='Не удалось пересчитать: '+(e&&e.message||e)}
-  window.__nor=false;render();
+  window.__nor=!!STREAM.on;render();
 }
 function startOnline(meta){
   NET.log=[];NET.remote={};NET.desync=false;NET.err='';
   NET.me=meta.players.findIndex(p=>p.uid===NET.uid);
   window.__nor=true;seedv=meta.seed|0;
   newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode});
-  window.__nor=false;UI.viewer=NET.me;
+  window.__nor=!!STREAM.on;UI.viewer=STREAM.on?0:NET.me;
   NET.unsub.push(NET.db.collection('games/'+NET.code+'/moves').onSnapshot(onMoves,e=>{NET.err='Связь с партией потеряна: '+(e&&e.message||e);render()}));
+  render();
+}
+
+// ---------- режим трансляции: только карта и журнал, без управления ----------
+function streamTop(){
+  const p=P();
+  const adm=G.akainu?'<span class="pill pill-ak"><span class="avw sm" style="--pc:'+adm().col+'">'+av(G.adm||'akainu')+'</span>'+adm().short+': '+esc(locName(G.akainu.loc))+(G.akainu.stun>0?' 💫':'')+'</span>':'';
+  return '<span class="title">Гранд Лайн</span><div class="sttop"><span class="pill">📺 Комната <span class="code">'+esc(NET.code||'')+'</span></span><span class="pill">Раунд '+G.round+'</span>'
+    +(G.winner==null&&p?'<span class="pill" style="box-shadow:0 0 0 2px '+p.color+'"><span class="avw sm" style="--pc:'+p.color+'">'+av(p.ch)+'</span> Ход: '+esc(p.name)+' · ОД '+G.ap+'</span>':'')
+    +(G.roll?'<span class="pill">Кубики '+G.roll[0]+' + '+G.roll[1]+' = '+(G.roll[0]+G.roll[1])+'</span>':'')+adm+'</div>';
+}
+function streamSide(){
+  const pl=G.players.map((q,i)=>'<div class="spl'+(i===G.cur&&G.winner==null?' act':'')+'" style="--pc:'+q.color+'"><span class="avw" style="--pc:'+q.color+'">'+av(q.ch)+'</span><div><b>'+esc(q.name)+'</b><small>'+esc(CH[q.ch].n)+(q.jail>0?' · в тюрьме':'')+'</small></div><div class="st"><span>🪙 '+q.berries+'</span><span>⚑ '+(4-q.fl)+'</span><span>🗿 '+q.pon.length+'</span></div></div>').join('');
+  const lg=G.log.slice(0,26).map(l=>'<div class="ll">'+esc(lgv(l))+'</div>').join('');
+  return '<div class="splist">'+pl+'</div><div class="slog"><h3>Журнал</h3>'+lg+'</div>';
+}
+function renderStream(){
+  document.body.classList.add('ingame','stream');
+  window.__nor=true;FXQ.length=0;FXBUSY=false;
+  $('#top').innerHTML=streamTop();
+  $('#now').innerHTML=nowHtml();
+  ACTS=[];
+  renderMap();
+  $('#side').innerHTML=streamSide();
+  $('#legend').innerHTML=Object.entries(TYPES).map(([k,t])=>(BADGE[k]?'<span><i style="background:'+BADGE[k].c+'"></i>'+BADGE[k].i+' '+t.n+'</span>':'<span><i style="background:'+t.c+'"></i>'+t.n+'</span>')).join('');
+  let m='';
+  if(G.winner!=null){const w=G.players[G.winner];m='<div class="stwin"><div>🏆 '+esc(w.name)+'<br>Король Пиратов!<small>'+esc(lgv(G.log[0]))+'</small></div></div>'}
+  else if(NET.desync&&STREAM.fix<3){STREAM.fix++;m='<div class="stwin"><div>Пересчёт партии…</div></div>';setTimeout(()=>{if(STREAM.on&&NET.meta)netRebuild()},800)}
+  $('#modal').innerHTML=m;
+  try{document.title='📺 Трансляция · Гранд Лайн'}catch(e){}
+}
+async function netWatch(code){
+  NET.err='';NET.busy=true;render();
+  if(!await netInit()){NET.busy=false;render();return}
+  code=String(code||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6);
+  if(code.length<4){NET.err='Введите код комнаты (4 символа)';NET.busy=false;render();return}
+  try{
+    const mref=NET.db.doc('games/'+code),snap=await mref.get();
+    if(!snap.exists){NET.err='Комната «'+code+'» не найдена';NET.busy=false;render();return}
+    STREAM.on=true;STREAM.fix=0;window.__nor=true;
+    NET.code=code;NET.stage='watch';NET.started=false;NET.me=-1;
+    try{localStorage.setItem('gl_stream',code)}catch(e){}
+    NET.unsub.push(mref.onSnapshot(sn=>{
+      NET.meta=sn.exists?sn.data():null;
+      if(NET.meta&&NET.meta.status==='playing'&&!NET.started){NET.started=true;startOnline(NET.meta)}else if(!G)render();
+    },e=>netErr(e,'Связь с комнатой')));
+    reactSub(code);
+  }catch(e){NET.err='Не удалось подключиться: '+(e&&e.message||e)}
+  NET.busy=false;render();
+}
+function streamLeave(){
+  STREAM.on=false;window.__nor=false;document.body.classList.remove('stream','ingame');
+  netLeave();NET.on=false;try{localStorage.removeItem('gl_stream')}catch(e){}
   render();
 }
 function netErr(e,pref){NET.err=(pref||'Ошибка')+(e&&e.message?': '+e.message:'');render()}
@@ -3792,13 +3892,25 @@ function renderLobby(){
   $('#now').innerHTML='';$('#side').innerHTML='';$('#map').innerHTML='';$('#legend').innerHTML='';
   let name='';try{name=NET.name||localStorage.getItem('gl_name')||''}catch(e){}
   let last='';try{last=localStorage.getItem('gl_room')||''}catch(e){}
-  let h='<div class="ov solid"><div class="modal" style="max-width:820px">';
-  if(NET.stage==='menu'){
+  let h=(NET.stage==='stream'||NET.stage==='watch')?'<div class="ov solid lb"><div class="modal lobby" style="max-width:760px">':'<div class="ov solid"><div class="modal" style="max-width:820px">';
+  if(NET.stage==='stream'||NET.stage==='watch'){
+    let lastS='';try{lastS=localStorage.getItem('gl_stream')||localStorage.getItem('gl_room')||''}catch(e){}
+    const wait=NET.stage==='watch';
+    h+='<div class="lbhero" style="max-height:230px"><i style="background-image:url('+HERO+')"></i><img src="'+HERO+'" alt="" style="max-height:230px">'+presBadge()+'<div class="lbtitle"><div><small>Режим трансляции</small><h1>Эфир</h1></div></div></div>';
+    if(NET.stage==='watch'){
+      const st=NET.meta?NET.meta.status:'';
+      h+='<div class="lbcard stwait"><div style="font-size:40px">📺</div><b style="font-size:34px;letter-spacing:.3em">'+esc(NET.code)+'</b><div class="small">'+(st==='playing'?'Загружаем партию…':'Игра ещё не началась. Трансляция включится сама, как только создатель комнаты нажмёт «Начать игру».')+'</div></div><div class="lbtools" style="grid-template-columns:1fr"><button id="nsleave"><span>←</span>Назад</button></div>';
+    }else{
+      h+='<div class="lbcard"><div class="lbh"><span class="num">📺</span><b>Код комнаты</b></div><div class="small" style="margin-bottom:12px">Откройте на телевизоре или втором экране: будут видны только карта, игроки и журнал, без управления. Можно открыть ссылку с параметром <b>?stream=КОД</b>.</div>'
+        +'<div style="display:flex;gap:10px;flex-wrap:wrap"><input id="scode" maxlength="6" value="'+esc(lastS)+'" autocomplete="off" placeholder="ABCD" style="flex:1;min-width:160px;text-transform:uppercase;font:800 30px/1 system-ui;letter-spacing:.3em;text-align:center;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.3);color:var(--ink);outline:none"><button class="lbgo" id="swatch" style="width:auto;padding:0 34px;font-size:18px"'+(NET.busy?' disabled':'')+'>Смотреть</button></div></div>'
+        +'<div class="lbtools" style="grid-template-columns:1fr"><button id="nsback"><span>←</span>Назад</button></div>';
+    }
+  }else if(NET.stage==='menu'){
     h+=heroHtml()+'<h2 class="h2o">Игра по сети'+presBadge()+'</h2><div class="small">Каждый открывает эту страницу на своём устройстве.</div>';
     h+='<div class="row"><label>Ваше имя: <input id="nname" value="'+esc(name)+'" maxlength="14" placeholder="Имя"></label></div>';
     h+='<div class="row"><button class="btn primary" id="ncreate"'+(NET.busy?' disabled':'')+'>Создать комнату</button></div>';
     h+='<div class="row"><label>Код комнаты: <input id="ncode" maxlength="6" style="width:90px;text-transform:uppercase" value="'+esc(last)+'"></label><button class="btn" id="njoin"'+(NET.busy?' disabled':'')+'>Войти</button></div>';
-    h+='<div class="row"><button class="btn" id="nback">← Играть на одном экране</button></div>';
+    h+='<div class="row"><button class="btn" id="nback">← Играть на одном экране</button><button class="btn" id="nstream">📺 Режим трансляции</button></div>';
   }else{
     const mine=NET.seats.find(x=>x.uid===NET.uid);
     const isHost=NET.meta&&NET.meta.host===NET.uid;
@@ -3837,6 +3949,11 @@ function renderLobby(){
   if(g('ncreate'))g('ncreate').onclick=()=>{nm();netJoin(genCode(),true)};
   if(g('njoin'))g('njoin').onclick=()=>{nm();netJoin(g('ncode').value,false)};
   if(g('nback'))g('nback').onclick=()=>{NET.on=false;render()};
+  if(g('nstream'))g('nstream').onclick=()=>{NET.stage='stream';NET.err='';render()};
+  if(g('swatch'))g('swatch').onclick=()=>netWatch(g('scode').value);
+  if(g('scode'))g('scode').onkeydown=e=>{if(e.key==='Enter')netWatch(g('scode').value)};
+  if(g('nsback'))g('nsback').onclick=()=>{NET.on=false;NET.stage='menu';NET.err='';render()};
+  if(g('nsleave'))g('nsleave').onclick=streamLeave;
   document.querySelectorAll('[data-secret]').forEach(b=>b.onclick=()=>secretAsk(()=>render()));
   document.querySelectorAll('[data-nch]').forEach(b=>b.onclick=()=>{chSnap();SFX.stopVoice();if(b.dataset.nch==='zoro')SFX.play('zoro',0);if(b.dataset.nch==='luffy')SFX.play('luffy',0);if(b.dataset.nch==='law')SFX.play('law',0);if(b.dataset.nch==='ace')SFX.play('ace',0);if(b.dataset.nch==='sanji')SFX.play('sanji',0);if(b.dataset.nch==='olesya')SFX.play('olesya',0);if(b.dataset.nch==='hancock')SFX.play('hancock',0);setSeat({ch:b.dataset.nch})});
   chVid();
@@ -4376,7 +4493,7 @@ function botSchedule(){
 }
 
 // ---------- test API ----------
-window.__g={devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
+window.__g={NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,bStepToward,bMap,bFreePons,bUnknown,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
@@ -4477,6 +4594,7 @@ window.__g={devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPha
   document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go()});
 })();
 render();
+try{const sm=/[?&]stream=([A-Za-z0-9]{4,6})/.exec(location.search);if(sm){NET.on=true;NET.stage='stream';netWatch(sm[1])}}catch(e){}
 setTimeout(presInit,1200);
 })();
 </script>
