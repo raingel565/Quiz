@@ -859,7 +859,7 @@ body.stream #now{font-size:clamp(14px,1.3vw,22px)}
 .stwin small{display:block;font-size:.4em;margin-top:12px;opacity:.8}
 .stwait{display:grid;place-items:center;text-align:center;gap:12px;padding:34px 18px}
 </style>
-<div id="ver" title="Версия игры">V106</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V108</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -875,7 +875,7 @@ const WAVES=[[369,239],[442,186],[112,436],[134,349],[634,191],[557,271],[76,206
 const COLORS=['#d94b3d','#2f6fdb','#e0a21a','#7a45c9','#1f9d8a','#d1569a'];
 const TYPES={start:{n:'Старт',c:'#c4e8cf'},event:{n:'Ивентовая (задания)',c:'#fbd7a0'},base:{n:'Базовая',c:'#ffffff'},dozor:{n:'База Дозора',c:'#bcd3f5'},battle:{n:'Поле битвы',c:'#f5b0a6'},jail:{n:'Тюрьма',c:'#d0d3da'},market:{n:'Чёрный рынок',c:'#3a3a44'}};
 const CH={
- zoro:{n:'Зоро',A:7,U:5,d:'Две карты атаки в одном слоте. Антиплюс: раз за ход при переходе может заблудиться и выйти на другую соседнюю локацию'},
+ zoro:{n:'Зоро',A:7,U:5,d:'Две карты атаки в одном слоте. Антиплюс: последняя локация его хода, если фишка на ней скрыта, не вскрывается — она открывается только в начале его следующего хода'},
  kata:{n:'Катакури',A:5,U:6,d:'Самое высокое уклонение'},
  luffy:{n:'Луффи',A:6,U:3,d:'+3 ко всем выложенным картам атаки'},
  hancock:{n:'Хенкок',A:4,U:5,d:'Соперник не может использовать пассивные способности'},
@@ -1402,11 +1402,17 @@ function arrive(p,loc,o,cb){
   p.loc=loc;
   if(loc!=='Z'&&loc!=='L')p.sea=seaOf(loc);
   if(p.task&&p.task.seas)p.task.seas.add(p.sea);if(p.ltask&&p.ltask.seas)p.ltask.seas.add(p.sea);
-  const t=loc==='Z'||loc==='L'?null:drawToken(loc);
+  p.zfog=null;
+  const fog=!!o.zfog&&p.ch==='zoro'&&loc!=='Z'&&loc!=='L'&&!G.type[loc];
+  if(fog){p.zfog=loc;log(pname(p)+' выходит на '+locName(loc)+', но фишка остаётся закрытой до его следующего хода.')}
+  const t=loc==='Z'||loc==='L'||fog?null:drawToken(loc);
   if(loc==='L'){log(pname(p)+' прибыл на Лафтейл!');checkLaftelArrival(p)}
   if(G.grav&&G.grav[loc]&&!o.quiet&&G.tm&&!G.tm.gvd){G.tm.gvd=true;p.skip=(p.skip||0)+1;log(pname(p)+' попал под гравитацию Фуджиторы на '+locName(loc)+' и пропустит следующий ход.');fxEvent({banner:true,tone:'bad',icon:'⬇',title:'Гравитация!',desc:pname(p)+' пропустит следующий ход',auto:2600})}
   if(G.akainu&&G.akainu.loc===loc&&G.akainu.stun<=0&&!o.noBoss){const AD=adm();log(pname(p)+' встретил на '+locName(loc)+' адмирала '+AD.short+'!');fxSnd('enemy');fxEvent({banner:true,tone:'bad',icon:'☠',title:'Встреча с '+AD.short+'!',desc:pname(p)+' · атака '+AD.a+' / уклонение '+AD.u,auto:2800});startNpcFight(p,G.adm||'akainu',cb);return}
   if(o.quiet||!t){cb&&cb();return}
+  tokenFx(p,loc,t,cb);
+}
+function tokenFx(p,loc,t,cb){
   if((t==='dozor'||t==='battle')&&G.duels>=3){
     const back=p.prev;log(pname(p)+': лимит 3 дуэли за ход исчерпан, бой не начинается — возврат на '+locName(back)+'.');
     p.loc=back;if(back!=='Z'&&back!=='L')p.sea=seaOf(back);cb&&cb();return}
@@ -1418,6 +1424,13 @@ function arrive(p,loc,o,cb){
     jailEntry(p,cb);return;
   }
   cb&&cb();
+}
+function resolveFog(p,cb){
+  const loc=p.zfog;p.zfog=null;
+  if(!loc||p.loc!==loc){cb&&cb();return}
+  const t=drawToken(loc);
+  log(pname(p)+': фишка на '+locName(loc)+' вскрыта — '+TYPES[t].n+'.');
+  tokenFx(p,loc,t,cb);
 }
 function hasTre(p,k){return p.tre.some(c=>c.key===k&&activeC(c))}
 function jailEntry(p,cb){
@@ -1479,7 +1492,7 @@ function incomeRoll(){
 function beginTurn(){
   const p=P();
   (G.marks=G.marks||[]).push({pi:p.i,n:G.logN||0,r:G.round,name:p.name});if(G.marks.length>80)G.marks.shift();
-  G.ap=Math.max(1,3+(p.ch==='nami'?Math.max(0,G.apMod):G.apMod));G.apMax=G.ap;G.duels=0;G.turnNo=(G.turnNo||0)+1;G.tm={mv0:p.cnt.moves,buy:0,pvp:0};if(p.ch==='zoro')G.tm.lostN=d(G.apMax); // Зоро: в какой по счёту переход за ход он заблудится (каждый ход случайно)
+  G.ap=Math.max(1,3+(p.ch==='nami'?Math.max(0,G.apMod):G.apMod));G.apMax=G.ap;G.duels=0;G.turnNo=(G.turnNo||0)+1;G.tm={mv0:p.cnt.moves,buy:0,pvp:0};
   G.stolen=false;G.cardBought=false;G.endAfter=false;
   if(G.fire&&G.fire.by===p.i){log('Огненная стена на '+locName(G.fire.loc)+' гаснет.');G.fire=null}
   if(p.skip>0){p.skip--;log(pname(p)+' пропускает ход.');return endTurn()}
@@ -1504,7 +1517,7 @@ function beginTurn(){
   }
   startTurnMain();
 }
-function startTurnMain(){incomeRoll()}
+function startTurnMain(){const p=P();if(p.ch==='zoro'&&p.zfog)return resolveFog(p,incomeRoll);incomeRoll()}
 function endTurn(){
   if(G.winner!=null)return;
   marchCheck(P());
@@ -2197,16 +2210,12 @@ function actions(){
     if(t==='Z'&&!G.zun)continue;
     const lab=(t==='Z'?'Зунеша':locName(t))+(t!=='Z'&&t!=='L'&&G.type[t]?' · '+TYPES[G.type[t]].n:'');
     A.push({g:'move',label:lab,loc:t,dis,run:()=>{
-      G.ap-=1;p.cnt.moves++;
-      let dest=t;
-      if(p.ch==='zoro'&&G.tm&&G.tm.lostN&&!G.tm.lost&&p.cnt.moves-G.tm.mv0===G.tm.lostN&&t!=='Z'&&t!=='L'){
-        // антиплюс Зоро: теряется и приходит на другую соседнюю локацию (не Зунеша, не Лафтейл, не за стеной)
-        const alt=nbrsOf(p).filter(x=>x!==t&&x!=='Z'&&x!=='L'&&!walled(x,p)&&!(isCombat(x)&&G.duels>=3));
-        if(alt.length){G.tm.lost=true;dest=alt[d(alt.length)-1];log(p.name+' заблудился: хотел на '+locName(t)+', а вышел на '+locName(dest)+'.');
-          fxEvent({banner:true,tone:'bad',icon:'🧭',title:'Зоро заблудился!',desc:locName(dest)+' вместо '+locName(t),auto:2200})}
+      const go=()=>{G.ap-=1;p.cnt.moves++;log(p.name+' идёт на '+locName(t)+'.');arrive(p,t,{zfog:p.ch==='zoro'},null)};
+      if(p.ch==='zoro'&&p.zfog&&p.zfog===p.loc){ // Зоро идёт дальше: скрытая локация уже не последняя — вскрываем её сейчас
+        const from=p.loc;
+        return resolveFog(p,()=>{if(G.winner!=null||p.loc!==from||p.jail>0||G.endAfter||G.ap<1)return;go()});
       }
-      if(dest===t)log(p.name+' идёт на '+locName(t)+'.');
-      arrive(p,dest,{},null);
+      go();
     }});
   }
   if(p.ch==='sanji'&&p.loc!=='Z'&&p.loc!=='L'&&!(G.tm&&G.tm.sky)){
@@ -3249,7 +3258,7 @@ function bind(){
       render();
     });
     document.querySelectorAll('[data-atk]').forEach(b=>b.onclick=()=>{
-      const id=+b.dataset.atk;const sl=(S.act!=null&&S.slots[S.act].length<per)?S.slots[S.act]:S.slots.find(s=>s.length<per);if(sl){sl.push(id);S.act=null;render()}
+      const id=+b.dataset.atk;const sl=(S.act!=null&&S.slots[S.act].length<per)?S.slots[S.act]:S.slots.find(s=>s.length<per);if(sl){sl.push(id);if(sl.length>=per)S.act=null;render()} // слот остаётся выбранным, пока в нём есть место (у Зоро — две карты в один раунд)
     });
     document.querySelectorAll('[data-slot]').forEach(b=>b.onclick=()=>{const i=+b.dataset.slot;if(S.slots[i].length){S.slots[i].pop();S.act=i}else S.act=(S.act===i?null:i);render()});
     const ok=document.querySelector('[data-prepok]');
