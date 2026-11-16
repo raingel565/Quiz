@@ -859,7 +859,7 @@ body.stream #now{font-size:clamp(14px,1.3vw,22px)}
 .stwin small{display:block;font-size:.4em;margin-top:12px;opacity:.8}
 .stwait{display:grid;place-items:center;text-align:center;gap:12px;padding:34px 18px}
 </style>
-<div id="ver" title="Версия кооператива">C8 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия кооператива">C10 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -1098,7 +1098,7 @@ const P=()=>G.players[G.cur];
 let LOGCAP=null;
 // ---------- звуки (синтез WebAudio, без файлов; на ход игры не влияют) ----------
 const MAPV='?v=1'; // менять при замене assets/map.webp
-const SFXV='?v=61'; // менять при замене любого звука: иначе браузер/GitHub Pages отдают старую копию из кэша
+const SFXV='?v=63'; // менять при замене любого звука: иначе браузер/GitHub Pages отдают старую копию из кэша
 const ENEMY_MP3='assets/sfx_enemy.mp3'+SFXV;
 const WTF_MP3='assets/sfx_wtf.mp3'+SFXV;
 const ZORO_MP3='assets/sfx_zoro.mp3'+SFXV;
@@ -2586,6 +2586,22 @@ function akFx(ev,done){
   setTimeout(()=>{if(!fin&&v.readyState<2&&v.currentTime===0)end()},6000); // не загрузилось: не держим игру
   if(STREAM.on)setTimeout(end,14000); // на трансляции ролик не держит очередь событий дольше 14 секунд
 }
+let ADMMUS=null;
+function admMusicStart(){
+  try{
+    if(window.__nor||!SFX.on||SET.music===false)return;
+    admMusicStop(true);
+    const a=new Audio('assets/music_admiral.m4a'+SFXV);a.loop=false;a.volume=0;ADMMUS=a;
+    const go=()=>{try{a.currentTime=12}catch(e){}const pr=a.play();if(pr&&pr.catch)pr.catch(()=>{});
+      let v=0;const t=setInterval(()=>{if(ADMMUS!==a){clearInterval(t);return}v+=.04;if(v>=.8){v=.8;clearInterval(t)}try{a.volume=v}catch(e){clearInterval(t)}},120)}; // плавный набор громкости ~3 с
+    if(a.readyState>=1)go();else a.addEventListener('loadedmetadata',go,{once:true});
+  }catch(e){}
+}
+function admMusicStop(now){
+  const a=ADMMUS;if(!a)return;ADMMUS=null;
+  if(now){try{a.pause()}catch(e){}return}
+  let v=a.volume;const t=setInterval(()=>{v-=.1;if(v<=0){clearInterval(t);try{a.pause()}catch(e){}}else{try{a.volume=v}catch(e){clearInterval(t)}}},40);
+}
 function akScene(ev,done){
   const AD=ADMS[ev.adm||'akainu'];
   const fast=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2603,10 +2619,10 @@ function akScene(ev,done){
   let mt='';for(let i=0;i<14;i++)mt+='<i class="akmet" style="left:'+(Math.random()*100).toFixed(1)+'%;animation-delay:'+(4+Math.random()*2.4).toFixed(2)+'s"></i>';
   o.querySelector('.akscr').innerHTML=mt;
   document.body.appendChild(o);
-  SFX.play('akent',0);
-  let fin=false;const end=()=>{if(fin)return;fin=true;o.classList.add('out');setTimeout(()=>{o.remove();window.__akborn=Date.now();try{render()}catch(e){}done&&done()},fast?10:480)};
+  SFX.play('akent',0);admMusicStart();
+  let fin=false;const end=()=>{if(fin)return;fin=true;admMusicStop();o.classList.add('out');setTimeout(()=>{o.remove();window.__akborn=Date.now();try{render()}catch(e){}done&&done()},fast?10:480)};
   o.onclick=()=>{if(Date.now()-t0>900)end()};const t0=Date.now();
-  setTimeout(end,fast?1500:(ev.hits&&ev.hits.length?12500:(ev.lines&&ev.lines.length?10000:7500)));
+  if(fast)setTimeout(end,1500);else if(STREAM.on)setTimeout(end,ev.hits&&ev.hits.length?12500:(ev.lines&&ev.lines.length?10000:7500)); // обычная игра: окно держится, пока не нажмут
 }
 let FXBUSY=false;
 function eventFx(ev,done){
@@ -4659,7 +4675,7 @@ function botSchedule(){
 }
 
 // ---------- test API ----------
-window.__g={coopAdmPhase,coopFinalCheck,startFinal,mergeSides,aokijiFreeze,coopEnd,COOP,admDef,startNpcFight,completeTask,checkTasks,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
+window.__g={akScene,coopAdmPhase,coopFinalCheck,startFinal,mergeSides,aokijiFreeze,coopEnd,COOP,admDef,startNpcFight,completeTask,checkTasks,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,bStepToward,bMap,bFreePons,bUnknown,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
