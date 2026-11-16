@@ -817,7 +817,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 :root[data-theme="light"] .lbtools button{background:rgba(255,255,255,.7)}
 :root[data-theme="light"] .seat .nm{border-bottom-color:rgba(30,50,70,.25)}
 </style>
-<div id="ver" title="Версия игры">V97</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V98</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -3478,11 +3478,20 @@ function chVid(){
     if(v.readyState>=2&&!v.paused){
       ctx.drawImage(v,0,0,W,H);
       let im;try{im=ctx.getImageData(0,0,W,H)}catch(e){return} // file:// — canvas «грязный», остаётся статичное фото
-      const d=im.data;
-      for(let i=0;i<d.length;i+=4){
-        const r=d[i],g=d[i+1],b=d[i+2],m=r<g?(r<b?r:b):(g<b?g:b);
+      const d=im.data,N=W*H;
+      // убираем только белый фон, связанный с краем кадра: белая одежда и блики внутри персонажа остаются
+      if(!chVid.bg||chVid.bg.length!==N){chVid.bg=new Uint8Array(N);chVid.st=new Int32Array(N)}
+      const bg=chVid.bg,st=chVid.st;bg.fill(0);let sp=0;
+      const mn=i=>{const r=d[i*4],g=d[i*4+1],b=d[i*4+2];return r<g?(r<b?r:b):(g<b?g:b)};
+      const push=i=>{if(!bg[i]&&mn(i)>=226){bg[i]=1;st[sp++]=i}};
+      for(let x=0;x<W;x++){push(x);push((H-1)*W+x)}
+      for(let y=0;y<H;y++){push(y*W);push(y*W+W-1)}
+      while(sp){const i=st[--sp],x=i%W;if(x>0)push(i-1);if(x<W-1)push(i+1);if(i>=W)push(i-W);if(i<N-W)push(i+W)}
+      for(let p=0;p<N;p++){
+        if(!bg[p])continue;
+        const i=p*4,r=d[i],g=d[i+1],b=d[i+2],m=r<g?(r<b?r:b):(g<b?g:b);
         let a=(246-m)/34;a=a<0?0:a>1?1:a;
-        if(a<1){d[i+3]=a*255;if(a>0.02){const f=1-a;d[i]=Math.max(0,(r-255*f)/a);d[i+1]=Math.max(0,(g-255*f)/a);d[i+2]=Math.max(0,(b-255*f)/a)}}
+        d[i+3]=a*255;if(a>0.02&&a<1){const f=1-a;d[i]=Math.max(0,(r-255*f)/a);d[i+1]=Math.max(0,(g-255*f)/a);d[i+2]=Math.max(0,(b-255*f)/a)}
       }
       ctx.putImageData(im,0,0);card.classList.add('vplay');
     }
