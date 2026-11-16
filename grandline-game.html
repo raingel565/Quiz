@@ -825,6 +825,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 @keyframes sspin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.spulse,.sspin{animation:none}}
 
+body.stream #modal button,body.stream #modal [data-ui]{pointer-events:none}
 body.stream #bnav,body.stream .pvz,body.stream #mapme,body.stream #reactb,body.stream #toasts{display:none!important}
 body.stream #app{height:100vh;padding:10px 14px;gap:10px;overflow:hidden}
 body.stream main{grid-template-columns:minmax(0,1fr) clamp(340px,27vw,560px);align-items:stretch;min-height:0}
@@ -858,7 +859,7 @@ body.stream #now{font-size:clamp(14px,1.3vw,22px)}
 .stwin small{display:block;font-size:.4em;margin-top:12px;opacity:.8}
 .stwait{display:grid;place-items:center;text-align:center;gap:12px;padding:34px 18px}
 </style>
-<div id="ver" title="Версия игры">V101</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V102</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -1482,7 +1483,8 @@ function beginTurn(){
   G.stolen=false;G.cardBought=false;G.endAfter=false;
   if(G.fire&&G.fire.by===p.i){log('Огненная стена на '+locName(G.fire.loc)+' гаснет.');G.fire=null}
   if(p.skip>0){p.skip--;log(pname(p)+' пропускает ход.');return endTurn()}
-  if(p.jail>0&&p.hardJail){p.jail--;if(p.jail<=0)p.hardJail=false;log(pname(p)+' сидит в Импел Дауне'+(p.jail>0?' (осталось ходов: '+p.jail+')':': срок вышел')+'.');return endTurn()}
+  p.imm=0; // иммунитет к адмиралу после отсиженного срока действует до начала следующего хода игрока
+  if(p.jail>0&&p.hardJail){p.jail--;if(p.jail<=0){p.hardJail=false;p.imm=1}log(pname(p)+' сидит в Импел Дауне'+(p.jail>0?' (осталось ходов: '+p.jail+')':': срок вышел')+'.');return endTurn()}
   if(p.jail>0&&p.ch==='kid'){
     const j0=p.jail;p.jail=0;
     log(pname(p)+' в тюрьме: взятка и побег не для него, сразу дуэль с дозорным!');
@@ -1541,7 +1543,7 @@ function hardJail(p,n,who){n=n||3;who=who||'Акаину';
 function akainuDuels(list,cb){
   const q=list.shift();
   if(!q||!G.akainu||G.winner!=null)return cb&&cb();
-  if(q.jail>0||G.akainu.stun>0)return akainuDuels(list,cb);
+  if(q.jail>0||q.imm||G.akainu.stun>0)return akainuDuels(list,cb);
   const AD=adm();
   log(AD.short+' вызывает на дуэль: '+pname(q)+'.');fxSnd('enemy');
   fxEvent({banner:true,tone:'bad',icon:'☠',title:AD.short+' вызывает на дуэль!',desc:pname(q)+' · атака '+AD.a+' / уклонение '+AD.u,auto:2800});
@@ -1636,7 +1638,7 @@ function akainuPhase(cb){
   const A=G.akainu;
   if(A.stun>0){A.stun--;log(AD.short+' оглушён и пропускает движение.');return cb()}
   G.akPhase=true;
-  const targets=G.players.filter(q=>q.jail<=0&&q.loc!=='Z');
+  const targets=G.players.filter(q=>q.jail<=0&&!q.imm&&q.loc!=='Z');
   const ok=l=>!deadAt(l)&&!(G.fire&&G.fire.loc===l);
   let best=null;
   for(const q of targets){const pa=akPath(A.loc,q.loc);if(pa&&(!best||pa.length<best.length))best=pa}
@@ -1656,7 +1658,7 @@ function akainuPhase(cb){
     if(!best&&G.fire&&targets.length)log('Огненная стена Эйса не пропускает адмирала: он стоит на месте.');
     if(best&&best.length){const st=best.slice(0,2);A.loc=st[st.length-1];log(AD.short+' идёт к ближайшему игроку и выходит на '+locName(A.loc)+'.')}
   }
-  const here=G.players.filter(q=>q.loc===A.loc&&q.jail<=0);
+  const here=G.players.filter(q=>q.loc===A.loc&&q.jail<=0&&!q.imm);
   akainuDuels(here,()=>{G.akPhase=false;cb()});
 }
 function endRound(cb){
@@ -2432,6 +2434,7 @@ function akFx(ev,done){
   const go=()=>{const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{v.muted=true;v.play().then(()=>{mb.hidden=false}).catch(end)})};
   v.volume=1;go();
   setTimeout(()=>{if(!fin&&v.readyState<2&&v.currentTime===0)end()},6000); // не загрузилось: не держим игру
+  if(STREAM.on)setTimeout(end,14000); // на трансляции ролик не держит очередь событий дольше 14 секунд
 }
 function akScene(ev,done){
   const AD=ADMS[ev.adm||'akainu'];
@@ -3671,12 +3674,11 @@ function onMoves(snap){
 function drain(){
   if(!G||NET.desync)return;
   const prev=window.__nor;
-  if(STREAM.on)window.__nor=true;
   // V7: чужие ходы раньше применялись полностью без анимаций (__nor), поэтому игрок, чей ход наступал после чужого «закончить ход»,
   // не видел окна броска кубиков / карты погоды — только запись в журнале. Теперь, если пришли 1–3 новых хода (живая игра), анимации показываются;
   // при догрузке длинной истории (вход в комнату, восстановление) они по-прежнему отключены.
   let avail=0;for(let k=NET.log.length;avail<6;k++){const arr=NET.remote[Math.floor(k/CHUNK)];if(!arr||arr[k%CHUNK]==null)break;avail++}
-  window.__nor=STREAM.on?true:!(avail>0&&avail<=3&&(G.turnNo||0)>0&&!prev);
+  window.__nor=!(avail>0&&avail<=3&&(G.turnNo||0)>0&&!prev);
   try{
     for(;;){
       const k=NET.log.length,arr=NET.remote[Math.floor(k/CHUNK)];
@@ -3687,7 +3689,7 @@ function drain(){
     }
     for(let k=0;k<NET.log.length&&!NET.desync;k++){const arr=NET.remote[Math.floor(k/CHUNK)];const e=arr&&arr[k%CHUNK];if(e!=null&&e!==NET.log[k])NET.desync=true}
   }catch(e){NET.desync=true;NET.err='Ошибка при применении хода: '+(e&&e.message||e)}
-  window.__nor=STREAM.on?true:prev;
+  window.__nor=prev;
   render();
 }
 function netRebuild(){
@@ -3698,14 +3700,14 @@ function netRebuild(){
   UI.viewer=NET.me;
   try{for(const str of all){const {m,h}=decMove(str);doMove(m,true);NET.log.push(str);if(hashState()!==h){NET.desync=true;break}}}
   catch(e){NET.desync=true;NET.err='Не удалось пересчитать: '+(e&&e.message||e)}
-  window.__nor=!!STREAM.on;render();
+  window.__nor=false;render();
 }
 function startOnline(meta){
   NET.log=[];NET.remote={};NET.desync=false;NET.err='';
   NET.me=meta.players.findIndex(p=>p.uid===NET.uid);
   window.__nor=true;seedv=meta.seed|0;
   newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode});
-  window.__nor=!!STREAM.on;UI.viewer=STREAM.on?0:NET.me;
+  window.__nor=false;UI.viewer=STREAM.on?0:NET.me;
   NET.unsub.push(NET.db.collection('games/'+NET.code+'/moves').onSnapshot(onMoves,e=>{NET.err='Связь с партией потеряна: '+(e&&e.message||e);render()}));
   render();
 }
@@ -3725,7 +3727,10 @@ function streamSide(){
 }
 function renderStream(){
   document.body.classList.add('ingame','stream');
-  window.__nor=true;FXQ.length=0;FXBUSY=false;
+  if(G.turnNo!==SNDT){SNDT=G.turnNo}
+  if(G.pending&&G.pending.type==='duelResult'&&SNDD!==G.pending){SNDD=G.pending;fxSnd('duel')}
+  if(G.winner!=null&&!SNDW){SNDW=1;fxSnd('win')}
+  if(window.__nor){FXQ.length=0;FXBUSY=false}else if(FXQ.length)setTimeout(flushFx,30);
   $('#top').innerHTML=streamTop();
   $('#now').innerHTML=nowHtml();
   ACTS=[];
@@ -3734,6 +3739,7 @@ function renderStream(){
   $('#legend').innerHTML=Object.entries(TYPES).map(([k,t])=>(BADGE[k]?'<span><i style="background:'+BADGE[k].c+'"></i>'+BADGE[k].i+' '+t.n+'</span>':'<span><i style="background:'+t.c+'"></i>'+t.n+'</span>')).join('');
   let m='';
   if(G.winner!=null){const w=G.players[G.winner];m='<div class="stwin"><div>🏆 '+esc(w.name)+'<br>Король Пиратов!<small>'+esc(lgv(G.log[0]))+'</small></div></div>'}
+  else if(G.pending&&G.pending.type==='duelResult')m=pendingHtml();
   else if(NET.desync&&STREAM.fix<3){STREAM.fix++;m='<div class="stwin"><div>Пересчёт партии…</div></div>';setTimeout(()=>{if(STREAM.on&&NET.meta)netRebuild()},800)}
   $('#modal').innerHTML=m;
   try{document.title='📺 Трансляция · Гранд Лайн'}catch(e){}
@@ -3950,8 +3956,8 @@ function renderLobby(){
   if(g('njoin'))g('njoin').onclick=()=>{nm();netJoin(g('ncode').value,false)};
   if(g('nback'))g('nback').onclick=()=>{NET.on=false;render()};
   if(g('nstream'))g('nstream').onclick=()=>{NET.stage='stream';NET.err='';render()};
-  if(g('swatch'))g('swatch').onclick=()=>netWatch(g('scode').value);
-  if(g('scode'))g('scode').onkeydown=e=>{if(e.key==='Enter')netWatch(g('scode').value)};
+  if(g('swatch'))g('swatch').onclick=()=>{try{SFX.unlock()}catch(e){}netWatch(g('scode').value)};
+  if(g('scode'))g('scode').onkeydown=e=>{if(e.key==='Enter'){try{SFX.unlock()}catch(er){}netWatch(g('scode').value)}};
   if(g('nsback'))g('nsback').onclick=()=>{NET.on=false;NET.stage='menu';NET.err='';render()};
   if(g('nsleave'))g('nsleave').onclick=streamLeave;
   document.querySelectorAll('[data-secret]').forEach(b=>b.onclick=()=>secretAsk(()=>render()));
