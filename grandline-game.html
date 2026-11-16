@@ -818,6 +818,13 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 :root[data-theme="light"] .seat .nm{border-bottom-color:rgba(30,50,70,.25)}
 
 /* ===== режим трансляции (ТВ): карта и журнал ===== */
+.spulse{transform-box:fill-box;transform-origin:center;animation:spulse 1.6s ease-out infinite}
+.spulse.s2{animation-delay:.8s}
+.sspin{transform-box:fill-box;transform-origin:center;animation:sspin 5s linear infinite}
+@keyframes spulse{0%{transform:scale(.7);opacity:.95}100%{transform:scale(2.6);opacity:0}}
+@keyframes sspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spulse,.sspin{animation:none}}
+
 body.stream #bnav,body.stream .pvz,body.stream #mapme,body.stream #reactb,body.stream #toasts{display:none!important}
 body.stream #app{height:100vh;padding:10px 14px;gap:10px;overflow:hidden}
 body.stream main{grid-template-columns:minmax(0,1fr) clamp(340px,27vw,560px);align-items:stretch;min-height:0}
@@ -851,7 +858,7 @@ body.stream #now{font-size:clamp(14px,1.3vw,22px)}
 .stwin small{display:block;font-size:.4em;margin-top:12px;opacity:.8}
 .stwait{display:grid;place-items:center;text-align:center;gap:12px;padding:34px 18px}
 </style>
-<div id="ver" title="Версия игры">V100</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V101</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -3320,6 +3327,7 @@ function renderMap(){
       const op=(UI.pp||{})[p.i];const dx=op?op[0]-px:0,dy=op?op[1]-py:0;
       const me=(NET.on?NET.me:(UI.viewer>=0?UI.viewer:P().i))===p.i,cur=p===P();
       s+='<g class="pawn" data-pi="'+p.i+'" data-dx="'+dx+'" data-dy="'+dy+'" pointer-events="none" filter="url(#sh)">'
+        +(STREAM.on&&cur&&G.winner==null?'<circle class="spulse" cx="'+px+'" cy="'+py+'" r="30" fill="'+p.color+'" fill-opacity=".35" stroke="'+p.color+'" stroke-width="4"/><circle class="spulse s2" cx="'+px+'" cy="'+py+'" r="30" fill="none" stroke="#fff" stroke-width="3"/><circle cx="'+px+'" cy="'+py+'" r="34" fill="none" stroke="'+p.color+'" stroke-width="5" stroke-dasharray="9 6" class="sspin"/>':'')
         +(me?'<circle class="halo" cx="'+px+'" cy="'+py+'" r="30" fill="'+p.color+'" fill-opacity=".28" stroke="'+p.color+'" stroke-width="3"/>':'')
         +(cur?'<circle cx="'+px+'" cy="'+py+'" r="23" fill="none" stroke="#f2b01e" stroke-width="4" stroke-dasharray="5 4"/>':'')
         +(SHIPS[p.ch]
@@ -3327,6 +3335,7 @@ function renderMap(){
             +'<circle cx="'+(px+32)+'" cy="'+(py+16)+'" r="14" fill="'+p.color+'" stroke="#fff" stroke-width="2.5"/><text x="'+(px+32)+'" y="'+(py+22)+'" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" stroke="#1c1f26" stroke-width=".8" paint-order="stroke">'+esc(p.name[0]||'?')+'</text>'
           :'<circle cx="'+px+'" cy="'+py+'" r="19.5" fill="#1c1f26"/><circle cx="'+px+'" cy="'+py+'" r="17" fill="'+p.color+'" stroke="#fff" stroke-width="3"/><circle cx="'+px+'" cy="'+py+'" r="17" fill="url(#gloss)"/><text x="'+px+'" y="'+(py+6)+'" text-anchor="middle" font-size="17" font-weight="800" fill="#fff" stroke="#1c1f26" stroke-width=".8" paint-order="stroke">'+esc(p.name[0]||'?')+'</text>')
         +(me?'<g transform="translate('+px+','+(py-34)+')"><rect x="-18" y="-10" width="36" height="16" rx="8" fill="#1c1f26"/><text y="2" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">ВЫ</text></g>':'')
+        +(STREAM.on?(()=>{const fs=cur?21:17,w=p.name.length*fs*.62+22,h=fs+10;return '<g transform="translate('+px+','+(py-(cur?54:46))+')"><rect x="'+(-w/2)+'" y="'+(-h/2-2)+'" width="'+w+'" height="'+h+'" rx="'+(h/2)+'" fill="'+p.color+'" stroke="#fff" stroke-width="3"/><text y="'+(fs*.36-1)+'" text-anchor="middle" font-size="'+fs+'" font-weight="800" fill="#1c1f26">'+esc(p.name)+'</text></g>'})():'')
         +'</g>';
     });
   }
