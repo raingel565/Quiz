@@ -746,7 +746,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 #map .akm{animation:akb 2s ease-in-out infinite}
 @keyframes akb{50%{transform:translateY(-4px)}}
 </style>
-<div id="ver" title="Версия игры">V76</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V77</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="0 96 1588 880" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -808,9 +808,9 @@ const TRE={
  fist:{n:'Огненный кулак',d:'Чтобы получить: победить Эйса (А7 / У5), при проигрыше карта в сброс. 3-я пассивка: +5 к атаке; +10 к уклонению, если у соперника нет Воли вооружения',ap:null,cond:{n:'Эйс',a:7,u:5},lossObt:1,pas:{a:5,u:0},c:1},
  marco:{n:'Феникс Марко',d:'Чтобы получить: победить Марко (А3 / У10), при проигрыше карта в сброс. 3-я пассивка: раз за дуэль проигранный раунд считается ничьей',ap:null,cond:{n:'Марко',a:3,u:10},lossObt:1,pas:{a:0,u:0},c:1},
  poseidon:{n:'Древнее оружие Посейдон',d:'Чтобы получить: победить Короля Нептуна (А6 / У0), при проигрыше карта в сброс. Раз за игру поменять местами две открытые фишки локаций',ap:0,cond:{n:'Король Нептун',a:6,u:0},lossObt:1,c:1},
- laxus:{n:'Лаксус Дреяр',d:'Гость. 3-я пассивка: +10 к атаке во всех раундах. Вне дуэли: громовой дождь, все игроки уходят на стартовые локации (карта сбрасывается)',ap:0,guest:1,pas:{a:10,u:0}},
- natsu:{n:'Нацу Драгнил',d:'Гость. 3-я пассивка, сбрасывается после дуэли. Раз за дуэль «съедает огонь»: +20 к атаке в раунде, который иначе проигран или сведён вничью',ap:null,guest:1,once:1,pas:{a:0,u:0}},
- jinwoo:{n:'Сон Джин Ву',d:'Гость. 3-я пассивка, сбрасывается после дуэли. В дуэли вместо 1d12 вы бросаете особый кубик 1d20',ap:null,guest:1,once:1,pas:{a:0,u:0}},
+ laxus:{n:'Лаксус Дреяр',d:'Гость. 3-я пассивка: +10 к атаке во всех раундах, после этой дуэли сбрасывается. Вне дуэли: громовой дождь, все игроки уходят на стартовые локации (карта сбрасывается). Из сброса её не достать',ap:0,guest:1,once:1,pas:{a:10,u:0}},
+ natsu:{n:'Нацу Драгнил',d:'Гость. 3-я пассивка, сбрасывается после дуэли, из сброса её не достать. Раз за дуэль «съедает огонь»: +20 к атаке в раунде, который иначе проигран или сведён вничью',ap:null,guest:1,once:1,pas:{a:0,u:0}},
+ jinwoo:{n:'Сон Джин Ву',d:'Гость. 3-я пассивка, сбрасывается после дуэли, из сброса её не достать. В дуэли вместо 1d12 вы бросаете особый кубик 1d20',ap:null,guest:1,once:1,pas:{a:0,u:0}},
  underground:{n:'Подпольный рынок',d:'Чтобы получить: победить Дофламинго (А5 / У5). Покупать карты сокровищ можно где угодно со скидкой 10',ap:null,cond:{n:'Дофламинго',a:5,u:5},c:2},
 };
 const SPECIAL_PAY={dozor:{4:['dandan']},pirate:{}};
@@ -1169,7 +1169,7 @@ function pay(p,n){p.berries-=n}
 function recycleAtk(){const a=G.discard.filter(c=>c.kind==='atk');G.discard=G.discard.filter(c=>c.kind!=='atk');G.decks.atk=shuffle(a)}
 function drawDeck(name){
   if(name==='pas'&&!G.decks.pas.length){const a=G.discard.filter(c=>c.kind==='pas');G.discard=G.discard.filter(c=>c.kind!=='pas');G.decks.pas=shuffle(a)}
-  if(name==='tre'&&!G.decks.tre.length){const a=G.discard.filter(c=>c.kind==='tre');G.discard=G.discard.filter(c=>c.kind!=='tre');G.decks.tre=shuffle(a);if(a.length)log('Колода сокровищ закончилась: сброс перемешан в новую колоду.')}
+  if(name==='tre'&&!G.decks.tre.length){const a=G.discard.filter(c=>c.kind==='tre'&&!TRE[c.key].guest);G.discard=G.discard.filter(c=>c.kind!=='tre'||TRE[c.key].guest);G.decks.tre=shuffle(a);if(a.length)log('Колода сокровищ закончилась: сброс перемешан в новую колоду.')}
   const D=G.decks[name];
   if(name==='atk'&&!D.length)recycleAtk();
   return D.length?D.shift():null;
@@ -1938,7 +1938,7 @@ function useTre(p,c){
     o1.push({label:'Отмена',run:()=>{}});
     ask('pickloc',{who:p.i,title:'Древнее оружие Посейдон',text:'Первая локация.',opts:o1,pick:cand});
   }else if(c.key==='scav'){
-    const pool=G.discard.filter(x=>(x.kind==='atk'&&p.atk.length<10)||(x.kind==='pas'&&p.pas.length<10)||(x.kind==='tre'&&p.tre.length<3));
+    const pool=G.discard.filter(x=>!(x.kind==='tre'&&TRE[x.key].guest)&&((x.kind==='atk'&&p.atk.length<10)||(x.kind==='pas'&&p.pas.length<10)||(x.kind==='tre'&&p.tre.length<3)));
     const uniq=[];const seen={};
     for(const x of pool){const k=x.kind+(x.v||x.key);if(!seen[k]){seen[k]=1;uniq.push(x)}}
     const o=uniq.map(x=>({label:cname(x),run:()=>{discardCard(p,c);G.discard.splice(G.discard.indexOf(x),1);p[x.kind].push(x);fxCard(p,x);log(p.name+' достаёт из сброса: '+cname(x)+'.')}}));
@@ -2056,7 +2056,7 @@ function actions(){
     add('market','Купить карту сокровищ ('+price+' Берри)',()=>{
       pay(p,price);G.tm.buy++;
       drawFor(p,'tre',c=>{if(c){p.tre.push(c);fxCard(p,c);logP(p.i,p.name+' покупает карту сокровищ: «'+TRE[c.key].n+'».',p.name+' покупает карту сокровищ.')}});
-    },p.berries<price||p.tre.length>=3||(!G.decks.tre.length&&!G.discard.some(c=>c.kind==='tre')));
+    },p.berries<price||p.tre.length>=3||(!G.decks.tre.length&&!G.discard.some(c=>c.kind==='tre'&&!TRE[c.key].guest)));
   }
   if(atMarket&&!G.guestBought)add('market','Купить гостевого персонажа (50 Берри)',()=>{pay(p,50);G.tm.buy++;G.guestBought=true;const c=card('tre',{key:G.guest});p.tre.push(c);fxCard(p,c);logP(p.i,p.name+' нанимает гостя: «'+TRE[c.key].n+'».',p.name+' нанимает гостя.')},p.berries<50||p.tre.length>=3);
   if(p.ltask){
@@ -2698,7 +2698,7 @@ function helpHtml(){
   +'<li>Погода: Аквалагуна ×6, Buster Call ×4, Затишье ×6, Зунеша ×4 (по морю), Калм Белт ×5 (−1 ОД всем на раунд), Шторм Гранд Лайна ×6 (все уходят на случайную безопасную соседнюю локацию), Течение Тарай ×6 (+1 ОД всем на раунд). Нами защищена от негативных эффектов погоды. Эффект на ОД действует в раунде после карты. Бомбардировка Buster Call отправляет в тюрьму на 2 хода.</li>'
   +'<li>Золотой Дэн-Дэн Муси один на всю игру: его получает первый, кто победил Адмирала дозора (4 ур.); после использования карта уходит из игры. Остальные особые карты сокровищ покупаются как обычные, но неактивны, пока вы не победите в дуэли персонажа, указанного на карте (его А/У напечатаны на карте): действие «Сразиться за карту» из руки, 0 ОД, считается в лимит 3 дуэлей. Для карт с пометкой проигрыш — карта уходит в сброс.</li>'
   +'<li>Выложенные пассивные карты и открытые карты атаки после дуэли уходят в сброс; невскрытые карты атаки возвращаются в руку. Карты сокровищ с характеристиками остаются, если в тексте не сказано иное. Карты сокровищ с характеристиками (А/У) работают как 3-я пассивка; суммы по картам: Ловушка 15, Расписка 10, подпольный рынок −10.</li>'
-  +'<li>Гости: в партию выкладывается один из трёх (Лаксус, Нацу, Сон Джин Ву), покупается за 50 Берри как карта сокровищ (3-я пассивка). Impact Dial: −3 к итогу соперника и +3 к вашей следующей карте. Чоппер: +2 к уклонению. Рамбл Болл: 5 Берри один раз за дуэль, +3 к атаке в каждом раунде.</li>'
+  +'<li>Гости: в партию выкладывается один из трёх (Лаксус, Нацу, Сон Джин Ву), покупается за 50 Берри как карта сокровищ (3-я пассивка). Гостевая карта слишком сильна, поэтому после первого использования (одной дуэли или громового дождя Лаксуса) она уходит в сброс навсегда: достать её оттуда, в том числе Мусорщиками, нельзя. Impact Dial: −3 к итогу соперника и +3 к вашей следующей карте. Чоппер: +2 к уклонению. Рамбл Болл: 5 Берри один раз за дуэль, +3 к атаке в каждом раунде.</li>'
   +'<li>Зунеша стоит на клетке и блокирует её; игроки с этой клетки переезжают на ней (отдельный узел «Зунеша»), там же лежит 4-й понеглиф.</li>'
   +'<li>Лафтейл появляется на пересечении линий Ист–Вест и Норт–Саус; вход только с 4 опорных локаций. Победа также при понеглифах у одного игрока (Робин: достаточно 3).</li>'
   +'<li>В тюрьму после ареста вы не переноситесь: остаётесь на месте и пропускаете 2 хода (или платите 15 / играете «Побег»). Игроков за столом до 4 (по одному на море).</li>'
