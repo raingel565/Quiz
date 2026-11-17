@@ -6,7 +6,7 @@ if(window.DuelScene)return;
 const NS='http://www.w3.org/2000/svg';
 const CSS=`
 #ds_scene{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;flex:0 0 auto;background:linear-gradient(#1b2433 0%,#3a2e46 46%,#d98a55 66%,#f0b26b 67%,#6b4a2c 67.3%,#2a1d12 100%);box-shadow:0 12px 34px rgba(0,0,0,.45);isolation:isolate;container-type:size;color:#eef3f8;font-family:inherit;user-select:none}
-#ds_scene.ds-shake #ds_stage,#ds_scene.ds-shake .ds-sun,#ds_scene.ds-shake .ds-deck{animation:ds_shake .3s}
+#ds_scene.ds-shake #ds_stage{animation:ds_shake .3s}
 @keyframes ds_shake{0%,100%{transform:translate(0)}20%{transform:translate(-2px,1px)}45%{transform:translate(2px,-1px)}70%{transform:translate(-1px,1px)}}
 #ds_scene .ds-sun{position:absolute;left:50%;top:40%;width:16%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(#ffd89a,#ff9a55 60%,transparent 70%);opacity:.9}
 #ds_scene .ds-deck{position:absolute;left:0;right:0;bottom:0;height:33%;background:repeating-linear-gradient(90deg,transparent 0 11.5%,rgba(0,0,0,.28) 11.5% 12%),linear-gradient(#7a5532,#3a2815)}
@@ -1049,7 +1049,7 @@ const API={
   setSide(1,cfg.nameL||'',L[0].col,L[0].glow);setSide(2,cfg.nameR||'',R.col,R.glow);pips(1);pips(2);
   return API},
  async intro(){const R=RF.kit;await entrance(RF,R.ent||'');snd('horn');
-  await banner(R.ent?String(CFG.nameR||'').toUpperCase():'ДУЭЛЬ!',(CFG.nameL||'')+'  vs  '+(CFG.nameR||''),'#ffd45a');await sleep(1000);await hideBanner()},
+  const bn=R.ent?String(CFG.nameR||'').replace(/\s*\(.*?\)\s*/g,' ').trim().toUpperCase():'ДУЭЛЬ!';$('banner').style.fontSize=bn.length>13?'4.6cqw':'';await banner(bn,(CFG.nameL||'')+'  vs  '+(CFG.nameR||''),'#ffd45a');await sleep(1000);await hideBanner()},
  /* o: {out:0|1|-1, margin, fall:bool} */
  async round(o){
   if(!RF)return;
@@ -1074,7 +1074,7 @@ const API={
   label(1,'');label(2,'');W.forEach(F=>{F.x=F.home;F.rest()});
   if(!o.fall)await Promise.all(losers.map(F=>F.to('guard',420,E.io,{dx:0}).then(()=>F.rest())));
  },
- async finish(winner,title){
+ async finish(winner,title){title=String(title||'').replace(/\s*\(.*?\)\s*/g,' ').trim();$('banner').style.fontSize=title.length>16?'4.6cqw':'';
   if(!RF)return;
   if((winner===0||winner===1)&&!FELL[1-winner]){FELL[1-winner]=true;const Lo=winner===0?[RF]:LF;await Promise.all(Lo.map((F,i)=>sleep(i*60).then(()=>react(F,{col:'#ffffff'},true))))}
   if(winner===0||winner===1){const W=winner===0?LF:[RF];snd('win');W.forEach(F=>F.idle=false);
