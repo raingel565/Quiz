@@ -69,6 +69,7 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:8px;flex:1;min-h
 .small{font-size:12px;color:var(--muted)}
 #log{max-height:200px;overflow:auto;font-size:12px;display:flex;flex-direction:column;gap:2px}
 #log div{border-bottom:1px dashed var(--line);padding-bottom:2px}
+.ov.pickov{background:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;pointer-events:none;align-items:flex-end;padding:0 8px calc(8px + env(safe-area-inset-bottom))}.pickbar{pointer-events:auto;max-width:520px;width:100%;background:var(--panel);color:var(--ink);border:2px solid #12a05a;border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.35);padding:10px 12px;display:flex;flex-direction:column;gap:6px;font-size:14px}.pickbar span{opacity:.85}.pickbar .grp{display:flex;flex-wrap:wrap;gap:6px}
 .ov{position:fixed;inset:0;background:rgba(10,15,20,.6);display:flex;align-items:center;justify-content:center;padding:12px;z-index:50}
 .ov.solid{background:var(--bg)}
 .modal{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;max-width:760px;width:100%;max-height:92vh;overflow:auto;display:flex;flex-direction:column;gap:10px}
@@ -458,6 +459,62 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 #akfx .akmet{position:absolute;top:-30px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle,#fff6c0,#ff9a1a 50%,#d1330a);box-shadow:0 0 14px 6px rgba(255,110,30,.7),-10px -22px 14px 2px rgba(255,90,20,.45);opacity:0;animation:akmet 1.1s linear both}
 @keyframes akmet{0%{opacity:0;transform:translate(-60px,0)}10%{opacity:1}100%{opacity:1;transform:translate(60px,105vh)}}
 @keyframes akfi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* ---- темы окна адмирала: лёд (Аокидзи), свет (Кизару), космос и гравитация (Фуджитора) ---- */
+#akfx.thm{background:var(--bg)}
+#akfx.thm .aklava,#akfx.thm .akember{display:none}
+#akfx.thm .akring{border-color:var(--r1);box-shadow:0 0 18px var(--r1),inset 0 0 18px var(--r1)}
+#akfx.thm .akring.r2{border-color:var(--r2)}
+#akfx.thm .akflash{background:var(--fl)}
+#akfx.thm .akk{color:var(--k)}
+#akfx.thm .akport{box-shadow:0 0 0 2px var(--r1),0 0 70px 14px var(--gl)}
+#akfx.thm .akt{color:var(--t1);text-shadow:0 0 22px var(--t2),0 0 3px #000}
+#akfx.thm .aks{color:var(--s)}
+#akfx.thm .akd{color:var(--d)}
+#akfx.thm .akd b,#akfx.thm .aklr b,#akfx.thm .aklt{color:var(--b)}
+#akfx.thm .aklr{color:var(--d)}#akfx.thm .aklr i{color:var(--s)}
+#akfx.thm .akh{color:var(--h)}
+#akfx.thm .akd,#akfx.thm .aks,#akfx.thm .aklr{text-shadow:0 1px 7px #000,0 0 3px #000}
+#akfx.thm .akbox{z-index:5}
+/* лёд */
+#akfx.th-aokiji{--bg:radial-gradient(ellipse at 50% 105%,#2f7fb0 0,#0d2f50 42%,#02060d 100%);--r1:#9be7ff;--r2:#eafcff;--gl:rgba(120,220,255,.65);--k:#a8e6ff;--t1:#eefbff;--t2:#4cc9ff;--s:#8fd8f5;--d:#d3eaf5;--b:#bff1ff;--h:#8fb8cc;--fl:#e3f8ff}
+#akfx.th-aokiji .akscr{animation:none}
+#akfx.th-aokiji .akfrost{position:absolute;inset:-4%;pointer-events:none;box-shadow:inset 0 0 140px 50px rgba(185,235,255,.75),inset 0 0 30px 6px rgba(255,255,255,.7);background:radial-gradient(circle at 50% 50%,transparent 45%,rgba(190,235,255,.28) 100%);opacity:0;transform:scale(2.4);animation:akfrz 2.4s .2s cubic-bezier(.2,.8,.2,1) both}
+@keyframes akfrz{0%{opacity:0;transform:scale(2.4)}60%{opacity:1}100%{opacity:1;transform:scale(1)}}
+#akfx .aksnow{position:absolute;top:-12px;border-radius:50%;background:#fff;box-shadow:0 0 6px 1px rgba(200,240,255,.9);opacity:0;animation:aksn 5s linear infinite}
+@keyframes aksn{0%{opacity:0;transform:translate(0,0)}12%{opacity:.95}100%{opacity:0;transform:translate(var(--dx),108vh)}}
+#akfx .akcry{position:absolute;bottom:-2px;transform-origin:50% 100%;background:linear-gradient(165deg,#f4fdff 0,#8fdcf7 45%,#2a86b8 100%);clip-path:polygon(50% 0,100% 100%,0 100%);transform:scaleY(0) rotate(var(--r));opacity:.92;filter:drop-shadow(0 0 8px rgba(160,230,255,.8));animation:akcg 1.1s cubic-bezier(.2,.9,.2,1) both}
+#akfx .akcry.top{bottom:auto;top:-2px;transform-origin:50% 0;clip-path:polygon(0 0,100% 0,50% 100%)}
+@keyframes akcg{to{transform:scaleY(1) rotate(var(--r))}}
+#akfx .akshard{position:absolute;top:-80px;width:7px;height:70px;background:linear-gradient(180deg,rgba(255,255,255,0),#dff8ff 55%,#7fd6f5);clip-path:polygon(50% 100%,100% 0,0 0);filter:drop-shadow(0 0 6px #9be7ff);opacity:0;animation:aksh .9s cubic-bezier(.5,0,1,1) both}
+@keyframes aksh{0%{opacity:0;transform:translateY(0)}12%{opacity:1}100%{opacity:1;transform:translateY(112vh)}}
+/* свет */
+#akfx.th-kizaru{--bg:radial-gradient(ellipse at 50% 42%,#fff6b8 0,#d6a21c 26%,#4f3706 60%,#0b0803 100%);--r1:#fff3a0;--r2:#ffffff;--gl:rgba(255,236,120,.7);--k:#fff0a8;--t1:#fffdf0;--t2:#ffd21f;--s:#ffe27a;--d:#fff3d6;--b:#ffe27a;--h:#e0cf96;--fl:#fffbe0}
+#akfx.th-kizaru .akscr{animation:none}
+#akfx.th-kizaru .akport{box-shadow:0 0 0 2px #fff3a0,0 0 90px 24px rgba(255,236,120,.8)}
+#akfx .aksun{position:absolute;left:50%;top:44%;width:140vmax;height:140vmax;margin:-70vmax;background:conic-gradient(from 0deg,rgba(255,255,255,.55),transparent 6%,rgba(255,240,150,.5) 12%,transparent 19%,rgba(255,255,255,.5) 26%,transparent 33%,rgba(255,240,150,.45) 40%,transparent 47%,rgba(255,255,255,.5) 54%,transparent 61%,rgba(255,240,150,.45) 68%,transparent 75%,rgba(255,255,255,.5) 82%,transparent 90%,rgba(255,240,150,.4) 96%,rgba(255,255,255,.55));-webkit-mask:radial-gradient(circle,#000 0,transparent 55%);mask:radial-gradient(circle,#000 0,transparent 55%);opacity:.55;animation:aksunr 14s linear infinite}
+@keyframes aksunr{to{transform:rotate(360deg)}}
+#akfx .akbeam{position:absolute;left:-30%;width:160%;height:var(--h);background:linear-gradient(90deg,transparent,rgba(255,255,255,.95) 46%,#fff6b0 54%,transparent);filter:blur(1px);mix-blend-mode:screen;opacity:0;transform:rotate(var(--a)) translateX(-110%);animation:akbm 2.6s ease-in-out infinite}
+@keyframes akbm{0%{opacity:0;transform:rotate(var(--a)) translateX(-110%)}12%{opacity:1}45%{opacity:.9;transform:rotate(var(--a)) translateX(0)}100%{opacity:0;transform:rotate(var(--a)) translateX(110%)}}
+#akfx .akspark{position:absolute;width:var(--s);height:var(--s);background:#fff;clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);filter:drop-shadow(0 0 6px #fff6a0);opacity:0;animation:aksp 1.6s ease-in-out infinite}
+@keyframes aksp{0%,100%{opacity:0;transform:scale(.2) rotate(0)}50%{opacity:1;transform:scale(1) rotate(45deg)}}
+#akfx .aklaser{position:absolute;left:-10%;height:3px;width:42vmax;background:linear-gradient(90deg,transparent,#fff 60%,#fff3a0);box-shadow:0 0 12px 3px rgba(255,235,120,.8);opacity:0;transform:rotate(var(--a)) translateX(-30vmax);animation:aklz .5s ease-in both}
+@keyframes aklz{0%{opacity:0;transform:rotate(var(--a)) translateX(-30vmax)}20%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(150vmax)}}
+/* космос и гравитация */
+#akfx.th-fujitora{--bg:radial-gradient(ellipse at 50% 50%,#2c1862 0,#0f0a31 46%,#02010a 100%);--r1:#b69cff;--r2:#ff9bd8;--gl:rgba(170,120,255,.7);--k:#c9b6ff;--t1:#f3ebff;--t2:#8f5bff;--s:#b79cff;--d:#e0d6f5;--b:#d8c6ff;--h:#9a8fc0;--fl:#f0e6ff}
+#akfx.th-fujitora .akmet{background:radial-gradient(circle,#fff,#c9a8ff 50%,#5b2fc4);box-shadow:0 0 14px 6px rgba(160,110,255,.7),-10px -22px 14px 2px rgba(120,80,255,.45)}
+#akfx.th-fujitora .akring{animation-name:akrgin}
+@keyframes akrgin{0%{opacity:0;width:150vmax;height:150vmax;margin:-75vmax}30%{opacity:.9}100%{opacity:0;width:40px;height:40px;margin:-20px}}
+#akfx .akneb{position:absolute;inset:-20%;background:radial-gradient(circle at 25% 30%,rgba(190,90,255,.38),transparent 38%),radial-gradient(circle at 78% 70%,rgba(255,110,190,.28),transparent 40%),radial-gradient(circle at 70% 20%,rgba(80,120,255,.3),transparent 35%);animation:aknb 16s ease-in-out infinite alternate;filter:blur(8px)}
+@keyframes aknb{to{transform:rotate(14deg) scale(1.15)}}
+#akfx .akstar{position:absolute;width:var(--s);height:var(--s);border-radius:50%;background:#fff;box-shadow:0 0 6px 1px rgba(210,190,255,.9);animation:akst var(--d) ease-in-out infinite alternate}
+@keyframes akst{from{opacity:.15}to{opacity:1}}
+#akfx .akvort{position:absolute;left:50%;top:46%;width:130vmax;height:130vmax;margin:-65vmax;border-radius:50%;background:conic-gradient(from 0deg,transparent 0,rgba(170,110,255,.8) 8%,transparent 20%,rgba(255,140,220,.6) 33%,transparent 45%,rgba(120,150,255,.75) 58%,transparent 70%,rgba(190,110,255,.7) 83%,transparent 100%);-webkit-mask:radial-gradient(circle,transparent 0,#000 7%,#000 30%,transparent 62%);mask:radial-gradient(circle,transparent 0,#000 7%,#000 30%,transparent 62%);opacity:0;animation:akvt 1.6s .1s ease-out both,akvr 7s .1s linear infinite}
+@keyframes akvt{to{opacity:.85}}
+@keyframes akvr{to{transform:rotate(-360deg)}}
+#akfx .akhole{position:absolute;left:50%;top:46%;width:46vmin;height:46vmin;margin:-23vmin;border-radius:50%;background:radial-gradient(circle,#000 0,#000 40%,rgba(30,10,70,.0) 72%);box-shadow:0 0 60px 20px rgba(150,100,255,.35);opacity:0;animation:akvt 1.6s .1s ease-out both}
+#akfx .aksuck{position:absolute;left:50%;top:46%;width:var(--s);height:var(--s);margin:calc(var(--s)/-2);border-radius:50%;background:#e6d9ff;box-shadow:0 0 8px 2px rgba(190,160,255,.8);opacity:0;animation:aksk var(--t) ease-in infinite}
+@keyframes aksk{0%{opacity:0;transform:translate(var(--sx),var(--sy)) rotate(0) scale(1)}15%{opacity:1}100%{opacity:0;transform:translate(0,0) rotate(220deg) scale(.15)}}
+
 #map .akm.born{animation:akb 2s ease-in-out infinite,akborn 3s ease-out 1}
 @keyframes akborn{0%{filter:drop-shadow(0 0 0 #ff3a1a)}25%{filter:drop-shadow(0 0 22px #ff5a1a) drop-shadow(0 0 40px #ff3a1a)}100%{filter:none}}
 @media(prefers-reduced-motion:reduce){#akfx *{animation-duration:.01s!important;animation-delay:0s!important}}
@@ -669,7 +726,7 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
   #bnav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;border:0;background:transparent;border-radius:18px;padding:7px 0 6px;color:var(--muted);font-size:10.5px;font-weight:600}
   #bnav button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
   #bnav button.on{color:var(--gold);background:rgba(233,185,74,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 0 1px rgba(233,185,74,.28)}
-  body.ingame #reactw{bottom:96px}body.ingame #toasts.one{bottom:94px}body.ingame #ver{bottom:100px}
+  body.ingame #reactw{bottom:96px}body.ingame #toasts.one{bottom:94px}body.ingame #ver{bottom:100px;pointer-events:none;font-size:9px;padding:2px 6px;opacity:.55}
   #mapwrap,.card{scroll-margin-top:10px}
 }
 @media(max-width:700px){
@@ -805,7 +862,9 @@ html:not([data-theme="light"]) #mapwrap{background:radial-gradient(120% 120% at 
 .lbgo:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 18px 44px rgba(242,184,74,.45),inset 0 2px 0 rgba(255,255,255,.55),inset 0 -3px 0 rgba(120,70,0,.3)}
 .lbgo:active{transform:translateY(1px)}
 .lbgo .dice{font-size:26px}
-.lbtools{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.lbtools{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.lbtools button[data-news]{position:relative}.ndot{position:absolute;top:8px;right:10px;width:9px;height:9px;border-radius:50%;background:#ff5a4d;box-shadow:0 0 0 2px rgba(0,0,0,.35)}
+#qoov .nw{padding:10px 12px;border:1px solid var(--line);border-radius:12px}#qoov .nwh{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}#qoov .nwh span{margin-left:auto;font-size:12px;opacity:.6}#qoov .nwh i{font-style:normal;font-size:11px;padding:2px 8px;border-radius:99px;background:rgba(242,184,74,.2);border:1px solid rgba(242,184,74,.5)}#qoov .nwx{margin-top:4px;font-size:14px;line-height:1.45;opacity:.9}
 .lbtools button{display:flex;flex-direction:column;align-items:center;gap:7px;padding:13px 8px;border-radius:16px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.045);color:var(--ink);font:600 12.5px/1.2 system-ui,sans-serif;cursor:pointer;text-align:center;transition:background .15s,transform .15s,border-color .15s}
 .lbtools button:hover{background:rgba(255,255,255,.1);transform:translateY(-2px);border-color:rgba(255,255,255,.22)}
 .lbtools button span{font-size:22px;line-height:1}
@@ -858,8 +917,9 @@ body.stream #now{font-size:clamp(14px,1.3vw,22px)}
 .stwin div{padding:40px 60px;border-radius:30px;background:linear-gradient(160deg,#ffd978,#c78914);color:#241705;font-weight:800;font-size:clamp(26px,4vw,64px);box-shadow:0 30px 90px rgba(0,0,0,.6)}
 .stwin small{display:block;font-size:.4em;margin-top:12px;opacity:.8}
 .stwait{display:grid;place-items:center;text-align:center;gap:12px;padding:34px 18px}
+html,body{overscroll-behavior-y:none}
 </style>
-<div id="ver" title="Версия игры">C1 · кооператив (бета)</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия кооператива">C23 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -958,12 +1018,12 @@ const WEATHER=[
 ];
 const T_EVENT=[
  {id:'e1',c:3,t:'Зачистка новичков',d:'Вступите в дуэль и победите любого Босса 1-го или 2-го уровня',k:'bossWin',lv:[1,2],o:[{r:10}],rt:'+10 Берри'},
- {id:'e2',c:2,t:'Крупная дичь',d:'Победите Босса 4-го или 5-го уровня',k:'bossWin',lv:[4,5],o:[{r:25}],rt:'+25 Берри'},
+ {id:'e2',c:2,t:'Крупная дичь',d:'Победите Босса 4-го или 5-го уровня',k:'bossWin',lv:[4,5],o:[{r:25,lab:'+25 Берри'},{tre:1,tb:1,lab:'1 карта сокровищ'}],rt:'+25 Берри ИЛИ 1 карта сокровищ'},
  {id:'e3',c:2,t:'Взятка офицеру Дозора',d:'Доберитесь до Чёрного рынка и сдайте задание там. Пока оно у вас, нельзя начинать дуэли с игроками (дуэль отменит задание и вернёт карту в колоду)',k:'bribe',o:[{pas:1}],rt:'1 карта пассивной способности'},
- {id:'e4',c:3,t:'Заказ Мирового Правительства',d:'Выследите и победите Босса ровно 3-го уровня',k:'bossWin',lv:[3],o:[{r:15,lab:'+15 Берри'},{atk:1,lab:'1 карта атаки'}],rt:'+15 Берри ИЛИ 1 карта атаки'},
+ {id:'e4',c:3,t:'Заказ Мирового Правительства',d:'Выследите и победите Босса ровно 3-го уровня',k:'bossWin',lv:[3],o:[{r:15,lab:'+15 Берри'},{atk:1,lab:'1 карта атаки'},{tre:1,tb:1,lab:'1 карта сокровищ'}],rt:'+15 Берри ИЛИ 1 карта атаки ИЛИ 1 карта сокровищ'},
  {id:'e5',c:2,t:'Сброс контрабанды',d:'Находясь на Чёрном рынке, добровольно сбросьте 1 любую карту сокровищ со своей руки',k:'contra',o:[{r:20}],rt:'+20 Берри'},
- {id:'e6',c:2,t:'Испытание Воли',d:'Победите Босса 3-го или 4-го уровня, не разыграв в этом бою ни одной карты пассивных способностей',k:'bossWin',lv:[3,4],noPas:true,o:[{r:20,atk:1,lab:'+20 Берри и 1 карта атаки'},{pas:1,lab:'1 карта пассивной способности'}],rt:'+20 Берри и 1 карта атаки ИЛИ 1 карта пассивной'},
- {id:'e8',c:1,t:'Сильнейший Йонко',d:'Победите в дуэли Фигарленда Шанкса (Босс 5-го уровня)',k:'bossWin',lv:[5],o:[{r:35}],rt:'+35 Берри'},
+ {id:'e6',c:2,t:'Испытание Воли',d:'Победите Босса 3-го или 4-го уровня, не разыграв в этом бою ни одной карты пассивных способностей',k:'bossWin',lv:[3,4],noPas:true,o:[{r:20,atk:1,lab:'+20 Берри и 1 карта атаки'},{pas:1,lab:'1 карта пассивной способности'},{tre:1,tb:1,lab:'1 карта сокровищ'}],rt:'+20 Берри и 1 карта атаки ИЛИ 1 карта пассивной'},
+ {id:'e8',c:1,t:'Сильнейший Йонко',d:'Победите Босса 5-го уровня',k:'bossWin',lv:[5],o:[{r:35,lab:'+35 Берри'},{tre:1,tb:1,lab:'1 карта сокровищ'}],rt:'+35 Берри ИЛИ 1 карта сокровищ'},
  {id:'e9',c:2,t:'Безупречная победа',d:'Победите Босса 2-го уровня со счётом 2:0: ни одного проигранного или сведённого вничью раунда',k:'bossWin',lv:[2],flawless:true,o:[{r:15,atk:1}],rt:'+15 Берри и 1 карта атаки'},
  {id:'e10',c:2,t:'Перестройка арсенала',d:'Находясь на любой Базовой локации (белая фишка), добровольно сбросьте с руки ровно 3 карты атаки',k:'rebuild',o:[{r:25}],rt:'+25 Берри'},
  {id:'e11',c:3,t:'Охотник за головами',d:'Целенаправленно отправьтесь на Поле битвы, вступите в бой с Боссом любого уровня и одержите над ним победу',k:'bossWin',o:[{r:15}],rt:'+15 Берри к обычной награде за босса'},
@@ -1098,7 +1158,7 @@ const P=()=>G.players[G.cur];
 let LOGCAP=null;
 // ---------- звуки (синтез WebAudio, без файлов; на ход игры не влияют) ----------
 const MAPV='?v=1'; // менять при замене assets/map.webp
-const SFXV='?v=61'; // менять при замене любого звука: иначе браузер/GitHub Pages отдают старую копию из кэша
+const SFXV='?v=64'; // менять при замене любого звука: иначе браузер/GitHub Pages отдают старую копию из кэша
 const ENEMY_MP3='assets/sfx_enemy.mp3'+SFXV;
 const WTF_MP3='assets/sfx_wtf.mp3'+SFXV;
 const ZORO_MP3='assets/sfx_zoro.mp3'+SFXV;
@@ -1168,10 +1228,47 @@ const SFX=(()=>{
     w_storm:t=>{noise(t,1.3,.5,'lowpass',260,90,1);noise(t+.25,.18,.7,'highpass',1800,null,1);for(let i=0;i<10;i++)noise(t+i*.1,.05,.12,'highpass',5000,null,1)},
     w_tarai:t=>{noise(t,.7,.35,'bandpass',300,2600,1.5);tone(t,220,.7,'sine',.07,660)}
   };
+  // ---- современный набор: сэмплы Kenney (CC0), синтез остаётся запасным вариантом ----
+  const PK={}; // имя файла -> AudioBuffer
+  const MAP={
+    click:[['tick_001']],
+    cardflip:[['maximize_004',0,1,.9]],
+    cardget:[['confirmation_002',0,1,.9]],
+    result:[['confirmation_001',0,1,.9]],
+    alert:[['question_001',0,1,.9]],
+    coin:[['glass_006',0,1,1],['glass_002',.07,1.25,.8]],
+    flag:[['impact_wood_heavy_001',0,1,1.1]],
+    move:[['footstep_wood_001',0,1,1],['footstep_wood_001',.16,.92,.8]],
+    jail:[['impact_metal_heavy_000',0,.8,1.3],['impact_bell_heavy_003',.04,.6,.5]],
+    win:[['confirmation_004',0,1,1],['impact_bell_heavy_003',.18,1.2,.7],['confirmation_002',.4,1.25,.7]],
+    lose:[['error_007',0,.75,1],['drop_004',.12,.8,1]],
+    duel:[['impact_punch_heavy_002',0,1,1.2],['impact_metal_light_002',.1,1,.9]],
+    turn:[['bong_001',0,1,1]],
+    diceEnd:[['impact_wood_medium_000',0,1,1.1]],
+    w_zun:[['impact_soft_heavy_003',0,.38,2.2,520],['impact_soft_heavy_003',.62,.32,2,460],['impact_soft_heavy_003',1.3,.28,1.6,400]],
+    w_still:[['glass_006',0,.9,1],['glass_002',.18,.7,.9]]
+  };
+  const loadPk=n=>{if(PK[n]!==undefined||!ctx)return;PK[n]=null;try{loadSnd('assets/snd/'+n+'.mp3'+SFXV,b=>{PK[n]=b},()=>{PK[n]=undefined})}catch(e){PK[n]=undefined}};
+  function preloadPk(){const seen=new Set();for(const k in MAP)for(const x of MAP[k])seen.add(x[0]);seen.forEach(loadPk)}
+  for(const k of Object.keys(MAP)){
+    const old=S[k];
+    S[k]=t=>{
+      const L=MAP[k];
+      if(!L.every(x=>PK[x[0]])){preloadPk();if(old)old(t);return}
+      const t0=Math.max(t||0,ctx.currentTime);
+      for(const [n,dl,rate,gain,lp] of L){
+        const s=ctx.createBufferSource();s.buffer=PK[n];s.playbackRate.value=rate||1;
+        const g=ctx.createGain();g.gain.value=(gain==null?1:gain)*.9;
+        let out=s;if(lp){const fl=ctx.createBiquadFilter();fl.type='lowpass';fl.frequency.value=lp;s.connect(fl);out=fl}
+        out.connect(g);g.connect(master);s.start(t0+(dl||0));
+      }
+      if(k==='w_zun'){tone(t0,55,1.8,'sine',.35,38)} // низкий гул под шагами Зунеши
+    };
+  }
   return {
     play(n,gap){if(!on||window.__nor)return;const c=init();if(!c||!S[n])return;const now=performance.now();if(now-(last[n]||0)<(gap||70))return;last[n]=now;try{if(c.state==='suspended')c.resume();S[n](c.currentTime+.02)}catch(e){}},
     stopVoice(){stopLuffy()},
-    unlock(){const c=init();if(c&&c.state==='suspended')c.resume().catch(()=>{})},
+    unlock(){const c=init();if(c&&c.state==='suspended')c.resume().catch(()=>{});preloadPk()},
     get on(){return on},
     toggle(){on=!on;try{localStorage.setItem('gl_snd',on?'1':'0')}catch(e){}if(on){this.play('click')}return on}
   };
@@ -1184,7 +1281,7 @@ function logSnd(s){
   else if(/побеждает|выполнил задание/.test(s))fxSnd('win');
   else if(/проиграл боссу/.test(s))fxSnd('lose');
 }
-document.addEventListener('pointerdown',e=>{SFX.unlock();const b=e.target.closest&&e.target.closest('button,[data-id],[data-a],[data-dz],[data-atk],[data-pas],[data-slot]');if(b&&!b.disabled&&!b.classList.contains('dgo')&&b.id!=='sndbtn')SFX.play('click')},true);
+document.addEventListener('pointerdown',e=>{SFX.unlock();},true); // звук на каждое нажатие убран (раздражал)
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#sndbtn');if(b){const on=SFX.toggle();b.textContent=on?'🔊':'🔇'}});
 document.addEventListener('click',e=>{
   const t=e.target.closest&&e.target.closest('#mnubtn');
@@ -1259,9 +1356,10 @@ function isCombat(id){const t=G.type[id];return t==='dozor'||t==='battle'}
 // V9: новые базовые статы персонажей; старые онлайн-комнаты (без флага top) играют по прежним значениям, чтобы не рассинхронизироваться
 const CH_OLD={zoro:[4,2],kata:[4,7],luffy:[4,3],law:[5,3]};
 function baseStat(ch){const o=NET.on&&!(NET.meta&&NET.meta.top===1)&&CH_OLD[ch];return o?{A:o[0],U:o[1]}:CH[ch]}
-function stats(p){const b=baseStat(p.ch);return{A:b.A+p.bA,U:b.U+p.bU}}
+function stats(p){const b=baseStat(p.ch);return{A:b.A+p.bA+(p.tA|0),U:b.U+p.bU+(p.tU|0)}}
 function newGame(cfg){
   try{SFX.stopVoice()}catch(e){}
+  if(!NET.on&&!window.__nor&&!window.__rep)saveBegin(seedv,cfg);
   CID=1;
   const decks={atk:[],pas:[],tre:[],weather:shuffle(WEATHER.map(w=>Object.assign({},w))),
     tev:shuffle(T_EVENT.flatMap(x=>Array.from({length:x.c},()=>Object.assign({},x)))),tpon:shuffle(T_PON.map(x=>Object.assign({},x))),tlaf:shuffle(T_LAF.map(x=>Object.assign({},x)))};
@@ -1278,7 +1376,7 @@ function newGame(cfg){
   for(const s of SEAK){boxes[s]=shuffle(['event','event','event','base','base','base','base','dozor','battle','jail','market']);type[s+'1']='start'}
   G={players:[],cur:0,round:1,ap:3,duels:0,decks,discard:[],specials,bossD,type,boxes,flags:{},ponAt:{},zun:null,
      log:[],pending:null,winner:null,endAfter:false,roll:null,search:{phase:'idle',rolls:[],veto:null},laftel:null,mode:MODES[cfg.mode]?cfg.mode:'std',
-     guest:['laxus','natsu','jinwoo'][d(3)-1],guestBought:false,apMod:0,lastWeather:null,stolen:false,over:false,
+     guest:['laxus','natsu','jinwoo'][d(3)-1],guestBought:false,tb:cfg.tb?1:0,apMod:0,lastWeather:null,stolen:false,over:false,
      coop:true,admL:[],admS:null,frz:0,lafDone:false,lafAt:null,final:null,hallDone:true,achDone:true};
   const WW=cfg.wseed!=null?worldFor(cfg.wseed):worldFor(1+Math.floor(rnd()*2e9));G.wseed=WW.seed;G.adm=window.__adm||ADMK[(Math.imul((WW.seed|0)^0x2545F491,2654435761)>>>0)%3];G.grav={};
   G.admOrder=admOrderFor(WW.seed);G.admSeas=admSeasFor(WW.seed);{const st=COOP.ADM[Math.max(2,Math.min(4,cfg.players.length))];G.admS={};for(const k of ADMK4)G.admS[k]=Object.assign({},ADMS[k],{a:st.a,u:st.u});const bs=COOP.BOSS[Math.max(2,Math.min(4,cfg.players.length))];G.admS.imu=Object.assign({},ADMS.imu,{a:bs.A,u:bs.U})}
@@ -1482,6 +1580,7 @@ function discardTre2(p,c){discardCard(p,c)}
 // ---------- income ----------
 let CARD_PRICE=10; // цена карты атаки / пассивки в Берри (одна покупка за ход)
 const PAYT={2:50,12:50,3:30,11:30,4:20,10:20,5:15,9:15,6:12,8:12,7:10};
+const PAYT2={2:25,12:25,3:15,11:15,4:10,10:10,5:8,9:8,6:6,8:6,7:5};
 function incomeRoll(){
   const a=d(6),b=d(6),n=a+b;G.roll=[a,b];fxRoll('Доход · '+P().name,[a,b],6,{gate:1,who:P().i});
   log(pname(P())+' бросает 2d6: '+a+'+'+b+' = '+n+'.');
@@ -1491,10 +1590,10 @@ function incomeRoll(){
     let stand=q.loc!=='Z'&&q.loc!=='L'&&numOf(q.loc)===n&&!['jail','dozor','battle','start'].includes(G.type[q.loc]);
     for(const l of flagLocs){
       if(['jail','dozor','battle','start'].includes(G.type[l]))continue;
-      let x=PAYT[n];if(stand&&q.loc===l){x*=2;stand=false}
+      let x=(G.tb?PAYT2:PAYT)[n];if(stand&&q.loc===l){x*=2;stand=false}
       if(q.ch==='nami')x+=5;sum+=x;
     }
-    if(stand){let x=PAYT[n];if(q.ch==='nami')x+=5;sum+=x}
+    if(stand){let x=(G.tb?PAYT2:PAYT)[n];if(q.ch==='nami')x+=5;sum+=x}
     if(sum){q.berries+=sum;res.push(q.name+' +'+sum)}
   }
   log(res.length?'Доход: '+res.join(', ')+'.':'Доход: никто ничего не получил.');
@@ -1511,8 +1610,8 @@ function beginTurn(){
   G.stolen=false;G.cardBought=false;G.endAfter=false;
   if(G.fire&&G.fire.by===p.i){log('Огненная стена на '+locName(G.fire.loc)+' гаснет.');G.fire=null}
   if(p.skip>0){p.skip--;log(pname(p)+' пропускает ход.');return endTurn()}
-  p.imm=0; // иммунитет к адмиралу после отсиженного срока действует до начала следующего хода игрока
-  if(p.jail>0&&p.hardJail){p.jail--;if(p.jail<=0){p.hardJail=false;p.imm=1}log(pname(p)+' сидит в Импел Дауне'+(p.jail>0?' (осталось ходов: '+p.jail+')':': срок вышел')+'.');return endTurn()}
+  p.imm=G.tb?Math.max(0,(p.imm|0)-1):0; // иммунитет к адмиралу после отсиженного срока действует до начала следующего хода игрока
+  if(p.jail>0&&p.hardJail){p.jail--;if(p.jail<=0){p.hardJail=false;p.imm=G.tb?2:1}log(pname(p)+' сидит в Импел Дауне'+(p.jail>0?' (осталось ходов: '+p.jail+')':': срок вышел')+'.');return endTurn()}
   if(p.jail>0&&p.ch==='kid'){
     const j0=p.jail;p.jail=0;
     log(pname(p)+' в тюрьме: взятка и побег не для него, сразу дуэль с дозорным!');
@@ -1655,7 +1754,7 @@ function admDefeat(p,type){
     log(t?p.name+' проиграл Кизару: он забирает '+t+' Берри.':p.name+' проиграл Кизару: денег нет, забирать нечего.');
     hardJail(p,2,'Кизару');
   }else if(type==='fujitora'){
-    p.skip=(p.skip||0)+2;G.endAfter=true;
+    p.skip=(p.skip||0)+2;if(G.tb)p.imm=3;G.endAfter=true;
     log(p.name+' проиграл Фуджиторе: придавлен гравитацией и пропустит два следующих хода.');
     fxEvent({banner:true,tone:'bad',icon:'⬇',title:'Поражение от Фуджиторы',desc:pname(p)+' пропустит 2 хода',auto:3200});
   }else if(type==='aokiji')hardJail(p,2,'Аокидзи');
@@ -1936,6 +2035,7 @@ function taskDone(p,t){
 function checkTasks(){
   for(const p of G.players){
     if(G.pending)return;
+    if(G.tb&&p.mile===1){p.mile=2;log(pname(p)+' выполнил 5 ивентовых заданий: 2 очка к атаке и уклонению на выбор!');mileStep(p,2);return}
     if(G.laftel&&p.loc==='L'){checkLaftelArrival(p);if(G.winner!=null)return}
     if(p.task&&taskDone(p,p.task))completeTask(p,'task');
     if(G.winner!=null)return;
@@ -1946,13 +2046,25 @@ function checkTasks(){
 function giveCards(p,kind,n){
   for(let i=0;i<n;i++)drawFor(p,kind,c=>{if(!c)return;if(p[kind].length<10){p[kind].push(c);fxCard(p,c);logP(p.i,p.name+' получает '+(kind==='atk'?'карту атаки '+c.v:'пассивку «'+PAS[c.key].n+'»')+'.',p.name+' получает '+(kind==='atk'?'карту атаки':'пассивную способность')+'.')}else{G.discard.push(c);log(p.name+': рука полна, карта ушла в сброс.')}});
 }
+const STAT_CAP_A=8,STAT_CAP_U=7,TB_MONEY=15;
+function statRoom(p,k){const b=baseStat(p.ch);return k==='A'?STAT_CAP_A-(b.A+(p.tA|0)):STAT_CAP_U-(b.U+(p.tU|0))}
+function mileGive(p,k){
+  if(statRoom(p,k)>0){if(k==='A')p.tA=(p.tA|0)+1;else p.tU=(p.tU|0)+1;log(p.name+': +1 к '+(k==='A'?'атаке':'уклонению')+'.')}
+  else{p.berries+=TB_MONEY;log(p.name+': потолок достигнут, очко превращается в '+TB_MONEY+' Берри.')}
+}
+function mileStep(p,left){
+  const st=stats(p),mk=(k,nm,cur,cap)=>({label:'+1 к '+nm+' (сейчас '+cur+', потолок '+cap+')'+(statRoom(p,k)>0?'':' → '+TB_MONEY+' Берри'),run:()=>{mileGive(p,k);if(left>1)mileStep(p,left-1)}});
+  ask('pick',{who:p.i,title:'Веха заданий: очко '+(3-left)+' из 2',opts:[mk('A','атаке',st.A,STAT_CAP_A),mk('U','уклонению',st.U,STAT_CAP_U)]});
+}
+function treLeft(){return G.decks.tre.length>0||G.discard.some(c=>c.kind==='tre'&&!TRE[c.key].guest)}
 function applyOpt(p,o,def){
+  if(o.tre)drawFor(p,'tre',c=>{if(c&&p.tre.length<3){p.tre.push(c);fxCard(p,c);logP(p.i,p.name+' получает карту сокровищ: «'+TRE[c.key].n+'».',p.name+' получает карту сокровищ.')}else if(c){G.decks.tre.push(c)}});
   if(o.r){p.berries+=o.r;log(p.name+' получает +'+o.r+' Берри.')}
   if(o.atk)giveCards(p,'atk',o.atk);
   if(o.pas)giveCards(p,'pas',o.pas);
 }
 function taskReward(p,def){
-  const o=def.o||[];
+  const o=(def.o||[]).filter(x=>!x.tb||(G.tb&&p.tre.length<3&&treLeft()));
   if(o.length<=1){if(o[0])applyOpt(p,o[0],def);return}
   ask('pick',{who:p.i,title:'Награда за «'+def.t+'»: выберите',opts:o.map(x=>({label:x.lab,run:()=>applyOpt(p,x,def)}))});
 }
@@ -1984,7 +2096,7 @@ function completeTask(p,slot){
   const t=p[slot];p[slot]=null;
   const dk=t.cat==='ev'?'tev':t.cat==='pon'?'tpon':'tlaf';
   G.decks[dk].push(t.def);
-  if(t.cat==='ev'){log(pname(p)+' выполнил задание «'+t.def.t+'».');taskReward(p,t.def)}
+  if(t.cat==='ev'){log(pname(p)+' выполнил задание «'+t.def.t+'».');taskReward(p,t.def);if(G.tb){p.td=(p.td|0)+1;if(p.td>=5&&!p.mile)p.mile=1}}
   else if(t.cat==='pon'){
     delete G.ponAt[t.loc];p.pon.push(t.loc);
     log(pname(p)+' выполнил «'+t.def.t+'» и получил роад-понеглиф!');
@@ -2023,7 +2135,7 @@ function mergeSides(L){
   const R=Math.max(...L.map(x=>x.slots.length)),slots=[];
   for(let r=0;r<R;r++)slots.push([].concat(...L.map(x=>x.slots[r]||[])));
   const owner=new Map();L.forEach(x=>{for(const sl of x.slots)for(const c of sl)owner.set(c,x.p);for(const c of x.pas)owner.set(c,x.p)});
-  return{p:L[0].p,ps:L.map(x=>x.p),owner,A:L.reduce((q,x)=>q+x.A,0),U:Math.max(...L.map(x=>x.U)),slots,pas:[].concat(...L.map(x=>x.pas)),ch:L[0].ch,name:L.map(x=>x.name).join(' + ')};
+  return{p:L[0].p,ps:L.map(x=>x.p),owner,A:L.reduce((q,x)=>q+x.A,0),U:L.reduce((q,x)=>q+x.U,0),slots,pas:[].concat(...L.map(x=>x.pas)),ch:L[0].ch,name:L.map(x=>x.name).join(' + ')};
 }
 function runDuel(S1,S2,full){
   const RR=S1.R||3,WW=S1.W||2;
@@ -2046,7 +2158,7 @@ function runDuel(S1,S2,full){
       if(cards.length&&opp.has('barto')&&!x.annul){x.annul=true;cards.shift();ann=true}
       used[i].push(...(x.s.slots[r]||[]));
       let val=0;
-      for(const c of cards){val+=c.v;if(x.s.ch==='luffy')val+=3;if(x.has('mihawk')&&c.v>=7)val+=4}
+      for(const c of cards){val+=c.v;if((x.s.owner?(x.s.owner.get(c)||x.s.p).ch:x.s.ch)==='luffy')val+=3;if(x.has('mihawk')&&c.v>=7)val+=4}
       const nodice=x.s.ch==='sanji'&&GIRLS.includes(opp.s.ch);
       const roll=nodice?0:(x.keys.includes('jinwoo')?d(20):d(12));
       let pa=0;if(x.has('will'))pa+=2;if(x.rumble)pa+=3;
@@ -2284,7 +2396,7 @@ function useTre(p,c){
   }else if(c.key==='dandan'){
     const cand=Object.keys(G.type).filter(l=>G.type[l]!=='start'&&G.type[l]!=='base'&&!deadAt(l));
     const o=cand.map(l=>({label:locName(l)+' ('+TYPES[G.type[l]].n+')',loc:l,run:()=>{
-      discardCard(p,c);G.type[l]='base';log(p.name+' превращает '+locName(l)+' в обычную базу (Дэн-Дэн Муси).');
+      discardCard(p,c);const _tn=TYPES[G.type[l]].n;G.type[l]='base';log(p.name+' превращает '+locName(l)+' в обычную базу (Дэн-Дэн Муси).');fxEvent({sfx:'w_buster',wk:'buster',stage:'post',cat:'Золотой Дэн-Дэн Муси',icon:'🐌',title:'Остров уничтожен!',lines:[p.name+' вызывает бомбардировку: '+locName(l)+' ('+_tn+') стёрт с карты и стал обычной базой.'],auto:9000});
       const near=bfsNear(l,x=>G.type[x]==='base');
       for(const q of G.players)if(q.loc===l&&near){q.loc=near;q.sea=seaOf(near);log(q.name+' перенесён на '+locName(near)+'.')}
       if(G.flags[l]!=null){const ow=G.players[G.flags[l]];delete G.flags[l];if(near&&G.flags[near]==null&&!ownFlagNum(ow,near)){G.flags[near]=ow.i}else ow.fl++}
@@ -2423,13 +2535,13 @@ function actions(){
   const atMarket=here&&lt==='market';
   const disc=hasTre(p,'underground')?10:0;
   if((atMarket||disc)&&true){
-    const price=Math.max(0,30-disc);
+    const price=Math.max(0,(G.tb?50:30)-disc);
     add('market','Купить карту сокровищ ('+price+' Берри)',()=>{
       pay(p,price);G.tm.buy++;
       drawFor(p,'tre',c=>{if(c){p.tre.push(c);fxCard(p,c);logP(p.i,p.name+' покупает карту сокровищ: «'+TRE[c.key].n+'».',p.name+' покупает карту сокровищ.')}});
     },p.berries<price||p.tre.length>=3||(!G.decks.tre.length&&!G.discard.some(c=>c.kind==='tre'&&!TRE[c.key].guest)));
   }
-  if(atMarket&&!G.guestBought)add('market','Купить гостевого персонажа (50 Берри)',()=>{pay(p,50);G.tm.buy++;G.guestBought=true;const c=card('tre',{key:G.guest});p.tre.push(c);fxCard(p,c);logP(p.i,p.name+' нанимает гостя: «'+TRE[c.key].n+'».',p.name+' нанимает гостя.')},p.berries<50||p.tre.length>=3);
+  if(atMarket&&!G.guestBought)add('market','Купить гостевого персонажа ('+(G.tb?80:50)+' Берри)',()=>{pay(p,G.tb?80:50);G.tm.buy++;G.guestBought=true;const c=card('tre',{key:G.guest});p.tre.push(c);fxCard(p,c);logP(p.i,p.name+' нанимает гостя: «'+TRE[c.key].n+'».',p.name+' нанимает гостя.')},p.berries<(G.tb?80:50)||p.tre.length>=3);
   if(p.ltask){
     const lt2=p.ltask,kk=lt2.def.k,atL=p.loc==='L';
     const payCube=()=>{p.pon.pop();log(p.name+' сбрасывает куб роад-понеглифа.')};
@@ -2587,27 +2699,68 @@ function akFx(ev,done){
   setTimeout(()=>{if(!fin&&v.readyState<2&&v.currentTime===0)end()},6000); // не загрузилось: не держим игру
   if(STREAM.on)setTimeout(end,14000); // на трансляции ролик не держит очередь событий дольше 14 секунд
 }
+let ADMMUS=null;
+function admMusicStart(){
+  try{
+    if(window.__nor||!SFX.on||SET.music===false)return;
+    admMusicStop(true);
+    const a=new Audio('assets/music_admiral.m4a'+SFXV);a.loop=false;a.volume=0;ADMMUS=a;
+    const go=()=>{try{a.currentTime=12}catch(e){}const pr=a.play();if(pr&&pr.catch)pr.catch(()=>{});
+      let v=0;const t=setInterval(()=>{if(ADMMUS!==a){clearInterval(t);return}v+=.04;if(v>=.8){v=.8;clearInterval(t)}try{a.volume=v}catch(e){clearInterval(t)}},120)}; // плавный набор громкости ~3 с
+    if(a.readyState>=1)go();else a.addEventListener('loadedmetadata',go,{once:true});
+  }catch(e){}
+}
+function admMusicStop(now){
+  const a=ADMMUS;if(!a)return;ADMMUS=null;
+  if(now){try{a.pause()}catch(e){}return}
+  let v=a.volume;const t=setInterval(()=>{v-=.1;if(v<=0){clearInterval(t);try{a.pause()}catch(e){}}else{try{a.volume=v}catch(e){clearInterval(t)}}},40);
+}
+
+function akTheme(k){
+  const R=(a,b)=>a+Math.random()*(b-a),F=(n,d)=>n.toFixed(d==null?1:d);let h='',m='';
+  if(k==='aokiji'){
+    h+='<div class="akfrost"></div>';
+    for(let i=0;i<46;i++){const s=R(2,6);h+='<i class="aksnow" style="left:'+F(R(0,100))+'%;width:'+F(s)+'px;height:'+F(s)+'px;--dx:'+((R(-60,60))|0)+'px;animation-duration:'+F(R(3.4,6.4))+'s;animation-delay:'+F(R(0,5))+'s"></i>'}
+    for(let i=0;i<9;i++){h+='<i class="akcry" style="left:'+F(i*11.5+R(-3,3))+'%;width:'+((R(26,64))|0)+'px;height:'+((R(11,30))|0)+'vh;--r:'+((R(-14,14))|0)+'deg;animation-delay:'+F(R(.5,2.2),2)+'s"></i>'}
+    for(let i=0;i<7;i++){h+='<i class="akcry top" style="left:'+F(i*15+R(-4,4))+'%;width:'+((R(18,40))|0)+'px;height:'+((R(8,19))|0)+'vh;--r:'+((R(-6,6))|0)+'deg;animation-delay:'+F(R(.8,2.4),2)+'s"></i>'}
+    for(let i=0;i<12;i++)m+='<i class="akshard" style="left:'+F(R(2,98))+'%;animation-delay:'+F(R(3.6,5.8),2)+'s"></i>';
+  }else if(k==='kizaru'){
+    h+='<div class="aksun"></div>';
+    for(let i=0;i<8;i++){h+='<i class="akbeam" style="top:'+F(R(4,92))+'%;--h:'+((R(5,16))|0)+'px;--a:'+((R(-34,-14))|0)+'deg;animation-delay:'+F(R(0,2.6),2)+'s;animation-duration:'+F(R(2,3.4))+'s"></i>'}
+    for(let i=0;i<22;i++){h+='<i class="akspark" style="left:'+F(R(2,96))+'%;top:'+F(R(2,96))+'%;--s:'+((R(8,22))|0)+'px;animation-delay:'+F(R(0,3),2)+'s;animation-duration:'+F(R(1.1,2.2))+'s"></i>'}
+    for(let i=0;i<16;i++)m+='<i class="aklaser" style="top:'+F(R(0,100))+'%;--a:'+((R(-30,-12))|0)+'deg;animation-delay:'+F(R(2.2,6.2),2)+'s"></i>';
+  }else if(k==='fujitora'){
+    h+='<div class="akneb"></div>';
+    for(let i=0;i<70;i++){h+='<i class="akstar" style="left:'+F(R(0,100))+'%;top:'+F(R(0,100))+'%;--s:'+F(R(1,3.2))+'px;--d:'+F(R(1.2,3.6))+'s;animation-delay:'+F(R(0,3),2)+'s"></i>'}
+    h+='<div class="akvort"></div><div class="akhole"></div>';
+    for(let i=0;i<34;i++){const a=R(0,6.283),r=R(38,70);h+='<i class="aksuck" style="--s:'+F(R(2,6))+'px;--sx:'+((Math.cos(a)*r)|0)+'vmax;--sy:'+((Math.sin(a)*r)|0)+'vmax;--t:'+F(R(2.4,4.6))+'s;animation-delay:'+F(R(0,4),2)+'s"></i>'}
+    for(let i=0;i<14;i++)m+='<i class="akmet" style="left:'+F(R(0,100))+'%;animation-delay:'+F(R(4,6.4))+'s"></i>';
+  }
+  return {h,m}
+}
 function akScene(ev,done){
   const AD=ADMS[ev.adm||'akainu'];
   const fast=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(window.__nor||!document.body){done&&done();return}
   const old=document.getElementById('akfx');if(old)old.remove();
   const o=document.createElement('div');o.id='akfx';
-  let em='';for(let i=0;i<26;i++)em+='<i class="akember" style="left:'+(Math.random()*100).toFixed(1)+'%;--dx:'+((Math.random()*80-40)|0)+'px;animation-delay:'+(Math.random()*3.4).toFixed(2)+'s;animation-duration:'+(2.4+Math.random()*2).toFixed(2)+'s"></i>';
-  o.innerHTML='<div class="akscr"></div><div class="aklava"></div>'+em+'<i class="akring"></i><i class="akring r2"></i><div class="akflash"></div>'
+  const TH=akTheme(ev.adm);const themed=!!(TH.h||TH.m);
+  let em='';if(!themed)for(let i=0;i<26;i++)em+='<i class="akember" style="left:'+(Math.random()*100).toFixed(1)+'%;--dx:'+((Math.random()*80-40)|0)+'px;animation-delay:'+(Math.random()*3.4).toFixed(2)+'s;animation-duration:'+(2.4+Math.random()*2).toFixed(2)+'s"></i>';
+  if(themed){o.className='thm th-'+ev.adm}
+  o.innerHTML='<div class="akscr"></div><div class="aklava"></div>'+TH.h+em+'<i class="akring"></i><i class="akring r2"></i><div class="akflash"></div>'
    +'<div class="akbox"><div class="akk">'+(G.coop?'☠ АДМИРАЛ ВЫХОДИТ В МОРЕ ☠':'☠ ВНИМАНИЕ · ЛАФТЕЛЬ НАЙДЕН ☠')+'</div><div class="akport">'+(AVS[ev.adm||'akainu']?'<img alt="" src="'+AVS[ev.adm||'akainu']+'">':'<div style="font-size:90px;line-height:1">☠</div>')+'</div>'
    +'<div class="akt">'+AD.title+'</div><div class="aks">'+AD.sub+'</div>'
    +'<div class="akd">Высаживается на <b>'+esc(ev.loc)+'</b>. Атака <b>'+AD.a+'</b>, уклонение <b>'+AD.u+'</b>. '+AD.desc+'</div>'
    +(ev.hits&&ev.hits.length?'<div class="aklv"><div class="aklt">🔥 ГРАД ЛАВЫ</div>'+ev.hits.map((h,i)=>'<div class="aklr" style="animation-delay:'+(4.4+i*.55).toFixed(2)+'s"><b>'+esc(h.name)+'</b> уничтожена'+(h.flag?' · флаг сгорел':'')+(h.jailed.length?' · в тюрьму: <i>'+esc(h.jailed.join(', '))+'</i>':'')+'</div>').join('')+'</div>':'')
    +(ev.lines&&ev.lines.length?'<div class="aklv"><div class="aklt">'+AD.lt+'</div>'+ev.lines.map((h,i)=>'<div class="aklr" style="animation-delay:'+(1.8+i*.5).toFixed(2)+'s"><b>'+esc(h)+'</b> '+AD.lr+'</div>').join('')+'</div>':'')
    +'<div class="akh">нажмите, чтобы продолжить</div></div>';
-  let mt='';for(let i=0;i<14;i++)mt+='<i class="akmet" style="left:'+(Math.random()*100).toFixed(1)+'%;animation-delay:'+(4+Math.random()*2.4).toFixed(2)+'s"></i>';
+  let mt=TH.m;if(!themed)for(let i=0;i<14;i++)mt+='<i class="akmet" style="left:'+(Math.random()*100).toFixed(1)+'%;animation-delay:'+(4+Math.random()*2.4).toFixed(2)+'s"></i>';
   o.querySelector('.akscr').innerHTML=mt;
   document.body.appendChild(o);
-  SFX.play('akent',0);
-  let fin=false;const end=()=>{if(fin)return;fin=true;o.classList.add('out');setTimeout(()=>{o.remove();window.__akborn=Date.now();try{render()}catch(e){}done&&done()},fast?10:480)};
+  SFX.play('akent',0);admMusicStart();
+  let fin=false;const end=()=>{if(fin)return;fin=true;admMusicStop();o.classList.add('out');setTimeout(()=>{o.remove();window.__akborn=Date.now();try{render()}catch(e){}done&&done()},fast?10:480)};
   o.onclick=()=>{if(Date.now()-t0>900)end()};const t0=Date.now();
-  setTimeout(end,fast?1500:(ev.hits&&ev.hits.length?12500:(ev.lines&&ev.lines.length?10000:7500)));
+  if(fast)setTimeout(end,1500);else if(STREAM.on)setTimeout(end,ev.hits&&ev.hits.length?12500:(ev.lines&&ev.lines.length?10000:7500)); // обычная игра: окно держится, пока не нажмут
 }
 let FXBUSY=false;
 function eventFx(ev,done){
@@ -2623,7 +2776,7 @@ function eventFx(ev,done){
    +(pre?'<div class="evd">'+esc(ev.desc)+'</div>':'<div class="evl">'+ev.lines.map(l=>'<div class="evr">'+esc(l)+'</div>').join('')+'</div>')
    +(pre?'<div class="dhint">нажмите, чтобы пропустить</div>':'<button class="btn primary">Понятно</button>')+'</div>';
   document.body.appendChild(o);
-  if(ev.banner){SFX.play(ev.tone==='good'?'result':'alert',0)}else if(pre&&ev.title==='Buster Call')SFX.play('w_buster',0);else if(!(ev.snd==='buster'))SFX.play(pre?'alert':(ev.snd&&ev.snd!=='coin'?'w_'+ev.snd:'result'),0);if(!pre&&ev.snd==='coin')SFX.play('coin',0);
+  if(ev.sfx){SFX.play(ev.sfx,0)}else if(ev.banner){SFX.play(ev.tone==='good'?'result':'alert',0)}else if(pre&&ev.title==='Buster Call')SFX.play('w_buster',0);else if(!(ev.snd==='buster'))SFX.play(pre?'alert':(ev.snd&&ev.snd!=='coin'?'w_'+ev.snd:'result'),0);if(!pre&&ev.snd==='coin')SFX.play('coin',0);
   let fin=false;const end=()=>{if(fin)return;fin=true;o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},280)};
   o.onclick=end;setTimeout(end,ev.auto||(pre?2800:8000));
 }
@@ -2815,7 +2968,7 @@ function render(){
   const need=viewerNeeded();
   if(G.turnNo!==SNDT){SNDT=G.turnNo;if(!window.__nor&&(!NET.on||need===NET.me))fxSnd('turn')}
   if(G.pending&&G.pending.type==='duelResult'&&SNDD!==G.pending){SNDD=G.pending;fxSnd('duel')}
-  if(G.winner!=null){achCheck();hallSave()}
+  if(G.winner!=null){achCheck();hallSave();logSave()}
   if(G.winner!=null&&!SNDW){SNDW=1;fxSnd('win')}else if(G.winner==null)SNDW=0;
   $('#top').innerHTML=topHtml();
   $('#now').innerHTML=nowHtml();
@@ -2946,7 +3099,7 @@ function handHtml(p){
   h+='<div class="blk"><div class="bt">Пассивные способности <em>'+p.pas.length+'/10</em></div>'+(p.pas.length?p.pas.map(c=>mc(PAS[c.key].n,PAS[c.key].d)).join(''):'<span class="small">нет карт</span>')+'</div>';
   h+='<div class="blk"><div class="bt">Сокровища <em>'+p.tre.length+'/3</em></div>'+(p.tre.length?p.tre.map(c=>mc(TRE[c.key].n,TRE[c.key].d,activeC(c)?'':'не активна')).join(''):'<span class="small">нет карт</span>')+'</div>';
   const tk=[p.task&&['Задание',p.task],p.ltask&&['Лафтейл',p.ltask]].filter(Boolean);
-  h+='<div class="blk"><div class="bt">Задания</div>'+(tk.length?tk.map(([n,t])=>(t.def.k==='world'&&t.target?'<div data-wroll="'+p.i+'" style="cursor:pointer">'+mc(n+': '+t.def.t,t.def.d+(t.def.rt?' · награда: '+t.def.rt:''),'🎲 выпало '+t.target)+'<div class="small" style="padding:0 4px 6px">Нужны 2 флага на локациях №'+t.target+' в двух морях. Нажмите, чтобы показать бросок ещё раз.</div></div>':mc(n+': '+t.def.t,t.def.d+(t.target?' (цель №'+t.target+')':'')+(t.def.rt?' · награда: '+t.def.rt:'')+(t.paid?' [куб сброшен]':'')+(t.moved?' [Зунеша переместилась]':'')))).join(''):'<span class="small">нет активного задания</span>')+'</div>';
+  h+='<div class="blk"><div class="bt">Задания'+(G.tb?': <em>'+Math.min(5,p.td|0)+' из 5'+(p.mile===2?' ✓':'')+'</em>':'')+'</div>'+(tk.length?tk.map(([n,t])=>(t.def.k==='world'&&t.target?'<div data-wroll="'+p.i+'" style="cursor:pointer">'+mc(n+': '+t.def.t,t.def.d+(t.def.rt?' · награда: '+t.def.rt:''),'🎲 выпало '+t.target)+'<div class="small" style="padding:0 4px 6px">Нужны 2 флага на локациях №'+t.target+' в двух морях. Нажмите, чтобы показать бросок ещё раз.</div></div>':mc(n+': '+t.def.t,t.def.d+(t.target?' (цель №'+t.target+')':'')+(t.def.rt?' · награда: '+t.def.rt:'')+(t.paid?' [куб сброшен]':'')+(t.moved?' [Зунеша переместилась]':'')))).join(''):'<span class="small">нет активного задания</span>')+'</div>';
   h+='<div class="small" style="padding:2px 4px">Особые ходы: нажмите на соседнюю локацию на карте.</div></div>';
   return h;
 }
@@ -2963,8 +3116,14 @@ function pendingHtml(){
   if(pe.type==='prep')return prepHtml(pe);
   if(pe.type==='duelResult')return resultHtml(pe);
   const retr=pe.pick&&pe.pick.length;
+  if(pe.type==='pickloc'&&retr&&UI.pickList!==pe){
+    let h='<div class="ov pickov"><div class="pickbar"><b>'+esc(pe.title||'Выбор')+'</b><span>'+esc((pe.text?pe.text+' ':'')+'Нажмите на подсвеченный зелёным остров на карте.')+'</span><div class="grp">';
+    ACTS.forEach((a,i)=>{if(!a.loc)h+='<button class="btn" data-a="'+i+'"'+(a.dis?' disabled':'')+'>'+esc(a.label)+'</button>'});
+    return h+'<button class="btn" data-ui="picklist">Выбрать из списка</button></div></div></div>';
+  }
   let h='<div class="ov"><div class="modal"><h2>'+esc(pe.title||'Выбор')+'</h2>'+(pe.text?'<div>'+esc(pe.text)+'</div>':'')+'<div class="grp">';
   ACTS.forEach((a,i)=>{h+='<button class="btn" data-a="'+i+'"'+(a.dis?' disabled':'')+'>'+esc(a.label)+'</button>'});
+  if(pe.type==='pickloc'&&retr)h+='<button class="btn" data-ui="pickmap">Выбрать на карте</button>';
   return h+'</div></div></div>';
 }
 function prepHtml(pe){
@@ -3004,9 +3163,10 @@ function resultHtml(pe){
     const pas=s0.pas.map(c=>c.kind==='pas'?PAS[c.key].n:TRE[c.key].n);
     const blocked=s0.pas.length&&!x.keys.length;
     const col=(s0.p&&s0.p.color)||(ADMS[s0.ch]?ADMS[s0.ch].col:'#8a8f98');
-    const por=(AVS[s0.ch]&&(s0.p||ADMS[s0.ch]))?av(s0.ch,'por'):'<div class="por boss">⚔</div>';
+    const team=s0.ps&&s0.ps.length>1;
+    const por=team?'<div style="display:flex;justify-content:center;gap:4px">'+s0.ps.map(q=>av(q.ch,'por')).join('')+'</div>':((AVS[s0.ch]&&(s0.p||ADMS[s0.ch]))?av(s0.ch,'por'):'<div class="por boss">⚔</div>');
     const last=Z.shown>0?res.rounds[Z.shown-1].out:-2;
-    return '<div class="dfc" style="--pcol:'+col+'">'+por+'<h3>'+esc(pe.names[i])+'</h3><div class="small">'+(s0.p?esc(CH[s0.ch].n)+' · ':'')+'атака '+s0.A+' / уклонение '+s0.U+'</div>'
+    return '<div class="dfc" style="--pcol:'+col+'">'+por+'<h3>'+esc(pe.names[i])+'</h3><div class="small">'+(team?esc(s0.ps.map(q=>q.name+' ('+CH[q.ch].n+')').join(' + '))+'<br>Сумма команды: ':(s0.p?esc(CH[s0.ch].n)+' · ':''))+'атака '+s0.A+' / уклонение '+s0.U+'</div>'
       +'<div class="small">Пассивные: '+(pas.length?esc(pas.join(', ')):'нет')+(blocked?' (отключены Хенкок)':'')+'</div>'
       +'<div style="margin-top:6px">'+Array.from({length:res.W||2},(_,k)=>k).map(k=>'<span class="pip'+(k<wins[i]?' on'+((k===wins[i]-1&&last===i)?' pop':''):'')+'"></span>').join('')+'</div></div>';
   };
@@ -3043,7 +3203,7 @@ function resultHtml(pe){
   return h+'</div></div>';
 }
 
-const RULES_HTML="<h1>Правила игры — единая версия</h1><p> · </p><h2>1. Подготовка к игре</h2><p><b>Карта и фишки</b></p><ul><li>Соедините две части поля по линии Red Line.</li><li>Достаньте 4 коробки с фишками локаций, по одной на каждое море. Фишка выкладывается на локацию, когда игрок впервые туда приходит (см. «Исследование локаций» в разделе 4). В каждом море 11 локаций с номерами 2–12 и стартовая №1; стартовые остаются без фишек.</li><li><b>Случайная карта.</b> Карта каждой партии строится заново: у локаций (кроме красных проходов) случайные номера, положение и дороги, поэтому стартовая локация №1 и локация понеглифа в каждом море оказываются в разных местах. Красные проходы между морями (Норт Блю №10, Вест Блю №2, Ист Блю №4, Саус Блю №2) всегда стоят на одном и том же месте. В игре карту показывают до выбора персонажа, а места понеглифов скрыты.</li></ul><p><b>Роад-понеглифы</b></p><ul><li>В игре 4 роад-понеглифа. Для первых трёх бросьте 2d6 по одному разу, по порядку для Вест Блю, Норт Блю и Саус Блю. Положите фишку роад-понеглифа на локацию выпавшего номера в этом море рубашкой вверх и накройте её фишкой локации (на острове понеглифа всегда лежит обычная база). Игроки не должны знать, где лежат понеглифы: их предстоит найти.</li><li>Четвёртый находится на блуждающем острове Зоя (см. «Зунеша» в разделе 4).</li><li>Каждый понеглиф охраняет хранитель. Случайно, не глядя, раздайте четырёх хранителей (Большая Мамочка, Кайдо, Рыжеволосый Шанкс, Эдвард Ньюгейт Белоус) по четырём понеглифам, включая понеглиф на острове Зоя. Показатели у всех одинаковые: атака 9, уклонение 6. Хранителя кладут рубашкой вверх вместе с фишкой понеглифа.</li></ul><p><b>Колоды и компоненты</b></p><ul><li>Разложите 10 колод (см. раздел 2). Из колоды гостевых персонажей возьмите одну случайную карту, не глядя, и положите рубашкой вверх. Посмотреть её можно только после покупки.</li><li>Разложите карточки и фигурки 8 персонажей.</li><li>Подготовьте кубики: 2d6 для хода по карте, 1d12 для дуэлей и для выбора клетки Зунеши, 1d20 для дуэлей (только если его открывает карта гостевого персонажа).</li><li>Поставьте рядом банк с Берри.</li></ul><p><b>Очерёдность, персонаж и море</b></p><ul><li>Каждый игрок бросает 2d6. Чем больше сумма, тем раньше ходит игрок. При равенстве равные игроки перебрасывают.</li><li>В порядке очерёдности игроки выбирают персонажа и берут его фигурку. Играть им придётся до конца партии, поэтому изучите способности, в том числе ультимативную.</li><li>Карта партии видна всем ещё до выбора персонажа. В том же порядке игроки выбирают море, с которого начинают путешествие, поэтому где лежат понеглифы, никто не знает, поэтому море выбирают по расположению старта и дорог. Два игрока не могут начать из одного моря. Старт в каждом море это локация №1.</li></ul><p><b>Стартовые ресурсы</b> (каждому игроку)</p><ul><li>20 Берри;</li><li>3 карты атаки, одинаковый набор для всех: со значениями 3, 5 и 7;</li><li>2 карты пассивных способностей.</li></ul><h2>2. Игровой инвентарь</h2><p><b>Колоды</b> (всего 10)</p><ul><li><b>Атака</b>: карты со значением от 1 до 8, которое прибавляется к силе атаки в дуэли. Также используются при некоторых картах погоды.</li><li><b>Пассивные способности</b>: особые способности (например, Воля вооружения, Воля наблюдения) и вспомогательные персонажи. Дают дополнительную атаку или снижают урон от соперника в дуэли.</li><li><b>Погода</b>: сюжетная колода, события которой меняют расположение игроков и компонентов на карте.</li><li><b>Задания</b>: задания, которые берут на ивентовых локациях.</li><li><b>Сокровища</b>: особые способности для дуэли и хода по карте, часть из них работает против владельца. Покупаются на «Чёрном рынке» за 30 Берри, карта берётся вслепую с верха колоды.</li><li><b>Боссы</b>: на поле битвы игрок берёт верхнюю карту и сражается с этим персонажем.</li><li><b>Дозорные</b>: то же на Базе Дозора, а в Тюрьме только если игрок не откупается.</li><li><b>Гостевые персонажи</b>: в игру выкладывается одна случайная карта. Её можно купить на «Чёрном рынке» за 50 Берри. Гость может сильно изменить расклад сил, а может оказаться пустышкой.</li><li><b>Понеглифы</b>: задания, которые нужно выполнить, чтобы получить роад-понеглиф.</li><li><b>Лафтейл</b>: финальные задания. Чтобы победить, игрок, попавший на остров Лафтейл, должен выполнить одно из них.</li></ul><p><b>Роад-понеглифы.</b> В игре 4 понеглифа, это особые кубики со значениями 1–3 (каждое по два раза). С их помощью определяют координаты Лафтейла (см. раздел 6).</p><p><b>Фишки.</b> Цвет фишки определяет тип локации (см. «Типы локаций» в разделе 4). Всего:</p><ul><li>44 фишки локаций (4 моря × 11);</li><li>3 фишки роад-понеглифов (лежат под фишками локаций, четвёртый находится на острове Зоя);</li><li>4 карточки хранителей понеглифов (Большая Мамочка, Кайдо, Шанкс, Белоус), у каждого атака 9 и уклонение 6;</li><li>1 фишка Лафтейла, её выставляют, когда определены координаты.</li></ul><p><b>Флаги.</b> У каждого игрока 4 флага. Правила установки, сжигания и дохода описаны в разделе 4.</p><h2>3. Структура хода</h2><p><b>1. Доход (начало хода)</b></p><p>Игрок, чей ход, бросает 2d6, а доход получают все игроки. За каждую свою локацию с выпавшим номером (там стоит флаг игрока или он сам) выплачивается сумма по таблице «Доход» в разделе 4 (чем реже выпадает номер, тем больше платят), а если на ней есть и флаг, и игрок, то вдвое больше. Подробнее — «Доход» в разделе 4. Тюрьма, База Дозора и поле битвы доход не приносят.</p><p><b>2. Действия</b></p><p>У игрока 3 очка действия (ОД), они восстанавливаются в начале каждого хода. Тратить их можно в любом порядке до исчерпания:</p><table class=\"rt\"><tr><th>Действие</th><th>ОД</th></tr><tr><td>Перемещение на соседнюю локацию (фишка локации вскрывается сразу)</td><td>1</td></tr><tr><td>Вызов на дуэль игрока, который стоит на той же локации</td><td>1</td></tr><tr><td>Установка флага на текущей локации*</td><td>2</td></tr><tr><td>Сжигание вражеского флага с установкой своего*</td><td>2</td></tr><tr><td>Карта понеглифа</td><td>2</td></tr><tr><td>Карта Лафтейла</td><td>2</td></tr><tr><td>Применение карты сокровищ</td><td>указано на карте</td></tr></table><p>*Нельзя, если у вас уже есть флаг на локации с таким же номером в другом море, а также на Тюрьме, Базе Дозора, поле битвы и Зунеше.</p><p><b>Без ОД:</b> покупка карты атаки или пассивной способности (10 Берри, не более одной карты за ход), покупка карт на «Чёрном рынке» (только за Берри), взятие задания на ивентовой локации, сброс задания (штраф 10 Берри, для заданий понеглифа и Лафтейла 100 Берри), откуп из Тюрьмы, отступление после поражения, бой с боссом при входе на поле битвы, поднятие своего флага с локации. У некоторых персонажей есть одно бесплатное действие (см. карточки персонажей).</p><p>За ход можно вступить не более чем в 3 дуэли. Дуэли с игроками, боссами и дозорными считаются вместе (см. раздел 5).</p><p><b>Покупка карт атаки и пассивных способностей.</b> Карта атаки или пассивной способности покупается за 10 Берри без очков действия в любой момент своего хода. За ход можно купить только одну такую карту (атаку или пассивную вместе). Карта берётся с верха соответствующей колоды, лимит на руках прежний: не более 10 карт каждого типа.</p><p><b>3. Конец хода</b></p><p>Ход заканчивается сразу, если:</p><ol><li>Потрачены все 3 ОД (карту сокровищ без ОД можно сыграть и после этого).</li><li>Игрок проиграл дуэль, в которую сам бросил вызов: оставшиеся ОД сгорают, игрок отступает (см. раздел 5).</li><li>Игрок проиграл бой боссу: ОД сгорают, игрок отступает и его грабят (см. раздел 5).</li><li>Игрок проиграл бой Морскому Дозору на Базе Дозора: он отправляется в Тюрьму и пропускает 2 следующих хода.</li></ol><p>После победы игрок продолжает тратить ОД до конца. После ничьей в дуэли ход тоже продолжается (бросивший вызов уходит на соседнюю локацию без затрат ОД) и заканчивается, только когда кончились ОД.</p><p><b>Конец раунда</b></p><p>Когда все игроки сходили:</p><ol><li>Открывается верхняя карта погоды, её эффект действует на всех игроков на карте. Исключение составляют персонажи, у которых на карточке есть способность, отменяющая погоду.</li><li>Если идёт поиск Лафтейла, бросаются роад-понеглифы (см. раздел 6).</li></ol><h2>4. Механики</h2><h3>Исследование локаций</h3><ul><li>В начале игры все фишки локаций лежат в коробках по морям. Когда игрок впервые переходит на локацию в этом море, он достаёт фишку из коробки, не глядя, и выкладывает её открытой стороной. Так при каждой раскладке локации получают разные значения.</li><li>Игроки видят только расположение путей, тип локации известен только после вскрытия фишки.</li><li><b>Активация.</b> Сразу после вскрытия игрок обязан применить правила локации, если это Тюрьма, Поле битвы или База Дозора.</li><li><b>Постоянство.</b> Открытая локация остаётся открытой для всех до конца игры.</li></ul><h3>Проходы между морями</h3><ul><li><b>Красные кружки.</b> В каждом море есть один проход, он отмечен красным кружком: Норт Блю — №10, Вест Блю — №2, Ист Блю — №4, Саус Блю — №2. Через проходы моря соединены друг с другом (Reverse Mountain в центре карты). Красные проходы всегда на своих местах, остальные локации в каждой партии расположены по-разному.</li><li><b>Переход.</b> Перейти с красной локации одного моря на красную локацию другого моря стоит 1 ОД, как обычный шаг.</li><li><b>Обычная локация.</b> Во всём остальном красная локация такая же, как другие: у неё есть номер, при первом заходе на неё вскрывается фишка, на ней можно ставить флаг и получать доход. При отступлении красные локации считаются соседними так же, как обычные.</li><li><b>Особые фишки на проходе.</b> Если на красной локации вскрылась Тюрьма, База Дозора или поле битвы, там действуют правила этого типа. Поэтому переход в другое море через такой проход может потребовать боя.</li></ul><h3>Типы локаций</h3><table class=\"rt\"><tr><th>Тип</th><th>Фишка</th><th>В каждом море</th></tr><tr><td>Ивентовая</td><td>оранжевая</td><td>3</td></tr><tr><td>Базовая</td><td>белая</td><td>4</td></tr><tr><td>База Дозора</td><td>синяя</td><td>1</td></tr><tr><td>Поле битвы</td><td>красная</td><td>1</td></tr><tr><td>Тюрьма</td><td>серая</td><td>1</td></tr><tr><td>Чёрный рынок</td><td>чёрная</td><td>1</td></tr></table><ul><li><b>Ивентовая.</b> Всегда активна, не истощается, возвращаться на неё можно сколько угодно. Игрок может (по желанию) взять карту из колоды заданий, если у него нет другого невыполненного задания. Взятое задание обязательно выполнить или сбросить за штраф.</li><li><b>База Дозора.</b> Игрок обязан сразиться с дозорным: берёт верхнюю карту колоды дозорных и вступает в дуэль (раздел 5).</li><li><b>Поле битвы.</b> Бой с боссом начинается автоматически, до любых других действий игрока, и не требует ОД.</li><li><b>Тюрьма.</b> Попав сюда, игрок может откупиться за 15 Берри и действовать как обычно или вступить в бой с дозорным. Победа даёт награду с карты и право бесплатно переместиться на соседнюю локацию. Если игрок не откупился и не победил, он пропускает 2 следующих хода, после чего бесплатно перемещается на любую соседнюю локацию.</li><li><b>Чёрный рынок.</b> По одному в каждом море. Покупка доступна только при нахождении на этой локации, без ОД и только за Берри: карта сокровищ стоит 30, берётся вслепую с верха колоды. Гостевой персонаж стоит 50. Лимита покупок за визит нет, но на руках может быть не более 3 карт сокровищ.</li><li><b>Лафтейл</b> (раздел 6) и <b>блуждающие локации</b> (Зунеша, ниже) фишек моря не имеют; блуждающие появляются только по картам погоды.</li></ul><h3>Флаги</h3><ul><li>У игрока 4 флага. Флаг ставится на локацию, где находится игрок (2 ОД).</li><li>Нельзя иметь два своих флага на локациях с одинаковым номером в разных морях. Флаги нельзя ставить на Тюрьму, Базу Дозора, поле битвы и Зунешу.</li><li><b>Перенос.</b> Чтобы перенести флаг, игрок лично возвращается на его локацию, забирает бесплатно и ставит заново на нужной локации за 2 ОД.</li><li><b>Сжигание.</b> На локации с чужим флагом игрок может за 2 ОД заменить его своим. Чужой флаг возвращается владельцу в запас. Правило об одинаковых номерах действует и здесь.</li></ul><h3>Доход</h3><ul><li><b>Бросок 2d6.</b> В начале хода бросает тот, чей ход, а доход получают все. Сумма определяет «активную локацию». Игрок, чей флаг или чья фишка стоит на локации с этим номером в любом из морей, получает выплату по таблице ниже за каждую такую локацию. Чем реже выпадает номер, тем больше платят.</li><li><b>Двойная плата.</b> Если на этой локации стоят и ваш флаг, и ваша фишка, вы получаете удвоенную выплату. Чужие флаги на вашу плату не влияют.</li><li><b>Исключения.</b> Тюрьма, База Дозора и поле битвы доход не приносят.</li><li><b>Другие источники.</b> Задания (сумма указана на карте), победа над игроком (20 Берри и трофей), победа над боссом или дозорным (награда по карте). Суммы — в приложении.</li></ul><table class=\"rt\"><tr><th>Выпавший номер (2d6)</th><th>2 и 12</th><th>3 и 11</th><th>4 и 10</th><th>5 и 9</th><th>6 и 8</th><th>7</th></tr><tr><td>Выплата за флаг или фишку</td><td>50</td><td>30</td><td>20</td><td>15</td><td>12</td><td>10</td></tr><tr><td>Флаг и фишка вместе</td><td>100</td><td>60</td><td>40</td><td>30</td><td>24</td><td>20</td></tr></table><p>Стартовые локации (номер 1) дохода не приносят, потому что 2d6 даёт минимум 2.</p><h3>Карты</h3><ul><li><b>Атака и пассивные способности:</b> не более 10 карт каждого типа на игрока. Применяются в дуэли или при определённых картах погоды.</li><li><b>Задания:</b> не более 1 активной карты (с ивентовой локации, понеглифа или Лафтейла). Пока она не выполнена, брать любые другие задания нельзя. Игрок активирует задание в свой ход, озвучивая его всем, без ОД, если иное не написано на карте. <b>Сброс:</b> задание можно сбросить в любой свой ход без ОД, заплатив в банк 10 Берри. Задание роад-понеглифа и задание Лафтейла просто так не сбросить: для этого нужно единовременно заплатить в банк 100 Берри. Задание Лафтейла можно сбросить только находясь на самом Лафтейле. Только после этого можно взять новое.</li><li><b>Сокровища:</b> не более 3 карт на руках. Если после покупки или награды их стало 4 и более, лишние немедленно уходят в сброс без возврата денег.</li><li><b>Открытый сброс.</b> Любую карту сокровищ при сбросе (переполнение, желание игрока, эффект другой карты) нужно показать всем. Тайный сброс запрещён.</li><li><b>Ловушки.</b> Если сброшенная карта имеет подтип «Ловушка», игрок обязан немедленно выполнить её штрафное условие (заплатить Берри, сбросить карты атаки и т. д.). С ловушкой можно сбросить другую негативную карту сокровищ.</li></ul><h3>Обмен</h3><p>Игроки могут обмениваться любыми предметами с рук, в том числе роад-понеглифами. Берри передавать просто так нельзя: деньги можно получить только в обмен на предмет (например, продать карту сокровищ). Цену игроки обсуждают сами.</p><h3>Задания и чтение роад-понеглифов</h3><ul><li><b>Поиск.</b> Острова с роад-понеглифами скрыты: понеглиф лежит под фишкой локации. Когда игрок открывает фишку на этом острове, понеглиф обнаруживается и с этого момента виден всем. Четвёртый понеглиф на острове Зоя виден, как только Зоя появилась. Чтобы найти все понеглифы, придётся открывать локации на всех картах.</li><li><b>Хранитель понеглифа: условия не такие строгие.</b> Хранители сильные (атака 9, уклонение 6), но побеждать их не обязательно.<ul><li>Вызов хранителя стоит 1 ОД и считается дуэлью (не больше 3 дуэлей за ход).</li><li>Дуэль с хранителем всегда идёт все 3 раунда, даже если хранитель выиграл первые два.</li><li>Чтобы получить право взять задание понеглифа, достаточно выиграть хотя бы один раунд или сыграть вничью хотя бы один раунд.</li><li>Если не вышло, ничего страшного: Берри и карты задания не теряются, понеглиф остаётся на месте, хранителя можно вызвать снова. Использованные в дуэли карты атаки уходят в сброс, как в любой дуэли.</li><li>Если выиграть 2 раунда из 3, понеглиф достаётся сразу, без задания, и в придачу 100 Берри.</li><li>Допуск запоминается: после него задание понеглифа берётся за 2 ОД в этот же или в любой следующий ход на этом острове.</li></ul></li><li><b>Прибытие.</b> Персонаж должен находиться на локации роад-понеглифа.</li><li><b>Получение задания (2 ОД).</b> Игрок вытаскивает одну карту из колоды понеглифов. На локации понеглифа можно взять только одно задание: как только оно взято, фишка понеглифа снимается с карты. Если игрок сбросит это задание за штраф, фишка возвращается на карту.</li><li><b>Выполнение.</b> Игрок обязан выполнить условия карты. Время на эти задания не ограничено, но пока испытание не выполнено, брать задания на ивентовых локациях и карты других понеглифов нельзя.</li><li><b>Захват.</b> Как только условия выполнены, игрок немедленно забирает роад-понеглиф в инвентарь.</li><li><b>Потеря.</b> Роад-понеглиф можно отнять: если владелец проигрывает дуэль другому игроку, победитель может забрать его, если проигравший не выставил карту пассивной способности, которая этому препятствует.</li></ul><h3>Зунеша (блуждающий остров Зоя)</h3><p>Зунеша — исполинский слон, на спине которого находится остров Зоя с четвёртым роад-понеглифом. У него нет фиксированных координат.</p><ul><li><b>Глобальное перемещение.</b> В колоде погоды 4 карты «Зунеша» (по одной на море). При её выходе Зунеша перемещается в указанное море, а клетка определяется броском 1d12.</li><li><b>Истощение.</b> Когда все 4 карты вышли, перемещения прекращаются. Слон остаётся на последней позиции, пока его не перенесут карты «Вивр-карта Зунеши» или «Древняя Вивр-карта Зунеши».</li><li><b>Пассажиры и груз.</b> Зунеша перемещается вместе со всеми игроками на его спине. Четвёртый понеглиф путешествует с ним, пока его не заберёт игрок.</li><li><b>Топот.</b> Зунеша перекрывает любую локацию, на которую прибывает: её свойства недоступны, закрытые карты смотреть нельзя. Игрок, оказавшийся на этой локации в момент прибытия, автоматически переносится на её спину.</li><li><b>Ручное управление (карты сокровищ).</b> «Вивр-карта Зунеши» (2 ОД) перемещает Зунешу на соседнюю локацию. «Древняя Вивр-карта Зунеши» (3 ОД) перемещает её в любое море на локацию с тем же номером. Обе карты может сыграть только игрок на спине Зунеши.</li></ul><h2>5. Дуэль</h2><h3>Общие правила</h3><ul><li><b>Лимит.</b> За один ход игрок может участвовать не более чем в 3 дуэлях. Дуэли с игроками, боссами и дозорными считаются вместе. После третьей дуэли в этом ходу нельзя вызывать игроков на дуэль и входить на поле битвы и Базу Дозора.</li><li><b>Вызов.</b> На дуэль можно вызвать только игрока, который стоит на той же локации (1 ОД).</li><li><b>Отступление без соседней нейтральной локации.</b> Если игрок проиграл и должен отступить, но все соседние локации тоже боевые, он перемещается на ближайшую нейтральную локацию, находящуюся в одном ходе от любой из окружающих его боевых локаций. Если подходит несколько, выбирает игрок.</li></ul><h3>Игрок против игрока</h3><p>Цель: одержать 2 победы в серии из максимум 3 раундов.</p><p><b>Шаг 1. Подготовка.</b> Оба игрока могут выложить до 2 карт пассивных способностей лицевой стороной вниз. Их эффекты действуют всю дуэль.</p><p><b>Шаг 2. Закладка атак.</b> Игроки выкладывают до 3 карт атаки рубашкой вверх. Если карт не хватает (или игрок не хочет их тратить), он выкладывает пустые слоты: бонус карты в таком раунде равен нулю, и игрок полагается только на кости.</p><p><b>Шаг 3. Раунды</b> (до 3). В каждом раунде игроки действуют одновременно:</p><ol><li>Вскрывают обе карты пассивных способностей.</li><li>Вскрывают свою первую карту атаки (или объявляют о её отсутствии).</li><li>Оба бросают 1d12.</li><li>Считают силу атаки: Атака персонажа + значение карты + результат на кубике + эффекты пассивных способностей − Уклонение соперника.</li></ol><p>Игрок с большей суммой побеждает в раунде и наносит 1 ранение (очко победы). При равенстве раунд заканчивается вничью: никто не получает ранений, кости не перебрасываются.</p><p><b>Невыложенные карты атаки.</b> Карты, вскрытые в раундах, после дуэли уходят в открытый сброс (в том числе в раунде, закончившемся вничью). Карты, которые не дошли до вскрытия, потому что серия закончилась раньше, остаются в закрытую у игрока и возвращаются ему в руку.</p><p><b>Шаг 4. Итоги и награды.</b> Дуэль завершается сразу, когда:</p><ul><li><b>Чистая победа:</b> один из игроков первым набрал 2 победы. Победитель получает <b>20 Берри</b> из банка и может забрать у проигравшего одно на выбор: либо 1 роад-понеглиф, либо 1 карту сокровищ.</li><li><b>Тотальный грабёж:</b> если у проигравшего нет ни понеглифов, ни карт сокровищ, победитель вслепую вытягивает 1 случайную карту из руки проигравшего (атаки или пассивной способности). Если карт нет вообще, победитель остаётся без трофеев, кроме 20 Берри.</li><li><b>Поражение:</b> проигравший обязан переместиться на любую соседнюю локацию без затрат ОД. Если проиграл тот, кто бросил вызов, его ход заканчивается, оставшиеся ОД сгорают.</li><li><b>Боевая ничья:</b> после 3 раундов никто не набрал 2 победы (из-за ничьих или счёта 1:1). Вызванный игрок остаётся на локации, бросивший вызов переходит на любую соседнюю без затрат ОД и продолжает ход.</li></ul><h3>Игрок против босса или дозорного</h3><p>Бой идёт по тем же правилам (до 2 побед в раундах), но проще:</p><ul><li>Боссы и дозорные не используют карты атаки, пассивных способностей и сокровищ.</li><li>Вся мощь противника заложена в его карточку. Кубики за него бросает любой другой игрок за столом.</li><li>После боя карта босса или дозорного не уходит в сброс, а возвращается в самый низ колоды. В каждой колоде 10 карт: уровень 1 — 3 карты, уровни 2, 3 и 4 — по 2 карты, уровень 5 — 1 карта. Награды у боссов и дозорных одинаковы для каждого уровня. Побеждённый персонаж не появится снова, пока колода не пройдёт целиком.</li></ul><p><b>Победа игрока.</b> Игрок наносит 2 ранения и получает из банка Берри или карты, указанные на карточке поверженного.</p><p><b>Особые карты сокровищ.</b> Золотой Дэн-Дэн Муси существует в единственном экземпляре на всю игру и лежит отдельно от колоды сокровищ: его получает только первый игрок, победивший Адмирала дозора (4 уровень), сразу, если у него меньше 3 карт сокровищ. После использования карта уходит из игры, повторно её никто не получает. Золотые Дэн-Дэн Муси, входящие в колоду сокровищ, остаются в колоде и покупаются как обычные карты. Остальные особые карты (Ключ от Импел Даун, Ножницы Похитителя Теней, Огненный кулак, Феникс Марко, Древнее оружие Посейдон, Подпольный рынок) покупаются как обычные карты сокровищ, но не действуют, пока владелец не победит в дуэли уникального персонажа, напечатанного на самой карте (Магеллан, Гекко Мория, Эйс, Марко, Король Нептун, Дофламинго; его атака и уклонение указаны на карте). Дуэль за карту проводится из руки по обычным правилам дуэли, стоит 0 ОД и входит в лимит 3 дуэлей за ход. При проигрыше карты с соответствующей пометкой уходят в сброс.</p><p><b>Поражение от босса</b> (пираты, Шичибукаи и др.):</p><ul><li><b>Отступление:</b> игрок немедленно возвращается на локацию, с которой пришёл на поле босса, без затрат ОД.</li><li><b>Ограбление:</b> игрок теряет 10 Берри. Если у него меньше 10 Берри, он отдаёт одну карту атаки или пассивку на выбор. Если нет ни Берри (10), ни таких карт, он пропускает 2 следующих хода.</li></ul><p><b>Поражение от Морского Дозора</b> (на Базе Дозора):</p><ul><li><b>Арест:</b> игрок остаётся на Базе Дозора и отправляется в Тюрьму на 2 следующих хода.</li><li><b>Взятка:</b> сразу после проигрыша дозорному, до ареста, игрок может заплатить в банк 15 Берри (0 ОД). Тогда арест не применяется, игрок остаётся на Базе Дозора и продолжает ход как обычно. Если игрок принял арест, он может заплатить такую же взятку в начале любого из своих ходов в тюрьме, после чего свободен и действует как обычно.</li><li><b>Побег:</b> карта сокровищ «Побег из тюрьмы», сыгранная сразу после проигрыша, отменяет арест, и игрок уходит на любую соседнюю локацию.</li></ul><h2>6. Победа в игре</h2><h3>Покорение Лафтейла</h3><p>Один из способов выиграть партию — первым достичь скрытого острова Лафтейл и выполнить финальное задание. Ступив на локацию Лафтейла, игрок вытягивает одну карту из колоды заданий Лафтейла (2 ОД), озвучивает её вслух и обязан выполнить. Первый, кто закрыл задание, объявляется Королём Пиратов и победителем.</p><p>Карту Лафтейла можно взять, только если у игрока есть хотя бы один роад-понеглиф. Если его нет, сначала нужно отобрать понеглиф в дуэли у другого игрока.</p><h3>Поиск Лафтейла («концепция ниток»)</h3><p>Чтобы найти путь к Лафтейлу, нужно собрать 4 роад-понеглифа с разных островов. Все они не обязаны находиться у одного игрока.</p><ol><li><b>Условие запуска.</b> Поиск начинается, когда в игре найдены все 4 роад-понеглифа и все их владельцы дали согласие. Любой владелец может отказаться по любой причине (право вето). Тогда бросок не совершается, игра идёт как обычно. Чтобы сдвинуться с мертвой точки, остальным придётся договариваться с отказником или отбирать его понеглиф в дуэли.</li><li><b>Вычисление координат (4 раунда).</b> После согласия в конце каждого раунда (после карты погоды) 4 роад-понеглифа бросаются ровно один раз. Каждый бросок определяет одну опорную точку по порядку: в Ист Блю, затем в Вест Блю, Норт Блю и в Саус Блю.</li><li><b>Точка Х.</b> После 4-го броска между четырьмя опорными островами нитками проводятся линии крест-накрест. Клетка, где линии пересекаются, становится Лафтейлом, на неё выставляется фишка.</li><li><b>Вход.</b> На клетку Лафтейла можно попасть только с тех 4 локаций, которые были определены бросками, по образовавшимся «ниткам». Если Лафтейл выпал на уже существующую локацию, её обычные пути к другим островам игнорируются.</li></ol><h3>Адмирал на карте</h3><p>Когда Лафтейл найден, на карту выходит один из трёх адмиралов Дозора: Акаину, Кизару или Фуджитора. Какой именно, определяется случайно в начале партии. Он появляется на красной локации и в конце каждого раунда идёт к ближайшему игроку, проходя до двух островов (атака 8, уклонение 5). Игрок на его острове сражается с ним в обычной дуэли; победа даёт 50 Берри и оглушает адмирала.</p><ul><li><b>Акаину.</b> При появлении град лавы навсегда уничтожает по одной локации в каждом море. Проигрыш: Импел Даун на 3 хода без выкупа и побега.</li><li><b>Кизару.</b> Может за один ход переместиться в другое море на локацию с тем же номером. При появлении по одной открытой локации в каждом море снова скрывается под знаком вопроса. Проигрыш: отбирает половину Берри и сажает в Импел Даун на 2 хода без выкупа и побега (если Берри нет, просто тюрьма).</li><li><b>Фуджитора.</b> В пределах одного моря попадает на любую локацию с игроком. При появлении в каждом море отмечается одна локация гравитации: игрок, вошедший на неё, пропускает следующий ход. Проигрыш: пропуск двух следующих ходов.</li></ul><h3>Второй способ победы: Истинный Король Пиратов</h3><p>Если один персонаж получает в инвентарь все доступные роад-понеглифы, ему достаточно переместиться на локацию Лафтейл. Прибыв на место, он мгновенно объявляется победителем, а карты заданий Лафтейла игнорируются.</p><h2>Приложение. Таблица сумм</h2><p>Все суммы в Берри кратны 5, поэтому для расчётов хватает покерных фишек номиналом 5, 10, 25 и 100. Суммы на карточках должны совпадать с этой таблицей.</p><table class=\"rt\"><tr><th>Статья</th><th>Берри</th><th>Тип</th></tr><tr><td>Стартовый капитал</td><td>20</td><td>Доход (разовый)</td></tr><tr><td>Флаг или игрок на локации с выпавшим номером</td><td>5</td><td>Доход (за бросок)</td></tr><tr><td>Флаг и игрок на одной локации (двойная плата)</td><td>10</td><td>Доход (за бросок)</td></tr><tr><td>Победа над игроком в дуэли</td><td>20</td><td>Доход (за событие)</td></tr><tr><td>Босс, ур. 1 — Простой пират</td><td>5</td><td>Доход (за событие)</td></tr><tr><td>Босс, ур. 2 — Капитан пиратов</td><td>10</td><td>Доход (за событие)</td></tr><tr><td>Босс, ур. 3 — Шичибукай</td><td>15</td><td>Доход (за событие)</td></tr><tr><td>Босс, ур. 4 — Великий пират</td><td>25</td><td>Доход (за событие)</td></tr><tr><td>Босс, ур. 5 — Правитель морей</td><td>35</td><td>Доход (за событие)</td></tr><tr><td>Дозорный, ур. 1 — Солдат дозора</td><td>5</td><td>Доход (за событие)</td></tr><tr><td>Дозорный, ур. 2 — Капитан дозора</td><td>10</td><td>Доход (за событие)</td></tr><tr><td>Дозорный, ур. 3 — Вице-адмирал дозора</td><td>15</td><td>Доход (за событие)</td></tr><tr><td>Дозорный, ур. 4 — Адмирал дозора</td><td>25</td><td>Доход (за событие)</td></tr><tr><td>Дозорный, ур. 5 — Герой дозора</td><td>35</td><td>Доход (за событие)</td></tr><tr><td>Карта сокровищ на Чёрном рынке</td><td>30</td><td>Расход</td></tr><tr><td>Гостевой персонаж на Чёрном рынке</td><td>50</td><td>Расход</td></tr><tr><td>Штраф за сброс задания</td><td>10</td><td>Расход</td></tr><tr><td>Штраф за сброс задания понеглифа или Лафтейла</td><td>100</td><td>Расход</td></tr><tr><td>Откуп из Тюрьмы и взятка при аресте</td><td>15</td><td>Расход</td></tr><tr><td>«Плата за тайну» (карта понеглифа)</td><td>5</td><td>Расход</td></tr><tr><td>Карта «Ловушка» — выкуп при сбросе</td><td>15</td><td>Расход</td></tr><tr><td>Карта «Долговая расписка» — выкуп при сбросе</td><td>10</td><td>Расход</td></tr><tr><td>Карта «Подпольный рынок» — скидка на карту сокровищ</td><td>10</td><td>Скидка</td></tr><tr><td>Денежное задание (цель победы)</td><td>85</td><td>Расход (цель)</td></tr></table>";
+const RULES_HTML="<h1>Правила игры — единая версия</h1><p> · </p><h2>1. Подготовка к игре</h2><p><b>Карта и фишки</b></p><ul><li>Соедините две части поля по линии Red Line.</li><li>Достаньте 4 коробки с фишками локаций, по одной на каждое море. Фишка выкладывается на локацию, когда игрок впервые туда приходит (см. «Исследование локаций» в разделе 4). В каждом море 11 локаций с номерами 2–12 и стартовая №1; стартовые остаются без фишек.</li><li><b>Случайная карта.</b> Карта каждой партии строится заново: у локаций (кроме красных проходов) случайные номера, положение и дороги, поэтому стартовая локация №1 и локация понеглифа в каждом море оказываются в разных местах. Красные проходы между морями (Норт Блю №10, Вест Блю №2, Ист Блю №4, Саус Блю №2) всегда стоят на одном и том же месте. В игре карту показывают до выбора персонажа, а места понеглифов скрыты.</li></ul><p><b>Роад-понеглифы</b></p><ul><li>В игре 4 роад-понеглифа. Для первых трёх бросьте 2d6 по одному разу, по порядку для Вест Блю, Норт Блю и Саус Блю. Положите фишку роад-понеглифа на локацию выпавшего номера в этом море рубашкой вверх и накройте её фишкой локации (на острове понеглифа всегда лежит обычная база). Игроки не должны знать, где лежат понеглифы: их предстоит найти.</li><li>Четвёртый находится на блуждающем острове Зоя (см. «Зунеша» в разделе 4).</li><li>Каждый понеглиф охраняет хранитель. Случайно, не глядя, раздайте четырёх хранителей (Большая Мамочка, Кайдо, Рыжеволосый Шанкс, Эдвард Ньюгейт Белоус) по четырём понеглифам, включая понеглиф на острове Зоя. Показатели у всех одинаковые: атака 9, уклонение 6. Хранителя кладут рубашкой вверх вместе с фишкой понеглифа.</li></ul><p><b>Колоды и компоненты</b></p><ul><li>Разложите 10 колод (см. раздел 2). Из колоды гостевых персонажей возьмите одну случайную карту, не глядя, и положите рубашкой вверх. Посмотреть её можно только после покупки.</li><li>Разложите карточки и фигурки 8 персонажей.</li><li>Подготовьте кубики: 2d6 для хода по карте, 1d12 для дуэлей и для выбора клетки Зунеши, 1d20 для дуэлей (только если его открывает карта гостевого персонажа).</li><li>Поставьте рядом банк с Берри.</li></ul><p><b>Очерёдность, персонаж и море</b></p><ul><li>Каждый игрок бросает 2d6. Чем больше сумма, тем раньше ходит игрок. При равенстве равные игроки перебрасывают.</li><li>В порядке очерёдности игроки выбирают персонажа и берут его фигурку. Играть им придётся до конца партии, поэтому изучите способности, в том числе ультимативную.</li><li>Карта партии видна всем ещё до выбора персонажа. В том же порядке игроки выбирают море, с которого начинают путешествие, поэтому где лежат понеглифы, никто не знает, поэтому море выбирают по расположению старта и дорог. Два игрока не могут начать из одного моря. Старт в каждом море это локация №1.</li></ul><p><b>Стартовые ресурсы</b> (каждому игроку)</p><ul><li>20 Берри;</li><li>3 карты атаки, одинаковый набор для всех: со значениями 3, 5 и 7;</li><li>2 карты пассивных способностей.</li></ul><h2>2. Игровой инвентарь</h2><p><b>Колоды</b> (всего 10)</p><ul><li><b>Атака</b>: карты со значением от 1 до 8, которое прибавляется к силе атаки в дуэли. Также используются при некоторых картах погоды.</li><li><b>Пассивные способности</b>: особые способности (например, Воля вооружения, Воля наблюдения) и вспомогательные персонажи. Дают дополнительную атаку или снижают урон от соперника в дуэли.</li><li><b>Погода</b>: сюжетная колода, события которой меняют расположение игроков и компонентов на карте.</li><li><b>Задания</b>: задания, которые берут на ивентовых локациях.</li><li><b>Сокровища</b>: особые способности для дуэли и хода по карте, часть из них работает против владельца. Покупаются на «Чёрном рынке» за 50 Берри, карта берётся вслепую с верха колоды.</li><li><b>Боссы</b>: на поле битвы игрок берёт верхнюю карту и сражается с этим персонажем.</li><li><b>Дозорные</b>: то же на Базе Дозора, а в Тюрьме только если игрок не откупается.</li><li><b>Гостевые персонажи</b>: в игру выкладывается одна случайная карта. Её можно купить на «Чёрном рынке» за 50 Берри. Гость может сильно изменить расклад сил, а может оказаться пустышкой.</li><li><b>Понеглифы</b>: задания, которые нужно выполнить, чтобы получить роад-понеглиф.</li><li><b>Лафтейл</b>: финальные задания. Чтобы победить, игрок, попавший на остров Лафтейл, должен выполнить одно из них.</li></ul><p><b>Роад-понеглифы.</b> В игре 4 понеглифа, это особые кубики со значениями 1–3 (каждое по два раза). С их помощью определяют координаты Лафтейла (см. раздел 6).</p><p><b>Фишки.</b> Цвет фишки определяет тип локации (см. «Типы локаций» в разделе 4). Всего:</p><ul><li>44 фишки локаций (4 моря × 11);</li><li>3 фишки роад-понеглифов (лежат под фишками локаций, четвёртый находится на острове Зоя);</li><li>4 карточки хранителей понеглифов (Большая Мамочка, Кайдо, Шанкс, Белоус), у каждого атака 9 и уклонение 6;</li><li>1 фишка Лафтейла, её выставляют, когда определены координаты.</li></ul><p><b>Флаги.</b> У каждого игрока 4 флага. Правила установки, сжигания и дохода описаны в разделе 4.</p><h2>3. Структура хода</h2><p><b>1. Доход (начало хода)</b></p><p>Игрок, чей ход, бросает 2d6, а доход получают все игроки. За каждую свою локацию с выпавшим номером (там стоит флаг игрока или он сам) выплачивается сумма по таблице «Доход» в разделе 4 (чем реже выпадает номер, тем больше платят), а если на ней есть и флаг, и игрок, то вдвое больше. Подробнее — «Доход» в разделе 4. Тюрьма, База Дозора и поле битвы доход не приносят.</p><p><b>2. Действия</b></p><p>У игрока 3 очка действия (ОД), они восстанавливаются в начале каждого хода. Тратить их можно в любом порядке до исчерпания:</p><table class=\"rt\"><tr><th>Действие</th><th>ОД</th></tr><tr><td>Перемещение на соседнюю локацию (фишка локации вскрывается сразу)</td><td>1</td></tr><tr><td>Вызов на дуэль игрока, который стоит на той же локации</td><td>1</td></tr><tr><td>Установка флага на текущей локации*</td><td>2</td></tr><tr><td>Сжигание вражеского флага с установкой своего*</td><td>2</td></tr><tr><td>Карта понеглифа</td><td>2</td></tr><tr><td>Карта Лафтейла</td><td>2</td></tr><tr><td>Применение карты сокровищ</td><td>указано на карте</td></tr></table><p>*Нельзя, если у вас уже есть флаг на локации с таким же номером в другом море, а также на Тюрьме, Базе Дозора, поле битвы и Зунеше.</p><p><b>Без ОД:</b> покупка карты атаки или пассивной способности (10 Берри, не более одной карты за ход), покупка карт на «Чёрном рынке» (только за Берри), взятие задания на ивентовой локации, сброс задания (штраф 10 Берри, для заданий понеглифа и Лафтейла 100 Берри), откуп из Тюрьмы, отступление после поражения, бой с боссом при входе на поле битвы, поднятие своего флага с локации. У некоторых персонажей есть одно бесплатное действие (см. карточки персонажей).</p><p>За ход можно вступить не более чем в 3 дуэли. Дуэли с игроками, боссами и дозорными считаются вместе (см. раздел 5).</p><p><b>Покупка карт атаки и пассивных способностей.</b> Карта атаки или пассивной способности покупается за 10 Берри без очков действия в любой момент своего хода. За ход можно купить только одну такую карту (атаку или пассивную вместе). Карта берётся с верха соответствующей колоды, лимит на руках прежний: не более 10 карт каждого типа.</p><p><b>3. Конец хода</b></p><p>Ход заканчивается сразу, если:</p><ol><li>Потрачены все 3 ОД (карту сокровищ без ОД можно сыграть и после этого).</li><li>Игрок проиграл дуэль, в которую сам бросил вызов: оставшиеся ОД сгорают, игрок отступает (см. раздел 5).</li><li>Игрок проиграл бой боссу: ОД сгорают, игрок отступает и его грабят (см. раздел 5).</li><li>Игрок проиграл бой Морскому Дозору на Базе Дозора: он отправляется в Тюрьму и пропускает 2 следующих хода.</li></ol><p>После победы игрок продолжает тратить ОД до конца. После ничьей в дуэли ход тоже продолжается (бросивший вызов уходит на соседнюю локацию без затрат ОД) и заканчивается, только когда кончились ОД.</p><p><b>Конец раунда</b></p><p>Когда все игроки сходили:</p><ol><li>Открывается верхняя карта погоды, её эффект действует на всех игроков на карте. Исключение составляют персонажи, у которых на карточке есть способность, отменяющая погоду.</li><li>Если идёт поиск Лафтейла, бросаются роад-понеглифы (см. раздел 6).</li></ol><h2>4. Механики</h2><h3>Исследование локаций</h3><ul><li>В начале игры все фишки локаций лежат в коробках по морям. Когда игрок впервые переходит на локацию в этом море, он достаёт фишку из коробки, не глядя, и выкладывает её открытой стороной. Так при каждой раскладке локации получают разные значения.</li><li>Игроки видят только расположение путей, тип локации известен только после вскрытия фишки.</li><li><b>Активация.</b> Сразу после вскрытия игрок обязан применить правила локации, если это Тюрьма, Поле битвы или База Дозора.</li><li><b>Постоянство.</b> Открытая локация остаётся открытой для всех до конца игры.</li></ul><h3>Проходы между морями</h3><ul><li><b>Красные кружки.</b> В каждом море есть один проход, он отмечен красным кружком: Норт Блю — №10, Вест Блю — №2, Ист Блю — №4, Саус Блю — №2. Через проходы моря соединены друг с другом (Reverse Mountain в центре карты). Красные проходы всегда на своих местах, остальные локации в каждой партии расположены по-разному.</li><li><b>Переход.</b> Перейти с красной локации одного моря на красную локацию другого моря стоит 1 ОД, как обычный шаг.</li><li><b>Обычная локация.</b> Во всём остальном красная локация такая же, как другие: у неё есть номер, при первом заходе на неё вскрывается фишка, на ней можно ставить флаг и получать доход. При отступлении красные локации считаются соседними так же, как обычные.</li><li><b>Особые фишки на проходе.</b> Если на красной локации вскрылась Тюрьма, База Дозора или поле битвы, там действуют правила этого типа. Поэтому переход в другое море через такой проход может потребовать боя.</li></ul><h3>Типы локаций</h3><table class=\"rt\"><tr><th>Тип</th><th>Фишка</th><th>В каждом море</th></tr><tr><td>Ивентовая</td><td>оранжевая</td><td>3</td></tr><tr><td>Базовая</td><td>белая</td><td>4</td></tr><tr><td>База Дозора</td><td>синяя</td><td>1</td></tr><tr><td>Поле битвы</td><td>красная</td><td>1</td></tr><tr><td>Тюрьма</td><td>серая</td><td>1</td></tr><tr><td>Чёрный рынок</td><td>чёрная</td><td>1</td></tr></table><ul><li><b>Ивентовая.</b> Всегда активна, не истощается, возвращаться на неё можно сколько угодно. Игрок может (по желанию) взять карту из колоды заданий, если у него нет другого невыполненного задания. Взятое задание обязательно выполнить или сбросить за штраф. <b>Веха заданий.</b> После 5 выполненных ивентовых заданий (сброшенные и отменённые не считаются, задания понеглифа и Лафтейла тоже) игрок один раз за игру получает 2 очка и распределяет их между атакой и уклонением как хочет (1+1, 2+0 или 0+2). Потолок: атака не выше 8, уклонение не выше 7 с учётом базовых значений персонажа и бонусов заданий; карты, пассивки и сокровища считаются сверху. Очко, для которого нет места, превращается в 15 Берри. Часть боевых заданий (Крупная дичь, Заказ Мирового Правительства, Испытание Воли, Сильнейший Йонко) даёт на выбор 1 карту сокровищ из общей колоды, если на руках есть место.</li><li><b>База Дозора.</b> Игрок обязан сразиться с дозорным: берёт верхнюю карту колоды дозорных и вступает в дуэль (раздел 5).</li><li><b>Поле битвы.</b> Бой с боссом начинается автоматически, до любых других действий игрока, и не требует ОД.</li><li><b>Тюрьма.</b> Попав сюда, игрок может откупиться за 15 Берри и действовать как обычно или вступить в бой с дозорным. Победа даёт награду с карты и право бесплатно переместиться на соседнюю локацию. Если игрок не откупился и не победил, он пропускает 2 следующих хода, после чего бесплатно перемещается на любую соседнюю локацию.</li><li><b>Чёрный рынок.</b> По одному в каждом море. Покупка доступна только при нахождении на этой локации, без ОД и только за Берри: карта сокровищ стоит 50, берётся вслепую с верха колоды. Гостевой персонаж стоит 80. Лимита покупок за визит нет, но на руках может быть не более 3 карт сокровищ.</li><li><b>Лафтейл</b> (раздел 6) и <b>блуждающие локации</b> (Зунеша, ниже) фишек моря не имеют; блуждающие появляются только по картам погоды.</li></ul><h3>Флаги</h3><ul><li>У игрока 4 флага. Флаг ставится на локацию, где находится игрок (2 ОД).</li><li>Нельзя иметь два своих флага на локациях с одинаковым номером в разных морях. Флаги нельзя ставить на Тюрьму, Базу Дозора, поле битвы и Зунешу.</li><li><b>Перенос.</b> Чтобы перенести флаг, игрок лично возвращается на его локацию, забирает бесплатно и ставит заново на нужной локации за 2 ОД.</li><li><b>Сжигание.</b> На локации с чужим флагом игрок может за 2 ОД заменить его своим. Чужой флаг возвращается владельцу в запас. Правило об одинаковых номерах действует и здесь.</li></ul><h3>Доход</h3><ul><li><b>Бросок 2d6.</b> В начале хода бросает тот, чей ход, а доход получают все. Сумма определяет «активную локацию». Игрок, чей флаг или чья фишка стоит на локации с этим номером в любом из морей, получает выплату по таблице ниже за каждую такую локацию. Чем реже выпадает номер, тем больше платят.</li><li><b>Двойная плата.</b> Если на этой локации стоят и ваш флаг, и ваша фишка, вы получаете удвоенную выплату. Чужие флаги на вашу плату не влияют.</li><li><b>Исключения.</b> Тюрьма, База Дозора и поле битвы доход не приносят.</li><li><b>Другие источники.</b> Задания (сумма указана на карте), победа над игроком (20 Берри и трофей), победа над боссом или дозорным (награда по карте). Суммы — в приложении.</li></ul><table class=\"rt\"><tr><th>Выпавший номер (2d6)</th><th>2 и 12</th><th>3 и 11</th><th>4 и 10</th><th>5 и 9</th><th>6 и 8</th><th>7</th></tr><tr><td>Выплата за флаг или фишку</td><td>25</td><td>15</td><td>10</td><td>8</td><td>6</td><td>5</td></tr><tr><td>Флаг и фишка вместе</td><td>50</td><td>30</td><td>20</td><td>16</td><td>12</td><td>10</td></tr></table><p>Стартовые локации (номер 1) дохода не приносят, потому что 2d6 даёт минимум 2.</p><h3>Карты</h3><ul><li><b>Атака и пассивные способности:</b> не более 10 карт каждого типа на игрока. Применяются в дуэли или при определённых картах погоды.</li><li><b>Задания:</b> не более 1 активной карты (с ивентовой локации, понеглифа или Лафтейла). Пока она не выполнена, брать любые другие задания нельзя. Игрок активирует задание в свой ход, озвучивая его всем, без ОД, если иное не написано на карте. <b>Сброс:</b> задание можно сбросить в любой свой ход без ОД, заплатив в банк 10 Берри. Задание роад-понеглифа и задание Лафтейла просто так не сбросить: для этого нужно единовременно заплатить в банк 100 Берри. Задание Лафтейла можно сбросить только находясь на самом Лафтейле. Только после этого можно взять новое.</li><li><b>Сокровища:</b> не более 3 карт на руках. Если после покупки или награды их стало 4 и более, лишние немедленно уходят в сброс без возврата денег.</li><li><b>Открытый сброс.</b> Любую карту сокровищ при сбросе (переполнение, желание игрока, эффект другой карты) нужно показать всем. Тайный сброс запрещён.</li><li><b>Ловушки.</b> Если сброшенная карта имеет подтип «Ловушка», игрок обязан немедленно выполнить её штрафное условие (заплатить Берри, сбросить карты атаки и т. д.). С ловушкой можно сбросить другую негативную карту сокровищ.</li></ul><h3>Обмен</h3><p>Игроки могут обмениваться любыми предметами с рук, в том числе роад-понеглифами. Берри передавать просто так нельзя: деньги можно получить только в обмен на предмет (например, продать карту сокровищ). Цену игроки обсуждают сами.</p><h3>Задания и чтение роад-понеглифов</h3><ul><li><b>Поиск.</b> Острова с роад-понеглифами скрыты: понеглиф лежит под фишкой локации. Когда игрок открывает фишку на этом острове, понеглиф обнаруживается и с этого момента виден всем. Четвёртый понеглиф на острове Зоя виден, как только Зоя появилась. Чтобы найти все понеглифы, придётся открывать локации на всех картах.</li><li><b>Хранитель понеглифа: условия не такие строгие.</b> Хранители сильные (атака 9, уклонение 6), но побеждать их не обязательно.<ul><li>Вызов хранителя стоит 1 ОД и считается дуэлью (не больше 3 дуэлей за ход).</li><li>Дуэль с хранителем всегда идёт все 3 раунда, даже если хранитель выиграл первые два.</li><li>Чтобы получить право взять задание понеглифа, достаточно выиграть хотя бы один раунд или сыграть вничью хотя бы один раунд.</li><li>Если не вышло, ничего страшного: Берри и карты задания не теряются, понеглиф остаётся на месте, хранителя можно вызвать снова. Использованные в дуэли карты атаки уходят в сброс, как в любой дуэли.</li><li>Если выиграть 2 раунда из 3, понеглиф достаётся сразу, без задания, и в придачу 100 Берри.</li><li>Допуск запоминается: после него задание понеглифа берётся за 2 ОД в этот же или в любой следующий ход на этом острове.</li></ul></li><li><b>Прибытие.</b> Персонаж должен находиться на локации роад-понеглифа.</li><li><b>Получение задания (2 ОД).</b> Игрок вытаскивает одну карту из колоды понеглифов. На локации понеглифа можно взять только одно задание: как только оно взято, фишка понеглифа снимается с карты. Если игрок сбросит это задание за штраф, фишка возвращается на карту.</li><li><b>Выполнение.</b> Игрок обязан выполнить условия карты. Время на эти задания не ограничено, но пока испытание не выполнено, брать задания на ивентовых локациях и карты других понеглифов нельзя.</li><li><b>Захват.</b> Как только условия выполнены, игрок немедленно забирает роад-понеглиф в инвентарь.</li><li><b>Потеря.</b> Роад-понеглиф можно отнять: если владелец проигрывает дуэль другому игроку, победитель может забрать его, если проигравший не выставил карту пассивной способности, которая этому препятствует.</li></ul><h3>Зунеша (блуждающий остров Зоя)</h3><p>Зунеша — исполинский слон, на спине которого находится остров Зоя с четвёртым роад-понеглифом. У него нет фиксированных координат.</p><ul><li><b>Глобальное перемещение.</b> В колоде погоды 4 карты «Зунеша» (по одной на море). При её выходе Зунеша перемещается в указанное море, а клетка определяется броском 1d12.</li><li><b>Истощение.</b> Когда все 4 карты вышли, перемещения прекращаются. Слон остаётся на последней позиции, пока его не перенесут карты «Вивр-карта Зунеши» или «Древняя Вивр-карта Зунеши».</li><li><b>Пассажиры и груз.</b> Зунеша перемещается вместе со всеми игроками на его спине. Четвёртый понеглиф путешествует с ним, пока его не заберёт игрок.</li><li><b>Топот.</b> Зунеша перекрывает любую локацию, на которую прибывает: её свойства недоступны, закрытые карты смотреть нельзя. Игрок, оказавшийся на этой локации в момент прибытия, автоматически переносится на её спину.</li><li><b>Ручное управление (карты сокровищ).</b> «Вивр-карта Зунеши» (2 ОД) перемещает Зунешу на соседнюю локацию. «Древняя Вивр-карта Зунеши» (3 ОД) перемещает её в любое море на локацию с тем же номером. Обе карты может сыграть только игрок на спине Зунеши.</li></ul><h2>5. Дуэль</h2><h3>Общие правила</h3><ul><li><b>Лимит.</b> За один ход игрок может участвовать не более чем в 3 дуэлях. Дуэли с игроками, боссами и дозорными считаются вместе. После третьей дуэли в этом ходу нельзя вызывать игроков на дуэль и входить на поле битвы и Базу Дозора.</li><li><b>Вызов.</b> На дуэль можно вызвать только игрока, который стоит на той же локации (1 ОД).</li><li><b>Отступление без соседней нейтральной локации.</b> Если игрок проиграл и должен отступить, но все соседние локации тоже боевые, он перемещается на ближайшую нейтральную локацию, находящуюся в одном ходе от любой из окружающих его боевых локаций. Если подходит несколько, выбирает игрок.</li></ul><h3>Игрок против игрока</h3><p>Цель: одержать 2 победы в серии из максимум 3 раундов.</p><p><b>Шаг 1. Подготовка.</b> Оба игрока могут выложить до 2 карт пассивных способностей лицевой стороной вниз. Их эффекты действуют всю дуэль.</p><p><b>Шаг 2. Закладка атак.</b> Игроки выкладывают до 3 карт атаки рубашкой вверх. Если карт не хватает (или игрок не хочет их тратить), он выкладывает пустые слоты: бонус карты в таком раунде равен нулю, и игрок полагается только на кости.</p><p><b>Шаг 3. Раунды</b> (до 3). В каждом раунде игроки действуют одновременно:</p><ol><li>Вскрывают обе карты пассивных способностей.</li><li>Вскрывают свою первую карту атаки (или объявляют о её отсутствии).</li><li>Оба бросают 1d12.</li><li>Считают силу атаки: Атака персонажа + значение карты + результат на кубике + эффекты пассивных способностей − Уклонение соперника.</li></ol><p>Игрок с большей суммой побеждает в раунде и наносит 1 ранение (очко победы). При равенстве раунд заканчивается вничью: никто не получает ранений, кости не перебрасываются.</p><p><b>Невыложенные карты атаки.</b> Карты, вскрытые в раундах, после дуэли уходят в открытый сброс (в том числе в раунде, закончившемся вничью). Карты, которые не дошли до вскрытия, потому что серия закончилась раньше, остаются в закрытую у игрока и возвращаются ему в руку.</p><p><b>Шаг 4. Итоги и награды.</b> Дуэль завершается сразу, когда:</p><ul><li><b>Чистая победа:</b> один из игроков первым набрал 2 победы. Победитель получает <b>20 Берри</b> из банка и может забрать у проигравшего одно на выбор: либо 1 роад-понеглиф, либо 1 карту сокровищ.</li><li><b>Тотальный грабёж:</b> если у проигравшего нет ни понеглифов, ни карт сокровищ, победитель вслепую вытягивает 1 случайную карту из руки проигравшего (атаки или пассивной способности). Если карт нет вообще, победитель остаётся без трофеев, кроме 20 Берри.</li><li><b>Поражение:</b> проигравший обязан переместиться на любую соседнюю локацию без затрат ОД. Если проиграл тот, кто бросил вызов, его ход заканчивается, оставшиеся ОД сгорают.</li><li><b>Боевая ничья:</b> после 3 раундов никто не набрал 2 победы (из-за ничьих или счёта 1:1). Вызванный игрок остаётся на локации, бросивший вызов переходит на любую соседнюю без затрат ОД и продолжает ход.</li></ul><h3>Игрок против босса или дозорного</h3><p>Бой идёт по тем же правилам (до 2 побед в раундах), но проще:</p><ul><li>Боссы и дозорные не используют карты атаки, пассивных способностей и сокровищ.</li><li>Вся мощь противника заложена в его карточку. Кубики за него бросает любой другой игрок за столом.</li><li>После боя карта босса или дозорного не уходит в сброс, а возвращается в самый низ колоды. В каждой колоде 10 карт: уровень 1 — 3 карты, уровни 2, 3 и 4 — по 2 карты, уровень 5 — 1 карта. Награды у боссов и дозорных одинаковы для каждого уровня. Побеждённый персонаж не появится снова, пока колода не пройдёт целиком.</li></ul><p><b>Победа игрока.</b> Игрок наносит 2 ранения и получает из банка Берри или карты, указанные на карточке поверженного.</p><p><b>Особые карты сокровищ.</b> Золотой Дэн-Дэн Муси существует в единственном экземпляре на всю игру и лежит отдельно от колоды сокровищ: его получает только первый игрок, победивший Адмирала дозора (4 уровень), сразу, если у него меньше 3 карт сокровищ. После использования карта уходит из игры, повторно её никто не получает. Золотые Дэн-Дэн Муси, входящие в колоду сокровищ, остаются в колоде и покупаются как обычные карты. Остальные особые карты (Ключ от Импел Даун, Ножницы Похитителя Теней, Огненный кулак, Феникс Марко, Древнее оружие Посейдон, Подпольный рынок) покупаются как обычные карты сокровищ, но не действуют, пока владелец не победит в дуэли уникального персонажа, напечатанного на самой карте (Магеллан, Гекко Мория, Эйс, Марко, Король Нептун, Дофламинго; его атака и уклонение указаны на карте). Дуэль за карту проводится из руки по обычным правилам дуэли, стоит 0 ОД и входит в лимит 3 дуэлей за ход. При проигрыше карты с соответствующей пометкой уходят в сброс.</p><p><b>Поражение от босса</b> (пираты, Шичибукаи и др.):</p><ul><li><b>Отступление:</b> игрок немедленно возвращается на локацию, с которой пришёл на поле босса, без затрат ОД.</li><li><b>Ограбление:</b> игрок теряет 10 Берри. Если у него меньше 10 Берри, он отдаёт одну карту атаки или пассивку на выбор. Если нет ни Берри (10), ни таких карт, он пропускает 2 следующих хода.</li></ul><p><b>Поражение от Морского Дозора</b> (на Базе Дозора):</p><ul><li><b>Арест:</b> игрок остаётся на Базе Дозора и отправляется в Тюрьму на 2 следующих хода.</li><li><b>Взятка:</b> сразу после проигрыша дозорному, до ареста, игрок может заплатить в банк 15 Берри (0 ОД). Тогда арест не применяется, игрок остаётся на Базе Дозора и продолжает ход как обычно. Если игрок принял арест, он может заплатить такую же взятку в начале любого из своих ходов в тюрьме, после чего свободен и действует как обычно.</li><li><b>Побег:</b> карта сокровищ «Побег из тюрьмы», сыгранная сразу после проигрыша, отменяет арест, и игрок уходит на любую соседнюю локацию.</li></ul><h2>6. Победа в игре</h2><h3>Покорение Лафтейла</h3><p>Один из способов выиграть партию — первым достичь скрытого острова Лафтейл и выполнить финальное задание. Ступив на локацию Лафтейла, игрок вытягивает одну карту из колоды заданий Лафтейла (2 ОД), озвучивает её вслух и обязан выполнить. Первый, кто закрыл задание, объявляется Королём Пиратов и победителем.</p><p>Карту Лафтейла можно взять, только если у игрока есть хотя бы один роад-понеглиф. Если его нет, сначала нужно отобрать понеглиф в дуэли у другого игрока.</p><h3>Поиск Лафтейла («концепция ниток»)</h3><p>Чтобы найти путь к Лафтейлу, нужно собрать 4 роад-понеглифа с разных островов. Все они не обязаны находиться у одного игрока.</p><ol><li><b>Условие запуска.</b> Поиск начинается, когда в игре найдены все 4 роад-понеглифа и все их владельцы дали согласие. Любой владелец может отказаться по любой причине (право вето). Тогда бросок не совершается, игра идёт как обычно. Чтобы сдвинуться с мертвой точки, остальным придётся договариваться с отказником или отбирать его понеглиф в дуэли.</li><li><b>Вычисление координат (4 раунда).</b> После согласия в конце каждого раунда (после карты погоды) 4 роад-понеглифа бросаются ровно один раз. Каждый бросок определяет одну опорную точку по порядку: в Ист Блю, затем в Вест Блю, Норт Блю и в Саус Блю.</li><li><b>Точка Х.</b> После 4-го броска между четырьмя опорными островами нитками проводятся линии крест-накрест. Клетка, где линии пересекаются, становится Лафтейлом, на неё выставляется фишка.</li><li><b>Вход.</b> На клетку Лафтейла можно попасть только с тех 4 локаций, которые были определены бросками, по образовавшимся «ниткам». Если Лафтейл выпал на уже существующую локацию, её обычные пути к другим островам игнорируются.</li></ol><h3>Адмирал на карте</h3><p>Когда Лафтейл найден, на карту выходит один из трёх адмиралов Дозора: Акаину, Кизару или Фуджитора. Какой именно, определяется случайно в начале партии. Он появляется на красной локации и в конце каждого раунда идёт к ближайшему игроку, проходя до двух островов (атака 8, уклонение 5). Игрок на его острове сражается с ним в обычной дуэли; победа даёт 50 Берри и оглушает адмирала.</p><ul><li><b>Акаину.</b> При появлении град лавы навсегда уничтожает по одной локации в каждом море. Проигрыш: Импел Даун на 3 хода без выкупа и побега.</li><li><b>Кизару.</b> Может за один ход переместиться в другое море на локацию с тем же номером. При появлении по одной открытой локации в каждом море снова скрывается под знаком вопроса. Проигрыш: отбирает половину Берри и сажает в Импел Даун на 2 хода без выкупа и побега (если Берри нет, просто тюрьма).</li><li><b>Фуджитора.</b> В пределах одного моря попадает на любую локацию с игроком. При появлении в каждом море отмечается одна локация гравитации: игрок, вошедший на неё, пропускает следующий ход. Проигрыш: пропуск двух следующих ходов.</li></ul><h3>Второй способ победы: Истинный Король Пиратов</h3><p>Если один персонаж получает в инвентарь все доступные роад-понеглифы, ему достаточно переместиться на локацию Лафтейл. Прибыв на место, он мгновенно объявляется победителем, а карты заданий Лафтейла игнорируются.</p><h2>Приложение. Таблица сумм</h2><p>Все суммы в Берри кратны 5, поэтому для расчётов хватает покерных фишек номиналом 5, 10, 25 и 100. Суммы на карточках должны совпадать с этой таблицей.</p><table class=\"rt\"><tr><th>Статья</th><th>Берри</th><th>Тип</th></tr><tr><td>Стартовый капитал</td><td>20</td><td>Доход (разовый)</td></tr><tr><td>Флаг или игрок на локации с выпавшим номером</td><td>5</td><td>Доход (за бросок)</td></tr><tr><td>Флаг и игрок на одной локации (двойная плата)</td><td>10</td><td>Доход (за бросок)</td></tr><tr><td>Победа над игроком в дуэли</td><td>20</td><td>Доход (за событие)</td></tr><tr><td>Босс, ур. 1 — Простой пират</td><td>5</td><td>Доход (за событие)</td></tr><tr><td>Босс, ур. 2 — Капитан пиратов</td><td>10</td><td>Доход (за событие)</td></tr><tr><td>Босс, ур. 3 — Шичибукай</td><td>15</td><td>Доход (за событие)</td></tr><tr><td>Босс, ур. 4 — Великий пират</td><td>25</td><td>Доход (за событие)</td></tr><tr><td>Босс, ур. 5 — Правитель морей</td><td>35</td><td>Доход (за событие)</td></tr><tr><td>Дозорный, ур. 1 — Солдат дозора</td><td>5</td><td>Доход (за событие)</td></tr><tr><td>Дозорный, ур. 2 — Капитан дозора</td><td>10</td><td>Доход (за событие)</td></tr><tr><td>Дозорный, ур. 3 — Вице-адмирал дозора</td><td>15</td><td>Доход (за событие)</td></tr><tr><td>Дозорный, ур. 4 — Адмирал дозора</td><td>25</td><td>Доход (за событие)</td></tr><tr><td>Дозорный, ур. 5 — Герой дозора</td><td>35</td><td>Доход (за событие)</td></tr><tr><td>Карта сокровищ на Чёрном рынке</td><td>50</td><td>Расход</td></tr><tr><td>Гостевой персонаж на Чёрном рынке</td><td>80</td><td>Расход</td></tr><tr><td>Штраф за сброс задания</td><td>10</td><td>Расход</td></tr><tr><td>Штраф за сброс задания понеглифа или Лафтейла</td><td>100</td><td>Расход</td></tr><tr><td>Откуп из Тюрьмы и взятка при аресте</td><td>15</td><td>Расход</td></tr><tr><td>«Плата за тайну» (карта понеглифа)</td><td>5</td><td>Расход</td></tr><tr><td>Карта «Ловушка» — выкуп при сбросе</td><td>15</td><td>Расход</td></tr><tr><td>Карта «Долговая расписка» — выкуп при сбросе</td><td>10</td><td>Расход</td></tr><tr><td>Карта «Подпольный рынок» — скидка на карту сокровищ</td><td>10</td><td>Скидка</td></tr><tr><td>Денежное задание (цель победы)</td><td>85</td><td>Расход (цель)</td></tr></table>";
 let RSEC=0;
 function rulesSecs(){
   const parts=RULES_HTML.split(/(?=<h2>)/).filter(s=>s.startsWith('<h2>'));
@@ -3086,7 +3246,7 @@ function helpHtml(){
   +'<li>Погода: Аквалагуна ×6, Buster Call ×4, Затишье ×6, Зунеша ×4 (по морю), Калм Белт ×5 (−1 ОД всем на раунд), Шторм Гранд Лайна ×6 (все уходят на случайную безопасную соседнюю локацию), Течение Тарай ×6 (+1 ОД всем на раунд). Нами защищена от негативных эффектов погоды. Эффект на ОД действует в раунде после карты. Бомбардировка Buster Call отправляет в тюрьму на 2 хода.</li>'
   +'<li>Золотой Дэн-Дэн Муси один на всю игру: его получает первый, кто победил Адмирала дозора (4 ур.); после использования карта уходит из игры. Остальные особые карты сокровищ покупаются как обычные, но неактивны, пока вы не победите в дуэли персонажа, указанного на карте (его А/У напечатаны на карте): действие «Сразиться за карту» из руки, 0 ОД, считается в лимит 3 дуэлей. Для карт с пометкой проигрыш — карта уходит в сброс.</li>'
   +'<li>Выложенные пассивные карты и открытые карты атаки после дуэли уходят в сброс; невскрытые карты атаки возвращаются в руку. Карты сокровищ с характеристиками остаются, если в тексте не сказано иное. Карты сокровищ с характеристиками (А/У) работают как 3-я пассивка; суммы по картам: Ловушка 15, Расписка 10, подпольный рынок −10.</li>'
-  +'<li>Гости: в партию выкладывается один из трёх (Лаксус, Нацу, Сон Джин Ву), покупается за 50 Берри как карта сокровищ (3-я пассивка). Гостевая карта слишком сильна, поэтому после первого использования (одной дуэли или громового дождя Лаксуса) она уходит в сброс навсегда: достать её оттуда, в том числе Мусорщиками, нельзя. Impact Dial: −3 к итогу соперника и +3 к вашей следующей карте. Чоппер: +2 к уклонению. Рамбл Болл: 5 Берри один раз за дуэль, +3 к атаке в каждом раунде.</li>'
+  +'<li>Гости: в партию выкладывается один из трёх (Лаксус, Нацу, Сон Джин Ву), покупается за 80 Берри как карта сокровищ (3-я пассивка). Гостевая карта слишком сильна, поэтому после первого использования (одной дуэли или громового дождя Лаксуса) она уходит в сброс навсегда: достать её оттуда, в том числе Мусорщиками, нельзя. Impact Dial: −3 к итогу соперника и +3 к вашей следующей карте. Чоппер: +2 к уклонению. Рамбл Болл: 5 Берри один раз за дуэль, +3 к атаке в каждом раунде.</li>'
   +'<li>Зунеша стоит на клетке и блокирует её; игроки с этой клетки переезжают на ней (отдельный узел «Зунеша»), там же лежит 4-й понеглиф.</li>'
   +'<li>Лафтейл появляется на пересечении линий Ист–Вест и Норт–Саус; вход только с 4 опорных локаций. Победа также при понеглифах у одного игрока (Робин: достаточно 3).</li>'
   +'<li>В тюрьму после ареста вы не переноситесь: остаётесь на месте и пропускаете 2 хода (или платите 15 / играете «Побег»). Игроков за столом до 4 (по одному на море).</li>'
@@ -3224,12 +3384,68 @@ function setHtml(){
 
 // ===== Зал славы (Firebase hall/) =====
 function hallSave(){
-  if(!G||G.winner==null||G.hallDone||!NET.on||!NET.code)return;G.hallDone=true;
+  if(!G||G.winner==null||G.hallDone||G.coop||!NET.on||!NET.code)return;G.hallDone=true;
   const p=G.players[G.winner];if(!p)return;
   const id=NET.code+'-'+((NET.meta&&(NET.meta.seed|0))||0);
   fbLoad().then(rdb=>rdb.ref('hall/'+id).set({name:String(p.name||'Игрок').slice(0,24),ch:p.ch,mode:G.mode||'std',n:G.players.length,ts:Date.now(),code:NET.code})).catch(()=>{});
 }
-function hallHtml(){return '<h2>🏆 Зал славы</h2><div id="hallbody" class="small">Загрузка…</div>'}
+
+// ===== Журнал всех партий (Firebase gamelog/ + копия на этом устройстве) =====
+const LOGKEY='gl_log',LOGH='f21d60e51078079e036feae9'; // путь в базе = хеш пароля журнала (сам пароль в коде не хранится)
+function logLocalGet(){try{const a=JSON.parse(localStorage.getItem(LOGKEY)||'[]');return Array.isArray(a)?a:[]}catch(e){return[]}}
+function logLocalPut(r){try{const a=logLocalGet().filter(x=>x&&x.id!==r.id);a.push(r);while(a.length>300)a.shift();localStorage.setItem(LOGKEY,JSON.stringify(a))}catch(e){}}
+function logRec(){
+  const coop=!!G.coop;
+  const id=(NET.on&&NET.code)?NET.code+'-'+((NET.meta&&(NET.meta.seed|0))||0):(G.logId||(G.logId=Date.now().toString(36)+Math.random().toString(36).slice(2,6)));
+  const v=document.getElementById('ver');
+  return {id,ts:Date.now(),ver:v?String(v.textContent).slice(0,24):'',coop,mode:G.mode||'std',kind:NET.on?(STREAM.on?'stream':'online'):'local',n:G.players.length,round:G.round|0,
+    win:coop?!!G.coopWin:null,winner:(!coop&&G.winner!=null&&G.players[G.winner])?String(G.players[G.winner].name||'').slice(0,24):null,
+    pl:G.players.map(p=>({n:String(p.name||'Игрок').slice(0,24),c:p.ch,b:p.bot?1:0}))};
+}
+function logSave(){
+  if(!G||G.winner==null||G.logDone)return;G.logDone=true;
+  let r;try{r=logRec()}catch(e){return}
+  logLocalPut(r);
+  fbLoad().then(rdb=>rdb.ref('gamelog/'+LOGH+'/'+safeId(r.id)).set(r)).catch(()=>{});
+}
+function logCsv(arr){
+  const q=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"';
+  const rows=[['Дата','Версия','Режим','Тип','Игроков','Раунд','Результат','Игроки']];
+  arr.forEach(r=>rows.push([new Date(r.ts).toLocaleString('ru-RU'),r.ver||'',r.coop?'кооператив':((MODES[r.mode]&&MODES[r.mode].n)||r.mode||''),r.kind==='online'?'онлайн':r.kind==='stream'?'трансляция':'на устройстве',r.n,r.round,r.coop?(r.win?'победа команды':'поражение'):('победил: '+(r.winner||'?')),(r.pl||[]).map(p=>p.n+(p.b?' (бот)':'')+' ['+((CH[p.c]&&CH[p.c].n)||p.c||'')+']').join('; ')]));
+  return '﻿'+rows.map(r=>r.map(q).join(';')).join('\n');
+}
+function logGate(){
+  let ok=false;try{ok=sessionStorage.getItem('gl_logok')===LOGH}catch(e){}
+  if(ok){logLoad();return}
+  const b=document.getElementById('hallbody');if(!b)return;
+  b.innerHTML='<div class="grp"><b>🔒 Журнал партий</b></div><div class="small">Введите пароль.</div><input id="logpw" type="password" inputmode="numeric" autocomplete="off" placeholder="Пароль" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--line,#444);background:var(--sunk,#111);color:inherit;font:inherit;margin:8px 0"><div id="logerr" class="small" style="color:#ff8a7a;min-height:18px"></div><div style="display:flex;gap:8px"><button class="btn primary" id="loggo" type="button">Открыть</button><button class="btn" id="logback" type="button">← Зал славы</button></div>';
+  const go=()=>{const v=(document.getElementById('logpw')||{}).value||'';if(sha256hex('gl-log:'+v).slice(0,24)===LOGH){try{sessionStorage.setItem('gl_logok',LOGH)}catch(e){}logLoad()}else{const e=document.getElementById('logerr');if(e)e.textContent='Неверный пароль';const i=document.getElementById('logpw');if(i){i.value='';i.focus()}}};
+  document.getElementById('loggo').onclick=go;document.getElementById('logpw').addEventListener('keydown',e=>{if(e.key==='Enter')go()});
+  document.getElementById('logback').onclick=hallLoad;
+  setTimeout(()=>{const i=document.getElementById('logpw');if(i)i.focus()},50);
+}
+async function logLoad(){
+  const box=()=>document.getElementById('hallbody');
+  const b0=box();if(b0)b0.innerHTML='<div class="small">Загрузка…</div>';
+  const m=new Map();logLocalGet().forEach(r=>{if(r&&r.id)m.set(r.id,r)});
+  let remoteOk=false;
+  try{const rdb=await fbLoad();const sn=await rdb.ref('gamelog/'+LOGH).orderByChild('ts').limitToLast(300).once('value');sn.forEach(c=>{const v=c.val();if(v&&v.id)m.set(v.id,v)});remoteOk=true}catch(e){}
+  const arr=[...m.values()].sort((a,b)=>b.ts-a.ts);
+  const b=box();if(!b)return;
+  const dt=ts=>{try{return new Date(ts).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}catch(e){return''}};
+  const row=r=>{
+    const names=(r.pl||[]).map(p=>esc(p.n)+(p.b?' 🤖':'')).join(', ');
+    const res=r.coop?(r.win?'🏆 победа команды':'☠ поражение'):('🏆 '+esc(r.winner||'?'));
+    const mode=r.coop?'🤝 кооператив':esc((MODES[r.mode]&&MODES[r.mode].n)||'');
+    return '<div class="hall-r"><span class="hm">'+(r.kind==='online'?'🌐':r.kind==='stream'?'📺':'📱')+'</span><span class="hn">'+res+'<small>'+names+'</small></span><span class="hd">'+mode+' · '+(r.n|0)+' игр. · р.'+(r.round|0)+'<small>'+dt(r.ts)+(r.ver?' · '+esc(r.ver):'')+'</small></span></div>'};
+  b.innerHTML='<div class="grp"><b>Журнал партий ('+arr.length+')</b></div>'
+    +(remoteOk?'':'<div class="small" style="margin-bottom:6px">Нет связи с общей базой: показаны партии, сыгранные на этом устройстве.</div>')
+    +'<div class="hall-list">'+(arr.length?arr.map(row).join(''):'<div class="small">Пока нет ни одной завершённой партии.</div>')+'</div>'
+    +'<div style="display:flex;gap:8px;margin-top:10px"><button class="btn" id="logback" type="button">← Зал славы</button><button class="btn" id="logcsv" type="button">⬇ CSV</button></div>';
+  const bb=document.getElementById('logback');if(bb)bb.onclick=hallLoad;
+  const bc=document.getElementById('logcsv');if(bc)bc.onclick=()=>{try{const u=URL.createObjectURL(new Blob([logCsv(arr)],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=u;a.download='grandline-games.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}catch(e){}};
+}
+function hallHtml(){return '<h2>🏆 Зал славы</h2><div id="hallbody" class="small">Загрузка…</div><button class="btn" id="hallog" type="button" style="margin-top:8px">📋 Журнал всех партий</button>'}
 async function hallLoad(){
   const box=()=>document.getElementById('hallbody');
   try{
@@ -3297,15 +3513,26 @@ function admOpen(){
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#ver'))admOpen()});
 function qoOpen(k){
   qoClose();const o=document.createElement('div');o.id='qoov';o.dataset.k=k;
-  o.innerHTML='<div class="modal">'+(k==='replay'?replayHtml():k==='hall'?hallHtml():setHtml())+'<button class="btn primary" data-qo="close">Закрыть</button></div>';
-  document.body.appendChild(o);if(k==='hall')hallLoad();
+  o.innerHTML='<div class="modal">'+(k==='replay'?replayHtml():k==='hall'?hallHtml():k==='news'?newsHtml():k==='newspop'?newsPopHtml():setHtml())+'<button class="btn primary" data-qo="close">Закрыть</button></div>';
+  document.body.appendChild(o);if(k==='news'||k==='newspop')newsMark(k==='news');if(k==='hall'){hallLoad();const lb=document.getElementById('hallog');if(lb)lb.onclick=logGate};
 }
 function qoClose(){const o=document.getElementById('qoov');if(o)o.remove()}
+const NEWS=[{"id": "2026-11-17-tasks", "d": "17 ноября", "t": "Задания стали интереснее", "x": "Выполните 5 ивентовых заданий — и один раз за игру получите 2 очка к атаке и уклонению, распределяйте как хотите (но атака не выше 8, уклонение не выше 7). Часть боевых заданий теперь можно закрыть картой сокровищ вместо Берри. Зато доход с локаций вдвое меньше, карта сокровищ стоит 50 Берри, гостевой персонаж — 80."}, {"id": "2026-11-16-resume", "d": "16 ноября", "t": "Продолжить партию после обновления страницы", "x": "Случайно обновили страницу или закрыли вкладку? Партию можно продолжить с того же места, в том числе с ботами вместо игроков."}, {"id": "2026-11-16-adm", "d": "16 ноября", "t": "Против Имы: адмиралов столько же, сколько игроков", "x": "В кооперативе против Имы количество адмиралов теперь равно количеству игроков: вдвоём проще, вчетвером жарче.", "coop": 1}, {"id": "2026-11-16-tv", "d": "16 ноября", "t": "Трансляция на телевизор", "x": "Откройте ссылку комнаты в браузере телевизора (или нажмите «Трансляция» и введите код) — на большом экране будет общая карта и журнал, а играть можно с телефонов."}];
+const NEWS_KEY='glc_news_seen';
+function newsSeen(){try{return localStorage.getItem(NEWS_KEY)}catch(e){return null}}
+function newsPopSeen(){try{return localStorage.getItem(NEWS_KEY+'_p')}catch(e){return null}}
+function newsMark(full){try{localStorage.setItem(NEWS_KEY+'_p',NEWS[0].id);if(full){localStorage.setItem(NEWS_KEY,NEWS[0].id);document.querySelectorAll('.ndot').forEach(x=>x.remove())}}catch(e){}}
+function newsItem(n){return '<div class="nw"><div class="nwh"><b>'+esc(n.t)+'</b>'+(n.coop?'<i>Кооператив</i>':'')+'<span>'+esc(n.d)+'</span></div><div class="nwx">'+esc(n.x)+'</div></div>'}
+function newsHtml(){return '<h2>📰 Что нового</h2>'+NEWS.map(newsItem).join('')}
+function newsPopHtml(){return '<h2>🆕 Обновление</h2>'+newsItem(NEWS[0])+'<button class="btn" data-qo="news">Все новости</button>'}
+(function(){let n=0;const iv=setInterval(()=>{if(++n>240){clearInterval(iv);return}
+  if(document.getElementById('splash')||document.getElementById('resumeask')||document.getElementById('qoov')||!document.querySelector('.lbtools [data-news]'))return;
+  clearInterval(iv);if(newsPopSeen()!==NEWS[0].id)qoOpen('newspop')},700)})();
 document.addEventListener('click',async ev=>{
   const bt=ev.target.closest&&ev.target.closest('[data-qo]');
   if(!bt){const o=document.getElementById('qoov');if(o&&ev.target===o)qoClose();return}
   const k=bt.dataset.qo,o=document.getElementById('qoov');
-  if(k==='replay'||k==='settings'||k==='hall'){qoOpen(k);return}
+  if(k==='replay'||k==='settings'||k==='hall'||k==='news'||k==='newspop'){qoOpen(k);return}
   if(k==='close'){qoClose();return}
   if(k==='theme'){SET.theme=bt.dataset.v;setSave();applyTheme()}
   else if(k==='install'){if(DEFER){try{DEFER.prompt();await DEFER.userChoice}catch(e){}DEFER=null}}
@@ -3358,8 +3585,10 @@ function bind(){
     const k=b.dataset.ui;
     if(k==='ready'){UI.viewer=+b.dataset.p;render()}
     else if(k==='rules'){UI.showRules=true;render()}
+    else if(k==='picklist'){UI.pickList=G&&G.pending;render()}
+    else if(k==='pickmap'){UI.pickList=null;render()}
     else if(k==='close'){UI.showRules=false;render()}
-    else if(k==='new'){if(NET.on){netLeave()}else{G=null;UI.setup=null}render()}
+    else if(k==='new'){if(NET.on){netLeave()}else{saveClear();G=null;UI.setup=null}render()}
     else if(k==='resync'){netRebuild()}
     else if(k==='net'){NET.on=true;NET.stage='menu';NET.err='';render()}
   });
@@ -3563,7 +3792,7 @@ const gdFind=(sel,txt)=>{const l=[...document.querySelectorAll(sel)];return txt?
 function gdSteps(){return[
  {t:'Добро пожаловать в «Гранд Лайн»',x:'Цель: собрать 4 роад-понеглифа, найти остров Лафтейл и выполнить его задание. Игроки ходят по очереди. Сейчас коротко покажу, где что находится. Жмите «Далее», остальное кликать не нужно.'},
  {el:()=>gdFind('#top .pill','ОД'),t:'ОД: очки действий',x:'На каждый ход даётся 3 ОД, точки показывают остаток. Шаг на соседнюю локацию стоит 1 ОД, вызов на дуэль 1 ОД, флаг 2 ОД, карта понеглифа или Лафтейла 2 ОД. Покупка карт за Берри, Чёрный рынок и «Закончить ход» ОД не тратят.'},
- {el:()=>gdFind('#top .pill.gold'),t:'Берри: деньги',x:'Карта атаки или пассивка стоит 10 Берри (одна за ход), карта сокровищ 30. Берри дают доход, победы в боях и задания.'},
+ {el:()=>gdFind('#top .pill.gold'),t:'Берри: деньги',x:'Карта атаки или пассивка стоит 10 Берри (одна за ход), карта сокровищ '+(G&&G.tb?50:30)+'. Берри дают доход, победы в боях и задания.'+(G&&G.tb?' За 5 выполненных ивентовых заданий — 2 очка к атаке или уклонению на ваш выбор (счётчик «Задания» в боковой панели).':'')},
  {el:()=>gdFind('#top .pill','Кубики')||gdFind('#top .pill','Раунд'),t:'Доход в начале хода',x:'В начале каждого хода бросаются 2d6. Выпавшая сумма — номер локации: у кого там флаг или фишка, тот получает Берри (флаг и фишка вместе — вдвое больше). Чем реже номер, тем больше платят.'},
  {el:()=>document.getElementById('mapwrap'),t:'Карта',x:'Кружки — локации, цифра в кружке — её номер. Цвет показывает тип (легенда под картой). «?» — фишка локации ещё не вскрыта: тот, кто придёт первым, вскроет её. Золотой ромб «П» — остров с понеглифом.'},
  {el:()=>document.getElementById('mapme'),t:'Не видите себя?',x:'Нажмите «📍 Где я»: карта сама прокрутится к вашей фишке. Ваша фишка с пульсирующим ореолом и меткой «ВЫ».'},
@@ -3646,7 +3875,7 @@ function secretAsk(done){
   else alert('Неверный пароль.');
 }
 const charBtn=k=>(k===SECRET&&!secretOk())?'<button class="btn" data-secret="1"><span class="avw" style="--pc:#555;font-size:28px;font-weight:800;display:flex;align-items:center;justify-content:center">?</span><b>???</b><span>Секретный персонаж</span><span class="small">Нужен пароль</span></button>':null;
-const CHW={kid:1,ace:1,zoro:1,sanji:1,nami:1,robin:1,hancock:1,kata:1,law:1,luffy:1,olesya:1},CHV={zoro:1,hancock:1,luffy:1,ace:1,law:1,nami:1,robin:1,kata:1}; // CHV: есть видео assets/ch/<id>.mp4 // персонажи с фото по пояс: assets/ch/<id>.webp
+const CHW={kid:1,ace:1,zoro:1,sanji:1,nami:1,robin:1,hancock:1,kata:1,law:1,luffy:1,olesya:1},CHV={zoro:1,hancock:1,luffy:1,ace:1,law:1,nami:1,robin:1,kata:1,sanji:1,olesya:1}; // CHV: есть видео assets/ch/<id>.mp4 // персонажи с фото по пояс: assets/ch/<id>.webp
 const chBtn=(k,attr,dis,sel)=>charBtn(k)||'<button class="btn cc'+(sel?' sel':'')+'" '+attr+'="'+k+'"'+(dis?' disabled':'')+'><span class="ccg"></span>'+(CHW[k]?'<img class="ccfig" loading="lazy" src="assets/ch/'+k+'.webp" alt="">'+(CHV[k]&&sel?'<canvas class="ccv" data-k="'+k+'" width="260" height="360"></canvas>':''):'<span class="ccav">'+av(k)+'</span>')+'<span class="ccn">'+CH[k].n+'</span><span class="ccs">атака '+CH[k].A+' · уклонение '+CH[k].U+'</span>'+(sel?'<span class="cci"><span class="ccst"><span>Атака <b>'+CH[k].A+'</b></span><span>Уклонение <b>'+CH[k].U+'</b></span></span><span class="ccd">'+esc(CH[k].d)+'</span></span>':'')+'</button>';
 // видео выбранного персонажа: белый фон роликов убирается на лету (canvas), чтобы фигура «жила» на тёмной карточке
 // плавное раскрытие/перестановка карточек: запоминаем положение до перерисовки и «доезжаем» после неё (FLIP)
@@ -3661,14 +3890,15 @@ function chFlip(){
     e.animate([{transform:'translate('+dx+'px,'+dy+'px)',clipPath:sel?'inset(0 50% 0 0 round 20px)':'inset(0 round 20px)'},{transform:'none',clipPath:'inset(0 round 20px)'}],{duration:340,easing:'cubic-bezier(.2,.8,.2,1)'});
   });
 }
-const CHVID={};let CHV_RAF=0;
+const CHVID={};let CHV_RAF=0;const CHSND={olesya:1}; // видео со своим звуком: один раз со звуком, дальше без
+function chSndReset(k){const v=CHVID[k];if(v){v.muted=!SFX.on;v.loop=false;try{v.currentTime=0}catch(e){}}}
 function chVid(){
   chFlip();cancelAnimationFrame(CHV_RAF);
   const cv=document.querySelector('.cc.sel canvas.ccv');
   Object.keys(CHVID).forEach(k=>{if(!cv||cv.dataset.k!==k){try{CHVID[k].pause()}catch(e){}}});
   if(!cv)return;
   const k=cv.dataset.k;let v=CHVID[k];
-  if(!v){v=CHVID[k]=document.createElement('video');v.muted=true;v.loop=true;v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.src='assets/ch/'+k+'.mp4'}
+  if(!v){v=CHVID[k]=document.createElement('video');v.muted=CHSND[k]?!SFX.on:true;v.loop=!CHSND[k];if(CHSND[k])v.addEventListener('ended',()=>{v.muted=true;v.loop=true;const q=v.play();if(q&&q.catch)q.catch(()=>{})});v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.src='assets/ch/'+k+'.mp4'}
   const card=cv.closest('.cc'),ctx=cv.getContext('2d',{willReadFrequently:true}),W=cv.width,H=cv.height;
   const p=v.play();if(p&&p.catch)p.catch(()=>{});
   (function draw(){
@@ -3722,7 +3952,7 @@ function renderSetup(){
     h+='</div>';
     h+='<div class="lbcard"><div class="lbh"><span class="num">2</span><b>Режим партии</b></div><div class="modes">'+Object.keys(MODES).map(k=>{const m=MODES[k];return '<button type="button" class="mode'+(md===k?' on':'')+'" data-mode="'+k+'"><div class="mt">'+esc(m.n)+'<span class="cubes" title="Кубов понеглифа для победы">'+[1,2,3,4].map(c=>'<i class="'+(c<=m.need?'f':'')+'"></i>').join('')+'</span></div><small>'+esc(m.d)+'</small></button>'}).join('')+'</div></div>';
     h+='<button class="lbgo" id="go"><span class="dice">🎲</span>Бросить кубики на очерёдность</button>';
-    h+='<div class="lbtools"><button class="net" data-ui="net"><span>🌐</span>Играть по сети</button><button data-ui="stream"><span>📺</span>Трансляция</button><button data-rules><span>📖</span>Правила</button><button data-qo="hall"><span>🏆</span>Зал славы</button><button data-qo="settings"><span>⚙</span>Настройки</button><button data-mus data-short>'+musShort()+'</button></div>';
+    h+='<div class="lbtools"><button class="net" data-ui="net"><span>🌐</span>Играть по сети</button><button data-ui="stream"><span>📺</span>Трансляция</button><button data-rules><span>📖</span>Правила</button><button data-news data-qo="news"><span>📰</span>Новости'+(newsSeen()!==NEWS[0].id?'<i class="ndot"></i>':'')+'</button><button data-qo="hall"><span>🏆</span>Зал славы</button><button data-qo="settings"><span>⚙</span>Настройки</button><button data-mus data-short>'+musShort()+'</button></div>';
   }else if(S.step==='roll'){
     h+='<h2>Очерёдность хода</h2><table class="t"><tr><th>Игрок</th><th>2d6</th></tr>'+S.order.map(o=>'<tr><td>'+esc(o.name)+'</td><td>'+o.r+'</td></tr>').join('')+'</table><div class="small">Больше сумма — раньше ход. Ничьи перебрасываются. Персонажей и море выбирают по порядку, и карту вы увидите заранее.</div><button class="btn primary" id="go2">Выбирать персонажей</button>';
   }else{
@@ -3733,7 +3963,7 @@ function renderSetup(){
       const ch=BCH_RANK.find(k=>!tk.includes(k)&&k!==SECRET);
       S.picks.push({name:S.order[S.cur].name,ch,sea,bot:true,lv:S.order[S.cur].lv||2});S.cur++;
     }
-    if(S.cur>=S.order.length){const cfg={players:S.picks.slice(),wseed:S.wseed,mode:S.mode||'std'};UI.setup=null;newGame(cfg);render();return}
+    if(S.cur>=S.order.length){const cfg={players:S.picks.slice(),wseed:S.wseed,mode:S.mode||'std',tb:1};UI.setup=null;newGame(cfg);render();return}
     const pl=S.order[S.cur];
     const taken=S.picks.map(p=>p.ch),seas=S.picks.map(p=>p.sea);
     h+='<h2>'+esc(pl.name)+': выберите персонажа и стартовое море ('+(S.cur+1)+'/'+S.order.length+')</h2>'+pickSteps(S.selCh,S.selSea);
@@ -3767,14 +3997,14 @@ function renderSetup(){
   }else if(S.step==='roll'){g('go2').onclick=()=>{S.step='pick';renderSetup()}}
   else{
     document.querySelectorAll('[data-secret]').forEach(b=>b.onclick=()=>secretAsk(()=>renderSetup()));
-    document.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{chSnap();S.selCh=b.dataset.ch;SFX.stopVoice();if(S.selCh==='zoro')SFX.play('zoro',0);if(S.selCh==='luffy')SFX.play('luffy',0);if(S.selCh==='law')SFX.play('law',0);if(S.selCh==='ace')SFX.play('ace',0);if(S.selCh==='sanji')SFX.play('sanji',0);if(S.selCh==='olesya')SFX.play('olesya',0);if(S.selCh==='hancock')SFX.play('hancock',0);renderSetup()});
+    document.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{chSnap();S.selCh=b.dataset.ch;SFX.stopVoice();if(S.selCh==='zoro')SFX.play('zoro',0);if(S.selCh==='luffy')SFX.play('luffy',0);if(S.selCh==='law')SFX.play('law',0);if(S.selCh==='ace')SFX.play('ace',0);if(S.selCh==='sanji')SFX.play('sanji',0);if(S.selCh==='olesya')chSndReset('olesya');if(S.selCh==='hancock')SFX.play('hancock',0);renderSetup()});
     chVid();
     document.querySelectorAll('[data-sea]').forEach(b=>b.onclick=()=>{S.selSea=b.dataset.sea;renderSetup()});
     g('pick').onclick=()=>{
       if(!(S.selCh&&S.selSea)){pickNudge(0,S.selCh);return}
       SFX.stopVoice();
       S.picks.push({name:S.order[S.cur].name,ch:S.selCh,sea:S.selSea});S.selCh=null;S.selSea=null;S.cur++;
-      if(S.cur>=S.order.length){const cfg={players:S.picks.slice(),wseed:S.wseed,mode:S.mode||'std'};UI.setup=null;newGame(cfg);render()}else renderSetup();
+      if(S.cur>=S.order.length){const cfg={players:S.picks.slice(),wseed:S.wseed,mode:S.mode||'std',tb:1};UI.setup=null;newGame(cfg);render()}else renderSetup();
     };
   }
 }
@@ -3787,7 +4017,7 @@ const CHUNK=20,chunkId=i=>'c'+String(i).padStart(4,'0');
 const safeId=x=>String(x).replace(/[^A-Za-z0-9_\-.~:@+]/g,'_').slice(0,100);
 const genCode=()=>Array.from({length:4},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ'[Math.floor(Math.random()*24)]).join('');
 function hashState(){
-  const s=[G.round,G.cur,G.ap,G.duels,G.winner,G.players.map(p=>[p.berries,p.loc,p.atk.length,p.pas.length,p.tre.length,p.pon.length,p.fl,p.jail,p.skip,p.bA,p.bU].join(',')).join(';'),(G.fire?G.fire.loc+G.fire.by:''),(G.akainu?G.akainu.loc+G.akainu.stun:''),G.adm||'',(G.admL?G.admL.map(e=>e?e.adm+e.loc+e.stun:'-').join('.'):''),G.frz||0,G.lafAt||0,G.lafDone?1:0,(G.grav?Object.keys(G.grav).sort().join('.'):''),(G.dead?Object.keys(G.dead).sort().join('.'):''),G.decks.atk.length,G.decks.pas.length,G.decks.tre.length,G.discard.length,Object.keys(G.flags).length].join('|');
+  const s=[G.round,G.cur,G.ap,G.duels,G.winner,G.players.map(p=>[p.berries,p.loc,p.atk.length,p.pas.length,p.tre.length,p.pon.length,p.fl,p.jail,p.skip,p.bA,p.bU].join(',')).join(';'),(G.fire?G.fire.loc+G.fire.by:''),(G.akainu?G.akainu.loc+G.akainu.stun:''),G.adm||'',(G.admL?G.admL.map(e=>e?e.adm+e.loc+e.stun:'-').join('.'):''),G.frz||0,G.lafAt||0,G.lafDone?1:0,(G.grav?Object.keys(G.grav).sort().join('.'):''),(G.dead?Object.keys(G.dead).sort().join('.'):''),G.decks.atk.length,G.decks.pas.length,G.decks.tre.length,G.discard.length,Object.keys(G.flags).length].join('|')+(G.tb?'|'+G.players.map(p=>[p.tA|0,p.tU|0,p.td|0,p.mile|0].join(',')).join(';'):'');
   let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}
   return (h>>>0).toString(36);
 }
@@ -3804,7 +4034,7 @@ function doMove(m,strict){
   UI.prep=null;const cb=pe.cb;G.pending=null;cb(m.pr);after();return true;
 }
 function submit(m){
-  if(!NET.on||!G){doMove(m);return}
+  if(!NET.on||!G){if(doMove(m)&&G&&!NET.on&&!window.__rep)saveMove(m);return}
   if(G.winner!=null||NET.desync||NET.me<0||viewerNeeded()!==NET.me)return;
   if(!doMove(m))return;
   const s=encMove(m,hashState());NET.log.push(s);pushMove(NET.log.length-1);
@@ -3847,7 +4077,7 @@ function netRebuild(){
   const all=[];for(let i=0;NET.remote[i];i++)all.push(...NET.remote[i]);
   NET.desync=false;NET.err='';NET.log=[];
   window.__nor=true;seedv=NET.meta.seed|0;
-  newGame({players:NET.meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:NET.meta.wseed,mode:NET.meta.mode});
+  newGame({players:NET.meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:NET.meta.wseed,mode:NET.meta.mode,tb:NET.meta.tb});
   UI.viewer=NET.me;
   try{for(const str of all){const {m,h}=decMove(str);doMove(m,true);NET.log.push(str);if(hashState()!==h){NET.desync=true;break}}}
   catch(e){NET.desync=true;NET.err='Не удалось пересчитать: '+(e&&e.message||e)}
@@ -3857,7 +4087,7 @@ function startOnline(meta){
   NET.log=[];NET.remote={};NET.desync=false;NET.err='';
   NET.me=meta.players.findIndex(p=>p.uid===NET.uid);
   window.__nor=true;seedv=meta.seed|0;
-  newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode});
+  newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode,tb:meta.tb});
   window.__nor=false;UI.viewer=STREAM.on?0:NET.me;
   NET.unsub.push(NET.db.collection('cgames/'+NET.code+'/moves').onSnapshot(onMoves,e=>{NET.err='Связь с партией потеряна: '+(e&&e.message||e);render()}));
   render();
@@ -4030,7 +4260,7 @@ async function netStart(){
   if(S.length<2||S.some(x=>!x.ok||!x.ch||!x.sea)){NET.err='Все игроки должны подтвердить выбор персонажа и моря';render();return}
   if(new Set(S.map(x=>x.ch)).size<S.length||new Set(S.map(x=>x.sea)).size<S.length){NET.err='Персонажи и моря не должны повторяться';render();return}
   const seed=1+Math.floor(Math.random()*2e9);
-  try{await NET.db.doc('cgames/'+NET.code).update({status:'playing',seed,top:1,players:S.map(x=>({uid:x.uid,name:x.name,ch:x.ch,sea:x.sea}))})}
+  try{await NET.db.doc('cgames/'+NET.code).update({status:'playing',seed,top:1,tb:1,players:S.map(x=>({uid:x.uid,name:x.name,ch:x.ch,sea:x.sea}))})}
   catch(e){netErr(e,'Не удалось начать')}
 }
 function netLeave(){
@@ -4112,7 +4342,7 @@ function renderLobby(){
   if(g('nsback'))g('nsback').onclick=()=>{NET.on=false;NET.stage='menu';NET.err='';render()};
   if(g('nsleave'))g('nsleave').onclick=streamLeave;
   document.querySelectorAll('[data-secret]').forEach(b=>b.onclick=()=>secretAsk(()=>render()));
-  document.querySelectorAll('[data-nch]').forEach(b=>b.onclick=()=>{chSnap();SFX.stopVoice();if(b.dataset.nch==='zoro')SFX.play('zoro',0);if(b.dataset.nch==='luffy')SFX.play('luffy',0);if(b.dataset.nch==='law')SFX.play('law',0);if(b.dataset.nch==='ace')SFX.play('ace',0);if(b.dataset.nch==='sanji')SFX.play('sanji',0);if(b.dataset.nch==='olesya')SFX.play('olesya',0);if(b.dataset.nch==='hancock')SFX.play('hancock',0);setSeat({ch:b.dataset.nch})});
+  document.querySelectorAll('[data-nch]').forEach(b=>b.onclick=()=>{chSnap();SFX.stopVoice();if(b.dataset.nch==='zoro')SFX.play('zoro',0);if(b.dataset.nch==='luffy')SFX.play('luffy',0);if(b.dataset.nch==='law')SFX.play('law',0);if(b.dataset.nch==='ace')SFX.play('ace',0);if(b.dataset.nch==='sanji')SFX.play('sanji',0);if(b.dataset.nch==='olesya')chSndReset('olesya');if(b.dataset.nch==='hancock')SFX.play('hancock',0);setSeat({ch:b.dataset.nch})});
   chVid();
   document.querySelectorAll('[data-nsea]').forEach(b=>b.onclick=()=>setSeat({sea:b.dataset.nsea}));
   if(g('nstart'))g('nstart').onclick=netStart;
@@ -4433,6 +4663,7 @@ function bPend(p,pe,A){
       if(find(/Путь сильнейшего/)>=0)return find(/Путь сильнейшего/);
       return first();
     }
+    if(/Веха заданий/.test(title)){const st=stats(p),ia=idx(/к атаке/),iu=idx(/к уклонению/);return st.A<=st.U+1?ia:iu}
     if(/Награда за/.test(title)){
       const i=idx(/карт/);return i>=0?i:first();
     }
@@ -4554,7 +4785,7 @@ function bTurn(p,A){
     if(preferPas&&canP>=0)return canP;
     if(canA>=0&&p.atk.length<9)return canA;
   }
-  if(bL(p)===3&&lt==='market'&&p.tre.length<3&&p.berries-30>=20){const j=find(/Купить карту сокровищ/);if(j>=0)return j}
+  if(bL(p)===3&&lt==='market'&&p.tre.length<3&&p.berries-(G.tb?50:30)>=20){const j=find(/Купить карту сокровищ/);if(j>=0)return j}
   // 6. задание-событие на ивентовой локации
   if(lt==='event'&&!p.task){
     const fp=bFreePons(p);
@@ -4659,7 +4890,7 @@ function botSchedule(){
 }
 
 // ---------- test API ----------
-window.__g={coopAdmPhase,coopFinalCheck,startFinal,mergeSides,aokijiFreeze,coopEnd,COOP,admDef,startNpcFight,completeTask,checkTasks,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
+window.__g={giveTask,stats,statRoom,eventFx,SFX,useTre,akScene,coopAdmPhase,coopFinalCheck,startFinal,mergeSides,aokijiFreeze,coopEnd,COOP,admDef,startNpcFight,completeTask,checkTasks,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode,tb:meta.tb});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,bStepToward,bMap,bFreePons,bUnknown,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
@@ -4758,6 +4989,46 @@ window.__g={coopAdmPhase,coopFinalCheck,startFinal,mergeSides,aokijiFreeze,coopE
   setTimeout(()=>o.classList.add('rdy'),T*1000+700);
   o.addEventListener('click',go);
   document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go()});
+})();
+
+// ---------- автосохранение партии (против ботов / за одним устройством): переживёт случайное обновление страницы ----------
+const SAVEKEY='gl_save_coop';
+let SAVE=null;
+function saveWrite(){try{localStorage.setItem(SAVEKEY,JSON.stringify(SAVE))}catch(e){}}
+function saveClear(){SAVE=null;try{localStorage.removeItem(SAVEKEY)}catch(e){}}
+function saveBegin(sd,cfg){try{SAVE={v:1,sd,cfg:JSON.parse(JSON.stringify(cfg)),log:[],ts:Date.now()};saveWrite()}catch(e){SAVE=null}}
+function saveMove(m){if(!SAVE)return;SAVE.log.push(encMove(m,hashState()));SAVE.ts=Date.now();if(G.winner!=null)saveClear();else saveWrite()}
+function saveRestore(){
+  const S0=SAVE;if(!S0)return false;
+  let ok=false;window.__rep=true;window.__nor=true;
+  try{
+    seedv=S0.sd|0;newGame(S0.cfg);
+    for(const str of S0.log){const {m,h}=decMove(str);doMove(m,true);if(hashState()!==h)throw new Error('desync')}
+    ok=true;
+  }catch(e){ok=false}
+  window.__nor=false;window.__rep=false;
+  if(!ok){saveClear();G=null;UI.setup=null;render();return false}
+  SAVE=S0;render();return true;
+}
+(function(){
+  try{
+    if(/[?&](stream|nosave)/.test(location.search))return;
+    const raw=localStorage.getItem(SAVEKEY);if(!raw)return;
+    const S0=JSON.parse(raw);if(!S0||S0.v!==1||!Array.isArray(S0.log)||!S0.cfg||!S0.cfg.players)return;
+    SAVE=S0;
+    const ago=Math.max(1,Math.round((Date.now()-(S0.ts||0))/60000));
+    const agoT=ago<60?ago+' мин назад':ago<1440?Math.round(ago/60)+' ч назад':Math.round(ago/1440)+' дн назад';
+    const o=document.createElement('div');o.id='resumeask';
+    o.style.cssText='position:fixed;inset:0;z-index:300000;display:flex;align-items:center;justify-content:center;background:rgba(6,9,12,.82);padding:16px';
+    o.innerHTML='<div style="max-width:380px;width:100%;background:#fffdf7;color:#1c1f26;border:2px solid #5a3b1f;border-radius:16px;padding:18px;text-align:center;font-family:inherit">'
+     +'<h3 style="margin:0 0 6px;font-size:19px">Незавершённая партия</h3>'
+     +'<div style="font-size:14px;opacity:.8;margin-bottom:14px">'+S0.cfg.players.map(p=>esc(p.name)).join(', ')+'<br>ходов сделано: '+S0.log.length+' · '+agoT+'</div>'
+     +'<button id="rs-go" style="width:100%;padding:12px;border-radius:12px;border:0;background:#1c1f26;color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:8px">Продолжить партию</button>'
+     +'<button id="rs-new" style="width:100%;padding:10px;border-radius:12px;border:1px solid #5a3b1f;background:#fff;color:#1c1f26;font-size:14px;font-weight:600;cursor:pointer">Начать новую</button></div>';
+    document.body.appendChild(o);
+    o.querySelector('#rs-go').onclick=()=>{const sp=document.getElementById('splash');if(sp)sp.remove();o.remove();if(!saveRestore())alert('Не удалось восстановить партию, начните новую.')};
+    o.querySelector('#rs-new').onclick=()=>{saveClear();o.remove()};
+  }catch(e){}
 })();
 render();
 try{const sm=/[?&]stream=([A-Za-z0-9]{4,6})/.exec(location.search);if(sm){NET.on=true;NET.stage='stream';netWatch(sm[1])}}catch(e){}
