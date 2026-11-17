@@ -69,6 +69,7 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:8px;flex:1;min-h
 .small{font-size:12px;color:var(--muted)}
 #log{max-height:200px;overflow:auto;font-size:12px;display:flex;flex-direction:column;gap:2px}
 #log div{border-bottom:1px dashed var(--line);padding-bottom:2px}
+.ov.pickov{background:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;pointer-events:none;align-items:flex-end;padding:0 8px calc(8px + env(safe-area-inset-bottom))}.pickbar{pointer-events:auto;max-width:520px;width:100%;background:var(--panel);color:var(--ink);border:2px solid #12a05a;border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.35);padding:10px 12px;display:flex;flex-direction:column;gap:6px;font-size:14px}.pickbar span{opacity:.85}.pickbar .grp{display:flex;flex-wrap:wrap;gap:6px}
 .ov{position:fixed;inset:0;background:rgba(10,15,20,.6);display:flex;align-items:center;justify-content:center;padding:12px;z-index:50}
 .ov.solid{background:var(--bg)}
 .modal{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;max-width:760px;width:100%;max-height:92vh;overflow:auto;display:flex;flex-direction:column;gap:10px}
@@ -917,7 +918,7 @@ body.stream #now{font-size:clamp(14px,1.3vw,22px)}
 .stwait{display:grid;place-items:center;text-align:center;gap:12px;padding:34px 18px}
 
 </style>
-<div id="ver" title="Версия игры">V119</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V120</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2957,8 +2958,14 @@ function pendingHtml(){
   if(pe.type==='prep')return prepHtml(pe);
   if(pe.type==='duelResult')return resultHtml(pe);
   const retr=pe.pick&&pe.pick.length;
+  if(pe.type==='pickloc'&&retr&&UI.pickList!==pe){
+    let h='<div class="ov pickov"><div class="pickbar"><b>'+esc(pe.title||'Выбор')+'</b><span>'+esc((pe.text?pe.text+' ':'')+'Нажмите на подсвеченный зелёным остров на карте.')+'</span><div class="grp">';
+    ACTS.forEach((a,i)=>{if(!a.loc)h+='<button class="btn" data-a="'+i+'"'+(a.dis?' disabled':'')+'>'+esc(a.label)+'</button>'});
+    return h+'<button class="btn" data-ui="picklist">Выбрать из списка</button></div></div></div>';
+  }
   let h='<div class="ov"><div class="modal"><h2>'+esc(pe.title||'Выбор')+'</h2>'+(pe.text?'<div>'+esc(pe.text)+'</div>':'')+'<div class="grp">';
   ACTS.forEach((a,i)=>{h+='<button class="btn" data-a="'+i+'"'+(a.dis?' disabled':'')+'>'+esc(a.label)+'</button>'});
+  if(pe.type==='pickloc'&&retr)h+='<button class="btn" data-ui="pickmap">Выбрать на карте</button>';
   return h+'</div></div></div>';
 }
 function prepHtml(pe){
@@ -3408,6 +3415,8 @@ function bind(){
     const k=b.dataset.ui;
     if(k==='ready'){UI.viewer=+b.dataset.p;render()}
     else if(k==='rules'){UI.showRules=true;render()}
+    else if(k==='picklist'){UI.pickList=G&&G.pending;render()}
+    else if(k==='pickmap'){UI.pickList=null;render()}
     else if(k==='close'){UI.showRules=false;render()}
     else if(k==='new'){if(NET.on){netLeave()}else{G=null;UI.setup=null}render()}
     else if(k==='resync'){netRebuild()}
