@@ -920,7 +920,7 @@ body.stream #now{font-size:clamp(14px,1.3vw,22px)}
 .stwait{display:grid;place-items:center;text-align:center;gap:12px;padding:34px 18px}
 
 </style>
-<div id="ver" title="Версия игры">V121</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V122</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -1595,8 +1595,8 @@ function beginTurn(){
   G.stolen=false;G.cardBought=false;G.endAfter=false;
   if(G.fire&&G.fire.by===p.i){log('Огненная стена на '+locName(G.fire.loc)+' гаснет.');G.fire=null}
   if(p.skip>0){p.skip--;log(pname(p)+' пропускает ход.');return endTurn()}
-  p.imm=0; // иммунитет к адмиралу после отсиженного срока действует до начала следующего хода игрока
-  if(p.jail>0&&p.hardJail){p.jail--;if(p.jail<=0){p.hardJail=false;p.imm=1}log(pname(p)+' сидит в Импел Дауне'+(p.jail>0?' (осталось ходов: '+p.jail+')':': срок вышел')+'.');return endTurn()}
+  p.imm=G.tb?Math.max(0,(p.imm|0)-1):0; // иммунитет к адмиралу после отсиженного срока действует до начала следующего хода игрока
+  if(p.jail>0&&p.hardJail){p.jail--;if(p.jail<=0){p.hardJail=false;p.imm=G.tb?2:1}log(pname(p)+' сидит в Импел Дауне'+(p.jail>0?' (осталось ходов: '+p.jail+')':': срок вышел')+'.');return endTurn()}
   if(p.jail>0&&p.ch==='kid'){
     const j0=p.jail;p.jail=0;
     log(pname(p)+' в тюрьме: взятка и побег не для него, сразу дуэль с дозорным!');
@@ -1655,7 +1655,7 @@ function hardJail(p,n,who){n=n||3;who=who||'Акаину';
 function akainuDuels(list,cb){
   const q=list.shift();
   if(!q||!G.akainu||G.winner!=null)return cb&&cb();
-  if(q.jail>0||q.imm||G.akainu.stun>0)return akainuDuels(list,cb);
+  if(q.jail>0||q.imm||G.akainu.stun>0||(G.tb&&q.loc!==G.akainu.loc))return akainuDuels(list,cb);
   const AD=adm();
   log(AD.short+' вызывает на дуэль: '+pname(q)+'.');fxSnd('enemy');
   fxEvent({banner:true,tone:'bad',icon:'☠',title:AD.short+' вызывает на дуэль!',desc:pname(q)+' · атака '+AD.a+' / уклонение '+AD.u,auto:2800});
@@ -1722,17 +1722,22 @@ function fujiMarks(){
   log('Гравитация Фуджиторы давит на: '+(out.length?out.join(', '):'ничего')+'. Игрок, вошедший сюда, пропустит следующий ход.');
   return out;
 }
+function admRetreat(){ // победив, адмирал уходит к Рэд Лайну: не караулит освободившегося
+  if(!G.tb||!G.akainu)return;
+  const loc=REDL[d(REDL.length)-1];G.akainu.loc=loc;G.akainu.stun=Math.max(G.akainu.stun|0,1);
+  log(adm().short+' уходит к '+locName(loc)+'.');
+}
 function admDefeat(p,type){
   const AD=ADMS[type];
   if(type==='kizaru'){
     const t=Math.floor(p.berries/2);p.berries-=t;
     log(t?p.name+' проиграл Кизару: он забирает '+t+' Берри.':p.name+' проиграл Кизару: денег нет, забирать нечего.');
-    hardJail(p,2,'Кизару');
+    hardJail(p,2,'Кизару');admRetreat();
   }else if(type==='fujitora'){
-    p.skip=(p.skip||0)+2;G.endAfter=true;
+    p.skip=(p.skip||0)+2;if(G.tb)p.imm=3;G.endAfter=true;
     log(p.name+' проиграл Фуджиторе: придавлен гравитацией и пропустит два следующих хода.');
     fxEvent({banner:true,tone:'bad',icon:'⬇',title:'Поражение от Фуджиторы',desc:pname(p)+' пропустит 2 хода',auto:3200});
-  }else hardJail(p,3,'Акаину');
+  }else{hardJail(p,3,'Акаину');admRetreat()}
 }
 function akainuPhase(cb){
   if(G.winner!=null)return cb();
