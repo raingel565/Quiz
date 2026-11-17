@@ -69,6 +69,7 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:8px;flex:1;min-h
 .small{font-size:12px;color:var(--muted)}
 #log{max-height:200px;overflow:auto;font-size:12px;display:flex;flex-direction:column;gap:2px}
 #log div{border-bottom:1px dashed var(--line);padding-bottom:2px}
+.ov.pickov{background:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;pointer-events:none;align-items:flex-end;padding:0 8px calc(8px + env(safe-area-inset-bottom))}.pickbar{pointer-events:auto;max-width:520px;width:100%;background:var(--panel);color:var(--ink);border:2px solid #12a05a;border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.35);padding:10px 12px;display:flex;flex-direction:column;gap:6px;font-size:14px}.pickbar span{opacity:.85}.pickbar .grp{display:flex;flex-wrap:wrap;gap:6px}
 .ov{position:fixed;inset:0;background:rgba(10,15,20,.6);display:flex;align-items:center;justify-content:center;padding:12px;z-index:50}
 .ov.solid{background:var(--bg)}
 .modal{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;max-width:760px;width:100%;max-height:92vh;overflow:auto;display:flex;flex-direction:column;gap:10px}
@@ -915,7 +916,7 @@ body.stream #now{font-size:clamp(14px,1.3vw,22px)}
 .stwin small{display:block;font-size:.4em;margin-top:12px;opacity:.8}
 .stwait{display:grid;place-items:center;text-align:center;gap:12px;padding:34px 18px}
 </style>
-<div id="ver" title="Версия кооператива">C18 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия кооператива">C20 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -2376,7 +2377,7 @@ function useTre(p,c){
   }else if(c.key==='dandan'){
     const cand=Object.keys(G.type).filter(l=>G.type[l]!=='start'&&G.type[l]!=='base'&&!deadAt(l));
     const o=cand.map(l=>({label:locName(l)+' ('+TYPES[G.type[l]].n+')',loc:l,run:()=>{
-      discardCard(p,c);G.type[l]='base';log(p.name+' превращает '+locName(l)+' в обычную базу (Дэн-Дэн Муси).');
+      discardCard(p,c);const _tn=TYPES[G.type[l]].n;G.type[l]='base';log(p.name+' превращает '+locName(l)+' в обычную базу (Дэн-Дэн Муси).');fxEvent({sfx:'w_buster',wk:'buster',stage:'post',cat:'Золотой Дэн-Дэн Муси',icon:'🐌',title:'Остров уничтожен!',lines:[p.name+' вызывает бомбардировку: '+locName(l)+' ('+_tn+') стёрт с карты и стал обычной базой.'],auto:9000});
       const near=bfsNear(l,x=>G.type[x]==='base');
       for(const q of G.players)if(q.loc===l&&near){q.loc=near;q.sea=seaOf(near);log(q.name+' перенесён на '+locName(near)+'.')}
       if(G.flags[l]!=null){const ow=G.players[G.flags[l]];delete G.flags[l];if(near&&G.flags[near]==null&&!ownFlagNum(ow,near)){G.flags[near]=ow.i}else ow.fl++}
@@ -2756,7 +2757,7 @@ function eventFx(ev,done){
    +(pre?'<div class="evd">'+esc(ev.desc)+'</div>':'<div class="evl">'+ev.lines.map(l=>'<div class="evr">'+esc(l)+'</div>').join('')+'</div>')
    +(pre?'<div class="dhint">нажмите, чтобы пропустить</div>':'<button class="btn primary">Понятно</button>')+'</div>';
   document.body.appendChild(o);
-  if(ev.banner){SFX.play(ev.tone==='good'?'result':'alert',0)}else if(pre&&ev.title==='Buster Call')SFX.play('w_buster',0);else if(!(ev.snd==='buster'))SFX.play(pre?'alert':(ev.snd&&ev.snd!=='coin'?'w_'+ev.snd:'result'),0);if(!pre&&ev.snd==='coin')SFX.play('coin',0);
+  if(ev.sfx){SFX.play(ev.sfx,0)}else if(ev.banner){SFX.play(ev.tone==='good'?'result':'alert',0)}else if(pre&&ev.title==='Buster Call')SFX.play('w_buster',0);else if(!(ev.snd==='buster'))SFX.play(pre?'alert':(ev.snd&&ev.snd!=='coin'?'w_'+ev.snd:'result'),0);if(!pre&&ev.snd==='coin')SFX.play('coin',0);
   let fin=false;const end=()=>{if(fin)return;fin=true;o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},280)};
   o.onclick=end;setTimeout(end,ev.auto||(pre?2800:8000));
 }
@@ -3096,8 +3097,14 @@ function pendingHtml(){
   if(pe.type==='prep')return prepHtml(pe);
   if(pe.type==='duelResult')return resultHtml(pe);
   const retr=pe.pick&&pe.pick.length;
+  if(pe.type==='pickloc'&&retr&&UI.pickList!==pe){
+    let h='<div class="ov pickov"><div class="pickbar"><b>'+esc(pe.title||'Выбор')+'</b><span>'+esc((pe.text?pe.text+' ':'')+'Нажмите на подсвеченный зелёным остров на карте.')+'</span><div class="grp">';
+    ACTS.forEach((a,i)=>{if(!a.loc)h+='<button class="btn" data-a="'+i+'"'+(a.dis?' disabled':'')+'>'+esc(a.label)+'</button>'});
+    return h+'<button class="btn" data-ui="picklist">Выбрать из списка</button></div></div></div>';
+  }
   let h='<div class="ov"><div class="modal"><h2>'+esc(pe.title||'Выбор')+'</h2>'+(pe.text?'<div>'+esc(pe.text)+'</div>':'')+'<div class="grp">';
   ACTS.forEach((a,i)=>{h+='<button class="btn" data-a="'+i+'"'+(a.dis?' disabled':'')+'>'+esc(a.label)+'</button>'});
+  if(pe.type==='pickloc'&&retr)h+='<button class="btn" data-ui="pickmap">Выбрать на карте</button>';
   return h+'</div></div></div>';
 }
 function prepHtml(pe){
@@ -3548,6 +3555,8 @@ function bind(){
     const k=b.dataset.ui;
     if(k==='ready'){UI.viewer=+b.dataset.p;render()}
     else if(k==='rules'){UI.showRules=true;render()}
+    else if(k==='picklist'){UI.pickList=G&&G.pending;render()}
+    else if(k==='pickmap'){UI.pickList=null;render()}
     else if(k==='close'){UI.showRules=false;render()}
     else if(k==='new'){if(NET.on){netLeave()}else{G=null;UI.setup=null}render()}
     else if(k==='resync'){netRebuild()}
@@ -4849,7 +4858,7 @@ function botSchedule(){
 }
 
 // ---------- test API ----------
-window.__g={akScene,coopAdmPhase,coopFinalCheck,startFinal,mergeSides,aokijiFreeze,coopEnd,COOP,admDef,startNpcFight,completeTask,checkTasks,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
+window.__g={eventFx,SFX,useTre,akScene,coopAdmPhase,coopFinalCheck,startFinal,mergeSides,aokijiFreeze,coopEnd,COOP,admDef,startNpcFight,completeTask,checkTasks,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,bStepToward,bMap,bFreePons,bUnknown,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
