@@ -6,8 +6,8 @@ if(window.DuelScene)return;
 const NS='http://www.w3.org/2000/svg';
 const CSS=`
 #ds_scene{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;flex:0 0 auto;background:linear-gradient(#1b2433 0%,#3a2e46 46%,#d98a55 66%,#f0b26b 67%,#6b4a2c 67.3%,#2a1d12 100%);box-shadow:0 12px 34px rgba(0,0,0,.45);isolation:isolate;container-type:size;color:#eef3f8;font-family:inherit;user-select:none}
-#ds_scene.ds-shake{animation:ds_shake .45s}
-@keyframes ds_shake{0%,100%{transform:translate(0)}15%{transform:translate(-9px,4px)}35%{transform:translate(8px,-5px)}55%{transform:translate(-6px,3px)}75%{transform:translate(4px,-2px)}}
+#ds_scene.ds-shake #ds_stage,#ds_scene.ds-shake .ds-sun,#ds_scene.ds-shake .ds-deck{animation:ds_shake .3s}
+@keyframes ds_shake{0%,100%{transform:translate(0)}20%{transform:translate(-2px,1px)}45%{transform:translate(2px,-1px)}70%{transform:translate(-1px,1px)}}
 #ds_scene .ds-sun{position:absolute;left:50%;top:40%;width:16%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(#ffd89a,#ff9a55 60%,transparent 70%);opacity:.9}
 #ds_scene .ds-deck{position:absolute;left:0;right:0;bottom:0;height:33%;background:repeating-linear-gradient(90deg,transparent 0 11.5%,rgba(0,0,0,.28) 11.5% 12%),linear-gradient(#7a5532,#3a2815)}
 #ds_scene .ds-vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 55%,transparent 45%,rgba(0,0,0,.55));pointer-events:none;z-index:8}
@@ -950,6 +950,7 @@ const MELEM={trident:'slash',phase:'slash',rain:'water',spark:'elec',stormcloud:
 const CHMAP={zoro:'sword',ace:'fire',kata:'viol',luffy:'pink',hancock:'blue',law:'navy',nami:'orange',robin:'lilac',kid:'red',sanji:'yellow',olesya:'maroon'};
 const NPCMAP={akainu:'akainu',kizaru:'kizaru',fujitora:'fujitora',aokiji:'aokiji',shanks:'shanks',whitebeard:'wb',kaido:'kaido',bigmom:'bm',imu:'imu'};
 const PIRL=['shanks','wb','kaido','bm'].flatMap(i=>BIGCH[i].l),PIRH=['shanks','wb','kaido','bm'].flatMap(i=>BIGCH[i].h);
+const ADML=['akainu','kizaru','fujitora','aokiji'].flatMap(i=>BIGCH[i].l),ADMH=['akainu','kizaru','fujitora','aokiji'].flatMap(i=>BIGCH[i].h);
 const DOZN=['Солдат дозора','Капитан дозора','Вице-адмирал дозора','Адмирал дозора','Герой дозора'],PIRN=['Простой пират','Капитан пиратов','Шичибукай','Великий пират','Правитель морей'];
 function kit(id,extra){const b=CHARS[id]||BIGCH[id];return Object.assign({id,elem:ELEM[id]||'punch'},b,extra||{})}
 function npcKit(ch,name){
@@ -964,15 +965,17 @@ function npcKit(ch,name){
  if(/Дофламинго/.test(nm))return kit('dofla');
  let lv=DOZN.indexOf(nm);
  if(lv===4)return kit('hero');
+ if(lv===3)return {id:'admpool',elem:'light',name:nm,col:'#dfe8f2',glow:'200,220,255',sc:1.3,x:650,bg:'admiral',ent:'admiral',l:ADML,h:ADMH};
  if(lv>=0)return kit('hero',{name:nm,col:'#9fc4ff',glow:'159,196,255',sc:1+.07*lv,x:610+12*lv,bg:'',ent:''});
  lv=PIRN.indexOf(nm);
+ if(lv===2)return {id:'shichi',elem:'dark',col:'#c98bff',glow:'201,139,255',sc:1.14,x:634,bg:'',ent:'',l:[...BIGCH.moria.l,...BIGCH.dofla.l],h:[...BIGCH.moria.h,...BIGCH.dofla.h]};
  if(lv===4)return {id:'pirate5',elem:'slash',col:'#b06bff',glow:'176,107,255',sc:1.4,x:655,bg:'boss',ent:'boss',l:PIRL,h:PIRH};
  if(lv>=0)return {id:'pirate',elem:'slash',col:'#c98bff',glow:'201,139,255',sc:1+.07*lv,x:610+12*lv,bg:'',ent:'',l:PIRL,h:PIRH};
  return {id:'unique',elem:'slash',col:'#e0a24a',glow:'224,162,74',sc:1.3,x:650,bg:'boss',ent:'boss',l:PIRL,h:PIRH};
 }
 
 /* ---------- бойцы на сцене ---------- */
-let LF=[],RF=null,LIVES=[2,2],WN=2,RNG=Math.random,CFG=null;
+let FELL=[false,false],LF=[],RF=null,LIVES=[2,2],WN=2,RNG=Math.random,CFG=null;
 const GAP=F=>Math.abs(((F&&F.tgt)||F||{home:0}).home-((F&&F.home)||0));
 function mkF(k,x,dir,sc){const g=document.createElementNS(NS,'g');g.setAttribute('class','ds-rim');g.style.setProperty('--g','rgba('+k.glow+',.6)');$('figs').appendChild(g);
  const F=new Fighter(g,x,dir,k.col);F.sc=sc;F.kit=k;F.last=null;if(k.sword)attachSword(F,k.swordLen||80);if(k.crown)attachCrown(F);if(k.fill){F.inner.querySelectorAll('[stroke="#0d1118"]').forEach(e=>e.setAttribute('stroke',k.fill));F.inner.querySelectorAll('[fill="#0d1118"]').forEach(e=>e.setAttribute('fill',k.fill))}if(k.tail)attachTail(F,k.col);if(k.trident)attachTrident(F);if(k.band){F.band.setAttribute('stroke',k.band);F.band.setAttribute('stroke-width',7)}return F}
@@ -1037,7 +1040,7 @@ const API={
  open(cfg){
   if(!document.getElementById('ds_css')){const s=document.createElement('style');s.id='ds_css';s.textContent=CSS;document.head.appendChild(s)}
   stopClock();clear();startClock();speed=cfg.fast?8:1;ROOT.classList.toggle('ds-fast',!!cfg.fast);
-  CFG=cfg;WN=cfg.W||2;LIVES=[WN,WN];RNG=mulberry((cfg.seed|0)||1);
+  CFG=cfg;FELL=[false,false];WN=cfg.W||2;LIVES=[WN,WN];RNG=mulberry((cfg.seed|0)||1);
   const R=cfg.R,L=cfg.L;ROOT.dataset.bg=R.bg||'';
   const ly=lay(L.length);
   for(let i=L.length-1;i>=0;i--){const F=mkF(L[i],ly.xs[i],1,ly.sc);LF[i]=F}
@@ -1065,6 +1068,7 @@ const API={
   if(speed<=1)snd(elemOf(W[0],moves[0]));
   const infos=await Promise.all(W.map((F,i)=>sleep(i*160).then(()=>attack(F,T,moves[i]))));
   snd(heavy||o.fall?'hitH':'hit');
+  if(o.fall)FELL[leftWins?1:0]=true;
   if(leftWins)LIVES[1]=Math.max(0,LIVES[1]-1);else LIVES[0]=Math.max(0,LIVES[0]-1);pips(1);pips(2);
   await Promise.all([...losers.map((F,i)=>sleep(i*60).then(()=>react(F,infos[0],o.fall))),...W.map(F=>sleep(220).then(()=>F.to('guard',420,E.io,{dx:0})))]);
   label(1,'');label(2,'');W.forEach(F=>{F.x=F.home;F.rest()});
@@ -1072,6 +1076,7 @@ const API={
  },
  async finish(winner,title){
   if(!RF)return;
+  if((winner===0||winner===1)&&!FELL[1-winner]){FELL[1-winner]=true;const Lo=winner===0?[RF]:LF;await Promise.all(Lo.map((F,i)=>sleep(i*60).then(()=>react(F,{col:'#ffffff'},true))))}
   if(winner===0||winner===1){const W=winner===0?LF:[RF];snd('win');W.forEach(F=>F.idle=false);
    await Promise.all(W.map(F=>F.to('win',420,E.back,{dy:-34})));await Promise.all(W.map(F=>F.to('win',260,E.bounce,{dy:0})))}
   else snd('draw');
