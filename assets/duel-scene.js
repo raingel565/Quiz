@@ -119,7 +119,7 @@ class Fighter{
     this.sFU(pts.sh,pts.fe);this.sFA(pts.fe,pts.fh);
     this.cBH(pts.bh);this.cFH(pts.fh)}
   /* мировые координаты точки */
-  W(k){const p=this.pts[k];return {x:this.x+p.x*this.dir*this.sc,y:GROUND+p.y*this.sc}}
+  W(k){if(!this.pts)this.draw(CLOCK);const p=this.pts[k];return {x:this.x+p.x*this.dir*this.sc,y:GROUND+p.y*this.sc}}
   async to(name,ms=200,ease=E.out,over={}){this.idle=false;const from=Object.assign({},this.pose),to=Object.assign({},typeof name==='string'?POSE[name]:name,over);
     await run(ms,t=>{this.pose=mix(from,to,ease(t))});this.pose=to}
   async seq(steps){for(const s of steps)await this.to(...s)}
@@ -711,6 +711,68 @@ Object.assign(ABIL,{
   await last;flash(.8);boom(T,'#d0314a',2.8,'pel');shake()})
 });
 
+/* ---------- бои за карты: Мория (тени) и Марко (синее пламя) ---------- */
+$('stage').querySelector('defs').insertAdjacentHTML('beforeend','<radialGradient id="blueF" cx="40%" cy="40%" r="75%"><stop offset="0" stop-color="#eafcff"/><stop offset=".45" stop-color="#5fd0ff"/><stop offset="1" stop-color="#1a5cff"/></radialGradient><radialGradient id="shadeG" cx="50%" cy="45%" r="65%"><stop offset="0" stop-color="#3a2a52"/><stop offset="1" stop-color="#07040c"/></radialGradient>');
+Object.assign(SH,{
+ bat:(g,o)=>{el('path',{d:'M0 -4 Q-10 -16 -24 -8 Q-16 -4 -18 4 Q-10 0 -6 8 Q0 2 6 8 Q10 0 18 4 Q16 -4 24 -8 Q10 -16 0 -4Z',fill:'#120a1c',stroke:'#a98bff','stroke-width':2,filter:'drop-shadow(0 0 6px #6a4ad8)'},g);for(const s of [-1,1])el('circle',{cx:s*3,cy:-3,r:1.6,fill:'#ff3a56'},g)},
+ scissors:(g,o)=>{for(const a of [-18,18])el('path',{d:'M-30 0 L22 -5 L26 0 L22 5Z',fill:'#cfd6e0',stroke:'#2a2f36','stroke-width':2,transform:`rotate(${a})`},g);for(const s of [-1,1])el('circle',{cx:-34,cy:s*12,r:8,fill:'none',stroke:'#a98bff','stroke-width':4},g)},
+ bflame:(g,o)=>{el('path',{d:'M0 -60 Q50 0 0 60 Q18 0 0 -60Z',fill:'url(#blueF)',filter:'drop-shadow(0 0 12px #2f8cff)'},g)},
+ bwing:(g,o)=>{el('path',{d:'M0 0 Q-40 -70 -110 -60 Q-70 -40 -90 -20 Q-50 -20 -60 0 Q-30 -6 0 0Z',fill:'url(#blueF)',opacity:.85,filter:'drop-shadow(0 0 10px #2f8cff)'},g)}
+});
+function legFlameC(F,dur,c1,c2,c3){const g=el('g',{});const glow=el('line',{stroke:c1,'stroke-width':20,'stroke-linecap':'round',opacity:.7,filter:'blur(5px)'},g),core=el('line',{stroke:c3,'stroke-width':7,'stroke-linecap':'round'},g);
+ return run(dur,t=>{const k=F.W('fk'),f=F.W('ff');for(const l of [glow,core]){l.setAttribute('x1',k.x);l.setAttribute('y1',k.y);l.setAttribute('x2',f.x);l.setAttribute('y2',f.y)}
+  if(Math.random()<.9){const q=el('circle',{cx:f.x+R_(-14,14),cy:f.y+R_(-14,14),r:R_(3,7),fill:Math.random()<.5?c2:c1,opacity:.9});run(300,u=>{q.setAttribute('cy',+q.getAttribute('cy')-1.6);q.setAttribute('opacity',.9*(1-u));if(u>=1)q.remove()})}
+  if(t>=1)g.remove()})}
+const blueLeg=(F,d)=>legFlameC(F,d,'#2f8cff','#5fd0ff','#eafcff');
+function bodyFlame(F,dur){return run(dur,t=>{if(Math.random()<.95){const ks=['head','sh','pel','fh','bh','ff','bf','fk','bk'];const p=F.W(ks[Math.floor(Math.random()*ks.length)]);const q=el('circle',{cx:p.x+R_(-12,12),cy:p.y+R_(-12,12),r:R_(4,9)*F.sc,fill:Math.random()<.5?'#5fd0ff':'#2f8cff',opacity:.85,filter:'blur(1px)'});run(380,u=>{q.setAttribute('cy',+q.getAttribute('cy')-2);q.setAttribute('opacity',.85*(1-u));if(u>=1)q.remove()})}})}
+/* клон-тень: тёмная копия бойца на сцене */
+function shade(F,x,sc){const g=document.createElementNS(NS,'g');g.setAttribute('class','ds-rim');g.style.setProperty('--g','rgba(150,110,230,.7)');g.style.opacity=0;$('figs').insertBefore(g,$('figs').firstChild);
+ const C=new Fighter(g,x,F.dir,'#7a68a8');C.sc=sc||F.sc;C.home=x;C.tgt=F.tgt;return C}
+async function shadeIn(C,ms){await run(ms||200,t=>{C.g.style.opacity=.85*t})}
+async function shadeOut(C,ms){await run(ms||200,t=>{C.g.style.opacity=.85*(1-t)});C.destroy()}
+Object.assign(ABIL,{
+ shadowsteal:MV('Кража тени','#a98bff',PS('cast',240),async(F,T)=>{const B=T.W('pel');const ft={x:B.x,y:GROUND-6};
+  await flyer(F,F.W('fh'),ft,{dur:260,ease:E.in,spin:720,shape:SH.scissors,s0:.8,s1:1.1});cutAt(ft.x,ft.y,0,70,'#cfd6e0',6);
+  const sh=el('ellipse',{cx:ft.x,cy:GROUND,rx:46*T.sc,ry:9,fill:'#07040c',opacity:.9},fxB);const hm=F.W('pel');
+  await run(360,t=>{const k=E.io(t);sh.setAttribute('cx',L_(ft.x,hm.x,k));sh.setAttribute('cy',GROUND-Math.sin(Math.PI*k)*80);sh.setAttribute('rx',46*T.sc*(1-.6*k));sh.setAttribute('opacity',.9*(1-.7*k))});sh.remove();
+  ring(hm.x,hm.y,'#a98bff',70);boom(T,'#a98bff',1.5)}),
+ shadowbats:MV('Теневые мыши','#a98bff',PS('cast',220,{fu:120,fb:0}),async(F,T)=>{const B=T.W('sh');let last;
+  for(let i=0;i<7;i++){last=flyer(F,F.W('fh'),{x:B.x+R_(-20,20),y:B.y+R_(-50,50)},{dur:340,arc:R_(-70,90),ease:E.lin,shape:SH.bat,s0:.7,s1:1.2,mirror:1});last.then(()=>burst(B.x,B.y+R_(-40,40),4,'#a98bff',.6));await sleep(70)}
+  await last;boom(T,'#a98bff',1.5)}),
+ shadowblade:MV('Теневой клинок','#a98bff',PS('windup',240,{bu:60,bb:60}),async(F,T)=>{await F.to('punch',100,E.in,{dx:60});const h=F.W('fh'),B=T.W('sh');
+  await flyer(F,h,{x:B.x-F.dir*10,y:B.y},{dur:220,ease:E.in,aim:1,shape:(g)=>{el('path',{d:'M0 -56 Q40 0 0 56 Q16 0 0 -56Z',fill:'#120a1c',stroke:'#a98bff','stroke-width':3,filter:'drop-shadow(0 0 10px #6a4ad8)'},g)},s0:1,s1:1.6,trail:1,col:'#6a4ad8'});boom(T,'#a98bff',1.6)}),
+ shadowclones:MV('Клоны-тени','#a98bff',async(F,T)=>{await F.to('cast',240,E.out,{fu:110,fb:0,bu:110,bb:0});
+  F._cl=[0,1,2].map(i=>shade(F,F.home-F.dir*(60+i*55),F.sc*.85));for(const C of F._cl){C.tgt=T;ring(C.x,GROUND-90,'#6a4ad8',60)}await Promise.all(F._cl.map(C=>shadeIn(C,260)))},
+  async(F,T)=>{const B=T.W('sh');
+   for(const C of F._cl){C.to('windup',120,E.out);await sleep(90)}
+   for(const C of F._cl){const pr=C.to('punch',130,E.in,{dx:Math.abs(T.home-C.home)-110*C.sc});await sleep(110);cutAt(B.x,B.y+R_(-30,30),R_(-.8,.8),110,'#a98bff',8);boom(T,'#a98bff',1.2);flash(.2);pr.then(()=>shadeOut(C,240))}
+   await sleep(220);boom(T,'#a98bff',2.4,'pel');shake();F._cl=null}),
+ shadowarmy:MV('Армия теней','#a98bff',PS('cast',260,{fu:172,fb:0,bu:172,bb:0}),async(F,T)=>{const xs=[0,1,2,3,4].map(i=>L_(F.home,T.home,.3+i*.09));
+  const S=xs.map(x=>{const C=shade(F,x,.85);C.tgt=T;C.idle=false;C.pose=Object.assign({},POSE.guard,{dy:120});return C});
+  for(const C of S){C.g.style.opacity=.85;burst(C.x,GROUND,5,'#6a4ad8',.6)}await Promise.all(S.map((C,i)=>sleep(i*60).then(()=>C.to('guard',300,E.out,{dy:0}))));
+  await Promise.all(S.map((C,i)=>sleep(i*70).then(()=>C.to('punch',160,E.in,{dx:Math.abs(T.home-C.home)-80}))));
+  const B=T.W('pel');for(let i=0;i<5;i++)cutAt(B.x,B.y+R_(-50,30),R_(-1,1),90,'#a98bff',7);boom(T,'#a98bff',2.4,'pel');shake();
+  await Promise.all(S.map(C=>shadeOut(C,260)))}),
+ shadowgiant:MV('Гигантская тень','#a98bff',PS('cast',280,{fu:150,fb:0,bu:150,bb:0}),async(F,T)=>{const dk=el('rect',{x:0,y:0,width:960,height:540,fill:'#07040c',opacity:0},fxB);
+  const C=shade(F,F.home-F.dir*40,2.05);C.tgt=T;await Promise.all([shadeIn(C,420),run(420,t=>dk.setAttribute('opacity',.45*t))]);
+  await C.to('windup',260,E.out);await C.to('punch',140,E.in,{dx:Math.abs(T.home-C.home)-100*C.sc});flash(.8);shake();groundRings(T.W('pel').x,'#6a4ad8','#a98bff',260);boom(T,'#a98bff',2.8,'pel');
+  await sleep(200);await Promise.all([shadeOut(C,320),run(320,t=>dk.setAttribute('opacity',.45*(1-t)))]);dk.remove()}),
+ bluekick:MV('Синий пинок','#5fd0ff',async(F,T)=>{await F.to('kickW',240,E.out);blueLeg(F,900);await sleep(200)},async(F,T)=>{await F.to('kick',110,E.in,{dx:GAP(F)-175*F.sc});const B=T.W('sh');boom(T,'#5fd0ff',1.6);burst(B.x,B.y,18,'#eafcff',1.3)}),
+ phoenixdash:MV('Рывок феникса','#5fd0ff',async(F,T)=>{await F.to('kickW',220,E.out,{dx:-20});blueLeg(F,900)},async(F,T)=>{const x0=F.W('pel');const pr=F.to('kick',160,E.in,{dx:GAP(F)-175*F.sc});
+  await run(160,t=>{const p=F.W('pel');tdot(p.x+R_(-10,10),p.y+R_(-30,30),Math.random()<.5?'#5fd0ff':'#2f8cff',8)});await pr;boom(T,'#5fd0ff',1.6);cutAt(T.W('sh').x,T.W('sh').y,-.5,100,'#eafcff',8)}),
+ flamekicks:MV('Серия синих пинков','#5fd0ff',async(F,T)=>{await F.to('kickW',200,E.out);blueLeg(F,1000)},async(F,T)=>{await F.to('kick',100,E.in,{dx:GAP(F)-175*F.sc});const B=T.W('sh');
+  for(let i=0;i<4;i++){F.to(i%2?'kickW':'kick',55,E.out,{dx:GAP(F)-175*F.sc});burst(B.x,B.y+R_(-40,40),6,i%2?'#2f8cff':'#5fd0ff',.8);flash(.12);await sleep(85)}boom(T,'#5fd0ff',1.7)}),
+ phoenixkick:MV('Синее пламя феникса','#5fd0ff',async(F,T)=>{F.to('charge',300,E.out);const p=F.W('pel');ring(p.x,p.y-40,'#5fd0ff',120);await bodyFlame(F,620);await F.to('kickW',200,E.out);blueLeg(F,1100)},
+  async(F,T)=>{bodyFlame(F,600);await F.to('kick',120,E.in,{dx:GAP(F)-175*F.sc});const B=T.W('sh'),ff=F.W('ff');
+  await flyer(F,{x:ff.x,y:ff.y-30},{x:B.x,y:B.y},{dur:150,ease:E.in,aim:1,shape:SH.bflame,s0:1.2,s1:2});flash(.7);shake();boom(T,'#5fd0ff',2.6,'pel');burst(B.x,B.y,30,'#eafcff',1.8);ring(B.x,B.y,'#2f8cff',190)}),
+ phoenixdive:MV('Пике феникса','#5fd0ff',async(F,T)=>{const wg=[0,1].map(()=>el('g',{}));wg.forEach((g,i)=>{SH.bwing(g,{})});F._w=wg;
+  const upd=()=>{const s=F.W('sh');wg[0].setAttribute('transform',`translate(${s.x},${s.y}) scale(${F.dir*F.sc},${F.sc})`);wg[1].setAttribute('transform',`translate(${s.x},${s.y}) scale(${-F.dir*F.sc*.8},${F.sc*.8})`)};
+  F._wr=run(1300,t=>{upd();if(t>=1)wg.forEach(g=>g.remove())});await F.to('kickW',320,E.out,{dy:-190,dx:GAP(F)*.5-60,t:-10});blueLeg(F,900);await sleep(100)},
+  async(F,T)=>{await F.to('kick',150,E.in,{dx:GAP(F)-175*F.sc,dy:0,t:-30});const B=T.W('pel');groundRings(B.x,'#5fd0ff','#eafcff',260);boom(T,'#5fd0ff',2.6,'pel');burst(B.x,GROUND-6,30,'#5fd0ff',1.6);shake();await F._wr;F._w.forEach(g=>g.remove())}),
+ bluewheel:MV('Синее колесо','#5fd0ff',async(F,T)=>{await F.to('kickW',240,E.out);blueLeg(F,1000);await sleep(200)},async(F,T)=>{const pr=F.to('kick',120,E.in,{dx:GAP(F)-175*F.sc});const f=F.W('pel'),B=T.W('pel');
+  await flyer(F,{x:f.x+F.dir*70,y:GROUND-60},{x:B.x,y:B.y},{dur:300,ease:E.lin,spin:1080*F.dir,shape:(g)=>{el('circle',{r:50,fill:'none',stroke:'#2f8cff','stroke-width':14,'stroke-dasharray':'60 40',filter:'drop-shadow(0 0 10px #2f8cff)'},g);el('circle',{r:50,fill:'none',stroke:'#eafcff','stroke-width':5,'stroke-dasharray':'30 70'},g)},s0:1,s1:1.6,trail:1,col:'#5fd0ff'});await pr;boom(T,'#5fd0ff',2.4,'pel');shake()})
+});
+
 const CHARS={
  sword:{name:'Мечник',col:'#e8eef5',glow:'190,220,255',band:'#3f9bff',sword:1,l:['wave','dash','flurry'],h:['vortex','cross','plunge']},
  fire:{name:'Огненный боец',col:'#e6573f',glow:'255,90,60',l:['shots','whip','firewave'],h:['fire','pillar','meteor']},
@@ -735,6 +797,8 @@ const BIGCH={
  bm:{name:'Хранитель: огромный меч и розовые молнии',col:'#ff8ec4',glow:'255,142,196',ent:'guardian',bg:'guardian',sc:1.25,x:645,sword:1,swordLen:170,l:['swordchop','pinkbolt','flameburst'],h:['giantblade','pinkstorm','fireorbs']},
  hero:{name:'Босс 5 уровня: белый (кулаки)',col:'#ffffff',glow:'255,255,255',ent:'boss',bg:'boss',sc:1.4,x:655,l:['jab','combo','forcepulse'],h:['giantfist','wavebarrage','shockpunch']}
 };
+BIGCH.moria={name:'Гекко Мория: тени',col:'#6e5c94',glow:'170,130,255',ent:'boss',bg:'boss',sc:1.5,x:660,l:['shadowsteal','shadowbats','shadowblade'],h:['shadowclones','shadowarmy','shadowgiant']};
+BIGCH.marco={name:'Марко: синее пламя',col:'#ffd23a',glow:'79,182,255',band:'#4fb6ff',ent:'phoenix',bg:'boss',sc:1.3,x:650,l:['bluekick','phoenixdash','flamekicks'],h:['phoenixkick','phoenixdive','bluewheel']};
 BIGCH.imu={name:'Има: чёрная сущность в короне',col:'#f4f4f8',glow:'208,49,74',ent:'imu',bg:'imu',sc:1.6,x:670,crown:1,l:['demonclaws','shadowbolt','soulgrab'],h:['giantclaws','hellportal','soulstorm']};
 const HEAVY=new Set();for(const id in CHARS)CHARS[id].h.forEach(k=>HEAVY.add(k));for(const id in BIGCH)BIGCH[id].h.forEach(k=>HEAVY.add(k));
 
@@ -779,7 +843,7 @@ const SND={
 };
 function snd(n){if(!API.soundOn()||!SND[n])return;const c=actx();if(!c)return;try{if(c.state==='suspended')c.resume().catch(()=>{});SND[n](c.currentTime+.02)}catch(e){}}
 const ELEM={sword:'slash',fire:'fire',viol:'mochi',pink:'rubber',blue:'heart',navy:'space',orange:'wind',lilac:'hand',red:'metal',yellow:'kick',maroon:'water',
- akainu:'lava',kizaru:'light',fujitora:'grav',aokiji:'ice',shanks:'elec',wb:'quake',kaido:'quake',bm:'slash',hero:'punch',imu:'dark'};
+ akainu:'lava',kizaru:'light',fujitora:'grav',aokiji:'ice',shanks:'elec',wb:'quake',kaido:'quake',bm:'slash',hero:'punch',imu:'dark',moria:'dark',marco:'fire'};
 const MELEM={trident:'slash',phase:'slash',rain:'water',spark:'elec',stormcloud:'elec',hail:'ice',firekick:'fire',firewheel:'fire',starkick:'fire',
  redcut:'slash',fireball:'fire',firebreath:'fire',pinkbolt:'elec',pinkstorm:'elec',flameburst:'fire',fireorbs:'fire',jab:'punch',combo:'punch',giantfist:'punch',
  tremorpunch:'punch',clubswing:'punch',bullcharge:'punch'};
@@ -795,6 +859,8 @@ function npcKit(ch,name){
  if(CHMAP[ch])return kit(CHMAP[ch]);
  const nm=String(name||'');
  if(/^Эйс/.test(nm))return kit('fire',{sc:1.1,x:620});
+ if(/Мория/.test(nm))return kit('moria');
+ if(/^Марко/.test(nm))return kit('marco');
  let lv=DOZN.indexOf(nm);
  if(lv===4)return kit('hero');
  if(lv>=0)return kit('hero',{name:nm,col:'#9fc4ff',glow:'159,196,255',sc:1+.07*lv,x:610+12*lv,bg:'',ent:''});
@@ -840,6 +906,9 @@ async function react(T,info,fall){
 async function entrance(F,k){const g=F.g,X=F.home;
  if(k==='admiral'){snd('ent_admiral');F.idle=false;F.pose=Object.assign({},POSE.guard,{dy:-460});await sleep(150);await F.to('guard',380,E.in,{dy:0});shake();flash(.4);
    groundRings(X,'#fff','#fff',280);burst(X,GROUND-6,40,'#d9c39a',1.8);await F.to('guard',300,E.out);F.rest()}
+ else if(k==='phoenix'){snd('fire');F.idle=false;F.pose=Object.assign({},POSE.guard,{dy:-420});const wg=[0,1].map(()=>{const g=el('g',{});SH.bwing(g,{});return g});
+   await run(700,t=>{const k2=E.out(t);F.pose=Object.assign({},POSE.guard,{dy:-420*(1-k2)});const s=F.W('sh');wg[0].setAttribute('transform',`translate(${s.x},${s.y}) scale(${F.dir*F.sc},${F.sc})`);wg[1].setAttribute('transform',`translate(${s.x},${s.y}) scale(${-F.dir*F.sc*.8},${F.sc*.8})`);if(Math.random()<.8)tdot(s.x+R_(-30,30),s.y+R_(-30,30),'#5fd0ff',7)});
+   flash(.3);ring(X,GROUND-60,'#5fd0ff',160);await run(300,t=>wg.forEach(g=>g.setAttribute('opacity',1-t)));wg.forEach(g=>g.remove());F.rest()}
  else if(k==='boss'){snd('ent_boss');g.style.opacity=0;F.x=X+170;const fog=[];for(let i=0;i<14;i++)fog.push(el('circle',{cx:X+60+Math.random()*150,cy:GROUND-30-Math.random()*110,r:30+Math.random()*34,fill:'#8a93b8',opacity:0,filter:'blur(14px)'},fxB));
    await run(1100,t=>{g.style.opacity=Math.min(1,t*1.6);F.x=X+170*(1-E.out(t));fog.forEach(f=>f.setAttribute('opacity',(t<.5?t*1.2:(1-t)*1.2)*.8))});fog.forEach(f=>f.remove());g.style.opacity=1;F.x=X;F.rest()}
  else if(k==='guardian'){snd('ent_guardian');F.idle=false;F.pose=Object.assign({},POSE.guard,{dy:320});let cl=$('stage').querySelector('#ds_clipE');if(!cl){const d=$('stage').querySelector('defs');cl=document.createElementNS(NS,'clipPath');cl.id='ds_clipE';const r=document.createElementNS(NS,'rect');r.setAttribute('x',0);r.setAttribute('y',0);r.setAttribute('width',960);r.setAttribute('height',GROUND+4);cl.appendChild(r);d.appendChild(cl)}
