@@ -919,7 +919,7 @@ body.stream #now{font-size:clamp(14px,1.3vw,22px)}
 .stwait{display:grid;place-items:center;text-align:center;gap:12px;padding:34px 18px}
 html,body{overscroll-behavior-y:none}
 </style>
-<div id="ver" title="Версия кооператива">C23 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия кооператива">C24 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script>
 (function(){
@@ -1379,7 +1379,7 @@ function newGame(cfg){
      guest:['laxus','natsu','jinwoo'][d(3)-1],guestBought:false,tb:cfg.tb?1:0,apMod:0,lastWeather:null,stolen:false,over:false,
      coop:true,admL:[],admS:null,frz:0,lafDone:false,lafAt:null,final:null,hallDone:true,achDone:true};
   const WW=cfg.wseed!=null?worldFor(cfg.wseed):worldFor(1+Math.floor(rnd()*2e9));G.wseed=WW.seed;G.adm=window.__adm||ADMK[(Math.imul((WW.seed|0)^0x2545F491,2654435761)>>>0)%3];G.grav={};
-  G.admOrder=admOrderFor(WW.seed);{const st=COOP.ADM[Math.max(2,Math.min(4,cfg.players.length))];G.admS={};for(const k of ADMK4)G.admS[k]=Object.assign({},ADMS[k],{a:st.a,u:st.u});const bs=COOP.BOSS[Math.max(2,Math.min(4,cfg.players.length))];G.admS.imu=Object.assign({},ADMS.imu,{a:bs.A,u:bs.U})}
+  G.admOrder=admOrderFor(WW.seed);G.admSeas=admSeasFor(WW.seed);{const st=COOP.ADM[Math.max(2,Math.min(4,cfg.players.length))];G.admS={};for(const k of ADMK4)G.admS[k]=Object.assign({},ADMS[k],{a:st.a,u:st.u});const bs=COOP.BOSS[Math.max(2,Math.min(4,cfg.players.length))];G.admS.imu=Object.assign({},ADMS.imu,{a:bs.A,u:bs.U})}
   {const gk=Object.keys(GUARD);let sd=(WW.seed>>>0)^0x9e3779b9;const rg=()=>{sd=(Math.imul(sd,1664525)+1013904223)>>>0;return sd/4294967296};
    for(let i=gk.length-1;i>0;i--){const j=Math.floor(rg()*(i+1));[gk[i],gk[j]]=[gk[j],gk[i]]}
    ['W','N','S'].forEach((s,i)=>{G.ponAt[s+WW.pon[s]]={owner:null,g:gk[i],ok:[]}});
@@ -1656,6 +1656,7 @@ ADMS.imu={n:'Има',short:'Има',lv:6,a:20,u:20,col:'#7a3fb0',vid:false,title
 const ADMK4=['akainu','kizaru','fujitora','aokiji'];
 const admDef=k=>(G&&G.admS&&G.admS[k])||ADMS[k];
 const admEntries=()=>G.coop?(G.admL||[]).filter(Boolean):(G.akainu?[{adm:G.adm||'akainu',loc:G.akainu.loc,stun:G.akainu.stun}]:[]);
+function admSeasFor(seed){let sd=(seed>>>0)^0x2b9d1f33;const rg=()=>{sd=(Math.imul(sd,1664525)+1013904223)>>>0;return sd/4294967296};const a=SEAK.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rg()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function admOrderFor(seed){let sd=(seed>>>0)^0x7f4a7c15;const rg=()=>{sd=(Math.imul(sd,1664525)+1013904223)>>>0;return sd/4294967296};const a=ADMK4.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rg()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 const ADMK=['akainu','kizaru','fujitora'];
 const adm=()=>admDef((G&&G.adm)||'akainu');
@@ -1817,9 +1818,9 @@ function coopAdmPhase(cb){
   if(G.winner!=null)return cb();
   const fresh=new Set(),done=new Set();
   const spawn=()=>{
-    const i=[0,1,2,3].find(j=>!G.admL[j]&&G.round>=COOP.ADM_START+j*COOP.ADM_GAP);
+    const i=[0,1,2,3].slice(0,G.tb?G.players.length:4).find(j=>!G.admL[j]&&G.round>=COOP.ADM_START+j*COOP.ADM_GAP);
     if(i==null)return moveAll();
-    const sea=SEAK[i],k=G.admOrder[i],loc=REDS[sea];
+    const sea=G.tb?G.admSeas[i]:SEAK[i],k=G.admOrder[i],loc=REDS[sea];
     const E={adm:k,loc,stun:0,sea,i};G.admL[i]=E;fresh.add(E);G.akainu=E;G.adm=k;
     const AD=adm();
     log('☠ В море '+SEAS[sea]+' выходит адмирал '+AD.short+' (атака '+AD.a+', уклонение '+AD.u+') и появляется на '+locName(loc)+'!');
