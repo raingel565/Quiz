@@ -920,6 +920,8 @@ body.stream #now{font-size:clamp(14px,1.3vw,22px)}
 .stwait{display:grid;place-items:center;text-align:center;gap:12px;padding:34px 18px}
 html,body{overscroll-behavior-y:none}
 .dsslot{width:100%;flex:0 0 auto}
+.dsoff{font-size:14px;text-align:center;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.05);border:1px dashed var(--line)}
+.dsonb{background:none;border:0;padding:0;color:var(--accent,#f2b01e);font:inherit;font-weight:800;text-decoration:underline;cursor:pointer}
 .dsp{display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);border-radius:16px;padding:10px;background:rgba(255,255,255,.03)}
 .dsscore{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:end;gap:4px 10px}
 .dsn{display:flex;flex-direction:column;gap:2px;min-width:0}.dsn b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dsn.dsr{align-items:flex-end;text-align:right}
@@ -945,7 +947,7 @@ html,body{overscroll-behavior-y:none}
 #fxbd.on{opacity:1}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 </style>
-<div id="ver" title="Версия кооператива">C30 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия кооператива">C31 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=8"></script>
 <script>
@@ -2739,13 +2741,24 @@ function akFx(ev,done){
   setTimeout(()=>{if(!fin&&v.readyState<2&&v.currentTime===0)end()},6000); // не загрузилось: не держим игру
   if(STREAM.on)setTimeout(end,14000); // на трансляции ролик не держит очередь событий дольше 14 секунд
 }
-let ADMMUS=null;
+let ADMMUS=null,ADMEL=null;
+// V130: «разрешаем» трек адмирала при первом касании экрана (тихий запуск и пауза),
+// чтобы потом он сам включился сразу после видео, без касания
+function admUnlock(){
+  if(ADMEL||window.__nor)return;
+  try{const a=new Audio('assets/music_admiral.m4a'+SFXV);a.preload='auto';a.muted=true;ADMEL=a;
+    const pr=a.play();const back=()=>{try{a.pause();a.currentTime=0}catch(e){}a.muted=false};
+    if(pr&&pr.then)pr.then(back,()=>{a.muted=false;ADMEL=null});else back();
+  }catch(e){ADMEL=null}
+}
+document.addEventListener('pointerdown',admUnlock,true);
 function admMusicStart(){
   try{
-    if(window.__nor||!SFX.on||SET.music===false)return;
+    if(window.__nor||!SFX.on)return; // V130: трек адмирала зависит только от общего звука, не от «Вступительной музыки»
     admMusicStop(true);
-    const a=new Audio('assets/music_admiral.m4a'+SFXV);a.loop=false;a.volume=0;ADMMUS=a;
-    const go=()=>{try{a.currentTime=12}catch(e){}const pr=a.play();if(pr&&pr.catch)pr.catch(()=>{});
+    const a=ADMEL||new Audio('assets/music_admiral.m4a'+SFXV);a.muted=false;a.loop=false;a.volume=0;ADMMUS=a;
+    const go=()=>{try{a.currentTime=12}catch(e){}const pr=a.play();if(pr&&pr.catch)pr.catch(()=>{ // браузер не дал включить звук без касания: включим при первом касании
+        const tap=()=>{if(ADMMUS===a){const p2=a.play();if(p2&&p2.catch)p2.catch(()=>{})}};document.addEventListener('pointerdown',tap,{once:true,capture:true})});
       let v=0;const t=setInterval(()=>{if(ADMMUS!==a){clearInterval(t);return}v+=.04;if(v>=.8){v=.8;clearInterval(t)}try{a.volume=v}catch(e){clearInterval(t)}},120)}; // плавный набор громкости ~3 с
     if(a.readyState>=1)go();else a.addEventListener('loadedmetadata',go,{once:true});
   }catch(e){}
@@ -2753,7 +2766,7 @@ function admMusicStart(){
 function admMusicStop(now){
   const a=ADMMUS;if(!a)return;ADMMUS=null;
   if(now){try{a.pause()}catch(e){}return}
-  let v=a.volume;const t=setInterval(()=>{v-=.1;if(v<=0){clearInterval(t);try{a.pause()}catch(e){}}else{try{a.volume=v}catch(e){clearInterval(t)}}},40);
+  let v=a.volume;const t=setInterval(()=>{if(ADMMUS===a){clearInterval(t);return}v-=.1;if(v<=0){clearInterval(t);try{a.pause()}catch(e){}}else{try{a.volume=v}catch(e){clearInterval(t)}}},40);
 }
 
 function akTheme(k){
@@ -3203,7 +3216,7 @@ function prepHtml(pe){
   return h;
 }
 // ===== V125: сцена дуэли поверх итога боя (assets/duel-scene.js). Сцена только показывает готовый результат runDuel =====
-function dsMode(){let m=null;try{m=localStorage.getItem('gl_dscene')}catch(e){}if(m==='on'||m==='fast'||m==='off')return m;return (window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)?'off':'on'}
+function dsMode(){let m=null;try{m=localStorage.getItem('gl_dscene')}catch(e){}if(m==='on'||m==='fast'||m==='off')return m;return 'on'}
 const DS_MODE_N={on:'показывать',fast:'ускоренно',off:'выключена'};
 function dsWanted(pe){return !!(window.DuelScene&&!window.__nor&&dsMode()!=='off'&&pe&&pe.res&&pe.res.st.some(x=>(x.s.ps||[x.s.p]).some(q=>q&&!q.bot)))}
 function dzSig(pe){try{return (pe.names||[]).join('|')+'#'+pe.res.rounds.map(r=>r.cur.map(c=>c.roll+'/'+c.att).join(',')+'>'+r.out).join(';')}catch(e){return Math.random()}}
@@ -3312,7 +3325,7 @@ function resultHtml(pe){
   };
   const shake=Z.shown>0&&Z.lastShk!==Z.shown;Z.lastShk=Z.shown;
   const dsw=dsWanted(pe);
-  let h='<div class="ov"><div class="modal'+(dsw?' dsw':'')+'"><h2>'+esc(pe.title)+'</h2>'+(dsw?'<div id="dsslot" class="dsslot"></div>':'')+'<div class="arena'+(shake?' shake':'')+'">'+side(0)+'<div class="vs">VS</div>'+side(1)+'</div>';
+  let h='<div class="ov"><div class="modal'+(dsw?' dsw':'')+'"><h2>'+esc(pe.title)+'</h2>'+(dsw?'<div id="dsslot" class="dsslot"></div>':(window.DuelScene&&!window.__nor&&dsMode()==='off'&&pe.res.st.some(x=>(x.s.ps||[x.s.p]).some(q=>q&&!q.bot))?'<div class="dsoff">🎬 Анимация боя выключена — <button class="dsonb" data-dz="mode-on">включить</button></div>':''))+'<div class="arena'+(shake?' shake':'')+'">'+side(0)+'<div class="vs">VS</div>'+side(1)+'</div>';
   const line=(r)=>{
     const R=res.rounds[r],c=R.cur;
     const part=(x,k)=>{
@@ -3744,6 +3757,7 @@ function bind(){
     const Z=UI.dz;if(!Z||!pe)return;
     const n=pe.res.rounds.length,act=b.dataset.dz;
     if(act==='mode'){dzMode(pe,Z);return}
+    if(act==='mode-on'){try{localStorage.setItem('gl_dscene','on')}catch(e){}Z.fast=false;clearTimeout(Z.at);Z.at=0;render();return}
     if(act==='skip'){
       if(Z.sc||dsWanted(pe)){Z.fast=true;if(Z.sc)Z.sc.fast(true);clearTimeout(Z.at);Z.at=0;dzRoll(pe,[0,1]);render();return}
       Z.shown=n;Z.spin=[false,false];Z.done=[false,false];render();return}
