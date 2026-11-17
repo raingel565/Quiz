@@ -919,12 +919,28 @@ body.stream #now{font-size:clamp(14px,1.3vw,22px)}
 .stwait{display:grid;place-items:center;text-align:center;gap:12px;padding:34px 18px}
 html,body{overscroll-behavior-y:none}
 .dsslot{width:100%;flex:0 0 auto}
+.dsp{display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);border-radius:16px;padding:10px;background:rgba(255,255,255,.03)}
+.dsscore{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.dsn{display:flex;flex-direction:column;gap:2px;min-width:0}.dsn b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dsn.dsr{align-items:flex-end;text-align:right}
+.dsn span{display:flex;gap:4px}.dscr{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px dashed rgba(255,255,255,.25);font-style:normal;font-size:14px}
+.dscr.on{border:0;background:rgba(255,200,60,.15);box-shadow:0 0 10px rgba(255,200,60,.5)}.dscr.pop{animation:dscrpop .6s cubic-bezier(.2,1.6,.4,1)}
+@keyframes dscrpop{0%{transform:scale(0)}100%{transform:scale(1)}}
+.dsrn{font-weight:800;opacity:.85;white-space:nowrap}
+.dsdice{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;min-height:92px}
+.dsdc{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.dsdc .pd{margin:0}.dssum{font-size:13px;line-height:1.3}.dssum .num{font-size:18px}
+.dsroll{min-width:118px;padding:12px 14px;line-height:1.15}.dswait{min-width:118px;text-align:center}
+.dsnd{font-size:13px;opacity:.85}
+.dshist{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;font-size:12.5px}.dshist span{padding:3px 9px;border-radius:99px;background:rgba(255,255,255,.06)}
+.dsbtns{justify-content:center;flex-wrap:wrap}
+.dsdet{border:1px solid var(--line);border-radius:14px;padding:8px 10px}.dsdet summary{cursor:pointer;font-weight:700;font-size:14px;opacity:.85}
+.dsdet[open]{display:flex;flex-direction:column;gap:8px}.dsdet .arena{margin-top:8px}
 .modal.dsw .arena .por{display:none}
 .modal.dsw .arena{min-height:0}
 .modal.dsw .arena .dfc{padding:6px 8px}
 .modal.dsw .arena .dfc h3{margin:0}
 </style>
-<div id="ver" title="Версия кооператива">C26 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия кооператива">C27 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=4"></script>
 <script>
@@ -3175,21 +3191,50 @@ function dsMode(){let m=null;try{m=localStorage.getItem('gl_dscene')}catch(e){}i
 const DS_MODE_N={on:'показывать',fast:'ускоренно',off:'выключена'};
 function dsWanted(pe){return !!(window.DuelScene&&!window.__nor&&dsMode()!=='off'&&pe&&pe.res&&pe.res.st.some(x=>(x.s.ps||[x.s.p]).some(q=>q&&!q.bot)))}
 function dzSig(pe){try{return (pe.names||[]).join('|')+'#'+pe.res.rounds.map(r=>r.cur.map(c=>c.roll+'/'+c.att).join(',')+'>'+r.out).join(';')}catch(e){return Math.random()}}
-function dzRoll(pe,k){
-  const Z=UI.dz;if(!Z||Z.busy||Z.shown>=pe.res.rounds.length||Z.done[k]||Z.spin[k])return;
+function dzRoll(pe,ks){
+  const Z=UI.dz;if(!Z||Z.busy||Z.shown>=pe.res.rounds.length)return;
+  ks=(Array.isArray(ks)?ks:[ks]).filter(k=>!Z.done[k]&&!Z.spin[k]);if(!ks.length)return;
   const fast=Z.fast||(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const fin=()=>{
     if(UI.dz!==Z||G.pending!==Z.key)return;
-    Z.spin[k]=false;Z.done[k]=true;render();
+    ks.forEach(k=>{Z.spin[k]=false;Z.done[k]=true});if(!fast&&Z.sc)SFX.play('diceEnd',0);render();
     if(Z.done[0]&&Z.done[1])dzNext(Z);
   };
   if(fast){fin();return}
-  Z.spin[k]=true;render();
-  const el=document.getElementById('d'+k);
-  const hi=pe.res.st[k].keys.includes('jinwoo')?20:12;
-  if(el)el.animate([{transform:'rotateY(0deg) translateY(-30px)'},{transform:'rotateY(900deg) translateY(0)'}],{duration:800,easing:'cubic-bezier(.2,.6,.2,1)'});
-  const eb=el&&el.querySelector('b');const tm=setInterval(()=>{if(eb&&eb.isConnected)eb.textContent=1+Math.floor(Math.random()*hi)},60);
-  setTimeout(()=>{clearInterval(tm);fin()},800);
+  ks.forEach(k=>Z.spin[k]=true);if(Z.sc)SFX.play('dice',0);render();
+  const tms=ks.map(k=>{
+    const el=document.getElementById('d'+k);
+    const hi=pe.res.st[k].keys.includes('jinwoo')?20:12;
+    if(el)el.animate([{transform:'rotateY(0deg) translateY(-30px)'},{transform:'rotateY(900deg) translateY(0)'}],{duration:800,easing:'cubic-bezier(.2,.6,.2,1)'});
+    const eb=el&&el.querySelector('b');return setInterval(()=>{if(eb&&eb.isConnected)eb.textContent=1+Math.floor(Math.random()*hi)},60);
+  });
+  setTimeout(()=>{tms.forEach(clearInterval);fin()},800);
+}
+function dsCompactHtml(pe,Z,side,line,wins){
+  const res=pe.res,n=res.rounds.length,W=res.W||2,last=Z.shown>0?res.rounds[Z.shown-1].out:-2;
+  const crowns=i=>Array.from({length:W},(_,k)=>'<i class="dscr'+(k<wins[i]?' on'+(k===wins[i]-1&&last===i?' pop':''):'')+'">'+(k<wins[i]?'👑':'')+'</i>').join('');
+  let h='<div class="ov"><div class="modal dsw"><h2>'+esc(pe.title)+'</h2><div id="dsslot" class="dsslot"></div><div class="dsp">';
+  h+='<div class="dsscore"><div class="dsn"><b>'+esc(pe.names[0])+'</b><span>'+crowns(0)+'</span></div><div class="dsrn">'+(Z.shown<n?'Раунд '+(Z.shown+1):'Итог')+'</div><div class="dsn dsr"><b>'+esc(pe.names[1])+'</b><span>'+crowns(1)+'</span></div></div>';
+  if(Z.shown<n){
+    const R=res.rounds[Z.shown],c=R.cur;
+    c.forEach((x,k)=>{if(x.nodice)Z.done[k]=true});
+    const col=k=>{
+      const x=c[k],hi=res.st[k].keys.includes('jinwoo')?20:12;
+      const die=x.nodice?'<span class="dsnd">🚬 без кубика</span>':Z.done[k]?'<span class="pd drop s'+hi+'"><b>'+x.roll+'</b></span>':'<span class="pd s'+hi+'" id="d'+k+'"><b>?</b></span>';
+      const sum=Z.done[k]?'<div class="dssum">атака <b>'+x.att+'</b><br>итог <b class="num">'+R.sc[k]+'</b></div>':'<div class="dssum small">карта: '+(x.cs.length?x.cs.join(' + '):'нет')+(x.ann?' (аннул.)':'')+'</div>';
+      return '<div class="dsdc">'+die+sum+'</div>';
+    };
+    const left=[0,1].some(k=>!Z.done[k]&&!Z.spin[k]);
+    const mid=left&&!Z.busy?'<button class="btn primary dsroll" data-dz="roll">🎲 Бросить<br>кубики</button>':'<div class="dswait small">'+(Z.busy?'⚔ бой…':'🎲 …')+'</div>';
+    h+='<div class="dsdice">'+col(0)+mid+col(1)+'</div>';
+  }else{
+    h+='<div class="fin'+(res.winner===-1?'':' win')+'">'+(res.winner===-1?'Боевая ничья':'Победа: '+esc(pe.names[res.winner]))+' ('+res.w[0]+' : '+res.w[1]+')</div><button class="btn primary" data-a="0">Продолжить</button>';
+  }
+  if(Z.shown>0)h+='<div class="dshist">'+res.rounds.slice(0,Z.shown).map((R,r)=>'<span>Р'+(r+1)+': '+(R.out===-1?'ничья':'👑 '+esc(pe.names[R.out]))+' <b>'+R.sc[0]+':'+R.sc[1]+'</b></span>').join('')+'</div>';
+  h+='</div><div class="row dsbtns">'+(Z.shown<n?'<button class="btn" data-dz="skip">'+(Z.fast?'⏩ Ускорено':'⏩ Ускорить бой')+'</button>':'')+'<button class="btn" data-dz="mode" title="Анимация боя: показывать, ускоренно или выключить">🎬 Сцена: '+DS_MODE_N[dsMode()]+'</button></div>';
+  let det='<div class="arena">'+side(0)+'<div class="vs">VS</div>'+side(1)+'</div>';for(let r=0;r<Z.shown;r++)det+=line(r);
+  h+='<details class="dsdet"'+(UI.dsDet?' open':'')+'><summary>Подробности: статы, пассивки и расчёт раундов</summary>'+det+'</details>';
+  return h+'</div></div>';
 }
 function dzNext(Z){
   const pe=Z.key,r=Z.shown,n=pe.res.rounds.length;
@@ -3206,7 +3251,7 @@ function dzAuto(Z){
   if(Z.shown>=n||Z.busy||Z.at)return;
   if(Z.sc&&!Z.ready)return;
   const r=Z.shown;
-  Z.at=setTimeout(()=>{Z.at=0;if(UI.dz!==Z||G.pending!==Z.key||Z.shown!==r||Z.busy)return;[0,1].forEach(k=>dzRoll(pe,k))},Z.fast?120:3000);
+  Z.at=setTimeout(()=>{Z.at=0;if(UI.dz!==Z||G.pending!==Z.key||Z.shown!==r||Z.busy)return;dzRoll(pe,[0,1])},Z.fast?120:3000);
 }
 function dzMode(pe,Z){
   const order=['on','fast','off'],m=order[(order.indexOf(dsMode())+1)%3];
@@ -3227,6 +3272,7 @@ function dsMount(){
     const sc=Z.sc;Z.q=sc.intro().catch(()=>{}).then(()=>{if(UI.dz===Z&&Z.sc===sc){Z.ready=true;dzAuto(Z)}});
   }
   if(slot&&Z.sc&&DuelScene.el.parentNode!==slot)slot.appendChild(DuelScene.el);
+  const det=document.querySelector('#modal .dsdet');if(det)det.ontoggle=()=>{UI.dsDet=det.open};
   if(!slot&&Z.sc&&DuelScene.el.parentNode)DuelScene.el.parentNode.removeChild(DuelScene.el);
   dzAuto(Z);
 }
@@ -3260,6 +3306,7 @@ function resultHtml(pe){
     const out=R.out===-1?'Ничья'+(R.marco?' (Феникс Марко)':''):'<span class="win">Раунд за '+esc(pe.names[R.out])+'</span>';
     return '<div class="card"><b class="rt">Раунд '+(r+1)+'</b><div class="rgrid"><div style="min-width:0">'+part(c[0],0)+'</div><div style="min-width:0">'+part(c[1],1)+'</div></div><div style="text-align:center">'+(R.nat&&(R.nat[0]||R.nat[1])?'Нацу даёт +20. ':'')+out+'</div></div>';
   };
+  if(dsw)return dsCompactHtml(pe,Z,side,line,wins);
   for(let r=0;r<Z.shown;r++)h+=line(r);
   if(Z.shown>0&&Z.shown<n){const Rl=res.rounds[Z.shown-1];h+='<div class="rbn'+(Rl.out===-1?' draw':'')+'">'+(Rl.out===-1?'Ничья':'Раунд за '+esc(pe.names[Rl.out]))+'</div>'}
   if(Z.shown<n){
@@ -3682,9 +3729,10 @@ function bind(){
     const n=pe.res.rounds.length,act=b.dataset.dz;
     if(act==='mode'){dzMode(pe,Z);return}
     if(act==='skip'){
-      if(Z.sc||dsWanted(pe)){Z.fast=true;if(Z.sc)Z.sc.fast(true);clearTimeout(Z.at);Z.at=0;[0,1].forEach(k=>dzRoll(pe,k));render();return}
+      if(Z.sc||dsWanted(pe)){Z.fast=true;if(Z.sc)Z.sc.fast(true);clearTimeout(Z.at);Z.at=0;dzRoll(pe,[0,1]);render();return}
       Z.shown=n;Z.spin=[false,false];Z.done=[false,false];render();return}
-    dzRoll(pe,+b.dataset.k);
+    if(act==='roll'){dzRoll(pe,[0,1]);return}
+    dzRoll(pe,[+b.dataset.k]);
   });
   if(pe&&pe.type==='prep'){
     const p=G.players[pe.who],S=UI.prep,per=p.ch==='zoro'?2:1;
