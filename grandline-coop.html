@@ -2744,10 +2744,11 @@ function akFx(ev,done){
 let ADMMUS=null;
 function admMusicStart(){
   try{
-    if(window.__nor||!SFX.on||SET.music===false)return;
+    if(window.__nor||!SFX.on)return; // V130: трек адмирала зависит только от общего звука, не от «Вступительной музыки»
     admMusicStop(true);
     const a=new Audio('assets/music_admiral.m4a'+SFXV);a.loop=false;a.volume=0;ADMMUS=a;
-    const go=()=>{try{a.currentTime=12}catch(e){}const pr=a.play();if(pr&&pr.catch)pr.catch(()=>{});
+    const go=()=>{try{a.currentTime=12}catch(e){}const pr=a.play();if(pr&&pr.catch)pr.catch(()=>{ // браузер не дал включить звук без касания: включим при первом касании
+        const tap=()=>{if(ADMMUS===a){const p2=a.play();if(p2&&p2.catch)p2.catch(()=>{})}};document.addEventListener('pointerdown',tap,{once:true,capture:true})});
       let v=0;const t=setInterval(()=>{if(ADMMUS!==a){clearInterval(t);return}v+=.04;if(v>=.8){v=.8;clearInterval(t)}try{a.volume=v}catch(e){clearInterval(t)}},120)}; // плавный набор громкости ~3 с
     if(a.readyState>=1)go();else a.addEventListener('loadedmetadata',go,{once:true});
   }catch(e){}
