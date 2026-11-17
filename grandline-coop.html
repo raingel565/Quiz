@@ -918,9 +918,15 @@ body.stream #now{font-size:clamp(14px,1.3vw,22px)}
 .stwin small{display:block;font-size:.4em;margin-top:12px;opacity:.8}
 .stwait{display:grid;place-items:center;text-align:center;gap:12px;padding:34px 18px}
 html,body{overscroll-behavior-y:none}
+.dsslot{width:100%;flex:0 0 auto}
+.modal.dsw .arena .por{display:none}
+.modal.dsw .arena{min-height:0}
+.modal.dsw .arena .dfc{padding:6px 8px}
+.modal.dsw .arena .dfc h3{margin:0}
 </style>
-<div id="ver" title="Версия кооператива">C25 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия кооператива">C26 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
+<script src="assets/duel-scene.js?v=4"></script>
 <script>
 (function(){
 'use strict';
@@ -1275,6 +1281,7 @@ const SFX=(()=>{
     toggle(){on=!on;try{localStorage.setItem('gl_snd',on?'1':'0')}catch(e){}if(on){this.play('click')}return on}
   };
 })();
+if(window.DuelScene)DuelScene.soundOn=()=>SFX.on&&!window.__nor;
 function fxSnd(n){if(window.__nor)return;FXQ.push({t:'s',n})}
 function logSnd(s){
   if(/ставит флаг|сжигает флаг/.test(s))fxSnd('flag');
@@ -1298,7 +1305,7 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 (function(){const nav=()=>document.querySelectorAll('#bnav [data-go]');let tk=0;
   window.addEventListener('scroll',()=>{if(tk)return;tk=requestAnimationFrame(()=>{tk=0;let best=null,bd=1e9;nav().forEach(b=>{const t=document.querySelector(b.dataset.go);if(!t)return;const d=Math.abs(t.getBoundingClientRect().top-70);if(d<bd){bd=d;best=b}});nav().forEach(b=>b.classList.toggle('on',b===best))})},{passive:true})})();
 
-const TOAST_SKIP=/^Доход:|^Погода:|бросает 2d6|^Бросок 1d12|^Фишка вскрыта|^Все игроки (получают|теряют)|^Игра началась/;
+const TOAST_SKIP=/^Доход:|^Погода:|бросает 2d6|^Бросок 1d12|^Фишка вскрыта|^Все игроки (получают|теряют)|^Игра началась|^Дуэль .+ vs .+: \d|^Бой .+ (vs .+|с хранителем .+): \d|^Финал: \d/;
 let TOAST_TICK=null;
 function toastTick(){
   const h=document.getElementById('toasts');if(!h){return}
@@ -3006,6 +3013,7 @@ function render(){
   $('#modal').innerHTML=m;
   if(mh!=null){const mn=document.querySelector('#modal .modal'),nt=mn&&mn.querySelector('h2');if(mn&&nt&&nt.textContent===mh)mn.scrollTop=ms}
   bind();
+  dsMount();
   notifyTurn();
   botSchedule();
 }
@@ -3162,9 +3170,69 @@ function prepHtml(pe){
   h+='</div></div><div class="row"><button class="btn primary" data-prepok="1">Готово</button><button class="btn" data-a="0">Случайно</button></div></div></div>';
   return h;
 }
+// ===== V125: сцена дуэли поверх итога боя (assets/duel-scene.js). Сцена только показывает готовый результат runDuel =====
+function dsMode(){let m=null;try{m=localStorage.getItem('gl_dscene')}catch(e){}if(m==='on'||m==='fast'||m==='off')return m;return (window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)?'off':'on'}
+const DS_MODE_N={on:'показывать',fast:'ускоренно',off:'выключена'};
+function dsWanted(pe){return !!(window.DuelScene&&!window.__nor&&dsMode()!=='off'&&pe&&pe.res&&pe.res.st.some(x=>(x.s.ps||[x.s.p]).some(q=>q&&!q.bot)))}
+function dzSig(pe){try{return (pe.names||[]).join('|')+'#'+pe.res.rounds.map(r=>r.cur.map(c=>c.roll+'/'+c.att).join(',')+'>'+r.out).join(';')}catch(e){return Math.random()}}
+function dzRoll(pe,k){
+  const Z=UI.dz;if(!Z||Z.busy||Z.shown>=pe.res.rounds.length||Z.done[k]||Z.spin[k])return;
+  const fast=Z.fast||(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const fin=()=>{
+    if(UI.dz!==Z||G.pending!==Z.key)return;
+    Z.spin[k]=false;Z.done[k]=true;render();
+    if(Z.done[0]&&Z.done[1])dzNext(Z);
+  };
+  if(fast){fin();return}
+  Z.spin[k]=true;render();
+  const el=document.getElementById('d'+k);
+  const hi=pe.res.st[k].keys.includes('jinwoo')?20:12;
+  if(el)el.animate([{transform:'rotateY(0deg) translateY(-30px)'},{transform:'rotateY(900deg) translateY(0)'}],{duration:800,easing:'cubic-bezier(.2,.6,.2,1)'});
+  const eb=el&&el.querySelector('b');const tm=setInterval(()=>{if(eb&&eb.isConnected)eb.textContent=1+Math.floor(Math.random()*hi)},60);
+  setTimeout(()=>{clearInterval(tm);fin()},800);
+}
+function dzNext(Z){
+  const pe=Z.key,r=Z.shown,n=pe.res.rounds.length;
+  const adv=()=>{if(UI.dz!==Z||Z.shown!==r)return;Z.busy=false;clearTimeout(Z.at);Z.at=0;Z.shown=r+1;Z.done=[false,false];render()};
+  if(!Z.sc){setTimeout(()=>{if(UI.dz===Z&&G.pending===Z.key)adv()},Z.fast?150:900);return}
+  Z.busy=true;const sc=Z.sc,pl=Z.plan[r];
+  Z.q=Z.q.then(()=>Z.sc===sc?sc.round(pl):null).then(()=>{
+    adv();
+    if(r===n-1&&Z.sc===sc){const w=pe.res.winner;return sc.finish(w,w===-1?'БОЕВАЯ НИЧЬЯ':'ПОБЕДА: '+String(pe.names[w]).toUpperCase())}
+  }).catch(()=>{adv()});
+}
+function dzAuto(Z){
+  const pe=Z.key,n=pe.res.rounds.length;
+  if(Z.shown>=n||Z.busy||Z.at)return;
+  if(Z.sc&&!Z.ready)return;
+  const r=Z.shown;
+  Z.at=setTimeout(()=>{Z.at=0;if(UI.dz!==Z||G.pending!==Z.key||Z.shown!==r||Z.busy)return;[0,1].forEach(k=>dzRoll(pe,k))},Z.fast?120:3000);
+}
+function dzMode(pe,Z){
+  const order=['on','fast','off'],m=order[(order.indexOf(dsMode())+1)%3];
+  try{localStorage.setItem('gl_dscene',m)}catch(e){}
+  clearTimeout(Z.at);Z.at=0;
+  if(m==='fast'){Z.fast=true;if(Z.sc)Z.sc.fast(true)}
+  else if(m==='off'){Z.fast=false;if(Z.sc){Z.sc.close();Z.sc=null}Z.ready=true;Z.q=Promise.resolve();if(Z.busy){Z.busy=false;Z.shown++;Z.done=[false,false]}}
+  else{Z.fast=false}
+  render();
+}
+function dsMount(){
+  const pe=G&&G.pending,Z=UI.dz;
+  const live=pe&&pe.type==='duelResult'&&Z&&Z.key===pe;
+  if(!live){if(Z&&Z.sc){Z.sc.close();Z.sc=null}return}
+  const slot=document.getElementById('dsslot');
+  if(slot&&!Z.sc&&dsWanted(pe)){
+    Z.sc=DuelScene.open(DuelScene.fromRes(pe.res,pe.names,{fast:Z.fast}));Z.plan=DuelScene.plan(pe.res);Z.ready=false;
+    const sc=Z.sc;Z.q=sc.intro().catch(()=>{}).then(()=>{if(UI.dz===Z&&Z.sc===sc){Z.ready=true;dzAuto(Z)}});
+  }
+  if(slot&&Z.sc&&DuelScene.el.parentNode!==slot)slot.appendChild(DuelScene.el);
+  if(!slot&&Z.sc&&DuelScene.el.parentNode)DuelScene.el.parentNode.removeChild(DuelScene.el);
+  dzAuto(Z);
+}
 function resultHtml(pe){
   const res=pe.res;
-  if(!UI.dz||UI.dz.key!==pe)UI.dz={key:pe,shown:0,spin:[false,false],done:[false,false]};
+  if(!UI.dz||UI.dz.key!==pe){const sig=dzSig(pe);if(UI.dz&&UI.dz.sig===sig)UI.dz.key=pe;else{if(UI.dz){clearTimeout(UI.dz.at);if(UI.dz.sc)UI.dz.sc.close()}UI.dz={key:pe,sig,shown:0,spin:[false,false],done:[false,false],fast:dsMode()==='fast',sc:null,at:0,busy:false,q:Promise.resolve()}}}
   const Z=UI.dz,n=res.rounds.length;
   const wins=[0,0];
   for(let r=0;r<Z.shown;r++){const o=res.rounds[r].out;if(o>=0)wins[o]++}
@@ -3181,7 +3249,8 @@ function resultHtml(pe){
       +'<div style="margin-top:6px">'+Array.from({length:res.W||2},(_,k)=>k).map(k=>'<span class="pip'+(k<wins[i]?' on'+((k===wins[i]-1&&last===i)?' pop':''):'')+'"></span>').join('')+'</div></div>';
   };
   const shake=Z.shown>0&&Z.lastShk!==Z.shown;Z.lastShk=Z.shown;
-  let h='<div class="ov"><div class="modal"><h2>'+esc(pe.title)+'</h2><div class="arena'+(shake?' shake':'')+'">'+side(0)+'<div class="vs">VS</div>'+side(1)+'</div>';
+  const dsw=dsWanted(pe);
+  let h='<div class="ov"><div class="modal'+(dsw?' dsw':'')+'"><h2>'+esc(pe.title)+'</h2>'+(dsw?'<div id="dsslot" class="dsslot"></div>':'')+'<div class="arena'+(shake?' shake':'')+'">'+side(0)+'<div class="vs">VS</div>'+side(1)+'</div>';
   const line=(r)=>{
     const R=res.rounds[r],c=R.cur;
     const part=(x,k)=>{
@@ -3207,7 +3276,7 @@ function resultHtml(pe){
       return '<div class="rbx"><b class="rn">'+esc(pe.names[k])+'</b><span class="small rc">'+cardTxt+'</span><div class="rm">'+mid+'</div></div>';
     };
     h+='<div class="card rcur"><b class="rt">Раунд '+(Z.shown+1)+'</b><div class="rgrid">'+box(0)+box(1)+'</div></div>';
-    h+='<div class="row" style="justify-content:center"><button class="btn" data-dz="skip">Показать всё сразу</button></div>';
+    h+='<div class="row" style="justify-content:center"><button class="btn" data-dz="skip">'+(dsw?(Z.fast?'⏩ Ускорено':'⏩ Ускорить бой'):'Показать всё сразу')+'</button>'+(window.DuelScene?'<button class="btn" data-dz="mode" title="Анимация боя: показывать, ускоренно или выключить">🎬 Сцена: '+DS_MODE_N[dsMode()]+'</button>':'')+'</div>';
   }
   if(Z.shown>=n)h+='<div class="fin'+(res.winner===-1?'':' win')+'">'+(res.winner===-1?'Боевая ничья':'Победа: '+esc(pe.names[res.winner]))+' ('+res.w[0]+' : '+res.w[1]+')</div><button class="btn primary" data-a="0">Продолжить</button>';
   return h+'</div></div>';
@@ -3527,7 +3596,7 @@ function qoOpen(k){
   document.body.appendChild(o);if(k==='news'||k==='newspop')newsMark(k==='news');if(k==='hall'){hallLoad();const lb=document.getElementById('hallog');if(lb)lb.onclick=logGate};
 }
 function qoClose(){const o=document.getElementById('qoov');if(o)o.remove()}
-const NEWS=[{"id": "2026-11-17-rearm", "d": "17 ноября", "t": "Новое задание «Перевооружение»", "x": "Победите Босса 2–4 уровня и получите особую карту: пока она у вас, за ход можно купить две карты вместо одной (две атаки, атаку и пассивку или две пассивки). Таких заданий в колоде всего три — успейте забрать!"}, {"id": "2026-11-17-tasks", "d": "17 ноября", "t": "Задания стали интереснее", "x": "Выполните 5 ивентовых заданий — и один раз за игру получите 2 очка к атаке и уклонению, распределяйте как хотите (но атака не выше 8, уклонение не выше 7). Часть боевых заданий теперь можно закрыть картой сокровищ вместо Берри. Зато доход с локаций вдвое меньше, карта сокровищ стоит 50 Берри, гостевой персонаж — 80."}, {"id": "2026-11-16-resume", "d": "16 ноября", "t": "Продолжить партию после обновления страницы", "x": "Случайно обновили страницу или закрыли вкладку? Партию можно продолжить с того же места, в том числе с ботами вместо игроков."}, {"id": "2026-11-16-adm", "d": "16 ноября", "t": "Против Имы: адмиралов столько же, сколько игроков", "x": "В кооперативе против Имы количество адмиралов теперь равно количеству игроков: вдвоём проще, вчетвером жарче.", "coop": 1}, {"id": "2026-11-16-tv", "d": "16 ноября", "t": "Трансляция на телевизор", "x": "Откройте ссылку комнаты в браузере телевизора (или нажмите «Трансляция» и введите код) — на большом экране будет общая карта и журнал, а играть можно с телефонов."}];
+const NEWS=[{"id": "2026-11-17-duelscene", "d": "17 ноября", "t": "Анимированные дуэли", "x": "Каждый бой теперь видно: бойцы дерутся раунд за раундом по выпавшим цифрам. У каждого персонажа и босса свои приёмы, при разнице в 4 очка и больше — тяжёлые. Кубик бросается сам через 3 секунды. «Ускорить бой» прокручивает анимацию быстро только у вас. Кнопка «Сцена» переключает: показывать, ускоренно или выключить. В боях за карты сокровищ у каждого соперника свой бой: Гекко Мория — тени, Марко — синее пламя, Магеллан — яд и гидра, Король Нептун — трезубец и вода, Дофламинго — нити. В коопе вся команда бьёт Иму и адмиралов одновременно."}, {"id": "2026-11-17-rearm", "d": "17 ноября", "t": "Новое задание «Перевооружение»", "x": "Победите Босса 2–4 уровня и получите особую карту: пока она у вас, за ход можно купить две карты вместо одной (две атаки, атаку и пассивку или две пассивки). Таких заданий в колоде всего три — успейте забрать!"}, {"id": "2026-11-17-tasks", "d": "17 ноября", "t": "Задания стали интереснее", "x": "Выполните 5 ивентовых заданий — и один раз за игру получите 2 очка к атаке и уклонению, распределяйте как хотите (но атака не выше 8, уклонение не выше 7). Часть боевых заданий теперь можно закрыть картой сокровищ вместо Берри. Зато доход с локаций вдвое меньше, карта сокровищ стоит 50 Берри, гостевой персонаж — 80."}, {"id": "2026-11-16-resume", "d": "16 ноября", "t": "Продолжить партию после обновления страницы", "x": "Случайно обновили страницу или закрыли вкладку? Партию можно продолжить с того же места, в том числе с ботами вместо игроков."}, {"id": "2026-11-16-adm", "d": "16 ноября", "t": "Против Имы: адмиралов столько же, сколько игроков", "x": "В кооперативе против Имы количество адмиралов теперь равно количеству игроков: вдвоём проще, вчетвером жарче.", "coop": 1}, {"id": "2026-11-16-tv", "d": "16 ноября", "t": "Трансляция на телевизор", "x": "Откройте ссылку комнаты в браузере телевизора (или нажмите «Трансляция» и введите код) — на большом экране будет общая карта и журнал, а играть можно с телефонов."}];
 const NEWS_KEY='glc_news_seen';
 function newsSeen(){try{return localStorage.getItem(NEWS_KEY)}catch(e){return null}}
 function newsPopSeen(){try{return localStorage.getItem(NEWS_KEY+'_p')}catch(e){return null}}
@@ -3610,22 +3679,12 @@ function bind(){
   const pe=G&&G.pending;
   document.querySelectorAll('[data-dz]').forEach(b=>b.onclick=()=>{
     const Z=UI.dz;if(!Z||!pe)return;
-    const n=pe.res.rounds.length;
-    if(b.dataset.dz==='skip'){Z.shown=n;Z.spin=[false,false];Z.done=[false,false];render();return}
-    const k=+b.dataset.k;
-    const fast=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const fin=()=>{
-      if(UI.dz!==Z||G.pending!==pe)return;
-      Z.spin[k]=false;Z.done[k]=true;render();
-      if(Z.done[0]&&Z.done[1])setTimeout(()=>{if(UI.dz===Z&&G.pending===pe){Z.shown++;Z.done=[false,false];render()}},900);
-    };
-    if(fast){fin();return}
-    Z.spin[k]=true;render();
-    const el=document.getElementById('d'+k);
-    const hi=pe.res.st[k].keys.includes('jinwoo')?20:12;
-    if(el)el.animate([{transform:'rotateY(0deg) translateY(-30px)'},{transform:'rotateY(900deg) translateY(0)'}],{duration:800,easing:'cubic-bezier(.2,.6,.2,1)'});
-    const eb=el&&el.querySelector('b');const tm=setInterval(()=>{if(eb&&eb.isConnected)eb.textContent=1+Math.floor(Math.random()*hi)},60);
-    setTimeout(()=>{clearInterval(tm);fin()},800);
+    const n=pe.res.rounds.length,act=b.dataset.dz;
+    if(act==='mode'){dzMode(pe,Z);return}
+    if(act==='skip'){
+      if(Z.sc||dsWanted(pe)){Z.fast=true;if(Z.sc)Z.sc.fast(true);clearTimeout(Z.at);Z.at=0;[0,1].forEach(k=>dzRoll(pe,k));render();return}
+      Z.shown=n;Z.spin=[false,false];Z.done=[false,false];render();return}
+    dzRoll(pe,+b.dataset.k);
   });
   if(pe&&pe.type==='prep'){
     const p=G.players[pe.who],S=UI.prep,per=p.ch==='zoro'?2:1;
@@ -4133,6 +4192,7 @@ function renderStream(){
   else if(G.pending&&G.pending.type==='duelResult')m=pendingHtml();
   else if(NET.desync&&STREAM.fix<3){STREAM.fix++;m='<div class="stwin"><div>Пересчёт партии…</div></div>';setTimeout(()=>{if(STREAM.on&&NET.meta)netRebuild()},800)}
   $('#modal').innerHTML=m;
+  dsMount();
   try{document.title='📺 Трансляция · Гранд Лайн'}catch(e){}
 }
 async function netWatch(code){
