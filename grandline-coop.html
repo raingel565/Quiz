@@ -3845,7 +3845,7 @@ function secretAsk(done){
   else alert('Неверный пароль.');
 }
 const charBtn=k=>(k===SECRET&&!secretOk())?'<button class="btn" data-secret="1"><span class="avw" style="--pc:#555;font-size:28px;font-weight:800;display:flex;align-items:center;justify-content:center">?</span><b>???</b><span>Секретный персонаж</span><span class="small">Нужен пароль</span></button>':null;
-const CHW={kid:1,ace:1,zoro:1,sanji:1,nami:1,robin:1,hancock:1,kata:1,law:1,luffy:1,olesya:1},CHV={zoro:1,hancock:1,luffy:1,ace:1,law:1,nami:1,robin:1,kata:1,sanji:1}; // CHV: есть видео assets/ch/<id>.mp4 // персонажи с фото по пояс: assets/ch/<id>.webp
+const CHW={kid:1,ace:1,zoro:1,sanji:1,nami:1,robin:1,hancock:1,kata:1,law:1,luffy:1,olesya:1},CHV={zoro:1,hancock:1,luffy:1,ace:1,law:1,nami:1,robin:1,kata:1,sanji:1,olesya:1}; // CHV: есть видео assets/ch/<id>.mp4 // персонажи с фото по пояс: assets/ch/<id>.webp
 const chBtn=(k,attr,dis,sel)=>charBtn(k)||'<button class="btn cc'+(sel?' sel':'')+'" '+attr+'="'+k+'"'+(dis?' disabled':'')+'><span class="ccg"></span>'+(CHW[k]?'<img class="ccfig" loading="lazy" src="assets/ch/'+k+'.webp" alt="">'+(CHV[k]&&sel?'<canvas class="ccv" data-k="'+k+'" width="260" height="360"></canvas>':''):'<span class="ccav">'+av(k)+'</span>')+'<span class="ccn">'+CH[k].n+'</span><span class="ccs">атака '+CH[k].A+' · уклонение '+CH[k].U+'</span>'+(sel?'<span class="cci"><span class="ccst"><span>Атака <b>'+CH[k].A+'</b></span><span>Уклонение <b>'+CH[k].U+'</b></span></span><span class="ccd">'+esc(CH[k].d)+'</span></span>':'')+'</button>';
 // видео выбранного персонажа: белый фон роликов убирается на лету (canvas), чтобы фигура «жила» на тёмной карточке
 // плавное раскрытие/перестановка карточек: запоминаем положение до перерисовки и «доезжаем» после неё (FLIP)
@@ -3860,14 +3860,15 @@ function chFlip(){
     e.animate([{transform:'translate('+dx+'px,'+dy+'px)',clipPath:sel?'inset(0 50% 0 0 round 20px)':'inset(0 round 20px)'},{transform:'none',clipPath:'inset(0 round 20px)'}],{duration:340,easing:'cubic-bezier(.2,.8,.2,1)'});
   });
 }
-const CHVID={};let CHV_RAF=0;
+const CHVID={};let CHV_RAF=0;const CHSND={olesya:1}; // видео со своим звуком: один раз со звуком, дальше без
+function chSndReset(k){const v=CHVID[k];if(v){v.muted=!SFX.on;v.loop=false;try{v.currentTime=0}catch(e){}}}
 function chVid(){
   chFlip();cancelAnimationFrame(CHV_RAF);
   const cv=document.querySelector('.cc.sel canvas.ccv');
   Object.keys(CHVID).forEach(k=>{if(!cv||cv.dataset.k!==k){try{CHVID[k].pause()}catch(e){}}});
   if(!cv)return;
   const k=cv.dataset.k;let v=CHVID[k];
-  if(!v){v=CHVID[k]=document.createElement('video');v.muted=true;v.loop=true;v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.src='assets/ch/'+k+'.mp4'}
+  if(!v){v=CHVID[k]=document.createElement('video');v.muted=CHSND[k]?!SFX.on:true;v.loop=!CHSND[k];if(CHSND[k])v.addEventListener('ended',()=>{v.muted=true;v.loop=true;const q=v.play();if(q&&q.catch)q.catch(()=>{})});v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.src='assets/ch/'+k+'.mp4'}
   const card=cv.closest('.cc'),ctx=cv.getContext('2d',{willReadFrequently:true}),W=cv.width,H=cv.height;
   const p=v.play();if(p&&p.catch)p.catch(()=>{});
   (function draw(){
@@ -3966,7 +3967,7 @@ function renderSetup(){
   }else if(S.step==='roll'){g('go2').onclick=()=>{S.step='pick';renderSetup()}}
   else{
     document.querySelectorAll('[data-secret]').forEach(b=>b.onclick=()=>secretAsk(()=>renderSetup()));
-    document.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{chSnap();S.selCh=b.dataset.ch;SFX.stopVoice();if(S.selCh==='zoro')SFX.play('zoro',0);if(S.selCh==='luffy')SFX.play('luffy',0);if(S.selCh==='law')SFX.play('law',0);if(S.selCh==='ace')SFX.play('ace',0);if(S.selCh==='sanji')SFX.play('sanji',0);if(S.selCh==='olesya')SFX.play('olesya',0);if(S.selCh==='hancock')SFX.play('hancock',0);renderSetup()});
+    document.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{chSnap();S.selCh=b.dataset.ch;SFX.stopVoice();if(S.selCh==='zoro')SFX.play('zoro',0);if(S.selCh==='luffy')SFX.play('luffy',0);if(S.selCh==='law')SFX.play('law',0);if(S.selCh==='ace')SFX.play('ace',0);if(S.selCh==='sanji')SFX.play('sanji',0);if(S.selCh==='olesya')chSndReset('olesya');if(S.selCh==='hancock')SFX.play('hancock',0);renderSetup()});
     chVid();
     document.querySelectorAll('[data-sea]').forEach(b=>b.onclick=()=>{S.selSea=b.dataset.sea;renderSetup()});
     g('pick').onclick=()=>{
@@ -4311,7 +4312,7 @@ function renderLobby(){
   if(g('nsback'))g('nsback').onclick=()=>{NET.on=false;NET.stage='menu';NET.err='';render()};
   if(g('nsleave'))g('nsleave').onclick=streamLeave;
   document.querySelectorAll('[data-secret]').forEach(b=>b.onclick=()=>secretAsk(()=>render()));
-  document.querySelectorAll('[data-nch]').forEach(b=>b.onclick=()=>{chSnap();SFX.stopVoice();if(b.dataset.nch==='zoro')SFX.play('zoro',0);if(b.dataset.nch==='luffy')SFX.play('luffy',0);if(b.dataset.nch==='law')SFX.play('law',0);if(b.dataset.nch==='ace')SFX.play('ace',0);if(b.dataset.nch==='sanji')SFX.play('sanji',0);if(b.dataset.nch==='olesya')SFX.play('olesya',0);if(b.dataset.nch==='hancock')SFX.play('hancock',0);setSeat({ch:b.dataset.nch})});
+  document.querySelectorAll('[data-nch]').forEach(b=>b.onclick=()=>{chSnap();SFX.stopVoice();if(b.dataset.nch==='zoro')SFX.play('zoro',0);if(b.dataset.nch==='luffy')SFX.play('luffy',0);if(b.dataset.nch==='law')SFX.play('law',0);if(b.dataset.nch==='ace')SFX.play('ace',0);if(b.dataset.nch==='sanji')SFX.play('sanji',0);if(b.dataset.nch==='olesya')chSndReset('olesya');if(b.dataset.nch==='hancock')SFX.play('hancock',0);setSeat({ch:b.dataset.nch})});
   chVid();
   document.querySelectorAll('[data-nsea]').forEach(b=>b.onclick=()=>setSeat({sea:b.dataset.nsea}));
   if(g('nstart'))g('nstart').onclick=netStart;
