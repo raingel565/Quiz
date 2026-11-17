@@ -2741,12 +2741,22 @@ function akFx(ev,done){
   setTimeout(()=>{if(!fin&&v.readyState<2&&v.currentTime===0)end()},6000); // не загрузилось: не держим игру
   if(STREAM.on)setTimeout(end,14000); // на трансляции ролик не держит очередь событий дольше 14 секунд
 }
-let ADMMUS=null;
+let ADMMUS=null,ADMEL=null;
+// V130: «разрешаем» трек адмирала при первом касании экрана (тихий запуск и пауза),
+// чтобы потом он сам включился сразу после видео, без касания
+function admUnlock(){
+  if(ADMEL||window.__nor)return;
+  try{const a=new Audio('assets/music_admiral.m4a'+SFXV);a.preload='auto';a.muted=true;ADMEL=a;
+    const pr=a.play();const back=()=>{try{a.pause();a.currentTime=0}catch(e){}a.muted=false};
+    if(pr&&pr.then)pr.then(back,()=>{a.muted=false;ADMEL=null});else back();
+  }catch(e){ADMEL=null}
+}
+document.addEventListener('pointerdown',admUnlock,true);
 function admMusicStart(){
   try{
     if(window.__nor||!SFX.on)return; // V130: трек адмирала зависит только от общего звука, не от «Вступительной музыки»
     admMusicStop(true);
-    const a=new Audio('assets/music_admiral.m4a'+SFXV);a.loop=false;a.volume=0;ADMMUS=a;
+    const a=ADMEL||new Audio('assets/music_admiral.m4a'+SFXV);a.muted=false;a.loop=false;a.volume=0;ADMMUS=a;
     const go=()=>{try{a.currentTime=12}catch(e){}const pr=a.play();if(pr&&pr.catch)pr.catch(()=>{ // браузер не дал включить звук без касания: включим при первом касании
         const tap=()=>{if(ADMMUS===a){const p2=a.play();if(p2&&p2.catch)p2.catch(()=>{})}};document.addEventListener('pointerdown',tap,{once:true,capture:true})});
       let v=0;const t=setInterval(()=>{if(ADMMUS!==a){clearInterval(t);return}v+=.04;if(v>=.8){v=.8;clearInterval(t)}try{a.volume=v}catch(e){clearInterval(t)}},120)}; // плавный набор громкости ~3 с
@@ -2756,7 +2766,7 @@ function admMusicStart(){
 function admMusicStop(now){
   const a=ADMMUS;if(!a)return;ADMMUS=null;
   if(now){try{a.pause()}catch(e){}return}
-  let v=a.volume;const t=setInterval(()=>{v-=.1;if(v<=0){clearInterval(t);try{a.pause()}catch(e){}}else{try{a.volume=v}catch(e){clearInterval(t)}}},40);
+  let v=a.volume;const t=setInterval(()=>{if(ADMMUS===a){clearInterval(t);return}v-=.1;if(v<=0){clearInterval(t);try{a.pause()}catch(e){}}else{try{a.volume=v}catch(e){clearInterval(t)}}},40);
 }
 
 function akTheme(k){
