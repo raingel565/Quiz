@@ -968,6 +968,7 @@ function npcKit(ch,name){
  if(lv===3)return {id:'admpool',elem:'light',name:nm,col:'#dfe8f2',glow:'200,220,255',sc:1.3,x:650,bg:'admiral',ent:'admiral',l:ADML,h:ADMH};
  if(lv>=0)return kit('hero',{name:nm,col:'#9fc4ff',glow:'159,196,255',sc:1+.07*lv,x:610+12*lv,bg:'',ent:''});
  lv=PIRN.indexOf(nm);
+ if(lv===2)return {id:'shichi',elem:'dark',col:'#c98bff',glow:'201,139,255',sc:1.14,x:634,bg:'',ent:'',l:[...BIGCH.moria.l,...BIGCH.dofla.l],h:[...BIGCH.moria.h,...BIGCH.dofla.h]};
  if(lv===4)return {id:'pirate5',elem:'slash',col:'#b06bff',glow:'176,107,255',sc:1.4,x:655,bg:'boss',ent:'boss',l:PIRL,h:PIRH};
  if(lv>=0)return {id:'pirate',elem:'slash',col:'#c98bff',glow:'201,139,255',sc:1+.07*lv,x:610+12*lv,bg:'',ent:'',l:PIRL,h:PIRH};
  return {id:'unique',elem:'slash',col:'#e0a24a',glow:'224,162,74',sc:1.3,x:650,bg:'boss',ent:'boss',l:PIRL,h:PIRH};
