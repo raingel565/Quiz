@@ -893,7 +893,7 @@ const BIGCH={
 BIGCH.moria={name:'Гекко Мория: тени',col:'#6e5c94',glow:'170,130,255',ent:'boss',bg:'boss',sc:1.5,x:660,l:['shadowsteal','shadowbats','shadowblade'],h:['shadowclones','shadowarmy','shadowgiant']};
 BIGCH.marco={name:'Марко: синее пламя',col:'#ffd23a',glow:'79,182,255',band:'#4fb6ff',ent:'phoenix',bg:'boss',sc:1.3,x:650,l:['bluekick','phoenixdash','flamekicks'],h:['phoenixkick','phoenixdive','bluewheel']};
 BIGCH.magellan={name:'Магеллан: яд и гидра',col:'#e0303a',fill:'#b48cff',glow:'224,48,58',ent:'boss',fog:'#9a6ac8',bg:'boss',sc:1.5,x:660,l:['poisonspit','poisoncoat','hydrabite'],h:['hydra3','poisonrain','poisonflood']};
-BIGCH.neptune={name:'Король Нептун: трезубец и вода',col:'#4fb6ff',glow:'79,182,255',ent:'sea',bg:'sea',sc:1.3,x:650,tail:1,trident:1,l:['tridentthrust','tridentwave','bubbles'],h:['tridentthrow','tidal','tridentstorm']};
+BIGCH.neptune={name:'Король Нептун: трезубец и вода',col:'#4fb6ff',glow:'79,182,255',ent:'sea',bg:'sea',sc:1.5,x:660,tail:1,trident:1,l:['tridentthrust','tridentwave','bubbles'],h:['tridentthrow','tidal','tridentstorm']};
 BIGCH.dofla={name:'Дофламинго: нити',col:'#ff6fae',glow:'255,111,174',band:'#ffe14a',ent:'strings',bg:'boss',sc:1.5,x:660,l:['stringcut','flamingokick','stringbullet'],h:['puppet','birdcage','overheat']};
 BIGCH.imu={name:'Има: чёрная сущность в короне',col:'#f4f4f8',glow:'208,49,74',ent:'imu',bg:'imu',sc:1.6,x:670,crown:1,l:['demonclaws','shadowbolt','soulgrab'],h:['giantclaws','hellportal','soulstorm']};
 const HEAVY=new Set();for(const id in CHARS)CHARS[id].h.forEach(k=>HEAVY.add(k));for(const id in BIGCH)BIGCH[id].h.forEach(k=>HEAVY.add(k));
