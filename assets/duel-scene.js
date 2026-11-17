@@ -974,7 +974,7 @@ function npcKit(ch,name){
 }
 
 /* ---------- бойцы на сцене ---------- */
-let LF=[],RF=null,LIVES=[2,2],WN=2,RNG=Math.random,CFG=null;
+let FELL=[false,false],LF=[],RF=null,LIVES=[2,2],WN=2,RNG=Math.random,CFG=null;
 const GAP=F=>Math.abs(((F&&F.tgt)||F||{home:0}).home-((F&&F.home)||0));
 function mkF(k,x,dir,sc){const g=document.createElementNS(NS,'g');g.setAttribute('class','ds-rim');g.style.setProperty('--g','rgba('+k.glow+',.6)');$('figs').appendChild(g);
  const F=new Fighter(g,x,dir,k.col);F.sc=sc;F.kit=k;F.last=null;if(k.sword)attachSword(F,k.swordLen||80);if(k.crown)attachCrown(F);if(k.fill){F.inner.querySelectorAll('[stroke="#0d1118"]').forEach(e=>e.setAttribute('stroke',k.fill));F.inner.querySelectorAll('[fill="#0d1118"]').forEach(e=>e.setAttribute('fill',k.fill))}if(k.tail)attachTail(F,k.col);if(k.trident)attachTrident(F);if(k.band){F.band.setAttribute('stroke',k.band);F.band.setAttribute('stroke-width',7)}return F}
@@ -1039,7 +1039,7 @@ const API={
  open(cfg){
   if(!document.getElementById('ds_css')){const s=document.createElement('style');s.id='ds_css';s.textContent=CSS;document.head.appendChild(s)}
   stopClock();clear();startClock();speed=cfg.fast?8:1;ROOT.classList.toggle('ds-fast',!!cfg.fast);
-  CFG=cfg;WN=cfg.W||2;LIVES=[WN,WN];RNG=mulberry((cfg.seed|0)||1);
+  CFG=cfg;FELL=[false,false];WN=cfg.W||2;LIVES=[WN,WN];RNG=mulberry((cfg.seed|0)||1);
   const R=cfg.R,L=cfg.L;ROOT.dataset.bg=R.bg||'';
   const ly=lay(L.length);
   for(let i=L.length-1;i>=0;i--){const F=mkF(L[i],ly.xs[i],1,ly.sc);LF[i]=F}
@@ -1067,6 +1067,7 @@ const API={
   if(speed<=1)snd(elemOf(W[0],moves[0]));
   const infos=await Promise.all(W.map((F,i)=>sleep(i*160).then(()=>attack(F,T,moves[i]))));
   snd(heavy||o.fall?'hitH':'hit');
+  if(o.fall)FELL[leftWins?1:0]=true;
   if(leftWins)LIVES[1]=Math.max(0,LIVES[1]-1);else LIVES[0]=Math.max(0,LIVES[0]-1);pips(1);pips(2);
   await Promise.all([...losers.map((F,i)=>sleep(i*60).then(()=>react(F,infos[0],o.fall))),...W.map(F=>sleep(220).then(()=>F.to('guard',420,E.io,{dx:0})))]);
   label(1,'');label(2,'');W.forEach(F=>{F.x=F.home;F.rest()});
@@ -1074,6 +1075,7 @@ const API={
  },
  async finish(winner,title){
   if(!RF)return;
+  if((winner===0||winner===1)&&!FELL[1-winner]){FELL[1-winner]=true;const Lo=winner===0?[RF]:LF;await Promise.all(Lo.map((F,i)=>sleep(i*60).then(()=>react(F,{col:'#ffffff'},true))))}
   if(winner===0||winner===1){const W=winner===0?LF:[RF];snd('win');W.forEach(F=>F.idle=false);
    await Promise.all(W.map(F=>F.to('win',420,E.back,{dy:-34})));await Promise.all(W.map(F=>F.to('win',260,E.bounce,{dy:0})))}
   else snd('draw');
