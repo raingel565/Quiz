@@ -947,7 +947,8 @@ const MELEM={trident:'slash',phase:'slash',rain:'water',spark:'elec',stormcloud:
  tremorpunch:'punch',clubswing:'punch',bullcharge:'punch',flamingokick:'kick',tridentthrust:'slash'};
 
 /* ---------- кто есть кто в игре ---------- */
-const CHMAP={zoro:'sword',ace:'fire',kata:'viol',luffy:'pink',hancock:'blue',law:'navy',nami:'orange',robin:'lilac',kid:'red',sanji:'yellow',olesya:'maroon'};
+BIGCH.roger=Object.assign({},BIGCH.shanks,{name:'Роджер: Камусари',col:'#9a1c2c',glow:'210,40,60',sc:1.12,x:620,ent:'',bg:''});ELEM.roger='elec';
+const CHMAP={zoro:'sword',ace:'fire',kata:'viol',luffy:'pink',hancock:'blue',law:'navy',nami:'orange',robin:'lilac',kid:'red',sanji:'yellow',olesya:'maroon',roger:'roger'};
 const NPCMAP={akainu:'akainu',kizaru:'kizaru',fujitora:'fujitora',aokiji:'aokiji',shanks:'shanks',whitebeard:'wb',kaido:'kaido',bigmom:'bm',imu:'imu'};
 const PIRL=['shanks','wb','kaido','bm'].flatMap(i=>BIGCH[i].l),PIRH=['shanks','wb','kaido','bm'].flatMap(i=>BIGCH[i].h);
 const ADML=['akainu','kizaru','fujitora','aokiji'].flatMap(i=>BIGCH[i].l),ADMH=['akainu','kizaru','fujitora','aokiji'].flatMap(i=>BIGCH[i].h);
