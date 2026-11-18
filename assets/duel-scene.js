@@ -990,6 +990,15 @@ async function banner(t,sub,col){const b=$('banner'),s=$('sub');b.textContent=t;
 async function hideBanner(){await run(250,k=>{$('banner').style.opacity=1-k;$('sub').style.opacity=1-k})}
 function label(i,txt){const a=$('ab'+i);a.textContent=txt;a.style.opacity=txt?1:0}
 
+/* красноватая полусфера-щит при ничьей */
+function dome(D){const r=135*D.sc,cx=D.x+D.dir*20*D.sc,y=GROUND;
+ const g=el('g',{opacity:0,style:'transform-box:fill-box;transform-origin:50% 100%'});
+ el('path',{d:`M ${cx-r} ${y} A ${r} ${r} 0 0 1 ${cx+r} ${y} Z`,fill:'rgba(255,70,70,.20)',stroke:'#ff5a5a','stroke-width':5,filter:'drop-shadow(0 0 12px #ff3030)'},g);
+ el('path',{d:`M ${cx-r*.72} ${y} A ${r*.72} ${r*.72} 0 0 1 ${cx+r*.72} ${y}`,fill:'none',stroke:'#ffb0a0','stroke-width':2,opacity:.7},g);
+ const ex=D.x+D.dir*r*.95,ey=y-r*.55;
+ return {open:()=>run(220,t=>{g.setAttribute('opacity',E.out(t));g.style.transform=`scale(${.6+.4*E.out(t)})`}),
+  hit:async()=>{ring(ex,ey,'#ff6a5a',90);burst(ex,ey,16,'#ff8a7a',1.2);g.setAttribute('stroke','#fff');await run(160,t=>g.setAttribute('opacity',1-.5*Math.sin(t*Math.PI*3)*.6))},
+  close:()=>run(300,t=>{g.setAttribute('opacity',1-t);if(t>=1)g.remove()})}}
 async function attack(F,T,abil){
   F.tgt=T;const A=ABIL[abil]||ABIL.none;
   if(A.pre){
@@ -1054,14 +1063,16 @@ const API={
  /* o: {out:0|1|-1, margin, fall:bool} */
  async round(o){
   if(!RF)return;
+  /* общий замах: у всех раундов одинаковое начало, по движению не угадать исход */
+  {const all=[...LF,RF];await Promise.all(all.map(F=>F.to('windup',240,E.out,{dx:-18})));await sleep(200)}
   if(o.out===-1){
-   const A=LF[0],B=RF;
-   await Promise.all([A.to('windup',200),B.to('windup',200),...LF.slice(1).map(F=>F.to('charge',200))]);
-   await Promise.all([A.to('punch',120,E.in,{dx:GAP(A)/2-100*A.sc}),B.to('punch',120,E.in,{dx:GAP(B)/2-100*B.sc})]);
-   const m={x:(A.home+B.home)/2,y:GROUND-150};snd('clash');flash(.5);ring(m.x,m.y,'#fff',120);burst(m.x,m.y,22,'#fff3c4',1.4);shake();
-   await banner('НИЧЬЯ','удары столкнулись — раунд никому','#cfd8e3');await sleep(650);
-   await Promise.all([...LF,RF].map(F=>F.to('stagger',320,E.out,{dx:-30})));await hideBanner();
-   await Promise.all([...LF,RF].map(F=>F.to('guard',360,E.io,{dx:0})));[...LF,RF].forEach(F=>F.rest());
+   const left=RNG()<.5,A=left?LF[0]:RF,Ds=left?[RF]:LF,hold=left?LF.slice(1):[];
+   const doms=Ds.map(D=>dome(D));await Promise.all(doms.map(d=>d.open()));
+   const info=await attack(A,Ds[0],pick(A,false));
+   snd('clash');flash(.4);shake();await Promise.all(doms.map(d=>d.hit()));
+   await banner('НИЧЬЯ','щит выдержал удар — раунд никому','#cfd8e3');await sleep(450);
+   await Promise.all(doms.map(d=>d.close()));await hideBanner();
+   A.x=A.home;await Promise.all([...LF,RF].map(F=>F.to('guard',380,E.io,{dx:0})));[...LF,RF].forEach(F=>F.rest());
    return}
   const leftWins=o.out===0,W=leftWins?LF:[RF],T=leftWins?RF:LF[0],losers=leftWins?[RF]:LF;
   const heavy=(o.margin||0)>=4,moves=W.map(F=>pick(F,heavy));

@@ -421,6 +421,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 @media(prefers-reduced-motion:reduce){#splash *{animation-duration:.01s!important;animation-delay:0s!important}}
 #admov{position:fixed;inset:0;z-index:2147482000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);padding:16px}
 #akvid{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.92);animation:dfin .25s ease both;padding:12px}
+#kwfx{position:fixed;inset:0;z-index:99998;pointer-events:none;animation:dfin .2s ease both}#kwfx.out{animation:dfout .3s ease both}#kwfx svg{position:absolute;inset:0}.kwtint{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(255,40,40,.35),rgba(20,0,10,.55));opacity:0}.kwtint.hit{animation:kwh .42s ease-out}@keyframes kwh{0%{opacity:.95}100%{opacity:0}}
 #akvid.out{animation:dfout .26s ease both}
 #akvid .avbox{position:relative;width:min(100%,960px);max-height:100%;border-radius:14px;overflow:hidden;background:#000;box-shadow:0 0 0 2px rgba(255,110,60,.7),0 0 60px rgba(255,70,20,.45)}
 #akvid video{display:block;width:100%;max-height:calc(100vh - 24px);background:#000}
@@ -951,7 +952,7 @@ body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:transpar
 </style>
 <div id="ver" title="Версия игры">V132</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
-<script src="assets/duel-scene.js?v=9"></script>
+<script src="assets/duel-scene.js?v=10"></script>
 <script>
 (function(){
 'use strict';
@@ -2321,6 +2322,7 @@ function useTre(p,c){
     for(const q of G.players){if(q===p||q.loc==='Z'||q.loc==='L')continue;if(seaOf(q.loc)===sea){q.skip=(q.skip||0)+1;hit.push(q.name)}}
     let ad=false;
     if(G.akainu&&G.akainu.loc!=='Z'&&G.akainu.loc!=='L'&&seaOf(G.akainu.loc)===sea){G.akainu.stun=(G.akainu.stun|0)+1;ad=true}
+    if(!window.__nor)FXQ.push({t:'kw',locs:Object.keys(G.type).filter(l=>l!=='Z'&&l!=='L'&&seaOf(l)===sea)});
     log(p.name+' разыгрывает «Воля короля»: '+(hit.length?hit.join(', ')+' пропустят ход':'')+(ad?(hit.length?'; ':'')+adm().short+' ошеломлён':'')+(hit.length||ad?'.':'в этом море никого нет.'));
     fxEvent({banner:true,tone:'good',icon:'👑',title:'Воля короля!',desc:(hit.length||ad)?(hit.join(', ')+(ad?(hit.length?', ':'')+adm().short:'')+': ошеломлены, ход потерян'):'В этом море никого нет',auto:3200});
   }else if(c.key==='dandan'){
@@ -2616,6 +2618,43 @@ function akFx(ev,done){
   setTimeout(()=>{if(!fin&&v.readyState<2&&v.currentTime===0)end()},6000); // не загрузилось: не держим игру
   if(STREAM.on)setTimeout(end,14000); // на трансляции ролик не держит очередь событий дольше 14 секунд
 }
+// V132: «Воля короля» — ролик (если файл есть) и красно-чёрные молнии по островам моря
+const KWVID='assets/kingwill.mp4'+SFXV;
+function kwFx(ev,done){
+  const fast=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(window.__nor||!document.body){done&&done();return}
+  const bolts=()=>{
+    const mp=document.getElementById('map');if(!mp||!mp.getScreenCTM||fast){done&&done();return}
+    const NS='http://www.w3.org/2000/svg',o=document.createElement('div');o.id='kwfx';
+    const W=innerWidth,H=innerHeight,svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox','0 0 '+W+' '+H);svg.setAttribute('width',W);svg.setAttribute('height',H);
+    o.appendChild(svg);const tint=document.createElement('div');tint.className='kwtint';o.appendChild(tint);document.body.appendChild(o);
+    const m=mp.getScreenCTM(),pts=(ev.locs||[]).map(l=>MAPD.nodes[l]).filter(Boolean).map(([x,y])=>({x:m.a*x+m.e,y:m.d*y+m.f}));
+    const jag=(x0,y0,x1,y1)=>{let d='M'+x0+' '+y0;const n=9;for(let i=1;i<=n;i++){const k=i/n;d+=' L'+(x0+(x1-x0)*k+(i<n?(Math.random()-.5)*46:0)).toFixed(1)+' '+(y0+(y1-y0)*k+(i<n?(Math.random()-.5)*22:0)).toFixed(1)}return d};
+    const strike=()=>{for(const p of pts){const d=jag(p.x+(Math.random()-.5)*160,-20,p.x,p.y);
+      for(const [c,w] of [['#14000a',16],['#ff2a2a',8],['#ffd0c0',3]]){const e=document.createElementNS(NS,'path');e.setAttribute('d',d);e.setAttribute('fill','none');e.setAttribute('stroke',c);e.setAttribute('stroke-width',w);e.setAttribute('stroke-linejoin','round');e.setAttribute('stroke-linecap','round');if(c==='#ff2a2a')e.style.filter='drop-shadow(0 0 10px #ff1010)';svg.appendChild(e);setTimeout(()=>{try{e.remove()}catch(_){}},260)}
+      const r=document.createElementNS(NS,'circle');r.setAttribute('cx',p.x);r.setAttribute('cy',p.y);r.setAttribute('r',8);r.setAttribute('fill','none');r.setAttribute('stroke','#ff3030');r.setAttribute('stroke-width',5);svg.appendChild(r);
+      try{r.animate([{r:8,opacity:1},{r:70,opacity:0}],{duration:520,easing:'ease-out'})}catch(_){}setTimeout(()=>{try{r.remove()}catch(_){}},540)}
+      tint.classList.remove('hit');void tint.offsetWidth;tint.classList.add('hit')};
+    try{SFX.play('w_buster',0)}catch(_){}
+    let n=0;strike();const iv=setInterval(()=>{if(++n>=5){clearInterval(iv);return}strike()},430);
+    setTimeout(()=>{o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},300)},2500);
+  };
+  if(fast||!Element.prototype.animate)return bolts();
+  const old=document.getElementById('akvid');if(old)old.remove();
+  const o=document.createElement('div');o.id='akvid';
+  o.innerHTML='<div class="avbox"><video playsinline preload="auto" src="'+KWVID+'"></video><button class="avx" aria-label="Закрыть">✕ Закрыть</button><button class="avm" hidden>🔇 Включить звук</button><div class="avc">👑 Воля короля</div></div>';
+  document.body.appendChild(o);
+  const v=o.querySelector('video'),mb=o.querySelector('.avm');
+  let fin=false;const end=(skip)=>{if(fin)return;fin=true;try{v.pause()}catch(e){}if(skip===true){o.remove();return bolts()}o.classList.add('out');setTimeout(()=>{o.remove();bolts()},260)};
+  o.querySelector('.avx').onclick=e=>{e.stopPropagation();end()};
+  o.onclick=e=>{if(e.target===o)end()};
+  v.onended=()=>end();v.onerror=()=>end(true); // файла ещё нет — сразу молнии
+  mb.onclick=e=>{e.stopPropagation();v.muted=false;v.play().catch(()=>{});mb.hidden=true};
+  const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{v.muted=true;v.play().then(()=>{mb.hidden=false}).catch(()=>end(true))});
+  v.volume=1;
+  setTimeout(()=>{if(!fin&&v.readyState<2&&v.currentTime===0)end(true)},4000);
+  if(STREAM.on)setTimeout(()=>end(),6000);
+}
 let ADMMUS=null,ADMEL=null;
 // V130: «разрешаем» трек адмирала при первом касании экрана (тихий запуск и пауза),
 // чтобы потом он сам включился сразу после видео, без касания
@@ -2770,7 +2809,8 @@ function flushFx(){
   FXBUSY=true;const next=()=>{FXBUSY=false;flushFx();if(!FXBUSY&&!FXQ.some(x=>x.t!=='s'))fxBd(false)};
   if(FXQ[0].t==='d'||FXQ[0].t==='e'||FXQ[0].t==='c')fxBd(true);
   if(FXQ[0].t==='s'){SFX.play(FXQ.shift().n,0);next();return}
-  if(FXQ[0].t==='k'){akFx(FXQ.shift(),next)}
+  if(FXQ[0].t==='kw'){kwFx(FXQ.shift(),next)}
+  else if(FXQ[0].t==='k'){akFx(FXQ.shift(),next)}
   else if(FXQ[0].t==='e'){eventFx(FXQ.shift(),next)}
   else if(FXQ[0].t==='c'){const g=[],w=FXQ[0].who;while(FXQ.length&&FXQ[0].t==='c'&&FXQ[0].who===w)g.push(FXQ.shift());cardFx(g,next)}
   else{const g=[];while(FXQ.length&&FXQ[0].t==='d')g.push(FXQ.shift());diceFx(g,next)}
@@ -3546,7 +3586,7 @@ function qoOpen(k){
   document.body.appendChild(o);if(k==='news'||k==='newspop')newsMark(k==='news');if(k==='hall'){hallLoad();const lb=document.getElementById('hallog');if(lb)lb.onclick=logGate};
 }
 function qoClose(){const o=document.getElementById('qoov');if(o)o.remove()}
-const NEWS=[{"id": "2026-11-18-king", "d": "18 ноября", "t": "Тёмный король Рейли и Воля короля", "x": "Новый босс: Тёмный король Рейли (атака 9, уклонение 6). Победа над ним даёт карту сокровищ «Воля короля»: за 1 ОД все остальные игроки в вашем море и адмирал пропускают ход. Игроков в тюрьме больше нельзя вызвать на дуэль (исключение: Юстас Кид). Дубль на костях дохода даёт +1 ОД на ход."}, {"id": "2026-11-17-exit", "d": "17 ноября", "t": "Выход из партии из меню", "x": "В меню (☰) появились пункты «Выйти с сохранением» и «Выйти из игры». После выхода с сохранением на главном экране будет кнопка «Продолжить партию», а для сетевой игры — «Вернуться в комнату»."}, {"id": "2026-11-17-duelwin", "d": "17 ноября", "t": "Победа по числу выигранных раундов", "x": "Если за 3 раунда никто не набрал 2 победы, теперь побеждает тот, у кого побед больше: например, 1:0 при двух ничьих. Боевая ничья — только при равном счёте (0:0 или 1:1). Бой с хранителем понеглифа считается по-старому. Правило действует в новых партиях."}, {"id": "2026-11-17-duelscene", "d": "17 ноября", "t": "Анимированные дуэли", "x": "Каждый бой теперь видно: бойцы дерутся раунд за раундом по выпавшим цифрам. У каждого персонажа и босса свои приёмы, при разнице в 4 очка и больше — тяжёлые. Кубик бросается сам через 3 секунды. «Ускорить бой» прокручивает анимацию быстро только у вас. Кнопка «Сцена» переключает: показывать, ускоренно или выключить. В боях за карты сокровищ у каждого соперника свой бой: Гекко Мория — тени, Марко — синее пламя, Магеллан — яд и гидра, Король Нептун — трезубец и вода, Дофламинго — нити."}, {"id": "2026-11-17-rearm", "d": "17 ноября", "t": "Новое задание «Перевооружение»", "x": "Победите Босса 2–4 уровня и получите особую карту: пока она у вас, за ход можно купить две карты вместо одной (две атаки, атаку и пассивку или две пассивки). Таких заданий в колоде всего три — успейте забрать!"}, {"id": "2026-11-17-tasks", "d": "17 ноября", "t": "Задания стали интереснее", "x": "Выполните 5 ивентовых заданий — и один раз за игру получите 2 очка к атаке и уклонению, распределяйте как хотите (но атака не выше 8, уклонение не выше 7). Часть боевых заданий теперь можно закрыть картой сокровищ вместо Берри. Зато доход с локаций вдвое меньше, карта сокровищ стоит 50 Берри, гостевой персонаж — 80."}, {"id": "2026-11-16-resume", "d": "16 ноября", "t": "Продолжить партию после обновления страницы", "x": "Случайно обновили страницу или закрыли вкладку? Партию можно продолжить с того же места, в том числе с ботами вместо игроков."}, {"id": "2026-11-16-tv", "d": "16 ноября", "t": "Трансляция на телевизор", "x": "Откройте ссылку комнаты в браузере телевизора (или нажмите «Трансляция» и введите код) — на большом экране будет общая карта и журнал, а играть можно с телефонов."}];
+const NEWS=[{"id": "2026-11-18-duelanim", "d": "18 ноября", "t": "Новая анимация дуэлей", "x": "В каждом раунде бойцы замахиваются одновременно, поэтому по первым кадрам не понять, кто выиграл. При ничьей один из бойцов бьёт, а второй ставит красноватый щит."}, {"id": "2026-11-18-king", "d": "18 ноября", "t": "Воля короля", "x": "Новая карта сокровищ «Воля короля»: чтобы получить её, нужно победить Тёмного короля Рейли (атака 9, уклонение 6). За 1 ОД: все остальные игроки в вашем море и адмирал пропускают ход. По островам моря бьют красно-чёрные молнии."}, {"id": "2026-11-18-double", "d": "18 ноября", "t": "Дубль на костях", "x": "Если на костях дохода выпал дубль, бросивший получает +1 очко действия на этот ход."}, {"id": "2026-11-17-exit", "d": "17 ноября", "t": "Выход из партии из меню", "x": "В меню (☰) появились пункты «Выйти с сохранением» и «Выйти из игры». После выхода с сохранением на главном экране будет кнопка «Продолжить партию», а для сетевой игры — «Вернуться в комнату»."}, {"id": "2026-11-17-duelwin", "d": "17 ноября", "t": "Победа по числу выигранных раундов", "x": "Если за 3 раунда никто не набрал 2 победы, теперь побеждает тот, у кого побед больше: например, 1:0 при двух ничьих. Боевая ничья — только при равном счёте (0:0 или 1:1). Бой с хранителем понеглифа считается по-старому. Правило действует в новых партиях."}, {"id": "2026-11-17-duelscene", "d": "17 ноября", "t": "Анимированные дуэли", "x": "Каждый бой теперь видно: бойцы дерутся раунд за раундом по выпавшим цифрам. У каждого персонажа и босса свои приёмы, при разнице в 4 очка и больше — тяжёлые. Кубик бросается сам через 3 секунды. «Ускорить бой» прокручивает анимацию быстро только у вас. Кнопка «Сцена» переключает: показывать, ускоренно или выключить. В боях за карты сокровищ у каждого соперника свой бой: Гекко Мория — тени, Марко — синее пламя, Магеллан — яд и гидра, Король Нептун — трезубец и вода, Дофламинго — нити."}, {"id": "2026-11-17-rearm", "d": "17 ноября", "t": "Новое задание «Перевооружение»", "x": "Победите Босса 2–4 уровня и получите особую карту: пока она у вас, за ход можно купить две карты вместо одной (две атаки, атаку и пассивку или две пассивки). Таких заданий в колоде всего три — успейте забрать!"}, {"id": "2026-11-17-tasks", "d": "17 ноября", "t": "Задания стали интереснее", "x": "Выполните 5 ивентовых заданий — и один раз за игру получите 2 очка к атаке и уклонению, распределяйте как хотите (но атака не выше 8, уклонение не выше 7). Часть боевых заданий теперь можно закрыть картой сокровищ вместо Берри. Зато доход с локаций вдвое меньше, карта сокровищ стоит 50 Берри, гостевой персонаж — 80."}, {"id": "2026-11-16-resume", "d": "16 ноября", "t": "Продолжить партию после обновления страницы", "x": "Случайно обновили страницу или закрыли вкладку? Партию можно продолжить с того же места, в том числе с ботами вместо игроков."}, {"id": "2026-11-16-tv", "d": "16 ноября", "t": "Трансляция на телевизор", "x": "Откройте ссылку комнаты в браузере телевизора (или нажмите «Трансляция» и введите код) — на большом экране будет общая карта и журнал, а играть можно с телефонов."}];
 const NEWS_KEY='gl_news_seen';
 function newsSeen(){try{return localStorage.getItem(NEWS_KEY)}catch(e){return null}}
 function newsPopSeen(){try{return localStorage.getItem(NEWS_KEY+'_p')}catch(e){return null}}
