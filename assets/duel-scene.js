@@ -990,14 +990,14 @@ async function banner(t,sub,col){const b=$('banner'),s=$('sub');b.textContent=t;
 async function hideBanner(){await run(250,k=>{$('banner').style.opacity=1-k;$('sub').style.opacity=1-k})}
 function label(i,txt){const a=$('ab'+i);a.textContent=txt;a.style.opacity=txt?1:0}
 
-/* красноватая полусфера-щит при ничьей */
-function dome(D){const r=135*D.sc,cx=D.x+D.dir*20*D.sc,y=GROUND;
- const g=el('g',{opacity:0,style:'transform-box:fill-box;transform-origin:50% 100%'});
- el('path',{d:`M ${cx-r} ${y} A ${r} ${r} 0 0 1 ${cx+r} ${y} Z`,fill:'rgba(255,70,70,.20)',stroke:'#ff5a5a','stroke-width':5,filter:'drop-shadow(0 0 12px #ff3030)'},g);
- el('path',{d:`M ${cx-r*.72} ${y} A ${r*.72} ${r*.72} 0 0 1 ${cx+r*.72} ${y}`,fill:'none',stroke:'#ffb0a0','stroke-width':2,opacity:.7},g);
- const ex=D.x+D.dir*r*.95,ey=y-r*.55;
+/* вертикальный щит-полусфера при ничьей: выше роста бойца, выгнут в сторону соперника */
+function dome(D){const H=250*D.sc,rx=120*D.sc,cx=D.x+D.dir*38*D.sc,y=GROUND+8,sw=D.dir>0?1:0;
+ const g=el('g',{opacity:0,style:'transform-box:fill-box;transform-origin:'+(D.dir>0?'0% 50%':'100% 50%')});
+ el('path',{d:`M ${cx} ${y-H} A ${rx} ${H/2} 0 0 ${sw} ${cx} ${y} Z`,fill:'rgba(90,170,255,.18)',stroke:'#6ab8ff','stroke-width':5,filter:'drop-shadow(0 0 12px #3a90ff)'},g);
+ el('path',{d:`M ${cx} ${y-H*.9} A ${rx*.8} ${H*.45} 0 0 ${sw} ${cx} ${y-H*.1}`,fill:'none',stroke:'#bfe0ff','stroke-width':2,opacity:.7},g);
+ const ex=cx+D.dir*rx,ey=y-H/2;
  return {open:()=>run(220,t=>{g.setAttribute('opacity',E.out(t));g.style.transform=`scale(${.6+.4*E.out(t)})`}),
-  hit:async()=>{ring(ex,ey,'#ff6a5a',90);burst(ex,ey,16,'#ff8a7a',1.2);g.setAttribute('stroke','#fff');await run(160,t=>g.setAttribute('opacity',1-.5*Math.sin(t*Math.PI*3)*.6))},
+  hit:async()=>{ring(ex,ey,'#6ab8ff',90);burst(ex,ey,16,'#9fd0ff',1.2);await run(160,t=>g.setAttribute('opacity',1-.5*Math.sin(t*Math.PI*3)*.6))},
   close:()=>run(300,t=>{g.setAttribute('opacity',1-t);if(t>=1)g.remove()})}}
 async function attack(F,T,abil){
   F.tgt=T;const A=ABIL[abil]||ABIL.none;
