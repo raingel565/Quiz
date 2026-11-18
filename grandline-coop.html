@@ -2582,7 +2582,7 @@ function actions(){
     if(['dandan','scav','key','kingwill'].includes(c.key)&&activeC(c))add('tre','Сыграть: '+T.n+(T.ap?' ('+T.ap+' ОД)':''),()=>useTre(p,c),ap<(T.ap||0)||(c.key==='kingwill'&&(p.loc==='Z'||p.loc==='L'))||(c.key==='key'&&!Object.keys(G.type).some(l=>G.type[l]==='jail'&&l!==p.loc)));
     if(T.cond&&!c.active)add('tre','Сразиться за карту «'+T.n+'»: '+T.cond.n+' (А'+T.cond.a+' / У'+T.cond.u+')',()=>uniqueFight(p,c),G.duels>=3);
     if(c.key==='poseidon'&&!c.used&&c.active)add('tre','Сыграть: '+T.n+' (раз за игру)',()=>useTre(p,c));
-    add('tre','Выбросить из руки: '+T.n+' (освободить слот)',()=>{discardTre(p,c,()=>{})});
+    add('tre','Выбросить из руки: '+T.n+' (освободить слот)',()=>{discardTre(p,c,cancel=>{if(!cancel&&p.task&&p.task.cat==='ev'&&p.task.def.k==='contra'&&here&&lt==='market'){p.task.done=true;log(p.name+' сбросил контрабанду на Чёрном рынке.')}})});
   }
   // market
   const atMarket=here&&lt==='market';
