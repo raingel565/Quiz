@@ -421,7 +421,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 @media(prefers-reduced-motion:reduce){#splash *{animation-duration:.01s!important;animation-delay:0s!important}}
 #admov{position:fixed;inset:0;z-index:2147482000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);padding:16px}
 #akvid{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.92);animation:dfin .25s ease both;padding:12px}
-#kwfx{position:fixed;inset:0;z-index:99998;pointer-events:none;animation:dfin .2s ease both}#kwfx.out{animation:dfout .3s ease both}#kwfx svg{position:absolute;inset:0}.kwtint{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(255,40,40,.35),rgba(20,0,10,.55));opacity:0}.kwtint.hit{animation:kwh .42s ease-out}@keyframes kwh{0%{opacity:.95}100%{opacity:0}}
+#kwfx{position:fixed;inset:0;z-index:99998;pointer-events:none;animation:dfin .2s ease both}#kwfx.out{animation:dfout .3s ease both}#kwfx svg{position:absolute;inset:0}.kwtint{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(255,40,40,.35),rgba(20,0,10,.55));opacity:0}.kwtint.hit{animation:kwh .42s ease-out}@keyframes kwh{0%{opacity:.45}100%{opacity:0}}
 #akvid.out{animation:dfout .26s ease both}
 #akvid .avbox{position:relative;width:min(100%,960px);max-height:100%;border-radius:14px;overflow:hidden;background:#000;box-shadow:0 0 0 2px rgba(255,110,60,.7),0 0 60px rgba(255,70,20,.45)}
 #akvid video{display:block;width:100%;max-height:calc(100vh - 24px);background:#000}
@@ -1019,7 +1019,7 @@ body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:transpar
 .ov.lb .roomh .btn.primary{border-color:#8a5a0e;color:#2a1804;background:linear-gradient(180deg,#ffd978,#e0a22a 60%,#c78914);font-weight:800}
 .ov.lb .roomh select{border:2px solid #2c1d12;border-radius:10px;padding:8px 10px;color:#f6e6c8;background:#2a1c12}
 </style>
-<div id="ver" title="Версия кооператива">C41 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия кооператива">C42 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=12"></script>
 <script>
@@ -2516,7 +2516,7 @@ function useTre(p,c){
     discardCard(p,c);
     let ad=false;
     if(G.akainu&&G.akainu.loc!=='Z'&&G.akainu.loc!=='L'&&seaOf(G.akainu.loc)===sea){G.akainu.stun=(G.akainu.stun|0)+1;ad=true}
-    if(!window.__nor)FXQ.push({t:'kw',locs:Object.keys(G.type).filter(l=>l!=='Z'&&l!=='L'&&seaOf(l)===sea)});
+    if(!window.__nor)FXQ.push({t:'kw',locs:Object.keys(MAPD.nodes).filter(l=>l!=='Z'&&l!=='L'&&seaOf(l)===sea)});
     log(p.name+' разыгрывает «Воля короля»: '+(hit.length?hit.join(', ')+' пропустят ход':'')+(ad?(hit.length?'; ':'')+adm().short+' ошеломлён':'')+(hit.length||ad?'.':'в этом море никого нет.'));
     fxEvent({banner:true,tone:'good',icon:'👑',title:'Воля короля!',desc:(hit.length||ad)?(hit.join(', ')+(ad?(hit.length?', ':'')+adm().short:'')+': ошеломлены, ход потерян'):'В этом море никого нет',auto:3200});
   }else if(c.key==='dandan'){
@@ -2840,19 +2840,26 @@ function kwFx(ev,done){
   if(window.__nor||!document.body){done&&done();return}
   const bolts=()=>{
     const mp=document.getElementById('map');if(!mp||!mp.getScreenCTM||fast){done&&done();return}
+    // V139: сначала показываем карту — на телефоне она может быть прокручена за экран
+    const mr=mp.getBoundingClientRect();
+    if(!bolts.ok&&(mr.bottom<80||mr.top>innerHeight*.6)){bolts.ok=1;try{(document.getElementById('mapwrap')||mp).scrollIntoView({block:'center',behavior:'smooth'})}catch(_){}setTimeout(bolts,550);return}
     const NS='http://www.w3.org/2000/svg',o=document.createElement('div');o.id='kwfx';
     const W=innerWidth,H=innerHeight,svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox','0 0 '+W+' '+H);svg.setAttribute('width',W);svg.setAttribute('height',H);
     o.appendChild(svg);const tint=document.createElement('div');tint.className='kwtint';o.appendChild(tint);document.body.appendChild(o);
-    const m=mp.getScreenCTM(),pts=(ev.locs||[]).map(l=>MAPD.nodes[l]).filter(Boolean).map(([x,y])=>({x:m.a*x+m.e,y:m.d*y+m.f}));
-    const jag=(x0,y0,x1,y1)=>{let d='M'+x0+' '+y0;const n=9;for(let i=1;i<=n;i++){const k=i/n;d+=' L'+(x0+(x1-x0)*k+(i<n?(Math.random()-.5)*46:0)).toFixed(1)+' '+(y0+(y1-y0)*k+(i<n?(Math.random()-.5)*22:0)).toFixed(1)}return d};
-    const strike=()=>{for(const p of pts){const d=jag(p.x+(Math.random()-.5)*160,-20,p.x,p.y);
-      for(const [c,w] of [['#14000a',16],['#ff2a2a',8],['#ffd0c0',3]]){const e=document.createElementNS(NS,'path');e.setAttribute('d',d);e.setAttribute('fill','none');e.setAttribute('stroke',c);e.setAttribute('stroke-width',w);e.setAttribute('stroke-linejoin','round');e.setAttribute('stroke-linecap','round');if(c==='#ff2a2a')e.style.filter='drop-shadow(0 0 10px #ff1010)';svg.appendChild(e);setTimeout(()=>{try{e.remove()}catch(_){}},260)}
+    const pts=(ev.locs||[]).map(l=>{const g=mp.querySelector('g[data-id="'+l+'"] circle')||mp.querySelector('g[data-id="'+l+'"]');if(!g)return null;const r=g.getBoundingClientRect();return r.width?{x:r.left+r.width/2,y:r.top+r.height/2}:null}).filter(Boolean);
+    const jag=(x0,y0,x1,y1)=>{let d='M'+x0+' '+y0;const n=7;for(let i=1;i<=n;i++){const k=i/n;d+=' L'+(x0+(x1-x0)*k+(i<n?(Math.random()-.5)*30:0)).toFixed(1)+' '+(y0+(y1-y0)*k+(i<n?(Math.random()-.5)*10:0)).toFixed(1)}return d};
+    try{const q=(document.getElementById('mapwrap')||mp).getBoundingClientRect();svg.style.clipPath='inset('+Math.max(0,q.top)+'px '+Math.max(0,W-q.right)+'px '+Math.max(0,H-q.bottom)+'px '+Math.max(0,q.left)+'px round 14px)'}catch(_){}
+    const vis=pts.filter(p=>p.x>-30&&p.x<W+30&&p.y>-30&&p.y<H+30);
+    let sk=0;const strike=()=>{sk++;for(const p of vis.filter((_,i)=>(i+sk)%2===0||vis.length<4)){for(let b=0;b<1;b++){const sx=p.x+(Math.random()-.5)*90,d=jag(sx,p.y-110-Math.random()*90,p.x+(Math.random()-.5)*6,p.y);
+      const br=jag(p.x+(Math.random()-.5)*30,p.y-80-Math.random()*60,p.x+(Math.random()-.5)*90,p.y-10);
+      for(const dd of [d,br])for(const [c,w] of [['#0a0005',dd===d?14:8],['#d0001c',dd===d?6:4],['#ff8a7a',dd===d?2:1.5]]){const e=document.createElementNS(NS,'path');e.setAttribute('d',dd);e.setAttribute('fill','none');e.setAttribute('stroke',c);e.setAttribute('stroke-width',w);e.setAttribute('stroke-linejoin','round');e.setAttribute('stroke-linecap','round');if(c==='#c4001a')e.style.filter='drop-shadow(0 0 8px #ff0020)';if(c==='#0a0005')e.style.filter='drop-shadow(0 0 6px #000)';svg.appendChild(e);
+        try{e.animate([{opacity:1},{opacity:.35},{opacity:1},{opacity:0}],{duration:520,easing:'linear'})}catch(_){}setTimeout(()=>{try{e.remove()}catch(_){}},520)}}
       const r=document.createElementNS(NS,'circle');r.setAttribute('cx',p.x);r.setAttribute('cy',p.y);r.setAttribute('r',8);r.setAttribute('fill','none');r.setAttribute('stroke','#ff3030');r.setAttribute('stroke-width',5);svg.appendChild(r);
       try{r.animate([{r:8,opacity:1},{r:70,opacity:0}],{duration:520,easing:'ease-out'})}catch(_){}setTimeout(()=>{try{r.remove()}catch(_){}},540)}
       tint.classList.remove('hit');void tint.offsetWidth;tint.classList.add('hit')};
     try{SFX.play('w_buster',0)}catch(_){}
-    let n=0;strike();const iv=setInterval(()=>{if(++n>=5){clearInterval(iv);return}strike()},430);
-    setTimeout(()=>{o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},300)},2500);
+    let n=0;strike();const iv=setInterval(()=>{if(++n>=5){clearInterval(iv);return}strike()},480);
+    setTimeout(()=>{o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},300)},2900);
   };
   if(fast||!Element.prototype.animate)return bolts();
   const old=document.getElementById('akvid');if(old)old.remove();
