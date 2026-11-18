@@ -5007,7 +5007,7 @@ function botSchedule(){
   if(BOTTIMER||NET.on||!G||G.winner!=null||window.__nor)return;
   const w=viewerNeeded();if(w==null||!G.players[w].bot)return;
   const pe=G.pending;
-  const humanSees=pe&&pe.type==='duelResult'&&pe.res.st.some(x=>x.s.p&&!x.s.p.bot);
+  const humanSees=pe&&pe.type==='duelResult'&&pe.res.st.some(x=>(x.s.ps||[x.s.p]).some(q=>q&&!q.bot));
   if(humanSees)return; // человек сам нажмёт «Продолжить»
   let delay=pe&&pe.type==='duelResult'?4000:(pe&&pe.type==='prep'?2000:2000);
   BOTTIMER=setTimeout(function tick(){
