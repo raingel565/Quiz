@@ -947,9 +947,9 @@ html,body{overscroll-behavior-y:none}
 #fxbd.on{opacity:1}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 </style>
-<div id="ver" title="Версия кооператива">C32 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия кооператива">C33 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
-<script src="assets/duel-scene.js?v=8"></script>
+<script src="assets/duel-scene.js?v=9"></script>
 <script>
 (function(){
 'use strict';
@@ -1014,6 +1014,7 @@ const TRE={
  natsu:{n:'Нацу Драгнил',d:'Гость. 3-я пассивка, сбрасывается после дуэли, из сброса её не достать. Раз за дуэль «съедает огонь»: +20 к атаке в раунде, который иначе проигран или сведён вничью',ap:null,guest:1,once:1,pas:{a:0,u:0}},
  jinwoo:{n:'Сон Джин Ву',d:'Гость. 3-я пассивка, сбрасывается после дуэли, из сброса её не достать. В дуэли вместо 1d12 вы бросаете особый кубик 1d20',ap:null,guest:1,once:1,pas:{a:0,u:0}},
  rearm:{n:'Перевооружение',d:'Постоянная. За ход можно купить две карты вместо одной: две атаки, атаку и пассивку или две пассивки',ap:null,c:0,own:true,guest:true},
+ kingwill:{n:'Воля короля',d:'Чтобы получить: победить Тёмного короля Рейли (А9 / У6), при проигрыше карта в сброс. 1 ОД, один раз: адмирал в вашем море пропускает один ход',ap:1,cond:{n:'Тёмный король Рейли',a:9,u:6},lossObt:1,c:1},
  underground:{n:'Подпольный рынок',d:'Чтобы получить: победить Дофламинго (А5 / У5). Покупать карты сокровищ можно где угодно со скидкой 10',ap:null,cond:{n:'Дофламинго',a:5,u:5},c:2},
 };
 const SPECIAL_PAY={dozor:{4:['dandan']},pirate:{}};
@@ -1397,7 +1398,7 @@ function newGame(cfg){
     tev:shuffle(T_EVENT.filter(x=>!x.tb||cfg.tb).flatMap(x=>Array.from({length:x.c},()=>Object.assign({},x)))),tpon:shuffle(T_PON.map(x=>Object.assign({},x))),tlaf:shuffle(T_LAF.map(x=>Object.assign({},x)))};
   for(const [v,c] of [[1,16],[3,16],[5,16],[7,14],[8,12]])for(let i=0;i<c;i++)decks.atk.push(card('atk',{v}));
   for(const k in PAS)for(let i=0;i<PAS[k].c;i++)decks.pas.push(card('pas',{key:k}));
-  for(const k in TRE)if(!TRE[k].sp&&!TRE[k].guest)for(let i=0;i<TRE[k].c;i++)decks.tre.push(card('tre',{key:k}));
+  for(const k in TRE)if(!TRE[k].sp&&!TRE[k].guest&&!(k==='kingwill'&&!(cfg.tb>=2)))for(let i=0;i<TRE[k].c;i++)decks.tre.push(card('tre',{key:k}));
   shuffle(decks.atk);shuffle(decks.pas);shuffle(decks.tre);
   const specials=[];for(const k in TRE)if(TRE[k].sp)for(let i=0;i<TRE[k].sp;i++)specials.push(card('tre',{key:k,used:false}));
   const bossD={};
@@ -1629,6 +1630,7 @@ function incomeRoll(){
     if(sum){q.berries+=sum;res.push(q.name+' +'+sum)}
   }
   log(res.length?'Доход: '+res.join(', ')+'.':'Доход: никто ничего не получил.');
+  if(a===b&&G.tb>=2){G.ap++;G.apMax++;log(pname(P())+': дубль '+a+'+'+b+'! +1 ОД на этот ход.');fxEvent({banner:true,tone:'good',icon:'🎲',title:'Дубль!',desc:P().name+' получает +1 ОД на этот ход',auto:2600})}
   if(res.length)fxEvent({snd:'coin',stage:'post',cat:'Доход',icon:'🪙',title:'Выпало '+n,lines:res,auto:3200});
   for(const q of G.players){const t=q.task;if(t&&t.def.k==='world'&&t.target===n){
     const ls=Object.keys(G.flags).filter(l=>(G.coop||G.flags[l]===q.i)&&numOf(l)===n&&!['jail','dozor','battle','start'].includes(G.type[l]));
@@ -1710,7 +1712,7 @@ function hardJail(p,n,who){n=n||3;who=who||'Акаину';
 function akainuDuels(list,cb){
   const q=list.shift();
   if(!q||!G.akainu||G.winner!=null)return cb&&cb();
-  if(q.jail>0||q.imm||G.akainu.stun>0)return akainuDuels(list,cb);
+  if((q.jail>0&&q.ch!=='kid')||q.imm||G.akainu.stun>0)return akainuDuels(list,cb);
   const allies=G.coop?list.filter(x=>x.jail<=0&&!x.imm&&x.loc===q.loc):[];
   for(const x of allies)list.splice(list.indexOf(x),1);
   const AD=adm();
@@ -2435,6 +2437,13 @@ function useTre(p,c){
     const o=SEAK.filter(s=>!deadAt(s+n)&&!['jail','dozor','battle'].includes(G.type[s+n])&&s+n!==G.zun.cell).map(s=>({label:SEAS[s]+' №'+n,loc:s+n,run:()=>{discardCard(p,c);setZun(s+n)}}));
     o.push({label:'Отмена',run:()=>{}});
     ask('pickloc',{who:p.i,title:'Древняя вивр-карта',text:'В какое море?',opts:o,pick:o.filter(x=>x.loc).map(x=>x.loc)});
+  }else if(c.key==='kingwill'){
+    const sea=seaOf(p.loc),hit=[];
+    discardCard(p,c);
+    let ad=false;
+    if(G.akainu&&G.akainu.loc!=='Z'&&G.akainu.loc!=='L'&&seaOf(G.akainu.loc)===sea){G.akainu.stun=(G.akainu.stun|0)+1;ad=true}
+    log(p.name+' разыгрывает «Воля короля»: '+(hit.length?hit.join(', ')+' пропустят ход':'')+(ad?(hit.length?'; ':'')+adm().short+' ошеломлён':'')+(hit.length||ad?'.':'в этом море никого нет.'));
+    fxEvent({banner:true,tone:'good',icon:'👑',title:'Воля короля!',desc:(hit.length||ad)?(hit.join(', ')+(ad?(hit.length?', ':'')+adm().short:'')+': ошеломлены, ход потерян'):'В этом море никого нет',auto:3200});
   }else if(c.key==='dandan'){
     const cand=Object.keys(G.type).filter(l=>G.type[l]!=='start'&&G.type[l]!=='base'&&!deadAt(l));
     const o=cand.map(l=>({label:locName(l)+' ('+TYPES[G.type[l]].n+')',loc:l,run:()=>{
@@ -2529,7 +2538,7 @@ function actions(){
     }
   }
   // duel
-  if(!G.coop)for(const q of G.players)if(q!==p&&q.loc===p.loc)add('duel','Вызвать на дуэль: '+pname(q)+(p.task&&p.task.def.k==='bribe'?' (отменит задание)':''),()=>{G.ap-=1;G.tm.pvp++;if(p.task&&p.task.def.k==='bribe')cancelTask(p,'дуэль с игроком');log(p.name+' вызывает '+q.name+' на дуэль.');startPvp(p.i,q.i)},ap<1||G.duels>=3);
+  if(!G.coop)for(const q of G.players)if(q!==p&&q.loc===p.loc&&(q.jail<=0||q.ch==='kid'))add('duel','Вызвать на дуэль: '+pname(q)+(p.task&&p.task.def.k==='bribe'?' (отменит задание)':''),()=>{G.ap-=1;G.tm.pvp++;if(p.task&&p.task.def.k==='bribe')cancelTask(p,'дуэль с игроком');log(p.name+' вызывает '+q.name+' на дуэль.');startPvp(p.i,q.i)},ap<1||G.duels>=3);
   // flags
   const loc=p.loc;
   const here=loc!=='Z'&&loc!=='L';
@@ -2568,7 +2577,7 @@ function actions(){
     const T=TRE[c.key];
     if(['vivre','ancient'].includes(c.key))add('tre','Сыграть: '+T.n,()=>useTre(p,c),!G.zun||ap<(T.ap||0));
     if(c.key==='laxus')add('tre','Сыграть: Лаксус — громовой дождь',()=>useTre(p,c));
-    if(['dandan','scav','key'].includes(c.key)&&activeC(c))add('tre','Сыграть: '+T.n+(T.ap?' ('+T.ap+' ОД)':''),()=>useTre(p,c),ap<(T.ap||0)||(c.key==='key'&&!Object.keys(G.type).some(l=>G.type[l]==='jail'&&l!==p.loc)));
+    if(['dandan','scav','key','kingwill'].includes(c.key)&&activeC(c))add('tre','Сыграть: '+T.n+(T.ap?' ('+T.ap+' ОД)':''),()=>useTre(p,c),ap<(T.ap||0)||(c.key==='kingwill'&&(p.loc==='Z'||p.loc==='L'))||(c.key==='key'&&!Object.keys(G.type).some(l=>G.type[l]==='jail'&&l!==p.loc)));
     if(T.cond&&!c.active)add('tre','Сразиться за карту «'+T.n+'»: '+T.cond.n+' (А'+T.cond.a+' / У'+T.cond.u+')',()=>uniqueFight(p,c),G.duels>=3);
     if(c.key==='poseidon'&&!c.used&&c.active)add('tre','Сыграть: '+T.n+' (раз за игру)',()=>useTre(p,c));
     add('tre','Выбросить из руки: '+T.n+' (освободить слот)',()=>{discardTre(p,c,()=>{})});
@@ -3672,7 +3681,7 @@ function qoOpen(k){
   document.body.appendChild(o);if(k==='news'||k==='newspop')newsMark(k==='news');if(k==='hall'){hallLoad();const lb=document.getElementById('hallog');if(lb)lb.onclick=logGate};
 }
 function qoClose(){const o=document.getElementById('qoov');if(o)o.remove()}
-const NEWS=[{"id": "2026-11-17-exit", "d": "17 ноября", "t": "Выход из партии из меню", "x": "В меню (☰) появились пункты «Выйти с сохранением» и «Выйти из игры». После выхода с сохранением на главном экране будет кнопка «Продолжить партию», а для сетевой игры — «Вернуться в комнату»."}, {"id": "2026-11-17-duelwin", "d": "17 ноября", "t": "Победа по числу выигранных раундов", "x": "Если за 3 раунда никто не набрал 2 победы, теперь побеждает тот, у кого побед больше: например, 1:0 при двух ничьих. Боевая ничья — только при равном счёте (0:0 или 1:1). Бой с хранителем понеглифа считается по-старому. Правило действует в новых партиях."}, {"id": "2026-11-17-duelscene", "d": "17 ноября", "t": "Анимированные дуэли", "x": "Каждый бой теперь видно: бойцы дерутся раунд за раундом по выпавшим цифрам. У каждого персонажа и босса свои приёмы, при разнице в 4 очка и больше — тяжёлые. Кубик бросается сам через 3 секунды. «Ускорить бой» прокручивает анимацию быстро только у вас. Кнопка «Сцена» переключает: показывать, ускоренно или выключить. В боях за карты сокровищ у каждого соперника свой бой: Гекко Мория — тени, Марко — синее пламя, Магеллан — яд и гидра, Король Нептун — трезубец и вода, Дофламинго — нити. В коопе вся команда бьёт Иму и адмиралов одновременно."}, {"id": "2026-11-17-rearm", "d": "17 ноября", "t": "Новое задание «Перевооружение»", "x": "Победите Босса 2–4 уровня и получите особую карту: пока она у вас, за ход можно купить две карты вместо одной (две атаки, атаку и пассивку или две пассивки). Таких заданий в колоде всего три — успейте забрать!"}, {"id": "2026-11-17-tasks", "d": "17 ноября", "t": "Задания стали интереснее", "x": "Выполните 5 ивентовых заданий — и один раз за игру получите 2 очка к атаке и уклонению, распределяйте как хотите (но атака не выше 8, уклонение не выше 7). Часть боевых заданий теперь можно закрыть картой сокровищ вместо Берри. Зато доход с локаций вдвое меньше, карта сокровищ стоит 50 Берри, гостевой персонаж — 80."}, {"id": "2026-11-16-resume", "d": "16 ноября", "t": "Продолжить партию после обновления страницы", "x": "Случайно обновили страницу или закрыли вкладку? Партию можно продолжить с того же места, в том числе с ботами вместо игроков."}, {"id": "2026-11-16-adm", "d": "16 ноября", "t": "Против Имы: адмиралов столько же, сколько игроков", "x": "В кооперативе против Имы количество адмиралов теперь равно количеству игроков: вдвоём проще, вчетвером жарче.", "coop": 1}, {"id": "2026-11-16-tv", "d": "16 ноября", "t": "Трансляция на телевизор", "x": "Откройте ссылку комнаты в браузере телевизора (или нажмите «Трансляция» и введите код) — на большом экране будет общая карта и журнал, а играть можно с телефонов."}];
+const NEWS=[{"id": "2026-11-18-king", "d": "18 ноября", "t": "Тёмный король Рейли и Воля короля", "x": "Новый босс: Тёмный король Рейли (атака 9, уклонение 6). Победа над ним даёт карту сокровищ «Воля короля»: за 1 ОД адмирал в вашем море пропускает ход. Игроков в тюрьме больше нельзя вызвать на дуэль (исключение: Юстас Кид). Дубль на костях дохода даёт +1 ОД на ход."}, {"id": "2026-11-17-exit", "d": "17 ноября", "t": "Выход из партии из меню", "x": "В меню (☰) появились пункты «Выйти с сохранением» и «Выйти из игры». После выхода с сохранением на главном экране будет кнопка «Продолжить партию», а для сетевой игры — «Вернуться в комнату»."}, {"id": "2026-11-17-duelwin", "d": "17 ноября", "t": "Победа по числу выигранных раундов", "x": "Если за 3 раунда никто не набрал 2 победы, теперь побеждает тот, у кого побед больше: например, 1:0 при двух ничьих. Боевая ничья — только при равном счёте (0:0 или 1:1). Бой с хранителем понеглифа считается по-старому. Правило действует в новых партиях."}, {"id": "2026-11-17-duelscene", "d": "17 ноября", "t": "Анимированные дуэли", "x": "Каждый бой теперь видно: бойцы дерутся раунд за раундом по выпавшим цифрам. У каждого персонажа и босса свои приёмы, при разнице в 4 очка и больше — тяжёлые. Кубик бросается сам через 3 секунды. «Ускорить бой» прокручивает анимацию быстро только у вас. Кнопка «Сцена» переключает: показывать, ускоренно или выключить. В боях за карты сокровищ у каждого соперника свой бой: Гекко Мория — тени, Марко — синее пламя, Магеллан — яд и гидра, Король Нептун — трезубец и вода, Дофламинго — нити. В коопе вся команда бьёт Иму и адмиралов одновременно."}, {"id": "2026-11-17-rearm", "d": "17 ноября", "t": "Новое задание «Перевооружение»", "x": "Победите Босса 2–4 уровня и получите особую карту: пока она у вас, за ход можно купить две карты вместо одной (две атаки, атаку и пассивку или две пассивки). Таких заданий в колоде всего три — успейте забрать!"}, {"id": "2026-11-17-tasks", "d": "17 ноября", "t": "Задания стали интереснее", "x": "Выполните 5 ивентовых заданий — и один раз за игру получите 2 очка к атаке и уклонению, распределяйте как хотите (но атака не выше 8, уклонение не выше 7). Часть боевых заданий теперь можно закрыть картой сокровищ вместо Берри. Зато доход с локаций вдвое меньше, карта сокровищ стоит 50 Берри, гостевой персонаж — 80."}, {"id": "2026-11-16-resume", "d": "16 ноября", "t": "Продолжить партию после обновления страницы", "x": "Случайно обновили страницу или закрыли вкладку? Партию можно продолжить с того же места, в том числе с ботами вместо игроков."}, {"id": "2026-11-16-adm", "d": "16 ноября", "t": "Против Имы: адмиралов столько же, сколько игроков", "x": "В кооперативе против Имы количество адмиралов теперь равно количеству игроков: вдвоём проще, вчетвером жарче.", "coop": 1}, {"id": "2026-11-16-tv", "d": "16 ноября", "t": "Трансляция на телевизор", "x": "Откройте ссылку комнаты в браузере телевизора (или нажмите «Трансляция» и введите код) — на большом экране будет общая карта и журнал, а играть можно с телефонов."}];
 const NEWS_KEY='glc_news_seen';
 function newsSeen(){try{return localStorage.getItem(NEWS_KEY)}catch(e){return null}}
 function newsPopSeen(){try{return localStorage.getItem(NEWS_KEY+'_p')}catch(e){return null}}

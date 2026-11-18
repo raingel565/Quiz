@@ -958,6 +958,7 @@ function npcKit(ch,name){
  if(CHMAP[ch])return kit(CHMAP[ch]);
  const nm=String(name||'');
  if(/^Эйс/.test(nm))return kit('fire',{sc:1.1,x:620});
+ if(/Рейли/.test(nm))return kit('shanks',{name:'Тёмный король Рейли',col:'#6a7a96',glow:'150,170,210'});
  if(/Мория/.test(nm))return kit('moria');
  if(/^Марко/.test(nm))return kit('marco');
  if(/Магеллан/.test(nm))return kit('magellan');
