@@ -1021,7 +1021,7 @@ body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:transpar
 .ov.lb .roomh .btn.primary{border-color:#8a5a0e;color:#2a1804;background:linear-gradient(180deg,#ffd978,#e0a22a 60%,#c78914);font-weight:800}
 .ov.lb .roomh select{border:2px solid #2c1d12;border-radius:10px;padding:8px 10px;color:#f6e6c8;background:#2a1c12}
 </style>
-<div id="ver" title="Версия игры">V137</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V138</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=12"></script>
 <script>
@@ -3566,13 +3566,23 @@ function hallSave(){
 const LOGKEY='gl_log',LOGH='f21d60e51078079e036feae9'; // путь в базе = хеш пароля журнала (сам пароль в коде не хранится)
 function logLocalGet(){try{const a=JSON.parse(localStorage.getItem(LOGKEY)||'[]');return Array.isArray(a)?a:[]}catch(e){return[]}}
 function logLocalPut(r){try{const a=logLocalGet().filter(x=>x&&x.id!==r.id);a.push(r);while(a.length>300)a.shift();localStorage.setItem(LOGKEY,JSON.stringify(a))}catch(e){}}
+function devInfo(){ // V138: система и экран устройства для журнала партий
+  let os='?';try{const u=navigator.userAgent||'';let m;
+    if((m=u.match(/Android\s([\d.]+)/)))os='Android '+m[1].split('.')[0];
+    else if((m=u.match(/(iPhone|iPad|iPod).*?OS (\d+)_(\d+)/)))os=(m[1]==='iPad'?'iPadOS ':'iOS ')+m[2]+'.'+m[3];
+    else if(/Macintosh/.test(u)&&navigator.maxTouchPoints>1)os='iPadOS';
+    else if(/Windows/.test(u))os='Windows';else if(/CrOS/.test(u))os='ChromeOS';else if(/Mac OS X/.test(u))os='macOS';else if(/Linux/.test(u))os='Linux';
+  }catch(e){}
+  let scr='?';try{scr=Math.round(screen.width)+'×'+Math.round(screen.height)+' @'+(Math.round((window.devicePixelRatio||1)*100)/100)}catch(e){}
+  return {os,scr};
+}
 function logRec(){
   const coop=!!G.coop;
   const id=(NET.on&&NET.code)?NET.code+'-'+((NET.meta&&(NET.meta.seed|0))||0):(G.logId||(G.logId=Date.now().toString(36)+Math.random().toString(36).slice(2,6)));
   const v=document.getElementById('ver');
   return {id,ts:Date.now(),ver:v?String(v.textContent).slice(0,24):'',coop,mode:G.mode||'std',kind:NET.on?(STREAM.on?'stream':'online'):'local',n:G.players.length,round:G.round|0,
     win:coop?!!G.coopWin:null,winner:(!coop&&G.winner!=null&&G.players[G.winner])?String(G.players[G.winner].name||'').slice(0,24):null,
-    pl:G.players.map(p=>({n:String(p.name||'Игрок').slice(0,24),c:p.ch,b:p.bot?1:0}))};
+    dev:devInfo(),pl:G.players.map((p,i)=>{const o={n:String(p.name||'Игрок').slice(0,24),c:p.ch,b:p.bot?1:0};const mp=NET.on&&NET.meta&&NET.meta.players&&NET.meta.players[i];if(mp&&mp.dev)o.d=mp.dev;return o})};
 }
 function logSave(){
   if(!G||G.winner==null||G.logDone)return;G.logDone=true;
@@ -3582,8 +3592,9 @@ function logSave(){
 }
 function logCsv(arr){
   const q=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"';
-  const rows=[['Дата','Версия','Режим','Тип','Игроков','Раунд','Результат','Игроки']];
-  arr.forEach(r=>rows.push([new Date(r.ts).toLocaleString('ru-RU'),r.ver||'',r.coop?'кооператив':((MODES[r.mode]&&MODES[r.mode].n)||r.mode||''),r.kind==='online'?'онлайн':r.kind==='stream'?'трансляция':'на устройстве',r.n,r.round,r.coop?(r.win?'победа команды':'поражение'):('победил: '+(r.winner||'?')),(r.pl||[]).map(p=>p.n+(p.b?' (бот)':'')+' ['+((CH[p.c]&&CH[p.c].n)||p.c||'')+']').join('; ')]));
+  const dv=d=>d?(d.os||'?')+', '+(d.scr||'?'):'';
+  const rows=[['Дата','Версия','Режим','Тип','Игроков','Раунд','Результат','Игроки','Устройство']];
+  arr.forEach(r=>rows.push([new Date(r.ts).toLocaleString('ru-RU'),r.ver||'',r.coop?'кооператив':((MODES[r.mode]&&MODES[r.mode].n)||r.mode||''),r.kind==='online'?'онлайн':r.kind==='stream'?'трансляция':'на устройстве',r.n,r.round,r.coop?(r.win?'победа команды':'поражение'):('победил: '+(r.winner||'?')),(r.pl||[]).map(p=>p.n+(p.b?' (бот)':'')+' ['+((CH[p.c]&&CH[p.c].n)||p.c||'')+']').join('; '),(r.pl||[]).some(p=>p.d)?(r.pl||[]).map(p=>p.n+': '+(p.d?dv(p.d):'?')).join(' | '):dv(r.dev)]));
   return '﻿'+rows.map(r=>r.map(q).join(';')).join('\n');
 }
 function logGate(){
@@ -3609,7 +3620,7 @@ async function logLoad(){
     const names=(r.pl||[]).map(p=>esc(p.n)+(p.b?' 🤖':'')).join(', ');
     const res=r.coop?(r.win?'🏆 победа команды':'☠ поражение'):('🏆 '+esc(r.winner||'?'));
     const mode=r.coop?'🤝 кооператив':esc((MODES[r.mode]&&MODES[r.mode].n)||'');
-    return '<div class="hall-r"><span class="hm">'+(r.kind==='online'?'🌐':r.kind==='stream'?'📺':'📱')+'</span><span class="hn">'+res+'<small>'+names+'</small></span><span class="hd">'+mode+' · '+(r.n|0)+' игр. · р.'+(r.round|0)+'<small>'+dt(r.ts)+(r.ver?' · '+esc(r.ver):'')+'</small></span></div>'};
+    return '<div class="hall-r"><span class="hm">'+(r.kind==='online'?'🌐':r.kind==='stream'?'📺':'📱')+'</span><span class="hn">'+res+'<small>'+names+'</small></span><span class="hd">'+mode+' · '+(r.n|0)+' игр. · р.'+(r.round|0)+'<small>'+dt(r.ts)+(r.ver?' · '+esc(r.ver):'')+'</small>'+((r.pl||[]).some(p=>p.d)?'<small>📟 '+(r.pl||[]).map(p=>esc(p.n)+': '+esc(p.d?p.d.os+', '+p.d.scr:'?')).join(' · ')+'</small>':r.dev?'<small>📟 '+esc(r.dev.os+', '+r.dev.scr)+'</small>':'')+'</span></div>'};
   b.innerHTML='<div class="grp"><b>Журнал партий ('+arr.length+')</b></div>'
     +(remoteOk?'':'<div class="small" style="margin-bottom:6px">Нет связи с общей базой: показаны партии, сыгранные на этом устройстве.</div>')
     +'<div class="hall-list">'+(arr.length?arr.map(row).join(''):'<div class="small">Пока нет ни одной завершённой партии.</div>')+'</div>'
@@ -4373,7 +4384,7 @@ async function netJoin(code,create){
     try{localStorage.setItem('gl_room',code);localStorage.setItem('gl_name',NET.name)}catch(e){}
     const sref=NET.db.doc('games/'+code+'/seats/'+NET.uid);
     const ss=await sref.get(),gm=(await mref.get()).data()||{};
-    if(!ss.exists&&gm.status==='lobby'&&!gm.order)await sref.set({uid:NET.uid,name:NET.name||'Игрок',ch:null,sea:null,ok:false,ts:Date.now()});
+    if(!ss.exists&&gm.status==='lobby'&&!gm.order)await sref.set({uid:NET.uid,name:NET.name||'Игрок',ch:null,sea:null,ok:false,ts:Date.now(),dev:devInfo()});
     NET.unsub.push(mref.onSnapshot(sn=>{
       NET.meta=sn.exists?sn.data():null;
       if(NET.meta&&NET.meta.status==='playing'&&!NET.started){NET.started=true;startOnline(NET.meta)}else render();
@@ -4432,7 +4443,7 @@ async function netStart(){
   if(S.length<2||S.some(x=>!x.ok||!x.ch||!x.sea)){NET.err='Все игроки должны подтвердить выбор персонажа и моря';render();return}
   if(new Set(S.map(x=>x.ch)).size<S.length||new Set(S.map(x=>x.sea)).size<S.length){NET.err='Персонажи и моря не должны повторяться';render();return}
   const seed=1+Math.floor(Math.random()*2e9);
-  try{await NET.db.doc('games/'+NET.code).update({status:'playing',seed,top:1,tb:2,players:S.map(x=>({uid:x.uid,name:x.name,ch:x.ch,sea:x.sea}))})}
+  try{await NET.db.doc('games/'+NET.code).update({status:'playing',seed,top:1,tb:2,players:S.map(x=>({uid:x.uid,name:x.name,ch:x.ch,sea:x.sea,dev:x.dev||null}))})}
   catch(e){netErr(e,'Не удалось начать')}
 }
 function netLeave(){
@@ -5055,7 +5066,7 @@ function botSchedule(){
 }
 
 // ---------- test API ----------
-window.__g={giveTask,stats,statRoom,completeTask,checkTasks,eventFx,SFX,useTre,akScene,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode,tb:meta.tb});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,startPvp,guardFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
+window.__g={devInfo,logRec,logCsv,logLocalGet,logSave,logLoad,hallHtml,LOGH,giveTask,stats,statRoom,completeTask,checkTasks,eventFx,SFX,useTre,akScene,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode,tb:meta.tb});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,startPvp,guardFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,bStepToward,bMap,bFreePons,bUnknown,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
