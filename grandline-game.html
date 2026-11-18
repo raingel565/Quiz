@@ -2642,7 +2642,7 @@ function kwFx(ev,done){
   if(fast||!Element.prototype.animate)return bolts();
   const old=document.getElementById('akvid');if(old)old.remove();
   const o=document.createElement('div');o.id='akvid';
-  o.innerHTML='<div class="avbox"><video playsinline preload="auto" src="'+KWVID+'"></video><button class="avx" aria-label="Закрыть">✕ Закрыть</button><button class="avm" hidden>🔇 Включить звук</button><div class="avc">👑 Воля короля</div></div>';
+  o.innerHTML='<div class="avbox"><video playsinline preload="auto" src="'+KWVID+'"></video><button class="avx" aria-label="Закрыть">✕ Закрыть</button><button class="avm" hidden>🔇 Включить звук</button><div class="avc">Темный Король Рейли сделал ход!</div></div>';
   document.body.appendChild(o);
   const v=o.querySelector('video'),mb=o.querySelector('.avm');
   let fin=false;const end=(skip)=>{if(fin)return;fin=true;try{v.pause()}catch(e){}if(skip===true){o.remove();return bolts()}o.classList.add('out');setTimeout(()=>{o.remove();bolts()},260)};
