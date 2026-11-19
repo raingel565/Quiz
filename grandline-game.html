@@ -1027,6 +1027,16 @@ body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:transpar
 #side [data-a].adv{box-shadow:0 0 0 2px #e9b94a,0 0 16px rgba(233,185,74,.55)!important}
 #map g.advloc>circle:first-of-type{stroke:#ffd34d!important;stroke-width:7!important;animation:advp 1.1s ease-in-out infinite}
 @keyframes advp{50%{stroke-opacity:.35}}
+
+#tutin{position:fixed;inset:0;z-index:160000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(5,8,12,.72);backdrop-filter:blur(6px)}
+.tutcard{max-width:420px;text-align:center}.tutcard p{font-size:15px;line-height:1.5;color:var(--muted,#c9c2b4)}
+.tutic{font-size:56px;line-height:1;margin:4px 0 6px}.tutstep{font-size:12px;letter-spacing:.2em;color:var(--gold,#e9b94a)}
+#tutco{position:fixed;left:10px;right:10px;top:max(8px,env(safe-area-inset-top));z-index:140000;display:flex;align-items:flex-start;gap:10px;padding:12px 40px 12px 14px;border-radius:16px;background:linear-gradient(180deg,#2c2414,#1d180e);border:2px solid #e9b94a;box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 22px rgba(233,185,74,.3);color:#f6e6c8;font-size:15px;line-height:1.4;animation:dfin .25s ease both}
+#tutco b{flex:none;color:#ffd978;font-size:13px;letter-spacing:.06em;padding-top:2px}
+#tutco #tutx{position:absolute;right:8px;top:8px;border:0;background:transparent;color:#d9c4a2;font-size:18px;cursor:pointer}
+body.tutor #app{padding-top:110px}
+.ov.lb .lbtut{display:flex;align-items:center;gap:12px;width:100%;margin:12px 0 4px;padding:14px 18px;border-radius:16px;cursor:pointer;text-align:left;border:2px solid #4fb3b8;color:#e8fbfb;background:linear-gradient(180deg,#1f4a52,#163338);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 18px rgba(79,179,184,.25),0 8px 18px rgba(0,0,0,.4);font:inherit}
+.ov.lb .lbtut span{font-size:30px}.ov.lb .lbtut b{font-size:18px}.ov.lb .lbtut em{margin-left:auto;font-style:normal;font-size:13px;color:#a8dfe2}
 </style>
 <div id="ver" title="Версия игры">V143</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
@@ -1586,9 +1596,10 @@ const guardOk=(p,pa)=>!pa.g||pa.ok.includes(p.i)||guardFree(p,pa);
 function guardFight(p,loc){
   const pa=G.ponAt[loc],gd=GUARD[pa.g];
   G.duels++;
-  reqPrep(p,'Хранитель понеглифа: '+gd.n+' (А'+GUARD_A+' / У'+GUARD_U+'). Достаточно выиграть один раунд или сыграть вничью',{name:gd.n,npc:true,A:GUARD_A,U:GUARD_U},pp=>{
+  const GA=G.tut?2:GUARD_A,GU=G.tut?0:GUARD_U;
+  reqPrep(p,'Хранитель понеглифа: '+gd.n+' (А'+GA+' / У'+GU+'). Достаточно выиграть один раунд или сыграть вничью',{name:gd.n,npc:true,A:GA,U:GUARD_U},pp=>{
     const a=sideFromPrep(p,pp);
-    const bs={p:null,A:GUARD_A,U:GUARD_U,slots:[],pas:[],ch:pa.g,name:gd.n};
+    const bs={p:null,A:GA,U:GU,slots:[],pas:[],ch:pa.g,name:gd.n};
     const res=runDuel(a,bs,true); // хранитель: всегда 3 раунда, достаточно 1 выигранного или ничьей
     applyDuelCards(res);
     log('Бой '+p.name+' с хранителем '+gd.n+': '+res.w[0]+':'+res.w[1]+(res.draws?' (ничьих раундов: '+res.draws+')':'')+'.');
@@ -1911,7 +1922,7 @@ function endRound(cb){
   G.round++;
   // weather
   if(!G.decks.weather.length){G.decks.weather=shuffle(G.weatherDiscard||[]);G.weatherDiscard=[]}
-  const w=G.decks.weather.shift();
+  const w=G.tut?null:G.decks.weather.shift();
   if(w){
     (G.weatherDiscard=G.weatherDiscard||[]).push(w);
     G.lastWeather=w;log('Погода: '+w.n+'.');
@@ -1990,6 +2001,7 @@ function doSearchEasy(){
   const S=G.search,k=modeOf().need;
   const seas=shuffle((G.seas||SEAK).slice()).slice(0,k),ids=[];
   for(const sea of seas){let id,g=0;do{id=sea+d(12)}while(G.zun&&id===G.zun.cell&&g++<20);ids.push(id)}
+  if(G.tut){const h=G.players.find(q=>!q.bot);if(h&&MAPD.nodes[h.loc])ids.splice(0,ids.length,h.loc)}
   fxRoll('Поиск Лафтейла',ids.map(x=>numOf(x)),12);
   S.rolls=ids;
   const pts=ids.map(x=>MAPD.nodes[x]);
@@ -2658,6 +2670,7 @@ function actions(){
   }
   add('end','Закончить ход',()=>{log(p.name+' завершает ход.');endTurn()});
   // V5: снять вето и заново спросить про поиск Лафтейла. Кнопка добавлена В КОНЕЦ списка, чтобы не сдвигать индексы действий в идущих онлайн-партиях.
+  if(G.tut)tutRestrict(A,p);
   if(p.pon.length&&G.search&&G.search.veto!=null&&G.search.phase==='idle'&&!G.laftel)add('task','Предложить поиск Лафтейла заново (бесплатно)',()=>{G.search.veto=null;log(p.name+' предлагает снова запустить поиск Лафтейла.');searchStep(()=>{})});
   return A;
 }
@@ -3067,7 +3080,9 @@ function render(){
   const need=viewerNeeded();
   if(G.turnNo!==SNDT){SNDT=G.turnNo;if(!window.__nor&&(!NET.on||need===NET.me))fxSnd('turn')}
   if(G.pending&&G.pending.type==='duelResult'&&SNDD!==G.pending){SNDD=G.pending;fxSnd('duel')}
-  if(G.winner!=null){achCheck();hallSave();logSave()}
+  if(G.winner!=null&&!G.tut){achCheck();hallSave();logSave()}
+  document.body.classList.toggle('tutor',!!G.tut);try{tutCoach()}catch(e){}
+  if(G.tut&&G.winner!=null)setTimeout(tutFinale,1200);
   if(G.winner!=null&&!SNDW){SNDW=1;fxSnd('win')}else if(G.winner==null)SNDW=0;
   $('#top').innerHTML=topHtml();
   $('#now').innerHTML=nowHtml();
@@ -3113,14 +3128,14 @@ function goalHtml(){ // V141: цель партии одной строкой и
 }
 function advHtml(){ // V141: совет «что сейчас лучше сделать» — та же логика, что у ботов
   UI.advI=null;
-  if(SET.adv===false||!G||G.winner!=null||G.pending)return '';
+  if((SET.adv===false&&!(G&&G.tut))||!G||G.winner!=null||G.pending)return '';
   const need=viewerNeeded();if(need==null)return '';
   if(NET.on?need!==NET.me:(UI.viewer!==need||G.players[need].bot))return '';
   try{
     const A=typeof ACTS!=='undefined'?ACTS:[];if(!A.length)return '';
     const p=G.players[need];
     const keep=typeof BROAM!=='undefined'?BROAM[p.i]:undefined;
-    const i=bTurn(p,A);
+    const i=G.tut?G.tut.i:bTurn(p,A);
     if(typeof BROAM!=='undefined')BROAM[p.i]=keep;
     const a=A[i];if(!a||a.dis)return '';
     UI.advI=i;
@@ -3751,7 +3766,7 @@ function qoOpen(k){
   document.body.appendChild(o);if(k==='news'||k==='newspop')newsMark(k==='news');if(k==='hall'){hallLoad();const lb=document.getElementById('hallog');if(lb)lb.onclick=logGate};
 }
 function qoClose(){const o=document.getElementById('qoov');if(o)o.remove()}
-const NEWS=[{"id": "2026-11-19-advice", "d": "19 ноября", "t": "Цель и советы", "x": "Над картой теперь всегда видна цель партии и ваш прогресс. Строка «💡 Совет» подсказывает, что сейчас лучше сделать: нужная кнопка и остров подсвечиваются, а кнопка «Сделать» выполнит совет. Отключить: Настройки → «Совет хода»."}, {"id": "2026-11-19-easy2", "d": "19 ноября", "t": "Упрощённый режим стал проще", "x": "В упрощённом режиме теперь только 2 моря (остальные закрыты на карте) и нет адмирала. По-прежнему достаточно одного понеглифа, чтобы открыть Лафтейл и победить. В этом режиме игроки могут стартовать в одном море."}, {"id": "2026-11-19-back", "d": "19 ноября", "t": "Кнопка «Назад»", "x": "Кнопка или жест «Назад» на телефоне больше не закрывает игру: он закрывает открытое окно или меню, возвращает на шаг назад при подготовке партии, а во время партии открывает меню. На главном экране нажмите «Назад» дважды, чтобы выйти."}, {"id": "2026-11-18-roger", "d": "18 ноября", "t": "Новый секретный персонаж", "x": "В игре появился ещё один секретный персонаж. Он доступен только по паролю. Кто знает, тот знает."}, {"id": "2026-11-18-duelanim", "d": "18 ноября", "t": "Новая анимация дуэлей", "x": "В каждом раунде бойцы замахиваются одновременно, поэтому по первым кадрам не понять, кто выиграл. При ничьей один из бойцов бьёт, а второй ставит красноватый щит."}, {"id": "2026-11-18-king", "d": "18 ноября", "t": "Воля короля", "x": "Новая карта сокровищ «Воля короля»: чтобы получить её, нужно победить Тёмного короля Рейли (атака 9, уклонение 6). За 1 ОД: все остальные игроки в вашем море и адмирал пропускают ход. По островам моря бьют красно-чёрные молнии."}, {"id": "2026-11-18-double", "d": "18 ноября", "t": "Дубль на костях", "x": "Если на костях дохода выпал дубль, бросивший получает +1 очко действия на этот ход."}, {"id": "2026-11-17-exit", "d": "17 ноября", "t": "Выход из партии из меню", "x": "В меню (☰) появились пункты «Выйти с сохранением» и «Выйти из игры». После выхода с сохранением на главном экране будет кнопка «Продолжить партию», а для сетевой игры — «Вернуться в комнату»."}, {"id": "2026-11-17-duelwin", "d": "17 ноября", "t": "Победа по числу выигранных раундов", "x": "Если за 3 раунда никто не набрал 2 победы, теперь побеждает тот, у кого побед больше: например, 1:0 при двух ничьих. Боевая ничья — только при равном счёте (0:0 или 1:1). Бой с хранителем понеглифа считается по-старому. Правило действует в новых партиях."}, {"id": "2026-11-17-duelscene", "d": "17 ноября", "t": "Анимированные дуэли", "x": "Каждый бой теперь видно: бойцы дерутся раунд за раундом по выпавшим цифрам. У каждого персонажа и босса свои приёмы, при разнице в 4 очка и больше — тяжёлые. Кубик бросается сам через 3 секунды. «Ускорить бой» прокручивает анимацию быстро только у вас. Кнопка «Сцена» переключает: показывать, ускоренно или выключить. В боях за карты сокровищ у каждого соперника свой бой: Гекко Мория — тени, Марко — синее пламя, Магеллан — яд и гидра, Король Нептун — трезубец и вода, Дофламинго — нити."}, {"id": "2026-11-17-rearm", "d": "17 ноября", "t": "Новое задание «Перевооружение»", "x": "Победите Босса 2–4 уровня и получите особую карту: пока она у вас, за ход можно купить две карты вместо одной (две атаки, атаку и пассивку или две пассивки). Таких заданий в колоде всего три — успейте забрать!"}, {"id": "2026-11-17-tasks", "d": "17 ноября", "t": "Задания стали интереснее", "x": "Выполните 5 ивентовых заданий — и один раз за игру получите 2 очка к атаке и уклонению, распределяйте как хотите (но атака не выше 8, уклонение не выше 7). Часть боевых заданий теперь можно закрыть картой сокровищ вместо Берри. Зато доход с локаций вдвое меньше, карта сокровищ стоит 50 Берри, гостевой персонаж — 80."}, {"id": "2026-11-16-resume", "d": "16 ноября", "t": "Продолжить партию после обновления страницы", "x": "Случайно обновили страницу или закрыли вкладку? Партию можно продолжить с того же места, в том числе с ботами вместо игроков."}, {"id": "2026-11-16-tv", "d": "16 ноября", "t": "Трансляция на телевизор", "x": "Откройте ссылку комнаты в браузере телевизора (или нажмите «Трансляция» и введите код) — на большом экране будет общая карта и журнал, а играть можно с телефонов."}];
+const NEWS=[{"id": "2026-11-19-tutorial", "d": "19 ноября", "t": "Обучение", "x": "На главном экране появилась кнопка «Обучение»: короткая партия, в которой наставник шаг за шагом показывает, как плыть по карте, победить хранителя, получить понеглиф и выиграть на Лафтейле. Занимает пару минут."}, {"id": "2026-11-19-advice", "d": "19 ноября", "t": "Цель и советы", "x": "Над картой теперь всегда видна цель партии и ваш прогресс. Строка «💡 Совет» подсказывает, что сейчас лучше сделать: нужная кнопка и остров подсвечиваются, а кнопка «Сделать» выполнит совет. Отключить: Настройки → «Совет хода»."}, {"id": "2026-11-19-easy2", "d": "19 ноября", "t": "Упрощённый режим стал проще", "x": "В упрощённом режиме теперь только 2 моря (остальные закрыты на карте) и нет адмирала. По-прежнему достаточно одного понеглифа, чтобы открыть Лафтейл и победить. В этом режиме игроки могут стартовать в одном море."}, {"id": "2026-11-19-back", "d": "19 ноября", "t": "Кнопка «Назад»", "x": "Кнопка или жест «Назад» на телефоне больше не закрывает игру: он закрывает открытое окно или меню, возвращает на шаг назад при подготовке партии, а во время партии открывает меню. На главном экране нажмите «Назад» дважды, чтобы выйти."}, {"id": "2026-11-18-roger", "d": "18 ноября", "t": "Новый секретный персонаж", "x": "В игре появился ещё один секретный персонаж. Он доступен только по паролю. Кто знает, тот знает."}, {"id": "2026-11-18-duelanim", "d": "18 ноября", "t": "Новая анимация дуэлей", "x": "В каждом раунде бойцы замахиваются одновременно, поэтому по первым кадрам не понять, кто выиграл. При ничьей один из бойцов бьёт, а второй ставит красноватый щит."}, {"id": "2026-11-18-king", "d": "18 ноября", "t": "Воля короля", "x": "Новая карта сокровищ «Воля короля»: чтобы получить её, нужно победить Тёмного короля Рейли (атака 9, уклонение 6). За 1 ОД: все остальные игроки в вашем море и адмирал пропускают ход. По островам моря бьют красно-чёрные молнии."}, {"id": "2026-11-18-double", "d": "18 ноября", "t": "Дубль на костях", "x": "Если на костях дохода выпал дубль, бросивший получает +1 очко действия на этот ход."}, {"id": "2026-11-17-exit", "d": "17 ноября", "t": "Выход из партии из меню", "x": "В меню (☰) появились пункты «Выйти с сохранением» и «Выйти из игры». После выхода с сохранением на главном экране будет кнопка «Продолжить партию», а для сетевой игры — «Вернуться в комнату»."}, {"id": "2026-11-17-duelwin", "d": "17 ноября", "t": "Победа по числу выигранных раундов", "x": "Если за 3 раунда никто не набрал 2 победы, теперь побеждает тот, у кого побед больше: например, 1:0 при двух ничьих. Боевая ничья — только при равном счёте (0:0 или 1:1). Бой с хранителем понеглифа считается по-старому. Правило действует в новых партиях."}, {"id": "2026-11-17-duelscene", "d": "17 ноября", "t": "Анимированные дуэли", "x": "Каждый бой теперь видно: бойцы дерутся раунд за раундом по выпавшим цифрам. У каждого персонажа и босса свои приёмы, при разнице в 4 очка и больше — тяжёлые. Кубик бросается сам через 3 секунды. «Ускорить бой» прокручивает анимацию быстро только у вас. Кнопка «Сцена» переключает: показывать, ускоренно или выключить. В боях за карты сокровищ у каждого соперника свой бой: Гекко Мория — тени, Марко — синее пламя, Магеллан — яд и гидра, Король Нептун — трезубец и вода, Дофламинго — нити."}, {"id": "2026-11-17-rearm", "d": "17 ноября", "t": "Новое задание «Перевооружение»", "x": "Победите Босса 2–4 уровня и получите особую карту: пока она у вас, за ход можно купить две карты вместо одной (две атаки, атаку и пассивку или две пассивки). Таких заданий в колоде всего три — успейте забрать!"}, {"id": "2026-11-17-tasks", "d": "17 ноября", "t": "Задания стали интереснее", "x": "Выполните 5 ивентовых заданий — и один раз за игру получите 2 очка к атаке и уклонению, распределяйте как хотите (но атака не выше 8, уклонение не выше 7). Часть боевых заданий теперь можно закрыть картой сокровищ вместо Берри. Зато доход с локаций вдвое меньше, карта сокровищ стоит 50 Берри, гостевой персонаж — 80."}, {"id": "2026-11-16-resume", "d": "16 ноября", "t": "Продолжить партию после обновления страницы", "x": "Случайно обновили страницу или закрыли вкладку? Партию можно продолжить с того же места, в том числе с ботами вместо игроков."}, {"id": "2026-11-16-tv", "d": "16 ноября", "t": "Трансляция на телевизор", "x": "Откройте ссылку комнаты в браузере телевизора (или нажмите «Трансляция» и введите код) — на большом экране будет общая карта и журнал, а играть можно с телефонов."}];
 const NEWS_KEY='gl_news_seen';
 function newsSeen(){try{return localStorage.getItem(NEWS_KEY)}catch(e){return null}}
 function newsPopSeen(){try{return localStorage.getItem(NEWS_KEY+'_p')}catch(e){return null}}
@@ -4074,6 +4089,7 @@ function startGuide(){
   gdDraw();
 }
 function gdAsk(){
+  if(G&&G.tut)return;
   const h='<div class="ov" id="gd-ask" style="z-index:150000"><div class="modal" style="max-width:420px;text-align:center"><h2>Хотите увидеть гайд?</h2><div class="small" style="font-size:14px">Короткий тур по экрану: что такое ОД, куда нажимать, как перейти на другую локацию и закончить ход. Займёт около минуты.</div><div class="row" style="justify-content:center"><button class="btn primary" data-gd="yes">Да, показать</button><button class="btn" data-gd="no">Нет, я уже играл(а)</button></div><label class="small" style="display:flex;gap:6px;justify-content:center;align-items:center"><input type="checkbox" id="gd-never"> больше не спрашивать</label></div></div>';
   const d=document.createElement('div');d.id='gd-askw';d.innerHTML=h;document.body.appendChild(d);
 }
@@ -4191,6 +4207,7 @@ function renderSetup(){
     h+='</div>';
     h+='<div class="lbcard"><div class="lbh"><span class="num">2</span><b>Режим партии</b></div><div class="modes">'+Object.keys(MODES).map(k=>{const m=MODES[k];return '<button type="button" class="mode'+(md===k?' on':'')+'" data-mode="'+k+'"><div class="mt">'+esc(m.n)+'<span class="cubes" title="Кубов понеглифа для победы">'+[1,2,3,4].map(c=>'<i class="'+(c<=m.need?'f':'')+'"></i>').join('')+'</span></div><small>'+esc(m.d)+'</small></button>'}).join('')+'</div></div>';
     h+='<button class="lbgo" id="go"><span class="dice">🎲</span>Бросить кубики на очерёдность</button>';
+    h+='<button class="lbtut" data-tut="1"><span>🎓</span><b>Обучение</b><em>первая партия за 3 минуты</em></button>';
     h+='<div class="lbtools"><button class="net" data-ui="net"><span class="ic"><img src="assets/ui/globe.webp?v=1" alt=""></span>Играть по сети</button><button data-ui="stream"><span class="ic"><img src="assets/ui/tv.webp?v=1" alt=""></span>Трансляция</button><button data-rules><span class="ic"><img src="assets/ui/book.webp?v=1" alt=""></span>Правила</button><button data-news data-qo="news"><span class="ic"><img src="assets/ui/news.webp?v=1" alt=""></span>Новости'+(newsSeen()!==NEWS[0].id?'<i class="ndot"></i>':'')+'</button><button data-qo="hall"><span class="ic"><img src="assets/ui/hall.webp?v=1" alt=""></span>Зал славы</button><button data-qo="settings"><span class="ic"><img src="assets/ui/gear.webp?v=1" alt=""></span>Настройки</button><button data-mus data-short>'+musShort()+'</button></div>';
     h+='<a class="coopbtn" href="grandline-coop.html"><span class="ic"><img src="assets/ui/anchor.webp?v=1" alt=""></span><b>Кооператив</b><i>бета</i><em>Все вместе против Имы</em></a>';
   }else if(S.step==='roll'){
@@ -4223,6 +4240,8 @@ function renderSetup(){
   const sb=document.querySelector('#modal [data-ui="stream"]');if(sb)sb.onclick=()=>{NET.on=true;NET.stage='stream';NET.err='';render()};
   if(S.step==='count'){
     const collect=()=>{S.names=S.names.map((x,i)=>{const el=g('nm'+i);return el?(el.value.trim()||x):x});S.bots=S.bots.map((x,i)=>{const el=g('bt'+i);return el?el.checked:x});S.lv=(S.lv||[2,2,2,2]).map((x,i)=>{const el=g('bl'+i);return el?+el.value:x})};
+    document.querySelectorAll('[data-tut]').forEach(b=>b.onclick=()=>tutIntro(0));
+    setTimeout(tutOffer,1600);
     document.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{collect();S.n=+b.dataset.n;renderSetup()});
     document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{collect();S.mode=b.dataset.mode;renderSetup()});
     document.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{const p=b.dataset.lv.split(':');g('bl'+p[0]).value=p[1];b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
@@ -5104,7 +5123,7 @@ function botMove(){
   if(pe&&pe.type==='prep')return{t:'p',pr:bPrepFor(p,pe)};
   const A=actions();
   if(!A.length)return null;
-  let i=pe?bPend(p,pe,A):bTurn(p,A);
+  let i=pe?bPend(p,pe,A):(G.tut?A.findIndex(a=>a.g==='end'):bTurn(p,A));
   if(i==null||i<0||!A[i]||A[i].dis){i=A.findIndex(a=>!a.dis);if(i<0)return null}
   return{t:'a',i};
 }
@@ -5127,6 +5146,88 @@ function botSchedule(){
 }
 
 // ---------- test API ----------
+// ===== V143: обучающая партия — с нуля до победы за пару ходов =====
+const TUT_INTRO=[
+  ['🏴‍☠️','Ты — капитан пиратов','Мир One Piece: моря, острова и легендарное сокровище. Тот, кто первым его найдёт, станет Королём Пиратов.'],
+  ['🗿','Понеглиф — ключ к сокровищу','На островах спрятаны древние камни — понеглифы. Их охраняют сильные хранители. Победи хранителя — и камень твой.'],
+  ['🏝','Лафтейл — финиш','Понеглиф укажет путь к острову Лафтейл. Доплыви до него с понеглифом — и ты победил. Сейчас покажем, как это сделать.']
+];
+function tutIntro(i){
+  i=i|0;const o=document.getElementById('tutin')||document.createElement('div');o.id='tutin';
+  const t=TUT_INTRO[i],last=i===TUT_INTRO.length-1;
+  o.innerHTML='<div class="modal tutcard"><div class="tutic">'+t[0]+'</div><div class="tutstep">'+(i+1)+' / '+TUT_INTRO.length+'</div><h2>'+t[1]+'</h2><p>'+t[2]+'</p><div class="row" style="justify-content:center"><button class="btn primary" id="tutnx">'+(last?'Поехали! ⛵':'Дальше')+'</button><button class="btn" id="tutsk">Пропустить</button></div></div>';
+  if(!o.parentNode)document.body.appendChild(o);
+  o.querySelector('#tutnx').onclick=()=>{if(last){o.remove();startTutorial()}else tutIntro(i+1)};
+  o.querySelector('#tutsk').onclick=()=>{o.remove();startTutorial()};
+}
+function startTutorial(){
+  try{qoClose()}catch(e){}
+  NET.on=false;UI.setup=null;
+  newGame({players:[{name:'Вы',ch:'luffy',sea:'E'},{name:'Нами (бот)',ch:'nami',sea:'W',bot:true,lv:1}],mode:'easy',tb:2,wseed:777});
+  G.tut={};G.seas=['E','W'];
+  // остров понеглифа в 2 шагах от старта, промежуточный остров — обычная база
+  const dist={'E1':0},prev={},q=['E1'];
+  while(q.length){const c=q.shift();for(const n of (ADJ[c]||[]))if(n[0]==='E'&&dist[n]==null){dist[n]=dist[c]+1;prev[n]=c;q.push(n)}}
+  const X=Object.keys(dist).find(k=>dist[k]===2)||Object.keys(dist).find(k=>dist[k]>=1);
+  G.ponAt={};G.ponAt[X]={owner:null,g:'whitebeard',ok:[]};
+  const Y=prev[X];if(Y&&Y!=='E1'){G.type[Y]='base'}
+  G.tut.X=X;
+  UI.viewer=0;
+  render();
+}
+function tutTarget(A,p){ // какое действие сейчас нужно новичку
+  const X=G.tut.X,f=re=>A.findIndex(a=>!a.dis&&re.test(a.label));
+  if(G.laftel){const i=A.findIndex(a=>a.loc==='L');if(i>=0)return[i,'🏝 Лафтейл появился рядом! Нажми на него: с понеглифом в руках ты сразу победишь.'];
+    const st=bStepToward(p,['L'],{});if(st){const j=A.findIndex(a=>a.g==='move'&&a.loc===st.step);if(j>=0)return[j,'🏝 Плыви к Лафтейлу: нажми на светящийся остров.']}}
+  if(p.pon.length){const i=A.findIndex(a=>a.g==='end');return[i,'🗿 Понеглиф твой! Теперь нажми «Закончить ход»: в конце хода понеглиф укажет путь к Лафтейлу.']}
+  if(p.loc===X){const i=f(/Вызвать хранителя/);if(i>=0)return[i,'❗ Под фишкой нашёлся понеглиф, но его охраняет хранитель. Нажми «Вызвать хранителя» — начнётся бой (1 ОД).'];
+    const j=f(/Карта понеглифа/);if(j>=0)return[j,'Хранитель признал тебя. Возьми «Карту понеглифа».']}
+  if(G.ap>0){const st=bStepToward(p,[X],{combat:true});if(st){const j=A.findIndex(a=>a.g==='move'&&a.loc===st.step&&!a.dis);
+    if(j>=0)return[j,p.loc==='E1'?'🚢 Твой корабль стоит на старте. Жёлтые кружки «ОД» в шапке — очки действий: каждый шаг по морю стоит 1 ОД. Нажми на светящийся остров на карте.':'👍 Отлично! Ещё один шаг: плыви к светящемуся острову — там что-то спрятано.']}}
+  const e=A.findIndex(a=>a.g==='end');
+  return[e,'⏳ Очки действий закончились. Нажми «Закончить ход» — следующий ход начнётся с новыми ОД и бросок дохода принесёт Берри.'];
+}
+function tutRestrict(A,p){
+  if(!G||!G.tut||G.pending||p.bot||G.winner!=null)return;
+  const r=tutTarget(A,p);G.tut.msg=r[1];G.tut.i=r[0];
+  A.forEach((a,i)=>{if(i!==r[0])a.dis=true});
+}
+function tutCoach(){ // строка наставника вверху экрана
+  let el=document.getElementById('tutco');
+  if(!G||!G.tut){if(el)el.remove();return}
+  if(!el){el=document.createElement('div');el.id='tutco';document.body.appendChild(el)}
+  const pe=G.pending,p=P();let m;
+  const dx=document.getElementById('dicefx');
+  if(dx&&dx.querySelector('.dgo'))m='🎲 Бросок дохода: в начале каждого хода кубики приносят Берри (деньги на карты). Нажми «Бросить кубики», потом нажми на экран.';
+  else if(G.winner!=null)m='🎉 Победа!';
+  else if(pe&&pe.type==='prep')m='⚔ Бой! Нажми на карты атаки, чтобы выложить их — каждая добавит силы. Потом нажми «Готово».';
+  else if(pe&&pe.type==='duelResult')m='🎲 Идёт бой: твоя атака + кубик против защиты хранителя. Чтобы забрать понеглиф, выиграй раунд. Затем нажми «Продолжить».';
+  else if(pe&&pe.type==='consent')m='🧭 Понеглиф указывает путь! Нажми «Найти Лафтейл».';
+  else if(pe)m='Сделай выбор в окне.';
+  else if(p.bot)m='⏳ Ходит соперник. Подожди немного…';
+  else{try{tutRestrict(actions(),p)}catch(e){}m=G.tut.msg||''}
+  el.dataset.dx=(dx&&dx.querySelector('.dgo'))?1:0;
+  el.innerHTML='<b>🎓 Обучение</b><span>'+esc(m)+'</span><button id="tutx" title="Выйти из обучения">✕</button>';
+  el.querySelector('#tutx').onclick=()=>{if(confirm('Выйти из обучения?')){el.remove();exitGame(false)}};
+}
+setInterval(()=>{try{if(G&&G.tut){const el=document.getElementById('tutco'),dx=document.getElementById('dicefx');const k=dx&&dx.querySelector('.dgo')?1:0;if(el&&el.dataset.dx!=String(k)){el.dataset.dx=k;tutCoach()}}}catch(e){}},400);
+function tutFinale(){
+  if(document.getElementById('tutfin'))return;
+  try{localStorage.setItem('gl_tut_done','1')}catch(e){}
+  const o=document.createElement('div');o.id='tutin';o.innerHTML='<div class="modal tutcard" id="tutfin"><div class="tutic">👑</div><h2>Ты — Король Пиратов!</h2><p>Обучение пройдено. В настоящей партии всё так же: ищи понеглифы, побеждай хранителей и плыви к Лафтейлу. Плюс есть задания, флаги, рынок, дуэли с другими игроками и адмирал.</p><div class="row" style="justify-content:center"><button class="btn primary" id="tutplay">Сыграть с ботом</button><button class="btn" id="tuthome">На главный экран</button></div></div>';
+  document.body.appendChild(o);
+  o.querySelector('#tutplay').onclick=()=>{o.remove();const c=document.getElementById('tutco');if(c)c.remove();exitGame(false);UI.setup={step:'count',n:2,mode:'easy',names:['Игрок 1','Бот','Игрок 3','Игрок 4'],bots:[false,true,false,false],lv:[2,1,2,2],order:[],picks:[],cur:0};render()};
+  o.querySelector('#tuthome').onclick=()=>{o.remove();const c=document.getElementById('tutco');if(c)c.remove();exitGame(false)};
+}
+function tutOffer(){ // при первом запуске — предложить обучение
+  try{if(localStorage.getItem('gl_tut_done')||localStorage.getItem('gl_tut_skip')||localStorage.getItem('gl_ach'))return}catch(e){return}
+  if(G||document.getElementById('tutin')||document.getElementById('qoov')||document.getElementById('splash'))return;
+  const o=document.createElement('div');o.id='tutin';
+  o.innerHTML='<div class="modal tutcard"><div class="tutic">🎓</div><h2>Впервые в Гранд Лайн?</h2><p>Пройдите короткое обучение: за пару минут вы сыграете первую партию и победите.</p><div class="row" style="justify-content:center"><button class="btn primary" id="tutgo">Начать обучение</button><button class="btn" id="tutno">Я уже умею</button></div></div>';
+  document.body.appendChild(o);
+  o.querySelector('#tutgo').onclick=()=>tutIntro(0);
+  o.querySelector('#tutno').onclick=()=>{try{localStorage.setItem('gl_tut_skip','1')}catch(e){}o.remove()};
+}
 // ===== V140: кнопка «Назад» на телефоне — шаг назад вместо закрытия игры =====
 function backStep(){
   const q=id=>document.getElementById(id);
@@ -5159,7 +5260,7 @@ function backStep(){
       if(guards>0){const n=guards;guards=0;try{history.go(-n)}catch(e){}}}
   });
 })();
-window.__g={backStep,devInfo,logRec,logCsv,logLocalGet,logSave,logLoad,hallHtml,LOGH,giveTask,stats,statRoom,completeTask,checkTasks,eventFx,SFX,useTre,akScene,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode,tb:meta.tb});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,startPvp,guardFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
+window.__g={startTutorial,tutIntro,backStep,devInfo,logRec,logCsv,logLocalGet,logSave,logLoad,hallHtml,LOGH,giveTask,stats,statRoom,completeTask,checkTasks,eventFx,SFX,useTre,akScene,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode,tb:meta.tb});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,startPvp,guardFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,bStepToward,bMap,bFreePons,bUnknown,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
