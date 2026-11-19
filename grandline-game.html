@@ -1021,7 +1021,7 @@ body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:transpar
 .ov.lb .roomh .btn.primary{border-color:#8a5a0e;color:#2a1804;background:linear-gradient(180deg,#ffd978,#e0a22a 60%,#c78914);font-weight:800}
 .ov.lb .roomh select{border:2px solid #2c1d12;border-radius:10px;padding:8px 10px;color:#f6e6c8;background:#2a1c12}
 </style>
-<div id="ver" title="Версия игры">V140</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V142</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=12"></script>
 <script>
@@ -1477,8 +1477,15 @@ function newGame(cfg){
   const WW=cfg.wseed!=null?worldFor(cfg.wseed):worldFor(1+Math.floor(rnd()*2e9));G.wseed=WW.seed;G.adm=window.__adm||ADMK[(Math.imul((WW.seed|0)^0x2545F491,2654435761)>>>0)%3];G.grav={};
   {const gk=Object.keys(GUARD);let sd=(WW.seed>>>0)^0x9e3779b9;const rg=()=>{sd=(Math.imul(sd,1664525)+1013904223)>>>0;return sd/4294967296};
    for(let i=gk.length-1;i>0;i--){const j=Math.floor(rg()*(i+1));[gk[i],gk[j]]=[gk[j],gk[i]]}
+   if(G.mode==='easy'){ // V142: упрощённый режим — 2 моря, понеглиф в каждом, без Зунеши-понеглифа
+     const used=[...new Set(cfg.players.map(c=>c.sea))];
+     while(used.length<2){const o=SEAK.filter(x=>!used.includes(x));used.push(o[(WW.seed>>>0)%o.length])}
+     G.seas=used.slice(0,2);
+     G.seas.forEach((s,i)=>{let n=WW.pon[s];if(!n){n=2+((WW.seed>>>3)%11);}G.ponAt[s+n]={owner:null,g:gk[i],ok:[]}});
+   }else{
    ['W','N','S'].forEach((s,i)=>{G.ponAt[s+WW.pon[s]]={owner:null,g:gk[i],ok:[]}});
-   G.ponAt.Z={owner:null,g:gk[3],ok:[]}}
+   G.ponAt.Z={owner:null,g:gk[3],ok:[]}}}
+  if(G.seas)cfg.players.forEach((c,i)=>{if(!G.seas.includes(c.sea))c.sea=G.seas[i%2]});
   cfg.players.forEach((c,i)=>{
     const p={i,bot:!!c.bot,lv:c.lv||2,name:c.name,ch:c.ch,sea:c.sea,loc:c.sea+'1',berries:20,atk:[card('atk',{v:3}),card('atk',{v:5}),card('atk',{v:7})],pas:[],tre:[],task:null,ltask:null,pon:[],fl:4,skip:0,jail:0,bA:0,bU:0,guest:null,prev:c.sea+'1',
       cnt:{winP:0,winB:0,winD:0,winAny:0,moves:0},color:COLORS[i],poseidonUsed:false};
@@ -1536,7 +1543,7 @@ function ask(type,data){
   if(G.pending.who==null)G.pending.who=G.cur;
 }
 const optsOf=()=>G.pending.opts||[];
-function deadAt(l){return !!(G.dead&&G.dead[l])}
+function deadAt(l){return !!(G.dead&&G.dead[l])||!!(G.seas&&l&&l!=='L'&&l!=='Z'&&!G.seas.includes(l[0]))} // V142: в упрощённом режиме играют 2 моря
 function walled(loc,p){return deadAt(loc)||!!(G.fire&&G.fire.loc===loc&&G.fire.by!==p.i)}
 function nbrsOf(p){
   let from=p.loc,base;
@@ -1858,7 +1865,7 @@ function akainuPhase(cb){
   if(G.winner!=null)return cb();
   const AD=adm();
   if(!G.akainu){
-    if(!G.laftel)return cb();
+    if(!G.laftel||G.mode==='easy')return cb(); // V142: в упрощённом режиме адмирала нет
     const loc=REDL[d(REDL.length)-1];
     G.akainu={loc,stun:0};
     log('☠ Лафтейл найден: на карту выходит адмирал '+AD.short+' (атака '+AD.a+', уклонение '+AD.u+') и появляется на '+locName(loc)+'!');
@@ -1939,7 +1946,7 @@ function setZun(cell){
   log('Зунеша встала на '+locName(cell)+'.'+(passengers.length?' На борту: '+passengers.map(q=>q.name).join(', ')+'.':''));
 }
 // ---------- Режимы игры ----------
-const MODES={easy:{n:'Упрощённый',need:1,d:'Достаточно найти 1 роад-понеглиф: после согласия владельца Лафтейл появляется возле случайной локации. Для победы на Лафтейле нужен 1 куб понеглифа.'},
+const MODES={easy:{n:'Упрощённый',need:1,d:'Играем только в 2 морях и без адмирала. Достаточно найти 1 роад-понеглиф: Лафтейл появится рядом, и для победы на нём хватит 1 куба понеглифа.'},
   mid:{n:'Средний',need:2,d:'Нужно найти 2 роад-понеглифа и получить согласие их владельцев: Лафтейл появляется между двумя случайными локациями. Для победы нужны 2 куба.'},
   std:{n:'Стандартный',need:4,d:'Все 4 роад-понеглифа, поиск по броскам кубиков в каждом море. Для победы нужны 4 куба.'}};
 const modeOf=()=>MODES[(typeof G!=='undefined'&&G&&G.mode)||'std']||MODES.std;
@@ -1974,7 +1981,7 @@ function searchStep(cb){
 }
 function doSearchEasy(){
   const S=G.search,k=modeOf().need;
-  const seas=shuffle(SEAK.slice()).slice(0,k),ids=[];
+  const seas=shuffle((G.seas||SEAK).slice()).slice(0,k),ids=[];
   for(const sea of seas){let id,g=0;do{id=sea+d(12)}while(G.zun&&id===G.zun.cell&&g++<20);ids.push(id)}
   fxRoll('Поиск Лафтейла',ids.map(x=>numOf(x)),12);
   S.rolls=ids;
@@ -3707,7 +3714,7 @@ function qoOpen(k){
   document.body.appendChild(o);if(k==='news'||k==='newspop')newsMark(k==='news');if(k==='hall'){hallLoad();const lb=document.getElementById('hallog');if(lb)lb.onclick=logGate};
 }
 function qoClose(){const o=document.getElementById('qoov');if(o)o.remove()}
-const NEWS=[{"id": "2026-11-19-back", "d": "19 ноября", "t": "Кнопка «Назад»", "x": "Кнопка или жест «Назад» на телефоне больше не закрывает игру: он закрывает открытое окно или меню, возвращает на шаг назад при подготовке партии, а во время партии открывает меню. На главном экране нажмите «Назад» дважды, чтобы выйти."}, {"id": "2026-11-18-roger", "d": "18 ноября", "t": "Новый секретный персонаж", "x": "В игре появился ещё один секретный персонаж. Он доступен только по паролю. Кто знает, тот знает."}, {"id": "2026-11-18-duelanim", "d": "18 ноября", "t": "Новая анимация дуэлей", "x": "В каждом раунде бойцы замахиваются одновременно, поэтому по первым кадрам не понять, кто выиграл. При ничьей один из бойцов бьёт, а второй ставит красноватый щит."}, {"id": "2026-11-18-king", "d": "18 ноября", "t": "Воля короля", "x": "Новая карта сокровищ «Воля короля»: чтобы получить её, нужно победить Тёмного короля Рейли (атака 9, уклонение 6). За 1 ОД: все остальные игроки в вашем море и адмирал пропускают ход. По островам моря бьют красно-чёрные молнии."}, {"id": "2026-11-18-double", "d": "18 ноября", "t": "Дубль на костях", "x": "Если на костях дохода выпал дубль, бросивший получает +1 очко действия на этот ход."}, {"id": "2026-11-17-exit", "d": "17 ноября", "t": "Выход из партии из меню", "x": "В меню (☰) появились пункты «Выйти с сохранением» и «Выйти из игры». После выхода с сохранением на главном экране будет кнопка «Продолжить партию», а для сетевой игры — «Вернуться в комнату»."}, {"id": "2026-11-17-duelwin", "d": "17 ноября", "t": "Победа по числу выигранных раундов", "x": "Если за 3 раунда никто не набрал 2 победы, теперь побеждает тот, у кого побед больше: например, 1:0 при двух ничьих. Боевая ничья — только при равном счёте (0:0 или 1:1). Бой с хранителем понеглифа считается по-старому. Правило действует в новых партиях."}, {"id": "2026-11-17-duelscene", "d": "17 ноября", "t": "Анимированные дуэли", "x": "Каждый бой теперь видно: бойцы дерутся раунд за раундом по выпавшим цифрам. У каждого персонажа и босса свои приёмы, при разнице в 4 очка и больше — тяжёлые. Кубик бросается сам через 3 секунды. «Ускорить бой» прокручивает анимацию быстро только у вас. Кнопка «Сцена» переключает: показывать, ускоренно или выключить. В боях за карты сокровищ у каждого соперника свой бой: Гекко Мория — тени, Марко — синее пламя, Магеллан — яд и гидра, Король Нептун — трезубец и вода, Дофламинго — нити."}, {"id": "2026-11-17-rearm", "d": "17 ноября", "t": "Новое задание «Перевооружение»", "x": "Победите Босса 2–4 уровня и получите особую карту: пока она у вас, за ход можно купить две карты вместо одной (две атаки, атаку и пассивку или две пассивки). Таких заданий в колоде всего три — успейте забрать!"}, {"id": "2026-11-17-tasks", "d": "17 ноября", "t": "Задания стали интереснее", "x": "Выполните 5 ивентовых заданий — и один раз за игру получите 2 очка к атаке и уклонению, распределяйте как хотите (но атака не выше 8, уклонение не выше 7). Часть боевых заданий теперь можно закрыть картой сокровищ вместо Берри. Зато доход с локаций вдвое меньше, карта сокровищ стоит 50 Берри, гостевой персонаж — 80."}, {"id": "2026-11-16-resume", "d": "16 ноября", "t": "Продолжить партию после обновления страницы", "x": "Случайно обновили страницу или закрыли вкладку? Партию можно продолжить с того же места, в том числе с ботами вместо игроков."}, {"id": "2026-11-16-tv", "d": "16 ноября", "t": "Трансляция на телевизор", "x": "Откройте ссылку комнаты в браузере телевизора (или нажмите «Трансляция» и введите код) — на большом экране будет общая карта и журнал, а играть можно с телефонов."}];
+const NEWS=[{"id": "2026-11-19-easy2", "d": "19 ноября", "t": "Упрощённый режим стал проще", "x": "В упрощённом режиме теперь только 2 моря (остальные закрыты на карте) и нет адмирала. По-прежнему достаточно одного понеглифа, чтобы открыть Лафтейл и победить. В этом режиме игроки могут стартовать в одном море."}, {"id": "2026-11-19-back", "d": "19 ноября", "t": "Кнопка «Назад»", "x": "Кнопка или жест «Назад» на телефоне больше не закрывает игру: он закрывает открытое окно или меню, возвращает на шаг назад при подготовке партии, а во время партии открывает меню. На главном экране нажмите «Назад» дважды, чтобы выйти."}, {"id": "2026-11-18-roger", "d": "18 ноября", "t": "Новый секретный персонаж", "x": "В игре появился ещё один секретный персонаж. Он доступен только по паролю. Кто знает, тот знает."}, {"id": "2026-11-18-duelanim", "d": "18 ноября", "t": "Новая анимация дуэлей", "x": "В каждом раунде бойцы замахиваются одновременно, поэтому по первым кадрам не понять, кто выиграл. При ничьей один из бойцов бьёт, а второй ставит красноватый щит."}, {"id": "2026-11-18-king", "d": "18 ноября", "t": "Воля короля", "x": "Новая карта сокровищ «Воля короля»: чтобы получить её, нужно победить Тёмного короля Рейли (атака 9, уклонение 6). За 1 ОД: все остальные игроки в вашем море и адмирал пропускают ход. По островам моря бьют красно-чёрные молнии."}, {"id": "2026-11-18-double", "d": "18 ноября", "t": "Дубль на костях", "x": "Если на костях дохода выпал дубль, бросивший получает +1 очко действия на этот ход."}, {"id": "2026-11-17-exit", "d": "17 ноября", "t": "Выход из партии из меню", "x": "В меню (☰) появились пункты «Выйти с сохранением» и «Выйти из игры». После выхода с сохранением на главном экране будет кнопка «Продолжить партию», а для сетевой игры — «Вернуться в комнату»."}, {"id": "2026-11-17-duelwin", "d": "17 ноября", "t": "Победа по числу выигранных раундов", "x": "Если за 3 раунда никто не набрал 2 победы, теперь побеждает тот, у кого побед больше: например, 1:0 при двух ничьих. Боевая ничья — только при равном счёте (0:0 или 1:1). Бой с хранителем понеглифа считается по-старому. Правило действует в новых партиях."}, {"id": "2026-11-17-duelscene", "d": "17 ноября", "t": "Анимированные дуэли", "x": "Каждый бой теперь видно: бойцы дерутся раунд за раундом по выпавшим цифрам. У каждого персонажа и босса свои приёмы, при разнице в 4 очка и больше — тяжёлые. Кубик бросается сам через 3 секунды. «Ускорить бой» прокручивает анимацию быстро только у вас. Кнопка «Сцена» переключает: показывать, ускоренно или выключить. В боях за карты сокровищ у каждого соперника свой бой: Гекко Мория — тени, Марко — синее пламя, Магеллан — яд и гидра, Король Нептун — трезубец и вода, Дофламинго — нити."}, {"id": "2026-11-17-rearm", "d": "17 ноября", "t": "Новое задание «Перевооружение»", "x": "Победите Босса 2–4 уровня и получите особую карту: пока она у вас, за ход можно купить две карты вместо одной (две атаки, атаку и пассивку или две пассивки). Таких заданий в колоде всего три — успейте забрать!"}, {"id": "2026-11-17-tasks", "d": "17 ноября", "t": "Задания стали интереснее", "x": "Выполните 5 ивентовых заданий — и один раз за игру получите 2 очка к атаке и уклонению, распределяйте как хотите (но атака не выше 8, уклонение не выше 7). Часть боевых заданий теперь можно закрыть картой сокровищ вместо Берри. Зато доход с локаций вдвое меньше, карта сокровищ стоит 50 Берри, гостевой персонаж — 80."}, {"id": "2026-11-16-resume", "d": "16 ноября", "t": "Продолжить партию после обновления страницы", "x": "Случайно обновили страницу или закрыли вкладку? Партию можно продолжить с того же места, в том числе с ботами вместо игроков."}, {"id": "2026-11-16-tv", "d": "16 ноября", "t": "Трансляция на телевизор", "x": "Откройте ссылку комнаты в браузере телевизора (или нажмите «Трансляция» и введите код) — на большом экране будет общая карта и журнал, а играть можно с телефонов."}];
 const NEWS_KEY='gl_news_seen';
 function newsSeen(){try{return localStorage.getItem(NEWS_KEY)}catch(e){return null}}
 function newsPopSeen(){try{return localStorage.getItem(NEWS_KEY+'_p')}catch(e){return null}}
@@ -3867,7 +3874,8 @@ function renderMap(){
     if(pickable.has(id))s+='<circle class="ring" cx="'+x+'" cy="'+y+'" r="'+(R+8)+'" fill="none" stroke="#12a05a" stroke-width="6"/>';
     if(G.flags[id]!=null){const c=G.players[G.flags[id]].color;s+='<line x1="'+(x-R+2)+'" y1="'+(y-R-16)+'" x2="'+(x-R+2)+'" y2="'+(y-R+8)+'" stroke="#5a3b1f" stroke-width="3"/><polygon points="'+(x-R+2)+','+(y-R-16)+' '+(x-R+24)+','+(y-R-8)+' '+(x-R+2)+','+(y-R)+'" fill="'+c+'" stroke="#5a3b1f" stroke-width="1.5"/>'}
     if(G.grav&&G.grav[id]&&!(G.dead&&G.dead[id]))s+='<g pointer-events="none"><circle cx="'+x+'" cy="'+y+'" r="'+(R+5)+'" fill="#6b4aa0" fill-opacity=".3" stroke="#6b4aa0" stroke-width="4" stroke-dasharray="7 5"/><text x="'+x+'" y="'+(y+R*.45)+'" text-anchor="middle" font-size="26" font-weight="800" fill="#fff" stroke="#4a2f7a" stroke-width="3" paint-order="stroke">⬇</text></g>';
-    if(G.dead&&G.dead[id])s+='<g pointer-events="none"><circle cx="'+x+'" cy="'+y+'" r="'+(R+6)+'" fill="#1c1411" fill-opacity=".93" stroke="#ff5a1a" stroke-width="5"/><path d="M'+(x-R*.6)+' '+(y-R*.3)+' L'+x+' '+(y+R*.1)+' L'+(x+R*.5)+' '+(y-R*.5)+' M'+x+' '+(y+R*.1)+' L'+(x+R*.2)+' '+(y+R*.7)+'" stroke="#ff7a1a" stroke-width="4" fill="none" stroke-linecap="round"/><text x="'+x+'" y="'+(y+R*.2)+'" text-anchor="middle" font-size="30" opacity=".9">🌋</text></g>';
+    if(G.seas&&id!=='L'&&id!=='Z'&&!G.seas.includes(id[0]))s+='<circle cx="'+x+'" cy="'+y+'" r="'+(R+8)+'" fill="#0d1218" fill-opacity=".72" pointer-events="none"/>';
+    else if(G.dead&&G.dead[id])s+='<g pointer-events="none"><circle cx="'+x+'" cy="'+y+'" r="'+(R+6)+'" fill="#1c1411" fill-opacity=".93" stroke="#ff5a1a" stroke-width="5"/><path d="M'+(x-R*.6)+' '+(y-R*.3)+' L'+x+' '+(y+R*.1)+' L'+(x+R*.5)+' '+(y-R*.5)+' M'+x+' '+(y+R*.1)+' L'+(x+R*.2)+' '+(y+R*.7)+'" stroke="#ff7a1a" stroke-width="4" fill="none" stroke-linecap="round"/><text x="'+x+'" y="'+(y+R*.2)+'" text-anchor="middle" font-size="30" opacity=".9">🌋</text></g>';
     if(G.rzone&&G.rzone.loc===id)s+='<g pointer-events="none"><circle cx="'+x+'" cy="'+y+'" r="'+(R+15)+'" fill="rgba(255,200,60,.12)" stroke="#ffcf4a" stroke-width="5" stroke-dasharray="4 7"/><text x="'+(x-12)+'" y="'+(y-R-8)+'" font-size="26">👑</text></g>';
     if(G.fire&&G.fire.loc===id)s+='<g class="firew" pointer-events="none"><circle cx="'+x+'" cy="'+y+'" r="'+(R+11)+'" fill="rgba(255,120,30,.14)" stroke="#ff7a1a" stroke-width="6" stroke-dasharray="10 6"/><text x="'+(x-R-4)+'" y="'+(y-R+6)+'" font-size="26">🔥</text><text x="'+(x+R-12)+'" y="'+(y+R+8)+'" font-size="26">🔥</text></g>';
     if(G.ponAt[id]&&G.type[id]){const px=x+R-2,py=y-R+2;s+='<circle cx="'+x+'" cy="'+y+'" r="'+(R+6)+'" fill="none" stroke="#d9a21b" stroke-width="3" stroke-dasharray="5 4" pointer-events="none"/><g class="ponglow" pointer-events="none"><circle class="ring" cx="'+px+'" cy="'+py+'" r="22" fill="none" stroke="#d9a21b" stroke-width="3"/><rect x="'+(px-15)+'" y="'+(py-15)+'" width="30" height="30" rx="4" transform="rotate(45 '+px+' '+py+')" fill="#d9a21b" stroke="#2a2118" stroke-width="2.5"/><text x="'+px+'" y="'+(py+7)+'" text-anchor="middle" font-size="20" font-weight="800" fill="#2a2118">П</text></g><text x="'+x+'" y="'+(y+R+22)+'" text-anchor="middle" font-size="19" font-weight="800" fill="#8a5a00" pointer-events="none" stroke="#fff" stroke-width="5" paint-order="stroke">Понеглиф'+(G.ponAt[id].owner!=null?' · '+esc(G.players[G.ponAt[id].owner].name):'')+'</text>'+(G.ponAt[id].g&&G.ponAt[id].owner==null&&AVS[G.ponAt[id].g]?'<g pointer-events="none"><circle cx="'+(x-R+4)+'" cy="'+(y-R+6)+'" r="21" fill="#fff" stroke="#8a5a00" stroke-width="3.5"/><image href="'+AVS[G.ponAt[id].g]+'" x="'+(x-R-13)+'" y="'+(y-R-11)+'" width="34" height="34" preserveAspectRatio="xMidYMid slice" style="clip-path:circle(50%)"/></g>':'')}
@@ -3940,7 +3948,7 @@ function worldPreviewHtml(W,o){
     s+='<circle cx="'+x+'" cy="'+y+'" r="'+(R+3)+'" fill="none" stroke="'+BR+'" stroke-width="1" opacity=".5"/><circle cx="'+x+'" cy="'+y+'" r="'+R+'" fill="#e9d9ae" stroke="'+(isRed?'#5b3f99':BR)+'" stroke-width="3" filter="url(#sh)"/><image href="'+islOf(id)+'" x="'+(x-R)+'" y="'+(y-R)+'" width="'+(2*R)+'" height="'+(2*R)+'" pointer-events="none"/>'+((isStart||isRed)?'<circle cx="'+x+'" cy="'+y+'" r="'+(R-1)+'" fill="'+(isRed?'#9a6be0':ISL_TINT.start)+'" style="mix-blend-mode:color" opacity="'+.8+'" pointer-events="none"/>':'')+((isStart||isRed)?'<circle cx="'+x+'" cy="'+y+'" r="'+(R-4)+'" fill="none" stroke="'+(isRed?'#7a4fc9':'#c4e8cf')+'" stroke-width="7" pointer-events="none"/>':'')+'<circle cx="'+x+'" cy="'+y+'" r="'+R+'" fill="none" stroke="'+(isRed?'#5b3f99':BR)+'" stroke-width="3" pointer-events="none"/>';
     if(isStart){
       const dd=worldDist(W,sea),tk=o.taken&&o.taken[sea];
-      const lbl=tk?tk.slice(0,7):'';
+      const lbl=tk?(tk[0]==='#'?'закрыто':tk.slice(0,7)):'';
       s+='<text x="'+x+'" y="'+(y+26)+'" text-anchor="middle" font-size="'+(tk?15:20)+'" font-weight="800" fill="'+(tk?'#a63a28':BR)+'" stroke="#fff6df" stroke-width="4" paint-order="stroke" stroke-linejoin="round">⚑'+(lbl?' '+esc(lbl):'')+'</text>';
     }
     s+='<text x="'+x+'" y="'+(y+(isStart?-4:10))+'" text-anchor="middle" font-family="Manrope,system-ui,sans-serif" font-size="'+(isStart?30:34)+'" font-weight="800" fill="'+BR+'" stroke="#fff6df" stroke-width="5" paint-order="stroke" stroke-linejoin="round">'+numOf(id)+'</text>';
@@ -3954,9 +3962,16 @@ function pickSteps(ch,sea){
   const c=ch&&CH[ch]?CH[ch].n:'';
   return '<div class="psteps"><div class="pst'+(ch?' ok':' cur')+'"><i>'+(ch?'✓':'1')+'</i><span>Персонаж'+(c?'<small>'+esc(c)+'</small>':'')+'</span></div><div class="pst'+(sea?' ok':(ch?' cur':''))+'"><i>'+(sea?'✓':'2')+'</i><span>Море'+(sea?'<small>'+esc(SEAS[sea])+'</small>':'')+'</span></div></div>';
 }
+function seaTaken(list,mode){ // V142: занятость морей; в упрощённом режиме моря можно делить, но их только 2
+  const t={};
+  if(mode!=='easy'){list.forEach(x=>{if(x.sea)t[x.sea]=x.name});return t}
+  const used=[...new Set(list.map(x=>x.sea).filter(Boolean))];
+  if(used.length>=2)SEAK.forEach(k=>{if(!used.includes(k))t[k]='#закрыто: в этом режиме 2 моря'});
+  return t;
+}
 function seaPick(attr,W,taken,sel){ // taken: {море: имя игрока}
   return '<div class="seasec" id="seasec"><div class="grp"><b>Шаг 2. Выберите стартовое море</b></div><div class="small">Здесь ваша фишка начнёт игру. На карте выше выбранное море подсвечивается. Понеглифы скрыты: их придётся искать по всем морям.</div><div class="seas">'
-    +SEAK.map(k=>{const by=taken[k];return '<button class="btn seab'+(sel===k?' sel':'')+'" '+attr+'="'+k+'"'+(by?' disabled':'')+'><b>'+SEAS[k]+'</b><span class="small">'+(by?'занято: '+esc(by):seaInfo(W,k))+'</span>'+(sel===k?'<i class="seachk">✓</i>':'')+'</button>'}).join('')+'</div></div>';
+    +SEAK.map(k=>{const by=taken[k];return '<button class="btn seab'+(sel===k?' sel':'')+'" '+attr+'="'+k+'"'+(by?' disabled':'')+'><b>'+SEAS[k]+'</b><span class="small">'+(by?(by[0]==='#'?esc(by.slice(1)):'занято: '+esc(by)):seaInfo(W,k))+'</span>'+(sel===k?'<i class="seachk">✓</i>':'')+'</button>'}).join('')+'</div></div>';
 }
 function pickBar(id,ch,sea,okLabel){
   const ready=ch&&sea;
@@ -4145,7 +4160,7 @@ function renderSetup(){
     // боты выбирают сами: первое свободное море и сильнейший из свободных персонажей
     while(S.cur<S.order.length&&S.order[S.cur].bot){
       const tk=S.picks.map(p=>p.ch),ts=S.picks.map(p=>p.sea);
-      const sea=SEAK.filter(s=>!ts.includes(s))[0];
+      const sea=(S.mode==='easy')?(()=>{const u=[...new Set(ts)];return u.length<2?SEAK.filter(s=>!u.includes(s))[0]:u[S.cur%2]})():SEAK.filter(s=>!ts.includes(s))[0];
       const ch=BCH_RANK.find(k=>!tk.includes(k)&&k!==SECRET);
       S.picks.push({name:S.order[S.cur].name,ch,sea,bot:true,lv:S.order[S.cur].lv||2});S.cur++;
     }
@@ -4153,7 +4168,7 @@ function renderSetup(){
     const pl=S.order[S.cur];
     const taken=S.picks.map(p=>p.ch),seas=S.picks.map(p=>p.sea);
     h+='<h2>'+esc(pl.name)+': выберите персонажа и стартовое море ('+(S.cur+1)+'/'+S.order.length+')</h2>'+pickSteps(S.selCh,S.selSea);
-    const tkn={};S.picks.forEach(p=>tkn[p.sea]=p.name);
+    const tkn=seaTaken(S.picks,S.mode||'std');
     h+='<div class="small">Карта этой партии уже построена: каждый раз она разная. Смотрите, где стартовая локация каждого моря.</div>'+worldPreviewHtml(WP,{sel:S.selSea,taken:tkn});
     h+='<div class="grp"><b>Шаг 1. Выберите персонажа</b></div><div class="chars">'+Object.keys(CH).map(k=>chBtn(k,'data-ch',taken.includes(k),S.selCh===k)).join('')+'</div>'+chInfo(S.selCh);
     h+=seaPick('data-sea',WP,tkn,S.selSea);
@@ -4512,7 +4527,7 @@ function renderLobby(){
       if(myTurn){
         const tk=ord.filter(x=>x.uid!==NET.uid&&x.ok).map(x=>x.ch),ts=ord.filter(x=>x.uid!==NET.uid&&x.ok).map(x=>x.sea);
         h+='<div class="grp"><b>Ваш ход. Шаг 1. Выберите персонажа</b></div>'+pickSteps(mine.ch,mine.sea)+'<div class="chars">'+Object.keys(CH).map(k=>chBtn(k,'data-nch',tk.includes(k),mine.ch===k)).join('')+'</div>'+chInfo(mine.ch);
-        const tkn2={};ord.forEach(x=>{if(x.uid!==NET.uid&&x.ok&&x.sea)tkn2[x.sea]=x.name});
+        const tkn2=seaTaken(ord.filter(x=>x.uid!==NET.uid&&x.ok&&x.sea),(NET.meta&&NET.meta.mode)||'std');
         h+=seaPick('data-nsea',W,tkn2,mine.sea);
         h+=pickBar('nok',mine.ch,mine.sea,'Подтвердить выбор');
       }else if(turn)h+='<div class="small"><b>Сейчас выбирает: '+esc(turn.name)+'.</b> Изучайте карту, скоро ваша очередь.</div>';
