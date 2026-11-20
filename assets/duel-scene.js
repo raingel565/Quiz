@@ -145,10 +145,12 @@ function flash(a=.5){const f=$('flash');run(220,t=>f.style.opacity=a*(1-Math.abs
 function shake(){const s=$('scene');s.classList.remove('ds-shake');void s.offsetWidth;s.classList.add('ds-shake')}
 function hitFx(F,col,big){const p=F.W('head'),c=F.W('sh');const x=(p.x+c.x)/2,y=(p.y+c.y)/2;flash(big?.6:.35);ring(x,y,col,big?130:80);burst(x,y,big?22:12,col,big?1.4:1);if(big)shake()}
 
+/* озвучка приёма (голос персонажа), только при обычной скорости и включённом звуке */
+const VOX={};function voice(src){try{if(!API.soundOn()||speed>1)return;const a=VOX[src]||(VOX[src]=new Audio(src));a.currentTime=0;a.volume=1;const q=a.play();if(q&&q.catch)q.catch(()=>{})}catch(e){}}
 const ABIL={
  none:{n:'Обычный удар',col:'#ffe9a8'},
  fire:{n:'Огненный кулак',col:'#ff7a1a',
-  async pre(F,T){F.to('windup',320,E.out);const ps=[];const h0=()=>F.W('fh');
+  async pre(F,T){voice('assets/sfx_ace.mp3');F.to('windup',320,E.out);const ps=[];const h0=()=>F.W('fh');
    await run(520,t=>{const h=h0();if(Math.random()<.8){const a=Math.random()*6.28,r=60+Math.random()*30;ps.push({e:el('circle',{r:3+Math.random()*3,fill:Math.random()<.5?'#ffd25a':'#ff6a1a'}),a,r,l:0})}
      for(const q of ps){q.l+=.05;q.r*=.93;q.e.setAttribute('cx',h.x+Math.cos(q.a+q.l*3)*q.r);q.e.setAttribute('cy',h.y+Math.sin(q.a+q.l*3)*q.r);q.e.setAttribute('opacity',Math.min(1,q.l*4)*(q.r>6?1:0))}});
    ps.forEach(q=>q.e.remove())},
