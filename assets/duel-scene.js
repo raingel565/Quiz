@@ -145,10 +145,12 @@ function flash(a=.5){const f=$('flash');run(220,t=>f.style.opacity=a*(1-Math.abs
 function shake(){const s=$('scene');s.classList.remove('ds-shake');void s.offsetWidth;s.classList.add('ds-shake')}
 function hitFx(F,col,big){const p=F.W('head'),c=F.W('sh');const x=(p.x+c.x)/2,y=(p.y+c.y)/2;flash(big?.6:.35);ring(x,y,col,big?130:80);burst(x,y,big?22:12,col,big?1.4:1);if(big)shake()}
 
+/* озвучка приёма (голос персонажа), только при обычной скорости и включённом звуке */
+const VOX={};function voice(src){try{if(!API.soundOn()||speed>1)return;const a=VOX[src]||(VOX[src]=new Audio(src));a.currentTime=0;a.volume=1;const q=a.play();if(q&&q.catch)q.catch(()=>{})}catch(e){}}
 const ABIL={
  none:{n:'Обычный удар',col:'#ffe9a8'},
  fire:{n:'Огненный кулак',col:'#ff7a1a',
-  async pre(F,T){F.to('windup',320,E.out);const ps=[];const h0=()=>F.W('fh');
+  async pre(F,T){voice('assets/sfx_ace.mp3');F.to('windup',320,E.out);const ps=[];const h0=()=>F.W('fh');
    await run(520,t=>{const h=h0();if(Math.random()<.8){const a=Math.random()*6.28,r=60+Math.random()*30;ps.push({e:el('circle',{r:3+Math.random()*3,fill:Math.random()<.5?'#ffd25a':'#ff6a1a'}),a,r,l:0})}
      for(const q of ps){q.l+=.05;q.r*=.93;q.e.setAttribute('cx',h.x+Math.cos(q.a+q.l*3)*q.r);q.e.setAttribute('cy',h.y+Math.sin(q.a+q.l*3)*q.r);q.e.setAttribute('opacity',Math.min(1,q.l*4)*(q.r>6?1:0))}});
    ps.forEach(q=>q.e.remove())},
@@ -356,6 +358,14 @@ function stretchArm(F,T,o){const c=o.col,w=o.w||18;const ln=el('line',{stroke:'#
  const tip=el('g',{});o.tip(tip);const A0=F.W('sh'),H=F.W('fh'),B=T.W('sh');const ex=B.x-F.dir*(o.reach||20),ey=B.y;
  const upd=(x,y)=>{for(const l of [ln,li]){l.setAttribute('x1',A0.x);l.setAttribute('y1',A0.y);l.setAttribute('x2',x);l.setAttribute('y2',y)}tip.setAttribute('transform',`translate(${x},${y}) scale(${F.dir*(o.s||1)},${o.s||1})`)};
  return {run:async()=>{await run(o.dur||200,t=>{const k=E.out(t);upd(L_(H.x,ex,k),L_(H.y,ey,k))})},back:async()=>{await run(o.back||200,t=>{const k=E.in(t);upd(L_(ex,A0.x+F.dir*20,k),L_(ey,A0.y,k))});ln.remove();li.remove();tip.remove()}}}
+/* резиновые руки: много растягивающихся рук одновременно (Gomu Gomu no Gatling) */
+function rubberArms(F,T,o){const B=T.W('sh'),c='#ff7aa8',n=o.n,sp=o.spread||50,r=o.r||12,w=o.w||9;const jobs=[];
+ const one=async(i)=>{const A0=F.W('sh'),ex=B.x-F.dir*(6+R_(0,14)),ey=B.y+R_(-sp,sp);
+  const ol=el('line',{stroke:'#0d1118','stroke-width':w+4,'stroke-linecap':'round',opacity:.85}),li=el('line',{stroke:c,'stroke-width':w,'stroke-linecap':'round'}),tip=el('g',{});SH.fist(tip,{r,col:c});
+  const upd=(x,y,op)=>{for(const l of [ol,li]){l.setAttribute('x1',A0.x);l.setAttribute('y1',A0.y);l.setAttribute('x2',x);l.setAttribute('y2',y);l.setAttribute('opacity',op)}tip.setAttribute('transform',`translate(${x},${y}) scale(${F.dir},1)`);tip.setAttribute('opacity',op)};
+  await run(o.out||90,t=>{const k=E.out(t);upd(L_(A0.x,ex,k),L_(A0.y,ey,k),1)});burst(ex,ey,4,'#ffb0cc',.6);
+  await run(o.back||90,t=>{const k=E.in(t);upd(L_(ex,A0.x,k),L_(ey,A0.y,k),1-.6*k)});ol.remove();li.remove();tip.remove()};
+ return (async()=>{for(let i=0;i<n;i++){jobs.push(one(i));if(o.every&&i%o.every===o.every-1){flash(.12);shake()}await sleep(o.gap||40)}await Promise.all(jobs)})()}
 Object.assign(ABIL,{
 /* ---- фиолетовый: трезубец и пончики ---- */
  donuts:MV('Пончиковый залп','#e3d4ff',PS('windup',240),async(F,T)=>{await F.to('cast',90,E.out);const B=T.W('sh');let last;
@@ -373,8 +383,7 @@ Object.assign(ABIL,{
  donutstorm:MV('Пончиковый шторм','#e3d4ff',PS('cast',260,{fu:150,fb:0,bu:150,bb:0}),async(F,T)=>{const B=T.W('pel');let last;
   for(let i=0;i<12;i++){const a=i*.9;last=flyer(F,{x:B.x+Math.cos(a)*190,y:-40-(i%4)*30},{x:B.x+Math.cos(a)*30,y:B.y+Math.sin(a)*40},{dur:340,ease:E.in,spin:720,shape:SH.donut,r:18,col:'#e3d4ff',trail:1});last.then(()=>boom(T,'#e3d4ff',.5,'pel'));await sleep(70)}await last;boom(T,'#fff',2,'pel');shake()}),
 /* ---- розовый: резиновое тело ---- */
- gatling:MV('Град ударов','#ff9ac0',PS('windup',200),async(F,T)=>{await F.to('cast',70,E.out);const B=T.W('sh');let last;
-  for(let i=0;i<14;i++){const H=F.W(i%2?'bh':'fh');last=flyer(F,H,{x:B.x-F.dir*8,y:B.y+R_(-45,45)},{dur:130,ease:E.lin,shape:SH.fist,r:11,col:'#ff7aa8',mirror:1});last.then(()=>burst(B.x+R_(-14,14),B.y+R_(-40,40),4,'#ffb0cc',.6));if(i%4===3){flash(.12);shake()}await sleep(42)}await last;boom(T,'#ff7aa8',1.2)}),
+ gatling:MV('Град резиновых рук','#ff9ac0',PS('windup',200),async(F,T)=>{await F.to('cast',70,E.out);await rubberArms(F,T,{n:14,spread:45,r:11,w:8,gap:45,every:4});boom(T,'#ff7aa8',1.2)}),
  longkick:MV('Растянутая нога','#ff9ac0',PS('kickW',220),async(F,T)=>{const pr=F.to('kick',110,E.in);const A0=F.W('pel'),B=T.W('sh');const ex=B.x-F.dir*14,ey=B.y+40;
   const ln=el('line',{x1:A0.x,y1:A0.y,x2:A0.x,y2:A0.y,stroke:'#ff7aa8','stroke-width':20,'stroke-linecap':'round',filter:'drop-shadow(0 0 8px #ff7aa8)'});const ft=el('g',{});SH.fist(ft,{r:18,col:'#ff7aa8'});
   await run(170,t=>{const k=E.out(t),x=L_(A0.x,ex,k),y=L_(A0.y,ey,k);ln.setAttribute('x2',x);ln.setAttribute('y2',y);ft.setAttribute('transform',`translate(${x},${y})`)});await pr;boom(T,'#ff7aa8',1.4,'pel');
@@ -384,12 +393,13 @@ Object.assign(ABIL,{
   async(F,T)=>{const l1=F._sl;const H=F.W('fh'),B=T.W('sh');F.to('punch',90,E.in,{dx:60});const ex=B.x-F.dir*10;const tip=el('g',{});SH.fist(tip,{r:26,col:'#ff7aa8'});
    await run(150,t=>{const k=E.in(t),x=L_(H.x,ex,k),y=L_(H.y,B.y,k);tip.setAttribute('transform',`translate(${x},${y}) scale(${F.dir},1)`);const s=F.W('sh');l1.setAttribute('x1',s.x);l1.setAttribute('y1',s.y);l1.setAttribute('x2',x);l1.setAttribute('y2',y)});boom(T,'#ff7aa8',1.5);tip.remove();l1.remove()}),
  stretcharm:MV('Растяжение руки','#ff7aa8',PS('windup',240,{bu:60,bb:60}),async(F,T)=>{await F.to('cast',90,E.out);const S=stretchArm(F,T,{col:'#ff7aa8',w:20,s:1.6,dur:210,tip:g=>SH.fist(g,{r:30,col:'#ff7aa8'})});await S.run();boom(T,'#ff7aa8',2,'pel');shake();await S.back()}),
- balloon:MV('Надутое тело','#ff9ac0',PS('charge',260),async(F,T)=>{const A0=F.W('pel'),B=T.W('pel');const g=el('g',{});el('circle',{r:30,fill:'#ff7aa8',opacity:.92,stroke:'#fff','stroke-width':4,filter:'drop-shadow(0 0 10px #ff7aa8)'},g);el('ellipse',{cx:-10,cy:-12,rx:12,ry:7,fill:'#fff',opacity:.7},g);
-  await run(300,t=>{g.setAttribute('transform',`translate(${A0.x},${A0.y}) scale(${1+2*E.out(t)})`)});
-  await run(260,t=>{const k=E.in(t);g.setAttribute('transform',`translate(${L_(A0.x,B.x,k)},${L_(A0.y,B.y,k)}) scale(${3-.3*k}) rotate(${k*360*F.dir})`)});g.remove();boom(T,'#ff7aa8',2,'pel');shake()}),
- gatlingH:MV('Пулемётный шквал','#ff7aa8',PS('windup',260,{dx:-20}),async(F,T)=>{await F.to('cast',70,E.out);const B=T.W('sh');let last;
-  for(let i=0;i<26;i++){const H=F.W(i%2?'bh':'fh');last=flyer(F,H,{x:B.x-F.dir*8,y:B.y+R_(-70,70)},{dur:120,ease:E.lin,shape:SH.fist,r:14,col:'#ff7aa8',mirror:1});last.then(()=>burst(B.x+R_(-20,20),B.y+R_(-60,60),4,'#ffb0cc',.7));if(i%5===4){flash(.15);shake()}await sleep(34)}await last;
-  await flyer(F,F.W('fh'),{x:B.x-F.dir*10,y:B.y},{dur:170,ease:E.in,shape:SH.fist,r:40,col:'#ff7aa8',mirror:1,s0:.5,s1:1.4});boom(T,'#ff7aa8',2.2,'pel');shake()}),
+ balloon:MV('Гигантский кулак','#ff9ac0',async(F,T)=>{await F.to('windup',260,E.out,{dx:-30});const A0=F.W('sh');const g=el('g',{});SH.fist(g,{r:30,col:'#ff7aa8'});F._gf=g;
+   await run(420,t=>{const h=F.W('fh'),k=E.out(t);g.setAttribute('transform',`translate(${h.x-F.dir*20*k},${h.y-30*k}) scale(${F.dir*(.6+2.4*k)},${.6+2.4*k})`)});flash(.2)},
+  async(F,T)=>{const g=F._gf;await F.to('punch',90,E.in,{dx:40});
+   const S=stretchArm(F,T,{col:'#ff7aa8',w:30,s:3.2,dur:230,reach:40,tip:t=>SH.fist(t,{r:30,col:'#ff7aa8'})});g.remove();await S.run();boom(T,'#ff7aa8',2.6,'pel');shake();flash(.3);await S.back()}),
+ gatlingH:MV('Резиновый шквал','#ff7aa8',PS('windup',260,{dx:-20}),async(F,T)=>{await F.to('cast',70,E.out);
+  await rubberArms(F,T,{n:28,spread:75,r:14,w:10,gap:30,every:6,out:80,back:80});
+  const S=stretchArm(F,T,{col:'#ff7aa8',w:22,s:2,dur:170,tip:g=>SH.fist(g,{r:34,col:'#ff7aa8'})});await S.run();boom(T,'#ff7aa8',2.2,'pel');shake();await S.back()}),
 /* ---- голубой: сердца и стрелы ---- */
  cupid:MV('Стрела купидона','#8fdcff',PS('cast',220),async(F,T)=>{const B=T.W('sh');await flyer(F,F.W('fh'),{x:B.x-F.dir*10,y:B.y},{dur:190,ease:E.in,aim:1,shape:SH.arrow,col:'#56c8ff',trail:1});boom(T,'#8fdcff',.8);hearts(B.x,B.y,6)}),
  kiss:MV('Воздушный поцелуй','#ff9ad0',PS('cast',220),async(F,T)=>{const B=T.W('head');let last;
