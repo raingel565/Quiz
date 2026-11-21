@@ -1063,7 +1063,7 @@ body.tutor #app{padding-top:110px}
 
 #qoov .tgrow{flex-wrap:wrap}#qoov .tgrow>div:first-child{flex:1 1 180px;min-width:0}#qoov .tgrow .seg{flex:0 1 auto;max-width:100%;flex-wrap:wrap;margin-left:auto}#qoov .tgrow .seg button{white-space:nowrap}
 </style>
-<div id="ver" title="Версия игры">V148</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V149</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=14"></script>
 <script>
@@ -1654,7 +1654,7 @@ function kidDuel(p,loc){
   else{k=G.players.find(x=>x.ch==='kid'&&x!==p&&x.loc===loc&&x.jail<=0);q=p}
   if(!k||!q)return;
   if(k===P())G.tm.pvp++;
-  if(k.task&&k.task.def.k==='bribe')cancelTask(k,'дуэль с игроком');
+  if(evT(k)&&evT(k).def.k==='bribe')cancelTask(k,'дуэль с игроком');
   log(pname(k)+' и '+q.name+' оказываются на одном острове: Кид сразу нападает!');
   fxEvent({banner:true,tone:'bad',icon:'⚔',title:'Кид нападает!',desc:k.name+' против '+q.name,auto:2400});
   startPvp(k.i,q.i);
@@ -1665,7 +1665,7 @@ function arrive(p,loc,o,cb){
   p.prev=p.loc;
   p.loc=loc;
   if(loc!=='Z'&&loc!=='L')p.sea=seaOf(loc);
-  if(p.task&&p.task.seas)p.task.seas.add(p.sea);if(p.ltask&&p.ltask.seas)p.ltask.seas.add(p.sea);
+  if(p.task&&p.task.seas)p.task.seas.add(p.sea);if(p.etask&&p.etask.seas)p.etask.seas.add(p.sea);if(p.ltask&&p.ltask.seas)p.ltask.seas.add(p.sea);
   p.zfog=null;
   const fog=!!o.zfog&&p.ch==='zoro'&&loc!=='Z'&&loc!=='L'&&!G.type[loc];
   if(fog){p.zfog=loc;log(pname(p)+' выходит на '+locName(loc)+', но фишка остаётся закрытой до его следующего хода.')}
@@ -2109,6 +2109,8 @@ function checkTasks(){
     if(G.tb&&p.mile===1){p.mile=2;log(pname(p)+' выполнил 5 ивентовых заданий: 2 очка к атаке и уклонению на выбор!');mileStep(p,2);return}
     if(G.laftel&&p.loc==='L'){checkLaftelArrival(p);if(G.winner!=null)return}
     if(p.task&&taskDone(p,p.task))completeTask(p,'task');
+    if(G.winner!=null||G.pending)return;
+    if(p.etask&&taskDone(p,p.etask))completeTask(p,'etask');
     if(G.winner!=null)return;
     if(p.ltask&&taskDone(p,p.ltask))completeTask(p,'ltask');
     if(G.winner!=null)return;
@@ -2145,15 +2147,17 @@ function taskReward(p,def){
   if(o.length<=1){if(o[0])applyOpt(p,o[0],def);return}
   ask('pick',{who:p.i,title:'Награда за «'+def.t+'»: выберите',opts:o.map(x=>({label:x.lab,run:()=>applyOpt(p,x,def)}))});
 }
+function evT(p){return p.etask||(p.task&&p.task.cat==='ev'?p.task:null)} // V149: ивентовое задание (отдельный слот в новых партиях)
+function evSlot(p){return p.etask?'etask':'task'}
 function cancelTask(p,why){
-  const t=p.task;if(!t)return;p.task=null;G.decks.tev.push(t.def);
+  const sl=evSlot(p),t=p[sl];if(!t||t.cat!=='ev')return;p[sl]=null;G.decks.tev.push(t.def);
   log(p.name+': задание «'+t.def.t+'» отменено ('+why+'), карта вернулась в колоду.');
 }
 function taskEvent(p,kind,info){
-  const t=p.task;if(!t)return;
-  if(kind==='pvpWin'){if(t.def.k==='conquer')t.armed=true;return}
-  if(kind==='npcWin'){if(t.def.k==='npcNoPas'&&!info.pasUsed)t.done=true;return}
-  if(t.cat!=='ev'||t.def.k!==kind)return;
+  const pt=p.task;
+  if(kind==='pvpWin'){if(pt&&pt.def.k==='conquer')pt.armed=true;return}
+  if(kind==='npcWin'){if(pt&&pt.def.k==='npcNoPas'&&!info.pasUsed)pt.done=true;return}
+  const t=evT(p);if(!t||t.def.k!==kind)return;
   const f=t.def;
   if(kind==='bossWin'){
     if(f.lv&&!f.lv.includes(info.lv))return;
@@ -2165,8 +2169,8 @@ function taskEvent(p,kind,info){
   }
 }
 function marchCheck(p){
-  const t=p.task;if(!t||t.cat!=='ev'||t.def.k!=='march'||!G.tm)return;
-  if((t.turnNo<G.turnNo||t.takeAp===G.apMax)&&G.ap===0&&G.tm.buy===0&&G.tm.pvp===0&&p.cnt.moves-G.tm.mv0===G.apMax){t.done=true;completeTask(p,'task')}
+  const t=evT(p);if(!t||t.def.k!=='march'||!G.tm)return;
+  if((t.turnNo<G.turnNo||t.takeAp===G.apMax)&&G.ap===0&&G.tm.buy===0&&G.tm.pvp===0&&p.cnt.moves-G.tm.mv0===G.apMax){t.done=true;completeTask(p,evSlot(p))}
 }
 function completeTask(p,slot){
   const t=p[slot];p[slot]=null;
@@ -2576,7 +2580,7 @@ function actions(){
     }
   }
   // duel
-  for(const q of G.players)if(q!==p&&q.loc===p.loc&&(q.jail<=0||q.ch==='kid'))add('duel','Вызвать на дуэль: '+pname(q)+(p.task&&p.task.def.k==='bribe'?' (отменит задание)':''),()=>{G.ap-=1;G.tm.pvp++;if(p.task&&p.task.def.k==='bribe')cancelTask(p,'дуэль с игроком');log(p.name+' вызывает '+q.name+' на дуэль.');startPvp(p.i,q.i)},ap<1||G.duels>=3);
+  for(const q of G.players)if(q!==p&&q.loc===p.loc&&(q.jail<=0||q.ch==='kid'))add('duel','Вызвать на дуэль: '+pname(q)+(evT(p)&&evT(p).def.k==='bribe'?' (отменит задание)':''),()=>{G.ap-=1;G.tm.pvp++;if(evT(p)&&evT(p).def.k==='bribe')cancelTask(p,'дуэль с игроком');log(p.name+' вызывает '+q.name+' на дуэль.');startPvp(p.i,q.i)},ap<1||G.duels>=3);
   // flags
   const loc=p.loc;
   const here=loc!=='Z'&&loc!=='L';
@@ -2618,7 +2622,7 @@ function actions(){
     if(['dandan','scav','key','kingwill'].includes(c.key)&&activeC(c))add('tre','Сыграть: '+T.n+(T.ap?' ('+T.ap+' ОД)':''),()=>useTre(p,c),ap<(T.ap||0)||(c.key==='kingwill'&&(p.loc==='Z'||p.loc==='L'))||(c.key==='key'&&!Object.keys(G.type).some(l=>G.type[l]==='jail'&&l!==p.loc)));
     if(T.cond&&!c.active)add('tre','Сразиться за карту «'+T.n+'»: '+T.cond.n+' (А'+T.cond.a+' / У'+T.cond.u+')',()=>uniqueFight(p,c),G.duels>=3);
     if(c.key==='poseidon'&&!c.used&&c.active)add('tre','Сыграть: '+T.n+' (раз за игру)',()=>useTre(p,c));
-    add('tre','Выбросить из руки: '+T.n+' (освободить слот)',()=>{discardTre(p,c,cancel=>{if(!cancel&&p.task&&p.task.cat==='ev'&&p.task.def.k==='contra'&&here&&lt==='market'){p.task.done=true;log(p.name+' сбросил контрабанду на Чёрном рынке.')}})});
+    add('tre','Выбросить из руки: '+T.n+' (освободить слот)',()=>{discardTre(p,c,cancel=>{const et=evT(p);if(!cancel&&et&&et.def.k==='contra'&&here&&lt==='market'){et.done=true;log(p.name+' сбросил контрабанду на Чёрном рынке.')}})});
   }
   // market
   const atMarket=here&&lt==='market';
@@ -2655,8 +2659,8 @@ function actions(){
       step(0)},tot<10);
   }
   // event-task actions
-  if(p.task&&p.task.cat==='ev'){
-    const tk=p.task,kk=tk.def.k;
+  if(evT(p)){
+    const tk=evT(p),kk=tk.def.k;
     if(kk==='bribe'&&atMarket)add('task','Сдать «'+tk.def.t+'» на Чёрном рынке (0 ОД)',()=>{tk.done=true});
     if(kk==='contra'&&atMarket)for(const c of p.tre)add('task','Сбросить «'+TRE[c.key].n+'» («'+tk.def.t+'»)',()=>{discardTre(p,c,cancel=>{if(!cancel)tk.done=true})});
     if(kk==='rebuild'&&here&&lt==='base')add('task','Сбросить 3 карты атаки («'+tk.def.t+'»)',()=>{
@@ -2665,18 +2669,18 @@ function actions(){
       step(3)},p.atk.length<3);
   }
   // tasks
-  if(here&&lt==='event'&&!p.task)add('task','Взять задание на ивентовой локации',()=>{
-    drawFor(p,'tev',def=>{p.task=giveTask(p,'ev',def);fxCard(p,{kind:'task',def});log(p.name+' берёт задание «'+def.t+'».')});
+  if(here&&lt==='event'&&!evT(p)&&(G.tb>=3||!p.task))add('task','Взять задание на ивентовой локации',()=>{
+    drawFor(p,'tev',def=>{const t=giveTask(p,'ev',def);if(G.tb>=3)p.etask=t;else p.task=t;fxCard(p,{kind:'task',def});log(p.name+' берёт задание «'+def.t+'».')});
   });
-  if(p.task){
-    const f=p.task.def;
-    if(f.k==='pay')add('task','Заплатить '+f.n+' Берри: «'+f.t+'»',()=>{pay(p,f.n);completeTask(p,'task')},p.berries<f.n);
+  for(const sl of ['task','etask'])if(p[sl]){
+    const T0=p[sl],f=T0.def;
+    if(f.k==='pay')add('task','Заплатить '+f.n+' Берри: «'+f.t+'»',()=>{pay(p,f.n);completeTask(p,sl)},p.berries<f.n);
     if(f.k==='disc2')add('task','Сбросить 2 карты сокровищ: «'+f.t+'»',()=>{
-      const a=p.tre.slice(0,2);for(const c of a)discardCard(p,c);completeTask(p,'task');
+      const a=p.tre.slice(0,2);for(const c of a)discardCard(p,c);completeTask(p,sl);
     },p.tre.length<2);
-    const rc=p.task.cat==='pon'?100:10;
-    add('task','Сбросить задание'+(rc>10?' понеглифа':'')+' (−'+rc+' Берри)',()=>{
-      pay(p,rc);const t=p.task;p.task=null;if(t.cat==='pon'&&G.ponAt[t.loc])G.ponAt[t.loc].owner=null;
+    const rc=T0.cat==='pon'?100:10;
+    add('task','Сбросить задание'+(rc>10?' понеглифа':' «'+f.t+'»')+' (−'+rc+' Берри)',()=>{
+      pay(p,rc);const t=p[sl];p[sl]=null;if(t.cat==='pon'&&G.ponAt[t.loc])G.ponAt[t.loc].owner=null;
       G.decks[t.cat==='pon'?'tpon':'tev'].push(t.def);log(p.name+' сбрасывает задание «'+t.def.t+'».');
     },p.berries<rc);
   }
@@ -3273,7 +3277,7 @@ function handHtml(p){
   h+='<div class="blk"><div class="bt">Карты атаки <em>'+p.atk.length+'/10</em></div><div class="pcs">'+(Object.keys(cnt).length?Object.keys(cnt).sort((a,b)=>a-b).map(v=>'<div class="pc"><b>'+v+'</b><small>×'+cnt[v]+'</small></div>').join(''):'<span class="small">нет карт</span>')+'</div></div>';
   h+='<div class="blk"><div class="bt">Пассивные способности <em>'+p.pas.length+'/10</em></div>'+(p.pas.length?p.pas.map(c=>mc(PAS[c.key].n,PAS[c.key].d)).join(''):'<span class="small">нет карт</span>')+'</div>';
   h+='<div class="blk"><div class="bt">Сокровища <em>'+p.tre.length+'/3</em></div>'+(p.tre.length?p.tre.map(c=>mc(TRE[c.key].n,TRE[c.key].d,activeC(c)?'':'не активна')).join(''):'<span class="small">нет карт</span>')+'</div>';
-  const tk=[p.task&&['Задание',p.task],p.ltask&&['Лафтейл',p.ltask]].filter(Boolean);
+  const tk=[p.task&&['Задание',p.task],p.etask&&['Ивент',p.etask],p.ltask&&['Лафтейл',p.ltask]].filter(Boolean);
   h+='<div class="blk"><div class="bt">Задания'+(G.tb?': <em>'+Math.min(5,p.td|0)+' из 5'+(p.mile===2?' ✓':'')+'</em>':'')+'</div>'+(tk.length?tk.map(([n,t])=>(t.def.k==='world'&&t.target?'<div data-wroll="'+p.i+'" style="cursor:pointer">'+mc(n+': '+t.def.t,t.def.d+(t.def.rt?' · награда: '+t.def.rt:''),'🎲 выпало '+t.target)+'<div class="small" style="padding:0 4px 6px">Нужны 2 флага на локациях №'+t.target+' в двух морях. Нажмите, чтобы показать бросок ещё раз.</div></div>':mc(n+': '+t.def.t,t.def.d+(t.target?' (цель №'+t.target+')':'')+(t.def.rt?' · награда: '+t.def.rt:'')+(t.paid?' [куб сброшен]':'')+(t.moved?' [Зунеша переместилась]':'')))).join(''):'<span class="small">нет активного задания</span>')+'</div>';
   h+='<div class="small" style="padding:2px 4px">Особые ходы: нажмите на соседнюю локацию на карте.</div></div>';
   return h;
@@ -3796,7 +3800,7 @@ function qoOpen(k){
   document.body.appendChild(o);if(k==='news'||k==='newspop')newsMark(k==='news');if(k==='hall'){hallLoad();const lb=document.getElementById('hallog');if(lb)lb.onclick=logGate};
 }
 function qoClose(){const o=document.getElementById('qoov');if(o)o.remove()}
-const NEWS=[{"id": "2026-11-20-guard", "d": "20 ноября", "t": "Хранители стали сильнее", "x": "Хранители понеглифов теперь сильнее: атака 11, уклонение 8 (было 9 и 6). Вызвать хранителя можно только один раз за раунд. Найти понеглиф мало: к бою с хранителем стоит подготовить карты атаки и пассивки."}, {"id": "2026-11-19-tutorial", "d": "19 ноября", "t": "Обучение", "x": "На главном экране появилась кнопка «Обучение»: короткая партия, в которой наставник шаг за шагом показывает, как плыть по карте, победить хранителя, получить понеглиф и выиграть на Лафтейле. Занимает пару минут."}, {"id": "2026-11-19-advice", "d": "19 ноября", "t": "Цель и советы", "x": "Над картой теперь всегда видна цель партии и ваш прогресс. Строка «💡 Совет» подсказывает, что сейчас лучше сделать: нужная кнопка и остров подсвечиваются, а кнопка «Сделать» выполнит совет. Отключить: Настройки → «Совет хода»."}, {"id": "2026-11-19-easy2", "d": "19 ноября", "t": "Упрощённый режим стал проще", "x": "В упрощённом режиме теперь только 2 моря (остальные закрыты на карте) и нет адмирала. По-прежнему достаточно одного понеглифа, чтобы открыть Лафтейл и победить. В этом режиме игроки могут стартовать в одном море."}, {"id": "2026-11-19-back", "d": "19 ноября", "t": "Кнопка «Назад»", "x": "Кнопка или жест «Назад» на телефоне больше не закрывает игру: он закрывает открытое окно или меню, возвращает на шаг назад при подготовке партии, а во время партии открывает меню. На главном экране нажмите «Назад» дважды, чтобы выйти."}, {"id": "2026-11-18-roger", "d": "18 ноября", "t": "Новый секретный персонаж", "x": "В игре появился ещё один секретный персонаж. Он доступен только по паролю. Кто знает, тот знает."}, {"id": "2026-11-18-duelanim", "d": "18 ноября", "t": "Новая анимация дуэлей", "x": "В каждом раунде бойцы замахиваются одновременно, поэтому по первым кадрам не понять, кто выиграл. При ничьей один из бойцов бьёт, а второй ставит красноватый щит."}, {"id": "2026-11-18-king", "d": "18 ноября", "t": "Воля короля", "x": "Новая карта сокровищ «Воля короля»: чтобы получить её, нужно победить Тёмного короля Рейли (атака 9, уклонение 6). За 1 ОД: все остальные игроки в вашем море и адмирал пропускают ход. По островам моря бьют красно-чёрные молнии."}, {"id": "2026-11-18-double", "d": "18 ноября", "t": "Дубль на костях", "x": "Если на костях дохода выпал дубль, бросивший получает +1 очко действия на этот ход."}, {"id": "2026-11-17-exit", "d": "17 ноября", "t": "Выход из партии из меню", "x": "В меню (☰) появились пункты «Выйти с сохранением» и «Выйти из игры». После выхода с сохранением на главном экране будет кнопка «Продолжить партию», а для сетевой игры — «Вернуться в комнату»."}, {"id": "2026-11-17-duelwin", "d": "17 ноября", "t": "Победа по числу выигранных раундов", "x": "Если за 3 раунда никто не набрал 2 победы, теперь побеждает тот, у кого побед больше: например, 1:0 при двух ничьих. Боевая ничья — только при равном счёте (0:0 или 1:1). Бой с хранителем понеглифа считается по-старому. Правило действует в новых партиях."}, {"id": "2026-11-17-duelscene", "d": "17 ноября", "t": "Анимированные дуэли", "x": "Каждый бой теперь видно: бойцы дерутся раунд за раундом по выпавшим цифрам. У каждого персонажа и босса свои приёмы, при разнице в 4 очка и больше — тяжёлые. Кубик бросается сам через 3 секунды. «Ускорить бой» прокручивает анимацию быстро только у вас. Кнопка «Сцена» переключает: показывать, ускоренно или выключить. В боях за карты сокровищ у каждого соперника свой бой: Гекко Мория — тени, Марко — синее пламя, Магеллан — яд и гидра, Король Нептун — трезубец и вода, Дофламинго — нити."}, {"id": "2026-11-17-rearm", "d": "17 ноября", "t": "Новое задание «Перевооружение»", "x": "Победите Босса 2–4 уровня и получите особую карту: пока она у вас, за ход можно купить две карты вместо одной (две атаки, атаку и пассивку или две пассивки). Таких заданий в колоде всего три — успейте забрать!"}, {"id": "2026-11-17-tasks", "d": "17 ноября", "t": "Задания стали интереснее", "x": "Выполните 5 ивентовых заданий — и один раз за игру получите 2 очка к атаке и уклонению, распределяйте как хотите (но атака не выше 8, уклонение не выше 7). Часть боевых заданий теперь можно закрыть картой сокровищ вместо Берри. Зато доход с локаций вдвое меньше, карта сокровищ стоит 50 Берри, гостевой персонаж — 80."}, {"id": "2026-11-16-resume", "d": "16 ноября", "t": "Продолжить партию после обновления страницы", "x": "Случайно обновили страницу или закрыли вкладку? Партию можно продолжить с того же места, в том числе с ботами вместо игроков."}, {"id": "2026-11-16-tv", "d": "16 ноября", "t": "Трансляция на телевизор", "x": "Откройте ссылку комнаты в браузере телевизора (или нажмите «Трансляция» и введите код) — на большом экране будет общая карта и журнал, а играть можно с телефонов."}];
+const NEWS=[{"id": "2026-11-21-tasks", "d": "21 ноября", "t": "Два задания сразу", "x": "Теперь можно держать одновременно задание понеглифа и ивентовое задание. Два ивентовых задания сразу брать нельзя. Правило действует в новых партиях."}, {"id": "2026-11-20-guard", "d": "20 ноября", "t": "Хранители стали сильнее", "x": "Хранители понеглифов теперь сильнее: атака 11, уклонение 8 (было 9 и 6). Вызвать хранителя можно только один раз за раунд. Найти понеглиф мало: к бою с хранителем стоит подготовить карты атаки и пассивки."}, {"id": "2026-11-19-tutorial", "d": "19 ноября", "t": "Обучение", "x": "На главном экране появилась кнопка «Обучение»: короткая партия, в которой наставник шаг за шагом показывает, как плыть по карте, победить хранителя, получить понеглиф и выиграть на Лафтейле. Занимает пару минут."}, {"id": "2026-11-19-advice", "d": "19 ноября", "t": "Цель и советы", "x": "Над картой теперь всегда видна цель партии и ваш прогресс. Строка «💡 Совет» подсказывает, что сейчас лучше сделать: нужная кнопка и остров подсвечиваются, а кнопка «Сделать» выполнит совет. Отключить: Настройки → «Совет хода»."}, {"id": "2026-11-19-easy2", "d": "19 ноября", "t": "Упрощённый режим стал проще", "x": "В упрощённом режиме теперь только 2 моря (остальные закрыты на карте) и нет адмирала. По-прежнему достаточно одного понеглифа, чтобы открыть Лафтейл и победить. В этом режиме игроки могут стартовать в одном море."}, {"id": "2026-11-19-back", "d": "19 ноября", "t": "Кнопка «Назад»", "x": "Кнопка или жест «Назад» на телефоне больше не закрывает игру: он закрывает открытое окно или меню, возвращает на шаг назад при подготовке партии, а во время партии открывает меню. На главном экране нажмите «Назад» дважды, чтобы выйти."}, {"id": "2026-11-18-roger", "d": "18 ноября", "t": "Новый секретный персонаж", "x": "В игре появился ещё один секретный персонаж. Он доступен только по паролю. Кто знает, тот знает."}, {"id": "2026-11-18-duelanim", "d": "18 ноября", "t": "Новая анимация дуэлей", "x": "В каждом раунде бойцы замахиваются одновременно, поэтому по первым кадрам не понять, кто выиграл. При ничьей один из бойцов бьёт, а второй ставит красноватый щит."}, {"id": "2026-11-18-king", "d": "18 ноября", "t": "Воля короля", "x": "Новая карта сокровищ «Воля короля»: чтобы получить её, нужно победить Тёмного короля Рейли (атака 9, уклонение 6). За 1 ОД: все остальные игроки в вашем море и адмирал пропускают ход. По островам моря бьют красно-чёрные молнии."}, {"id": "2026-11-18-double", "d": "18 ноября", "t": "Дубль на костях", "x": "Если на костях дохода выпал дубль, бросивший получает +1 очко действия на этот ход."}, {"id": "2026-11-17-exit", "d": "17 ноября", "t": "Выход из партии из меню", "x": "В меню (☰) появились пункты «Выйти с сохранением» и «Выйти из игры». После выхода с сохранением на главном экране будет кнопка «Продолжить партию», а для сетевой игры — «Вернуться в комнату»."}, {"id": "2026-11-17-duelwin", "d": "17 ноября", "t": "Победа по числу выигранных раундов", "x": "Если за 3 раунда никто не набрал 2 победы, теперь побеждает тот, у кого побед больше: например, 1:0 при двух ничьих. Боевая ничья — только при равном счёте (0:0 или 1:1). Бой с хранителем понеглифа считается по-старому. Правило действует в новых партиях."}, {"id": "2026-11-17-duelscene", "d": "17 ноября", "t": "Анимированные дуэли", "x": "Каждый бой теперь видно: бойцы дерутся раунд за раундом по выпавшим цифрам. У каждого персонажа и босса свои приёмы, при разнице в 4 очка и больше — тяжёлые. Кубик бросается сам через 3 секунды. «Ускорить бой» прокручивает анимацию быстро только у вас. Кнопка «Сцена» переключает: показывать, ускоренно или выключить. В боях за карты сокровищ у каждого соперника свой бой: Гекко Мория — тени, Марко — синее пламя, Магеллан — яд и гидра, Король Нептун — трезубец и вода, Дофламинго — нити."}, {"id": "2026-11-17-rearm", "d": "17 ноября", "t": "Новое задание «Перевооружение»", "x": "Победите Босса 2–4 уровня и получите особую карту: пока она у вас, за ход можно купить две карты вместо одной (две атаки, атаку и пассивку или две пассивки). Таких заданий в колоде всего три — успейте забрать!"}, {"id": "2026-11-17-tasks", "d": "17 ноября", "t": "Задания стали интереснее", "x": "Выполните 5 ивентовых заданий — и один раз за игру получите 2 очка к атаке и уклонению, распределяйте как хотите (но атака не выше 8, уклонение не выше 7). Часть боевых заданий теперь можно закрыть картой сокровищ вместо Берри. Зато доход с локаций вдвое меньше, карта сокровищ стоит 50 Берри, гостевой персонаж — 80."}, {"id": "2026-11-16-resume", "d": "16 ноября", "t": "Продолжить партию после обновления страницы", "x": "Случайно обновили страницу или закрыли вкладку? Партию можно продолжить с того же места, в том числе с ботами вместо игроков."}, {"id": "2026-11-16-tv", "d": "16 ноября", "t": "Трансляция на телевизор", "x": "Откройте ссылку комнаты в браузере телевизора (или нажмите «Трансляция» и введите код) — на большом экране будет общая карта и журнал, а играть можно с телефонов."}];
 const NEWS_KEY='gl_news_seen';
 function newsSeen(){try{return localStorage.getItem(NEWS_KEY)}catch(e){return null}}
 function newsPopSeen(){try{return localStorage.getItem(NEWS_KEY+'_p')}catch(e){return null}}
@@ -4733,8 +4737,7 @@ function bPrepCtx(p,pe){
     else if(/Хранитель понеглифа/.test(t))stake=420;
     else{
       stake=(REWARD[lv]||10)+(pirate?30:45);
-      const tk=p.task;
-      if(tk){
+      for(const tk of [p.task,p.etask])if(tk){
         const f=tk.def;
         if(f.k==='npcNoPas'){stake+=220;noPas=true}
         else if(f.k==='bossWin'&&pirate&&(!f.lv||f.lv.includes(lv))){stake+=95;if(f.noPas)noPas=true;if(f.flawless)flawless=true}
@@ -4746,7 +4749,7 @@ function bPrepCtx(p,pe){
     const att=/ваша расстановка/.test(t);
     stake=60+(att?o.pon.length*260:p.pon.length*260)+(att?0:30);
     if(att&&p.task&&p.task.def.k==='conquer')stake+=180;
-    if(att&&p.task&&p.task.def.k==='pvpInit')stake+=40;
+    if(att&&evT(p)&&evT(p).def.k==='pvpInit')stake+=40;
     if(p.ltask&&p.ltask.def.k==='duelP'&&p.ltask.paid)stake=4000;
   }
   return{spec,stake,noPas,flawless};
@@ -4825,7 +4828,7 @@ function bAllFreePons(){return Object.keys(G.ponAt).filter(k=>G.ponAt[k].owner==
 // ---------- цели ----------
 function bGoal(p){
   const oth=G.players.filter(q=>q!==p);
-  const tk=p.task,lt=p.ltask;
+  const tk=p.task||p.etask,lt=p.ltask;
   const res=(nodes,why,o)=>({nodes,why,opt:o||{}});
   if(lt){
     const k=lt.def.k;
@@ -5007,14 +5010,13 @@ function bTurn(p,A){
   const find=(re,g)=>A.findIndex(a=>!a.dis&&(!g||a.g===g)&&re.test(a.label));
   const endI=()=>A.findIndex(a=>a.g==='end');
   const cards=p.atk.length+p.pas.length+p.tre.length;
-  if(p.task&&p.task.bt0==null)p.task.bt0=G.round;
-  if(p.task&&p.berries>=(p.task.cat==='pon'?100:10)&&!(p.task.def.k==='pay'&&p.berries>=85)){
-    const age=G.round-p.task.bt0;
-    if(age>(p.task.cat==='pon'?16:12)){const j=find(/Сбросить задание/);if(j>=0)return j}
+  for(const T0 of [p.task,p.etask])if(T0){
+    if(T0.bt0==null)T0.bt0=G.round;
+    if(p.berries>=(T0.cat==='pon'?100:10)&&!(T0.def.k==='pay'&&p.berries>=85)&&G.round-T0.bt0>(T0.cat==='pon'?16:12)){const j=find(T0.cat==='pon'?/Сбросить задание понеглифа/:/Сбросить задание «/);if(j>=0)return j}
   }
   if(p.task&&p.task.def.k==='world'&&p.fl===0&&here&&G.flags[loc]===p.i&&numOf(loc)!==p.task.target){const j=find(/Поднять свой флаг/);if(j>=0)return j}
   // форсированный марш: весь ход только движение по безопасным клеткам
-  if(p.task&&p.task.def.k==='march'&&ap>=1&&G.tm.buy===0&&G.tm.pvp===0&&p.cnt.moves-G.tm.mv0===G.apMax-ap&&(p.task.turnNo<G.turnNo||p.task.takeAp===G.apMax)){
+  if(evT(p)&&evT(p).def.k==='march'&&ap>=1&&G.tm.buy===0&&G.tm.pvp===0&&p.cnt.moves-G.tm.mv0===G.apMax-ap&&(evT(p).turnNo<G.turnNo||evT(p).takeAp===G.apMax)){
     const safe=x=>x==='Z'||(G.type[x]&&!['dozor','battle','jail'].includes(G.type[x]));
     const g=bGoal(p),st=g.nodes.length?bStepToward(p,g.nodes,{fear:30}):null;
     let mi=st&&safe(st.step)?A.findIndex(a=>!a.dis&&a.g==='move'&&a.loc===st.step):-1;
@@ -5040,15 +5042,16 @@ function bTurn(p,A){
   if(i>=0&&p.task&&p.task.def.k==='pay')return i;
   i=find(/Сбросить карты атаки суммой/);if(i>=0)return i;
   i=find(/Сдать «/);if(i>=0)return i;
-  if(p.task&&p.task.def.k==='contra'){i=find(/Сбросить «/,'task');if(i>=0)return i}
-  if(p.task&&p.task.def.k==='rebuild'&&p.atk.length>=5){i=find(/Сбросить 3 карты атаки/);if(i>=0)return i}
+  if(evT(p)&&evT(p).def.k==='contra'){i=find(/Сбросить «/,'task');if(i>=0)return i}
+  if(evT(p)&&evT(p).def.k==='rebuild'&&p.atk.length>=5){i=find(/Сбросить 3 карты атаки/);if(i>=0)return i}
   // 4. понеглиф: читать
   if(here||p.loc==='Z'){
     const po=G.ponAt[p.loc];
     if(po&&po.owner==null&&!guardOk(p,po)&&ap>=1&&G.duels<3&&bGuardReady(p,po)){const j=find(/Вызвать хранителя/);if(j>=0)return j}
     if(po&&po.owner==null&&guardOk(p,po)){
-      if(ap<2&&!(p.task&&p.task.cat==='ev'))return endI();
-      if(p.task&&p.task.cat==='ev'&&p.berries>=10){const j=find(/Сбросить задание/);if(j>=0)return j}
+      const blockEv=p.task&&p.task.cat==='ev';
+      if(ap<2&&!blockEv)return endI();
+      if(blockEv&&p.berries>=10){const j=find(/Сбросить задание «/);if(j>=0)return j}
       const j=find(/Карта понеглифа/);if(j>=0)return j;
     }
   }
@@ -5072,7 +5075,7 @@ function bTurn(p,A){
   }
   if(bL(p)===3&&lt==='market'&&p.tre.length<3&&p.berries-(G.tb?50:30)>=20){const j=find(/Купить карту сокровищ/);if(j>=0)return j}
   // 6. задание-событие на ивентовой локации
-  if(lt==='event'&&!p.task){
+  if(lt==='event'&&!evT(p)&&(G.tb>=3||!p.task)){
     const fp=bFreePons(p);
     const near=fp.length&&fp.some(x=>bFromNode(p.loc,x)<=3);
     if(!near&&(bL(p)<3||bAvgWin(p)>=.5)){const j=find(/Взять задание/);if(j>=0)return j}
@@ -5082,11 +5085,11 @@ function bTurn(p,A){
   const duelI=A.findIndex(a=>!a.dis&&a.g==='duel');
   if(duelI>=0&&G.duels<3){
     const q=G.players.find(x=>x!==p&&x.loc===p.loc);
-    if(q&&!(p.task&&p.task.def.k==='bribe')){
+    if(q&&!(evT(p)&&evT(p).def.k==='bribe')){
       const wp=bPvpWin(p,q);
       let want=false;
       if(p.task&&p.task.def.k==='conquer'&&!p.task.armed&&wp>=.45)want=true;
-      else if(p.task&&p.task.def.k==='pvpInit'&&wp>=.3)want=true;
+      else if(evT(p)&&evT(p).def.k==='pvpInit'&&wp>=.3)want=true;
       else if(p.ltask&&p.ltask.def.k==='duelP'&&p.ltask.paid)want=true;
       else if(q.pon.length>0&&wp>=(bL(p)===3?.6:.5))want=true;
       else if(wp>=(bL(p)===3?.88:.78)&&p.atk.length>=4)want=true;
