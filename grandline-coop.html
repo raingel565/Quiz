@@ -1056,6 +1056,15 @@ body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:transpar
   #mapwrap.lg #legend{display:flex}
   #mapwrap.lg #maplg{background:#5a3b1f;color:#fff}
 }
+
+/* V153: корабли — обводка цветом игрока, зелёная аура у того, кто ходит */
+#map .pring{animation:pblink 1.6s ease-in-out infinite}
+@keyframes pblink{50%{opacity:.3}}
+#map .aura{animation:aura 1.8s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes aura{0%,100%{transform:scale(.88);opacity:.7}50%{transform:scale(1.12);opacity:1}}
+#map .aurar{animation:aurar 1.8s ease-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes aurar{0%{transform:scale(.85);opacity:.95}100%{transform:scale(1.8);opacity:0}}
+@media(prefers-reduced-motion:reduce){#map .pring,#map .aura,#map .aurar{animation:none}}
 </style>
 <div id="ver" title="Версия кооператива">C52 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
@@ -1295,7 +1304,7 @@ function worldDist(W,s){ // шагов от старта моря до поне�
 function baseGraph(){return ADJ}
 const seaOf=id=>id[0], numOf=id=>+id.slice(1);
 // ---------- state ----------
-let G=null, UI={viewer:-1,showRules:false,showHelp:false,prepSel:null,setup:null};
+let G=null, UI={viewer:-1,mapfit:true,showRules:false,showHelp:false,prepSel:null,setup:null};
 const P=()=>G.players[G.cur];
 let LOGCAP=null;
 // ---------- звуки (синтез WebAudio, без файлов; на ход игры не влияют) ----------
@@ -4026,10 +4035,10 @@ function mapBase(fancy){
   return s;
 }
 function renderMap(){let PTOP=''; // понеглиф-метки рисуем поверх кораблей и адмиралов
-  const R=38;
+  const R=44; // V153: острова крупнее
   let s='';
   const BR='#5a3b1f';
-  s+=mapBase(true);
+  s+=mapBase(true);s+='<defs><radialGradient id="auraG"><stop offset="0" stop-color="#5dff9a" stop-opacity=".85"/><stop offset=".55" stop-color="#2ee86e" stop-opacity=".45"/><stop offset="1" stop-color="#2ee86e" stop-opacity="0"/></radialGradient></defs>';
   if(G.laftel){for(const a of G.laftel.anch){const p=MAPD.nodes[a];s+='<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+G.laftel.x+'" y2="'+G.laftel.y+'" stroke="#d9a21b" stroke-width="3" stroke-dasharray="3 6"/>'}}
   const act=ACTS.filter(a=>a.loc&&!a.dis).map(a=>a.loc);
   const pickable=new Set([...act,...((G.pending&&G.pending.pick)||[])]);
@@ -4045,8 +4054,8 @@ function renderMap(){let PTOP=''; // понеглиф-метки рисуем п
     const rvl=PT.t&&!PT.t[id]&&t&&t!=='base';
     s+='<g data-id="'+id+'"'+(rvl?' class="rv"':'')+' style="cursor:'+(pickable.has(id)?'pointer':'default')+'">';
     s+='<circle cx="'+x+'" cy="'+y+'" r="'+(R+4)+'" fill="none" stroke="'+(t?TYPES[t].c:(isRed?'#cdbdee':'none'))+'" stroke-width="7"/><circle cx="'+x+'" cy="'+y+'" r="'+(R+7.5)+'" fill="none" stroke="'+BR+'" stroke-width="1" opacity="'+(t||isRed?'.5':'0')+'"/><circle cx="'+x+'" cy="'+y+'" r="'+R+'" fill="#e9d9ae" stroke="'+(isRed?'#5b3f99':BR)+'" stroke-width="3" filter="url(#sh)"/><image href="'+islOf(id)+'" x="'+(x-R)+'" y="'+(y-R)+'" width="'+(2*R)+'" height="'+(2*R)+'" pointer-events="none"/>'+'<circle cx="'+x+'" cy="'+y+'" r="'+R+'" fill="none" stroke="'+(isRed?'#5b3f99':BR)+'" stroke-width="3" pointer-events="none"/>';
-    if(t&&t!=='base'&&BADGE[t]){const B=BADGE[t],bx=x+R-9,by=y+R-9;PTOP+='<g pointer-events="none"><circle cx="'+bx+'" cy="'+(by+1.5)+'" r="19" fill="rgba(0,0,0,.28)"/><circle cx="'+bx+'" cy="'+by+'" r="18" fill="'+B.c+'" stroke="#fff" stroke-width="3.5"/><text x="'+bx+'" y="'+(by+7.5)+'" text-anchor="middle" font-size="21" fill="#fff">'+B.i+'</text></g>'}
-    s+='<text x="'+x+'" y="'+(y+3)+'" text-anchor="middle" font-family="Manrope,system-ui,sans-serif" font-size="34" font-weight="800" fill="'+(t==='market'?'#fff':BR)+'" stroke="'+(t==='market'?'#111':'#fff6df')+'" stroke-width="5" paint-order="stroke" stroke-linejoin="round" pointer-events="none">'+numOf(id)+'</text>';
+    if(t&&t!=='base'&&BADGE[t]){const B=BADGE[t],bx=x+R-9,by=y+R-9;PTOP+='<g pointer-events="none"><circle cx="'+bx+'" cy="'+(by+2)+'" r="23" fill="rgba(0,0,0,.28)"/><circle cx="'+bx+'" cy="'+by+'" r="22" fill="'+B.c+'" stroke="#fff" stroke-width="4"/><text x="'+bx+'" y="'+(by+9)+'" text-anchor="middle" font-size="26" fill="#fff">'+B.i+'</text></g>'}
+    s+='<text x="'+x+'" y="'+(y+5)+'" text-anchor="middle" font-family="Manrope,system-ui,sans-serif" font-size="42" font-weight="800" fill="'+(t==='market'?'#fff':BR)+'" stroke="'+(t==='market'?'#111':'#fff6df')+'" stroke-width="5" paint-order="stroke" stroke-linejoin="round" pointer-events="none">'+numOf(id)+'</text>';
     if(!t)s+='<text x="'+x+'" y="'+(y+(isRed?29:27))+'" text-anchor="middle" font-size="'+(isRed?24:22)+'" font-weight="700" fill="'+(isRed?'#5b3f99':BR)+'" stroke="#fff6df" stroke-width="4" paint-order="stroke" opacity="'+(isRed?'.95':'.7')+'" pointer-events="none">'+(isRed?'⛰':'?')+'</text>';
     if(pickable.has(id))s+='<circle class="ring" cx="'+x+'" cy="'+y+'" r="'+(R+8)+'" fill="none" stroke="#12a05a" stroke-width="6"/>';
     if(G.flags[id]!=null){const c=G.players[G.flags[id]].color;s+='<line x1="'+(x-R+2)+'" y1="'+(y-R-16)+'" x2="'+(x-R+2)+'" y2="'+(y-R+8)+'" stroke="#5a3b1f" stroke-width="3"/><polygon points="'+(x-R+2)+','+(y-R-16)+' '+(x-R+24)+','+(y-R-8)+' '+(x-R+2)+','+(y-R)+'" fill="'+c+'" stroke="#5a3b1f" stroke-width="1.5"/>'}
@@ -4078,7 +4087,7 @@ function renderMap(){let PTOP=''; // понеглиф-метки рисуем п
       s+='<g class="pawn" data-pi="'+p.i+'" data-dx="'+dx+'" data-dy="'+dy+'" pointer-events="none" filter="url(#sh)">'
         +(STREAM.on&&cur&&G.winner==null?'<circle class="spulse" cx="'+px+'" cy="'+py+'" r="30" fill="'+p.color+'" fill-opacity=".35" stroke="'+p.color+'" stroke-width="4"/><circle class="spulse s2" cx="'+px+'" cy="'+py+'" r="30" fill="none" stroke="#fff" stroke-width="3"/><circle cx="'+px+'" cy="'+py+'" r="34" fill="none" stroke="'+p.color+'" stroke-width="5" stroke-dasharray="9 6" class="sspin"/>':'')
         +(me?'<circle class="halo" cx="'+px+'" cy="'+py+'" r="30" fill="'+p.color+'" fill-opacity=".28" stroke="'+p.color+'" stroke-width="3"/>':'')
-        +(cur?'<circle cx="'+px+'" cy="'+py+'" r="23" fill="none" stroke="#f2b01e" stroke-width="4" stroke-dasharray="5 4"/>':'')
+        +(cur&&G.winner==null?'<circle class="aura" cx="'+px+'" cy="'+(py+4)+'" r="66" fill="url(#auraG)"/><circle class="aurar" cx="'+px+'" cy="'+(py+4)+'" r="42" fill="none" stroke="#2ee86e" stroke-width="6"/>':'')+'<circle cx="'+px+'" cy="'+(py+4)+'" r="41" fill="'+p.color+'" fill-opacity=".32" stroke="#fff" stroke-width="9"/><circle class="pring" cx="'+px+'" cy="'+(py+4)+'" r="41" fill="none" stroke="'+p.color+'" stroke-width="6"/>'
         +(SHIPS[p.ch]
           ?'<ellipse cx="'+px+'" cy="'+(py+26)+'" rx="38" ry="9" fill="'+p.color+'" fill-opacity=".55" stroke="#fff" stroke-width="2"/><image href="'+SHIPS[p.ch].u+'" x="'+(px-SHIPS[p.ch].w/2)+'" y="'+(py+29-SHIPS[p.ch].h)+'" width="'+SHIPS[p.ch].w+'" height="'+SHIPS[p.ch].h+'"/>'
             +'<circle cx="'+(px+32)+'" cy="'+(py+16)+'" r="14" fill="'+p.color+'" stroke="#fff" stroke-width="2.5"/><text x="'+(px+32)+'" y="'+(py+22)+'" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" stroke="#1c1f26" stroke-width=".8" paint-order="stroke">'+esc(p.name[0]||'?')+'</text>'
