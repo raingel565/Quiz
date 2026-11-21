@@ -1079,7 +1079,8 @@ const API={
   if(o.out===-1){
    const left=RNG()<.5,A=left?LF[0]:RF,Ds=left?[RF]:LF,hold=left?LF.slice(1):[];
    const doms=Ds.map(D=>dome(D));await Promise.all(doms.map(d=>d.open()));
-   const info=await attack(A,Ds[0],pick(A,false));
+   const D0=Ds[0],off=D0.dir*140*D0.sc,SP=Object.create(D0);SP.x=D0.x+off;SP.home=D0.home+off;SP.to=async()=>{}; // удар упирается в щит, а не в бойца
+   const info=await attack(A,SP,pick(A,false));A.tgt=D0;
    snd('clash');flash(.4);shake();await Promise.all(doms.map(d=>d.hit()));
    await banner('НИЧЬЯ','щит выдержал удар — раунд никому','#cfd8e3');await sleep(450);
    await Promise.all(doms.map(d=>d.close()));await hideBanner();
