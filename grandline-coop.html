@@ -1047,6 +1047,8 @@ body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:transpar
 
 .nm.need,.lbin.need{border-color:#ff6a5a!important;box-shadow:0 0 0 3px rgba(255,90,80,.35)!important;animation:nmsh .35s}
 @keyframes nmsh{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+
+.nm[readonly]{opacity:.7;cursor:default}
 </style>
 <div id="ver" title="Версия кооператива">C49 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
@@ -4303,7 +4305,7 @@ function renderSetup(){
     h+='<div class="seats">'+[0,1,2,3].slice(0,S.n).map(i=>{
       const bot=!!S.bots[i],lv=(S.lv&&S.lv[i])||2;
       return '<div class="seat'+(bot?' isbot':'')+'" style="--c:'+PC[i]+'"><div class="badge">'+(i+1)+'</div>'
-       +'<input class="nm" id="nm'+i+'" value="'+esc(S.names[i])+'" maxlength="14" placeholder="'+(S.bots[i]?'Имя бота':'Введите ваше имя')+'" aria-label="Имя игрока '+(i+1)+'" autocomplete="off">'
+       +'<input class="nm" id="nm'+i+'" value="'+esc(S.bots[i]?'Бот '+(i+1):S.names[i])+'"'+(S.bots[i]?' readonly':'')+' maxlength="14" placeholder="Введите ваше имя" aria-label="Имя игрока '+(i+1)+'" autocomplete="off">'
        +'<div class="sub"><label class="sw"><input type="checkbox" id="bt'+i+'"'+(bot?' checked':'')+'><i></i><span class="botl"><img class="fr" src="assets/ui/franky.webp?v=1" alt="">Бот</span></label>'
        +'<input type="hidden" id="bl'+i+'" value="'+lv+'"><div class="seg sm lvl" role="group" aria-label="Уровень бота">'+[[1,'Простой'],[2,'Средний'],[3,'Сложный']].map(o=>'<button type="button" data-lv="'+i+':'+o[0]+'" class="'+(lv===o[0]?'on':'')+'">'+o[1]+'</button>').join('')+'</div></div></div>'}).join('')+'</div>';
     if(S.bots.slice(0,S.n).some(Boolean))h+='<div class="botnote"><b>Простой</b>: гуляет по карте, дерётся и покупает карты. <b>Средний</b>: ищет острова понеглифов, выполняет задания понеглифов и Лафтейла. <b>Сложный</b>: копит сильную руку, ставит флаги ради дохода и идёт к хранителю подготовленным.</div>';
@@ -4339,13 +4341,13 @@ function renderSetup(){
   const nb=document.querySelector('#modal [data-ui="net"]');if(nb)nb.onclick=()=>{NET.on=true;NET.stage='menu';NET.err='';render()};
   const sb=document.querySelector('#modal [data-ui="stream"]');if(sb)sb.onclick=()=>{NET.on=true;NET.stage='stream';NET.err='';render()};
   if(S.step==='count'){
-    const collect=()=>{S.names=S.names.map((x,i)=>{const el=g('nm'+i);return el?el.value.trim():x});S.bots=S.bots.map((x,i)=>{const el=g('bt'+i);return el?el.checked:x});S.lv=(S.lv||[2,2,2,2]).map((x,i)=>{const el=g('bl'+i);return el?+el.value:x})};
+    const collect=()=>{S.names=S.names.map((x,i)=>{const el=g('nm'+i);return el&&!el.readOnly?el.value.trim():x});S.bots=S.bots.map((x,i)=>{const el=g('bt'+i);return el?el.checked:x});S.lv=(S.lv||[2,2,2,2]).map((x,i)=>{const el=g('bl'+i);return el?+el.value:x})};
     document.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{collect();S.n=+b.dataset.n;renderSetup()});
     document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{collect();S.mode=b.dataset.mode;renderSetup()});
     document.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{const p=b.dataset.lv.split(':');g('bl'+p[0]).value=p[1];b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
     [0,1,2,3].forEach(i=>{const c=g('bt'+i);if(c)c.onchange=()=>{collect();renderSetup()}});
     g('go').onclick=()=>{
-      S.names=S.names.map((x,i)=>{const el=g('nm'+i);return el?el.value.trim():x});
+      S.names=S.names.map((x,i)=>{const el=g('nm'+i);return el&&!el.readOnly?el.value.trim():x});
       S.bots=S.bots.map((x,i)=>{const el=g('bt'+i);return el?el.checked:x});
       { // V150: имена вводят сами игроки
         const miss=[];for(let i=0;i<S.n;i++)if(!S.bots[i]&&!S.names[i])miss.push(i);
@@ -4354,7 +4356,7 @@ function renderSetup(){
           try{toastPush(miss.length>1?'Введите имена игроков, чтобы начать':'Введите имя игрока '+(miss[0]+1)+', чтобы начать')}catch(e){}return}
       }
       S.lv=(S.lv||[2,2,2,2]).map((x,i)=>{const el=g('bl'+i);return el?+el.value:x});
-      S.names=S.names.map((x,i)=>S.bots[i]&&(!x||/^Игрок \d$/.test(x))?'Бот '+(i+1):x);
+      const nmH=S.names.slice();S.names=S.names.map((x,i)=>S.bots[i]?'Бот '+(i+1):x);
       let list=S.names.slice(0,S.n).map((n,i)=>({name:n,r:0,bot:!!S.bots[i],lv:(S.lv&&S.lv[i])||2}));
       let ok=false,guard=0;
       while(!ok&&guard++<50){list.forEach(o=>o.r=d(6)+d(6));ok=new Set(list.map(o=>o.r)).size===list.length}
