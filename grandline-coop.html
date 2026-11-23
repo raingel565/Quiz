@@ -1162,7 +1162,7 @@ body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:transpar
   body.ingame #app{padding-bottom:78px}
 }
 </style>
-<div id="ver" title="Версия кооператива">C56 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия кооператива">C57 · бета</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=15"></script>
 <script>
@@ -5594,7 +5594,7 @@ function resumeCardHtml(){
   if(R.room)h+='<button class="lbgo" data-resume="net" style="margin:0 0 8px"><span class="dice">🌐</span>Вернуться в комнату '+esc(R.room)+'</button>';
   return h+'<button class="btn" data-resume="drop" style="width:100%">Забыть эту партию</button></div>';
 }
-function resumeLocal(){const R=resumeInfo();if(!R.loc)return;SAVE=R.loc;if(!saveRestore())alert('Не удалось восстановить партию, начните новую.')}
+function resumeLocal(){const R=resumeInfo();if(!R.loc){render();return}SAVE=R.loc;if(!saveRestore())alert('Не удалось восстановить партию, начните новую.')}
 function resumeNet(){let code='';try{code=localStorage.getItem('gl_resume_room')||'';localStorage.removeItem('gl_resume_room');NET.name=NET.name||localStorage.getItem('gl_name')||'Игрок'}catch(e){}if(!code)return;NET.on=true;NET.stage='menu';netJoin(code,false)}
 function exitGame(keep){
   window.__mnu=false;qoClose&&qoClose();FXQ.length=0;FXBUSY=false;['dicefx','cardfx','evfx','akfx','akvid','fxbd'].forEach(i=>{const e=document.getElementById(i);if(e)e.remove()});document.body.classList.remove('fxchain');
@@ -5636,7 +5636,7 @@ function saveRestore(){
      +'<button id="rs-new" style="width:100%;padding:10px;border-radius:12px;border:1px solid #5a3b1f;background:#fff;color:#1c1f26;font-size:14px;font-weight:600;cursor:pointer">Начать новую</button></div>';
     document.body.appendChild(o);
     o.querySelector('#rs-go').onclick=()=>{const sp=document.getElementById('splash');if(sp)sp.remove();o.remove();if(!saveRestore())alert('Не удалось восстановить партию, начните новую.')};
-    o.querySelector('#rs-new').onclick=()=>{saveClear();o.remove()};
+    o.querySelector('#rs-new').onclick=()=>{saveClear();o.remove();render()};
   }catch(e){}
 })();
 render();
