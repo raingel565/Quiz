@@ -3384,7 +3384,8 @@ function sideHtml(){
   const hPlayers=isMob()?'<div class="card pr3 m-pl"><h3 class="mh">Игроки</h3>'+G.players.map(q=>{const n=q.pon.length;return '<div class="mpl'+(q===p?' act':'')+'"><span class="avw sm" style="--pc:'+q.color+'">'+av(q.ch)+'</span><span class="mpn"><b>'+esc(q.name)+((NET.on&&NET.me===q.i)?' (вы)':'')+'</b><small>'+esc(CH[q.ch].n)+'</small></span><span class="mpp"><span><b>'+n+'</b> '+(n%10===1&&n%100!==11?'понеглиф':(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20))?'понеглифа':'понеглифов')+'</span><small><i class="coin"></i>'+q.berries+' · флаги '+flagCount(q)+'/4'+(q.jail?' · тюрьма':'')+'</small></span></div>'}).join('')+'</div>':h;
   const viewer=viewerNeeded();
   const meP=NET.on?G.players[NET.me]:null;
-  const showHand=NET.on?!!meP:(UI.viewer===p.i||G.players.length===1);
+  const humP=G.players.filter(q=>!q.bot),solo=!NET.on&&humP.length===1; // V158: в игре с ботами инвентарь человека виден всегда
+  const showHand=NET.on?!!meP:(solo||UI.viewer===p.i||G.players.length===1);
   const myTurn=!NET.on||viewer===NET.me;
   h='<div class="card pr1'+(myTurn?' go':' wait')+'">'+(isMob()?'<h3 class="mh">Действия</h3>':'<h3><span class="pn">1</span>'+(myTurn?'Ваш ход: ':'Ход: ')+esc(pname(p))+'<span class="pbadge">'+(myTurn?'действуйте здесь':'ожидание')+'</span></h3>');
   if(NET.on&&viewer!==NET.me){h+='<div class="small">Сейчас решение за игроком '+esc(pname(G.players[viewer]))+'. Ваши действия появятся, когда дойдёт очередь.</div>'}
@@ -3406,7 +3407,7 @@ function sideHtml(){
     }
   }
   h+='</div>';
-  if(showHand)h+=handHtml(NET.on?meP:p);
+  if(showHand)h+=handHtml(NET.on?meP:solo?humP[0]:p);
   h+=hPlayers;
   h+='<div class="card pr4"><h3><span class="pn">4</span>Журнал<button class="btn logx" data-logx aria-label="Закрыть журнал">✕</button></h3><div id="log">'+G.log.slice(0,60).map(l=>'<div>'+esc(lgv(l))+'</div>').join('')+'</div></div>';
   return h;
