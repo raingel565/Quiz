@@ -1098,8 +1098,50 @@ body.tutor #app{padding-top:110px}
   body.logopen{overflow:hidden}
 }
 @keyframes login{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+
+/* V156: экран партии на телефоне — по макету пользователя */
+.tp-m{display:none}
+@media(max-width:900px){
+  body.ingame #top{display:block;position:relative;text-align:center;padding:12px 56px 12px;border-radius:22px}
+  body.ingame #top .tp-l,body.ingame #top .tp-st,body.ingame #top #sndbtn{display:none}
+  body.ingame #top .tp-r{position:absolute;right:10px;top:10px;display:flex;gap:6px}
+  body.ingame #top .tp-m{display:flex;flex-direction:column;align-items:center;gap:4px}
+  .tm-t{font-family:var(--f-display);font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;line-height:1.1}
+  .tm-r{font-size:15px;font-weight:700;color:var(--muted)}
+  .tm-od{margin-top:4px;height:34px;padding:0 16px;gap:7px;font-weight:700}
+  .tm-od .dot{width:13px;height:13px;border-radius:50%;background:var(--gold);box-shadow:0 0 6px rgba(233,185,74,.7);display:inline-block}
+  .tm-od .dot.off{background:#4b5257;box-shadow:none}
+  body.ingame #now>span{display:none}
+  body.ingame #now:not(:has(.hintbar)){display:none}
+  .card h3.mh{justify-content:center;text-align:center;font-size:18px;margin:0 0 4px}
+  .pr1 .blk{border:0!important;padding:0!important;background:transparent!important;box-shadow:none!important}
+  .pr1 .blk.g-move .bt{margin:0 0 6px 2px}
+  .pr1 .mrow{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+  .pr1 .mrow .btn{flex:none;width:auto;scroll-snap-align:start;min-width:96px;justify-content:center;border:2px solid var(--gold)}
+  .pr1 .mgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .pr1 .mgrid .btn{min-height:58px;height:auto;white-space:normal;flex-direction:column;justify-content:center;text-align:center;line-height:1.2;padding:8px 8px;border-left:4px solid #8b8f98}
+  .pr1 .mgrid .k-duel{border-left-color:#e0463a}.pr1 .mgrid .k-task{border-left-color:#f0b43a}.pr1 .mgrid .k-flag{border-left-color:#3ddc84}
+  .pr1 .mgrid .k-cards,.pr1 .mgrid .k-tre,.pr1 .mgrid .k-market{border-left-color:#9a83e6}.pr1 .mgrid .k-fire{border-left-color:#ff7a2e}
+  .pr1 .g-end .row .btn{width:100%;min-height:50px;justify-content:center;align-items:center;text-align:center;font-weight:700}
+  .pr1 .g-end .row .btn .al{flex:none;width:auto}
+  .pr1 .advbar{margin:0 0 10px;padding:6px 6px 6px 10px;display:flex;align-items:center;gap:6px;flex-wrap:nowrap;font-size:13px;line-height:1.25}
+  .pr1 .advbar .advgo{margin:0 0 0 auto;flex:none;height:32px;padding:0 12px;font-size:13px}
+  .m-inv .invst{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .m-inv .invst .chip{justify-content:center;height:32px;font-size:13px}
+  .m-inv .mgcs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .m-inv .mgc{display:flex;flex-direction:column;gap:4px;padding:10px;border-radius:14px;background:rgba(0,0,0,.28);border:1px solid var(--line);min-height:96px}
+  .m-inv .mgc b{font-size:13.5px;line-height:1.2}
+  .m-inv .mgc span{font-size:12px;line-height:1.3;color:var(--muted)}
+  .m-inv .mgc.ab{border-color:rgba(233,185,74,.55);background:rgba(233,185,74,.08)}
+  .m-pl .mpl{display:flex;align-items:center;gap:10px;padding:8px 6px;border-radius:14px}
+  .m-pl .mpl.act{background:rgba(61,220,132,.1);box-shadow:inset 0 0 0 1px rgba(61,220,132,.4)}
+  .m-pl .mpn{display:flex;flex-direction:column;flex:1;min-width:0}
+  .m-pl .mpn small,.m-pl .mpp small{color:var(--muted);font-size:11.5px}
+  .m-pl .mpp{display:flex;flex-direction:column;align-items:flex-end;text-align:right;font-size:14px}
+  .m-pl .mpp b{font-size:18px;color:var(--gold)}
+}
 </style>
-<div id="ver" title="Версия игры">V155</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Ход</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Рука</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V156</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=15"></script>
 <script>
@@ -3160,13 +3202,13 @@ function render(){
   document.body.classList.toggle('tutor',!!G.tut);try{tutCoach()}catch(e){}
   if(G.tut&&G.winner!=null)setTimeout(tutFinale,1200);
   if(G.winner!=null&&!SNDW){SNDW=1;fxSnd('win')}else if(G.winner==null)SNDW=0;
-  $('#top').innerHTML=topHtml();
+  UI.mob=isMob();$('#top').innerHTML=topHtml();
   $('#now').innerHTML=nowHtml();
   if(window.__nor){FXQ.length=0;FXBUSY=false}else if(FXQ.length)setTimeout(flushFx,30);
   renderMap();
   ACTS=actions();
   $('#side').innerHTML=sideHtml();
-  { const hh=advHtml()+hintHtml();if(hh)$('#now').insertAdjacentHTML('beforeend',hh);hintMark() }
+  { const ah=advHtml(),hh=hintHtml(),pr=isMob()&&document.querySelector('#side .pr1 h3');if(pr&&ah){pr.insertAdjacentHTML('afterend',ah);if(hh)$('#now').insertAdjacentHTML('beforeend',hh)}else if(ah+hh)$('#now').insertAdjacentHTML('beforeend',ah+hh);hintMark() }
   $('#legend').innerHTML=Object.entries(TYPES).map(([k,t])=>(BADGE[k]?'<span><i style="background:'+BADGE[k].c+'"></i>'+BADGE[k].i+' '+t.n+'</span>':'<span><i style="background:'+t.c+'"></i>'+t.n+'</span>')).join('')+'<span><i style="background:#cdbdee;border-color:#5b3f99!important"></i>⛰ переход между морями</span><span><i style="background:#fff"></i>«?» — фишка не вскрыта</span><span><i style="background:var(--gold);transform:rotate(45deg);border-radius:2px"></i><b>П</b> — остров понеглифа</span>';
   {const hum=G.players.filter(q=>!q.bot);if(!NET.on&&hum.length===1&&hum.length<G.players.length&&need!=null&&!G.players[need].bot)UI.viewer=hum[0].i}
   let m='';
@@ -3259,6 +3301,17 @@ function turnPill(){
   }catch(e){}
   return '';
 }
+const isMob=()=>matchMedia('(max-width:900px)').matches;
+function mobHead(){ // V156: шапка партии на телефоне
+  const p=P(),need=viewerNeeded(),w=G.players[need]||p;
+  let t;
+  if(G.winner!=null)t='Игра окончена';
+  else if(NET.on)t=need===NET.me?'Ваш ход':'Ходит '+w.name;
+  else if(w.bot)t='Ходит '+w.name;
+  else t=G.players.filter(q=>!q.bot).length>1?'Ход: '+w.name:'Ваш ход';
+  const dots=Array.from({length:Math.max(3,G.apMax||3)},(_,i)=>'<span class="dot'+(i<G.ap?'':' off')+'"></span>').join('');
+  return '<div class="tp-m"><b class="tm-t">'+esc(t)+'</b><span class="tm-r">Раунд '+G.round+(G.mode&&G.mode!=='std'?' · '+esc(modeOf().n):'')+'</span>'+(G.winner==null?'<span class="pill tm-od">ОД '+dots+'</span>':'')+'</div>';
+}
 function topHtml(){
   const p=P(),me=(NET.on&&G.players[NET.me])?G.players[NET.me]:p;
   const dots=Array.from({length:Math.max(3,G.apMax||3)},(_,i)=>i).map(i=>'<span class="dot'+(i<G.ap?'':' off')+'" style="background:var(--accent)"></span>').join('');
@@ -3279,7 +3332,7 @@ function topHtml(){
     +(G.akainu?'<span class="pill pill-ak" title="Адмирал на карте: '+adm().pill+'"><span class="avw sm" style="--pc:'+adm().col+'">'+av(G.adm||'akainu')+'</span>'+adm().short+': '+esc(locName(G.akainu.loc))+(G.akainu.stun>0?' 💫':'')+'</span>':'')+(G.roll?'<span class="pill">Кубики '+G.roll[0]+' + '+G.roll[1]+' = '+(G.roll[0]+G.roll[1])+'</span>':'')
     +(G.lastWeather?'<span class="pill" title="'+esc(G.lastWeather.n)+'">Погода: '+esc(G.lastWeather.n.split(':')[0])+'</span>':'')
     +(NET.on&&NET.code?'<span class="pill">Комната '+NET.code+(NET.me>=0?' · вы: '+esc(G.players[NET.me].name):' · наблюдатель')+'</span>':'');
-  return '<div class="tp-l"><span class="title">Гранд Лайн</span><span class="pill rnd">Раунд '+G.round+'</span>'+(G.mode&&G.mode!=='std'?'<span class="pill" title="'+esc(modeOf().d)+'">'+esc(modeOf().n)+'</span>':'')+'</div>'
+  return mobHead()+'<div class="tp-l"><span class="title">Гранд Лайн</span><span class="pill rnd">Раунд '+G.round+'</span>'+(G.mode&&G.mode!=='std'?'<span class="pill" title="'+esc(modeOf().d)+'">'+esc(modeOf().n)+'</span>':'')+'</div>'
     +'<div class="tp-st">'+st+'</div>'
     +'<div class="tp-r">'+presBadge()+'<button class="btn ico" id="sndbtn" title="Звук">'+(SFX.on?'🔊':'🔇')+'</button>'+menu+'</div>';
 }
@@ -3288,16 +3341,24 @@ function sideHtml(){
   const p=P();
   const coin='<i class="coin"></i>';
   let h='<div class="card pr3"><h3><span class="pn">3</span>Игроки (соперники)</h3><div class="plist2">'+G.players.map(q=>'<div class="pl'+(q===p?' act':'')+((NET.on&&NET.me===q.i)?' me':'')+'"><div class="pl-h"><span class="avw" style="--pc:'+q.color+'">'+av(q.ch)+'</span><div class="pl-n"><b>'+esc(q.name)+((NET.on&&NET.me===q.i)?' <em>вы</em>':'')+'</b><span>'+esc(CH[q.ch].n)+'</span></div><span class="chip gold">'+coin+q.berries+'</span></div><div class="chips"><span class="chip">Флаги '+flagCount(q)+'/4</span><span class="chip">Понеглифы '+q.pon.length+'</span><span class="chip">Карты '+(q.atk.length+q.pas.length+q.tre.length)+'</span>'+(q.jail?'<span class="chip bad">Тюрьма '+q.jail+'</span>':'')+(q.skip?'<span class="chip bad">Травма</span>':'')+'</div></div>').join('')+'</div></div>';
-  const hPlayers=h;
+  const hPlayers=isMob()?'<div class="card pr3 m-pl"><h3 class="mh">Игроки</h3>'+G.players.map(q=>{const n=q.pon.length;return '<div class="mpl'+(q===p?' act':'')+'"><span class="avw sm" style="--pc:'+q.color+'">'+av(q.ch)+'</span><span class="mpn"><b>'+esc(q.name)+((NET.on&&NET.me===q.i)?' (вы)':'')+'</b><small>'+esc(CH[q.ch].n)+'</small></span><span class="mpp"><span><b>'+n+'</b> '+(n%10===1&&n%100!==11?'понеглиф':(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20))?'понеглифа':'понеглифов')+'</span><small><i class="coin"></i>'+q.berries+' · флаги '+flagCount(q)+'/4'+(q.jail?' · тюрьма':'')+'</small></span></div>'}).join('')+'</div>':h;
   const viewer=viewerNeeded();
   const meP=NET.on?G.players[NET.me]:null;
   const showHand=NET.on?!!meP:(UI.viewer===p.i||G.players.length===1);
   const myTurn=!NET.on||viewer===NET.me;
-  h='<div class="card pr1'+(myTurn?' go':' wait')+'"><h3><span class="pn">1</span>'+(myTurn?'Ваш ход: ':'Ход: ')+esc(pname(p))+'<span class="pbadge">'+(myTurn?'действуйте здесь':'ожидание')+'</span></h3>';
+  h='<div class="card pr1'+(myTurn?' go':' wait')+'">'+(isMob()?'<h3 class="mh">Действия</h3>':'<h3><span class="pn">1</span>'+(myTurn?'Ваш ход: ':'Ход: ')+esc(pname(p))+'<span class="pbadge">'+(myTurn?'действуйте здесь':'ожидание')+'</span></h3>');
   if(NET.on&&viewer!==NET.me){h+='<div class="small">Сейчас решение за игроком '+esc(pname(G.players[viewer]))+'. Ваши действия появятся, когда дойдёт очередь.</div>'}
   else if(G.pending&&G.pending.type!=='prep'){h+='<div class="small">Ожидается решение: '+esc(G.pending.title||'')+'</div>'}
   else{
     const groups={move:'Перемещение (или нажмите на карту)',duel:'Дуэль',flag:'Флаги',fire:'Способность',task:'Задания и понеглифы',cards:'Карты',tre:'Сокровища',market:'Чёрный рынок',end:''};
+    if(isMob()){ // V156: «Действия» на телефоне — ходы лентой, остальное сеткой
+      const all=ACTS.map((a,i)=>[a,i]).filter(([a])=>!a.far);
+      const B=([a,i],cl)=>'<button class="btn act'+(cl||'')+'" data-a="'+i+'"'+(a.dis?' disabled':'')+'>'+actLbl(a.label)+'</button>';
+      const mv=all.filter(([a])=>a.g==='move'),oth=all.filter(([a])=>a.g!=='move'&&a.g!=='end'),en=all.filter(([a])=>a.g==='end');
+      if(mv.length)h+='<div class="blk g-move"><div class="bt">Куда плыть</div><div class="mrow">'+mv.map(x=>B(x)).join('')+'</div></div>';
+      if(oth.length)h+='<div class="blk g-acts"><div class="mgrid">'+oth.map(x=>B(x,' k-'+x[0].g)).join('')+'</div></div>';
+      if(en.length)h+='<div class="blk g-end"><div class="row">'+en.map(x=>B(x,G.ap===0?' primary':'')).join('')+'</div></div>';
+    }else
     for(const g of Object.keys(groups)){
       const items=ACTS.map((a,i)=>[a,i]).filter(([a])=>a.g===g&&!a.far);
       if(!items.length)continue;
@@ -3313,12 +3374,22 @@ function sideHtml(){
 function handHtml(p){
   const cnt={};for(const c of p.atk)cnt[c.v]=(cnt[c.v]||0)+1;
   const st=stats(p);
+  let h0='';
   const mc=(t,d,badge)=>'<div class="mc"><div class="mc-t"><b>'+esc(t)+'</b>'+(badge?'<span class="chip bad">'+badge+'</span>':'')+'</div>'+(d?'<div class="mc-d">'+esc(d)+'</div>':'')+'</div>';
+  if(isMob()){ // V156: «Инвентарь» на телефоне
+    let m='<div class="card hand pr2 m-inv"><h3 class="mh">Инвентарь</h3>';
+    m+='<div class="invst"><span class="chip gold"><i class="coin"></i>'+p.berries+' Б</span><span class="chip">Флаги '+flagCount(p)+'/4</span><span class="chip">Понеглифы '+p.pon.length+'</span><span class="chip">Карты '+(p.atk.length+p.pas.length+p.tre.length)+'</span><span class="chip">⚔ Атака '+st.A+'</span><span class="chip">🛡 Уклонение '+st.U+'</span></div>';
+    m+='<div class="blk"><div class="bt">Карты атаки <em>'+p.atk.length+'/10</em></div><div class="pcs">'+(Object.keys(cnt).length?Object.keys(cnt).sort((a,b)=>a-b).map(v=>'<div class="pc"><b>'+v+'</b><small>×'+cnt[v]+'</small></div>').join(''):'<span class="small">нет карт</span>')+'</div></div>';
+    const cg=(t,d,cl)=>'<div class="mgc'+(cl||'')+'"><b>'+esc(t)+'</b><span>'+esc(d)+'</span></div>';
+    m+='<div class="blk"><div class="bt">Способность и пассивки <em>'+p.pas.length+'/10</em></div><div class="mgcs">'+cg(CH[p.ch].n,CH[p.ch].d,' ab')+p.pas.map(c=>cg(PAS[c.key].n,PAS[c.key].d)).join('')+'</div></div>';
+    h0=m;
+  }
   let h='<div class="card hand pr2"><div class="hdr"><span class="avw big" style="--pc:'+p.color+'">'+av(p.ch)+'</span><div style="flex:1"><h3><span class="pn">2</span>Рука: '+esc(p.name)+'</h3><div class="small">'+esc(CH[p.ch].n)+'</div></div><div class="bal"><i class="coin"></i><b>'+p.berries+'</b><span>Берри</span></div></div>';
   h+='<div class="stats"><div class="stat"><span>Атака</span><b>'+st.A+'</b></div><div class="stat"><span>Уклонение</span><b>'+st.U+'</b></div><div class="stat"><span>Флаги</span><b>'+flagCount(p)+'/4</b></div><div class="stat"><span>Понеглифы</span><b>'+p.pon.length+'</b></div></div>';
   h+='<div class="blk"><div class="bt">Способность персонажа</div>'+mc(CH[p.ch].n,CH[p.ch].d)+'</div>';
   h+='<div class="blk"><div class="bt">Карты атаки <em>'+p.atk.length+'/10</em></div><div class="pcs">'+(Object.keys(cnt).length?Object.keys(cnt).sort((a,b)=>a-b).map(v=>'<div class="pc"><b>'+v+'</b><small>×'+cnt[v]+'</small></div>').join(''):'<span class="small">нет карт</span>')+'</div></div>';
   h+='<div class="blk"><div class="bt">Пассивные способности <em>'+p.pas.length+'/10</em></div>'+(p.pas.length?p.pas.map(c=>mc(PAS[c.key].n,PAS[c.key].d)).join(''):'<span class="small">нет карт</span>')+'</div>';
+  if(h0)h=h0;
   h+='<div class="blk"><div class="bt">Сокровища <em>'+p.tre.length+'/3</em></div>'+(p.tre.length?p.tre.map(c=>mc(TRE[c.key].n,TRE[c.key].d,activeC(c)?'':'не активна')).join(''):'<span class="small">нет карт</span>')+'</div>';
   const tk=[p.task&&['Задание',p.task],p.etask&&['Ивент',p.etask],p.ltask&&['Лафтейл',p.ltask]].filter(Boolean);
   h+='<div class="blk"><div class="bt">Задания'+(G.tb?': <em>'+Math.min(5,p.td|0)+' из 5'+(p.mile===2?' ✓':'')+'</em>':'')+'</div>'+(tk.length?tk.map(([n,t])=>(t.def.k==='world'&&t.target?'<div data-wroll="'+p.i+'" style="cursor:pointer">'+mc(n+': '+t.def.t,t.def.d+(t.def.rt?' · награда: '+t.def.rt:''),'🎲 выпало '+t.target)+'<div class="small" style="padding:0 4px 6px">Нужны 2 флага на локациях №'+t.target+' в двух морях. Нажмите, чтобы показать бросок ещё раз.</div></div>':mc(n+': '+t.def.t,t.def.d+(t.target?' (цель №'+t.target+')':'')+(t.def.rt?' · награда: '+t.def.rt:'')+(t.paid?' [куб сброшен]':'')+(t.moved?' [Зунеша переместилась]':'')))).join(''):'<span class="small">нет активного задания</span>')+'</div>';
@@ -3904,7 +3975,7 @@ function hintHtml(){
   return '<div class="hintbar">💡 Осталось ОД: <b>'+G.ap+'</b>. Можно: '+(parts.length?parts.join(', '):'только закончить ход')+'. Каждое действие тратит ОД.</div>';
 }
 function hintMark(){
-  try{if(UI.advI!=null){const b=document.querySelector('#side [data-a="'+UI.advI+'"]');if(b)b.classList.add('adv');const a=ACTS[UI.advI];if(a&&a.loc){const g=document.querySelector('#map g[data-id="'+a.loc+'"]');if(g)g.classList.add('advloc')}}}catch(e){}
+  try{if(UI.advI!=null){const b=document.querySelector('#side .blk [data-a="'+UI.advI+'"]');if(b)b.classList.add('adv');const a=ACTS[UI.advI];if(a&&a.loc){const g=document.querySelector('#map g[data-id="'+a.loc+'"]');if(g)g.classList.add('advloc')}}}catch(e){}
   try{if(!SET.hints||!G||G.winner!=null||G.pending||G.ap>0)return;
     document.querySelectorAll('#side [data-a]').forEach(b=>{const a=ACTS[+b.dataset.a];if(a&&a.g==='end'&&!a.dis)b.classList.add('hl')})}catch(e){}
 }
@@ -3996,7 +4067,7 @@ function vertify(sv){
   rot.querySelectorAll('image').forEach(im=>{if(im.closest('[data-vr]'))return;const x=+im.getAttribute('x'),y=+im.getAttribute('y'),w=+im.getAttribute('width'),h=+im.getAttribute('height');const p=piv(im,x+w/2,y+h/2);const wr=document.createElementNS(NS,'g');wr.setAttribute('transform','rotate(-90 '+p[0]+' '+p[1]+')');im.parentNode.insertBefore(wr,im);wr.appendChild(im)});
   sv.setAttribute('viewBox','-966 8 860 1572');
 }
-addEventListener('resize',()=>{clearTimeout(window.__vrt);window.__vrt=setTimeout(()=>{try{if(G&&document.getElementById('map')&&mapVert()!==!!UI.vert)render()}catch(e){}},200)});
+addEventListener('resize',()=>{clearTimeout(window.__vrt);window.__vrt=setTimeout(()=>{try{if(G&&document.getElementById('map')&&(mapVert()!==!!UI.vert||isMob()!==!!UI.mob))render()}catch(e){}},200)});
 function renderMap(){let PTOP=''; // понеглиф-метки рисуем поверх кораблей и адмиралов
   const R=44; // V153: острова крупнее
   let s='';
@@ -4135,11 +4206,11 @@ const heroHtml=()=>'<div class="hero"><i style="background-image:url('+HERO+')">
 
 // ---------- V14: гайд для новичков ----------
 const GD={on:false,i:0,steps:[]};
-const gdFind=(sel,txt)=>{const l=[...document.querySelectorAll(sel)];return txt?l.find(e=>e.textContent.trim().startsWith(txt)):l[0]};
+const gdFind=(sel,txt)=>{const l=[...document.querySelectorAll(sel)].filter(e=>e.offsetWidth||e.offsetHeight);return txt?l.find(e=>e.textContent.trim().startsWith(txt)):l[0]};
 function gdSteps(){return[
  {t:'Добро пожаловать в «Гранд Лайн»',x:'Цель: собрать 4 роад-понеглифа, найти остров Лафтейл и выполнить его задание. Игроки ходят по очереди. Сейчас коротко покажу, где что находится. Жмите «Далее», остальное кликать не нужно.'},
  {el:()=>gdFind('#top .pill','ОД'),t:'ОД: очки действий',x:'На каждый ход даётся 3 ОД, точки показывают остаток. Шаг на соседнюю локацию стоит 1 ОД, вызов на дуэль 1 ОД, флаг 2 ОД, карта понеглифа или Лафтейла 2 ОД. Покупка карт за Берри, Чёрный рынок и «Закончить ход» ОД не тратят.'},
- {el:()=>gdFind('#top .pill.gold'),t:'Берри: деньги',x:'Карта атаки или пассивка стоит 10 Берри (одна за ход), карта сокровищ '+(G&&G.tb?50:30)+'. Берри дают доход, победы в боях и задания.'+(G&&G.tb?' За 5 выполненных ивентовых заданий — 2 очка к атаке или уклонению на ваш выбор (счётчик «Задания» в боковой панели).':'')},
+ {el:()=>gdFind('#top .pill.gold')||gdFind('.invst .gold'),t:'Берри: деньги',x:'Карта атаки или пассивка стоит 10 Берри (одна за ход), карта сокровищ '+(G&&G.tb?50:30)+'. Берри дают доход, победы в боях и задания.'+(G&&G.tb?' За 5 выполненных ивентовых заданий — 2 очка к атаке или уклонению на ваш выбор (счётчик «Задания» в боковой панели).':'')},
  {el:()=>gdFind('#top .pill','Кубики')||gdFind('#top .pill','Раунд'),t:'Доход в начале хода',x:'В начале каждого хода бросаются 2d6. Выпавшая сумма — номер локации: у кого там флаг или фишка, тот получает Берри (флаг и фишка вместе — вдвое больше). Чем реже номер, тем больше платят.'},
  {el:()=>document.getElementById('mapwrap'),t:'Карта',x:'Кружки — локации, цифра в кружке — её номер. Цвет показывает тип (легенда под картой). «?» — фишка локации ещё не вскрыта: тот, кто придёт первым, вскроет её. Золотой ромб «П» — остров с понеглифом.'},
  {el:()=>document.getElementById('mapme'),t:'Не видите себя?',x:'Нажмите «📍 Где я»: карта сама прокрутится к вашей фишке. Ваша фишка с пульсирующим ореолом и меткой «ВЫ».'},
