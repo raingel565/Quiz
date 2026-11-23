@@ -1140,6 +1140,25 @@ body.tutor #app{padding-top:110px}
   .m-pl .mpp{display:flex;flex-direction:column;align-items:flex-end;text-align:right;font-size:14px}
   .m-pl .mpp b{font-size:18px;color:var(--gold)}
 }
+
+/* V156b: компактные кнопки действий, «Закончить ход» — круглая кнопка справа внизу */
+@media(max-width:900px){
+  .pr1 .mgrid{gap:6px;margin-bottom:4px}
+  .pr1 .mgrid .btn{min-height:0!important;padding:7px 8px!important;font-size:13px;gap:4px;border-radius:14px;line-height:1.15}
+  .pr1 .mgrid .btn .ac{font-size:11px;padding:2px 8px;margin:0}
+  .endfab{position:fixed;right:16px;bottom:calc(98px + env(safe-area-inset-bottom));z-index:46;width:58px;height:58px;border-radius:50%;border:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#f3cf6b,#d9a21b);color:#2a1d05;box-shadow:0 8px 22px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.5)}
+  .endfab svg{width:26px;height:26px;fill:currentColor;stroke:currentColor;stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round}
+  .endfab[disabled]{opacity:.45}
+  .endfab.hot{animation:fabp 1.4s ease-in-out infinite}
+  .endfab.adv,.endfab.hl{box-shadow:0 0 0 3px #fff,0 0 18px rgba(233,185,74,.9)}
+  body.logopen .endfab{display:none}
+}
+@keyframes fabp{50%{box-shadow:0 0 0 8px rgba(233,185,74,.25),0 8px 22px rgba(0,0,0,.55)}}
+#endask{z-index:90}
+#endask .endq{max-width:320px;text-align:center;align-items:center;gap:10px}
+#endask .endq .row{display:flex;gap:10px;justify-content:center;width:100%}
+#endask .endq .btn{flex:1;min-height:46px;justify-content:center!important;text-align:center;font-weight:700}
+@media(max-width:900px){body.ingame #ver{right:84px!important}}
 </style>
 <div id="ver" title="Версия игры">V156</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
@@ -3202,7 +3221,7 @@ function render(){
   document.body.classList.toggle('tutor',!!G.tut);try{tutCoach()}catch(e){}
   if(G.tut&&G.winner!=null)setTimeout(tutFinale,1200);
   if(G.winner!=null&&!SNDW){SNDW=1;fxSnd('win')}else if(G.winner==null)SNDW=0;
-  UI.mob=isMob();$('#top').innerHTML=topHtml();
+  UI.mob=isMob();if(G.winner!=null||G.pending)endAskClose();$('#top').innerHTML=topHtml();
   $('#now').innerHTML=nowHtml();
   if(window.__nor){FXQ.length=0;FXBUSY=false}else if(FXQ.length)setTimeout(flushFx,30);
   renderMap();
@@ -3357,7 +3376,7 @@ function sideHtml(){
       const mv=all.filter(([a])=>a.g==='move'),oth=all.filter(([a])=>a.g!=='move'&&a.g!=='end'),en=all.filter(([a])=>a.g==='end');
       if(mv.length)h+='<div class="blk g-move"><div class="bt">Куда плыть</div><div class="mrow">'+mv.map(x=>B(x)).join('')+'</div></div>';
       if(oth.length)h+='<div class="blk g-acts"><div class="mgrid">'+oth.map(x=>B(x,' k-'+x[0].g)).join('')+'</div></div>';
-      if(en.length)h+='<div class="blk g-end"><div class="row">'+en.map(x=>B(x,G.ap===0?' primary':'')).join('')+'</div></div>';
+      if(en.length)h+='<button class="endfab'+(G.ap===0?' hot':'')+'" data-a="'+en[0][1]+'"'+(en[0][0].dis?' disabled':'')+' aria-label="Закончить ход" title="Закончить ход"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5l9 7-9 7z"/><path d="M18 5v14"/></svg></button>';
     }else
     for(const g of Object.keys(groups)){
       const items=ACTS.map((a,i)=>[a,i]).filter(([a])=>a.g===g&&!a.far);
@@ -3979,8 +3998,17 @@ function hintMark(){
   try{if(!SET.hints||!G||G.winner!=null||G.pending||G.ap>0)return;
     document.querySelectorAll('#side [data-a]').forEach(b=>{const a=ACTS[+b.dataset.a];if(a&&a.g==='end'&&!a.dis)b.classList.add('hl')})}catch(e){}
 }
+function endAsk(i){ // V156: подтверждение «Закончить ход?»
+  endAskClose();
+  const o=document.createElement('div');o.id='endask';o.className='ov';
+  o.innerHTML='<div class="modal endq" role="alertdialog" aria-label="Закончить ход?"><h2>Закончить ход?</h2>'+(G.ap>0?'<div class="small">Осталось ОД: '+G.ap+'</div>':'')+'<div class="row"><button class="btn" data-eq="0">Нет</button><button class="btn primary" data-eq="1">Да</button></div></div>';
+  o.addEventListener('click',e=>{const b=e.target.closest('[data-eq]');if(b){endAskClose();if(b.dataset.eq==='1'){const j=ACTS.findIndex(a=>a.g==='end'&&!a.dis);if(j>=0)submit({t:'a',i:j})}}else if(e.target===o)endAskClose()});
+  document.body.appendChild(o);
+}
+function endAskClose(){const o=document.getElementById('endask');if(o)o.remove()}
 function bind(){
-  document.querySelectorAll('#modal [data-a],#side [data-a],#now [data-a]').forEach(b=>b.onclick=()=>{submit({t:'a',i:+b.dataset.a})});
+  document.querySelectorAll('#modal [data-a]').forEach(b=>b.onclick=()=>{submit({t:'a',i:+b.dataset.a})});
+  document.querySelectorAll('#side [data-a],#now [data-a]').forEach(b=>b.onclick=()=>{const i=+b.dataset.a,a=ACTS[i];if(a&&a.g==='end'&&!G.tut)endAsk(i);else submit({t:'a',i})});
   document.querySelectorAll('[data-ui]').forEach(b=>b.onclick=()=>{
     const k=b.dataset.ui;
     if(k==='ready'){UI.viewer=+b.dataset.p;render()}
@@ -4219,7 +4247,7 @@ function gdSteps(){return[
  {el:()=>document.querySelector('.pr2'),t:'Рука: ваши карты',x:'Тут ваши карты атаки (числа), пассивки и сокровища, а также Атака и Уклонение персонажа. Соперники ваши карты не видят. Раунд дуэли: атака персонажа + карта атаки + 1d12 + пассивки − уклонение соперника.'},
  {el:()=>document.querySelector('.pr3'),t:'Соперники',x:'Берри, флаги, понеглифы и число карт у каждого игрока. Какие именно карты, никто не видит.'},
  {el:()=>document.querySelector(matchMedia('(max-width:900px)').matches?'#bnav [data-go=".pr4"]':'.pr4'),t:'Журнал и уведомления',x:'В журнале все события партии (на телефоне он открывается кнопкой «Журнал» внизу). Самые важные ещё всплывают над картой слева сверху, их можно закрыть крестиком.'},
- {el:()=>document.querySelector('.pr1 .blk.g-end'),t:'Конец хода',x:'Когда ОД закончились или делать больше нечего, нажмите «Закончить ход». Следующий игрок бросит кубики и начнёт свой ход.'},
+ {el:()=>document.querySelector('.pr1 .blk.g-end')||document.querySelector('.endfab'),t:'Конец хода',x:'Когда ОД закончились или делать больше нечего, нажмите «Закончить ход». Следующий игрок бросит кубики и начнёт свой ход.'},
  {t:'Это всё!',x:'Гайд можно открыть снова кнопкой «❓ Гайд» вверху. Полные правила: «📖 Правила». Удачного плавания!'}
 ]}
 function gdClose(rm){GD.on=false;['gd-catch','gd-hl','gd-tip'].forEach(i=>{const e=document.getElementById(i);if(e)e.remove()});if(rm){try{localStorage.setItem('gl_guide_off','1')}catch(e){}}}
@@ -5403,6 +5431,7 @@ function tutOffer(){ // при первом запуске — предложи�
 function backStep(){
   const q=id=>document.getElementById(id);
   const av=q('akvid');if(av){const x=av.querySelector('.avx');if(x){x.click();return true}}
+  if(q('endask')){endAskClose();return true}
   if(document.body.classList.contains('logopen')){logOpen(false);return true}
   const ro=q('rulesov');if(ro&&ro.classList.contains('on')){rulesClose();return true}
   if(q('admov')){admClose();return true}
