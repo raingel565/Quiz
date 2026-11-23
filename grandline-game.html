@@ -1089,10 +1089,10 @@ body.tutor #app{padding-top:110px}
 
 /* V155: журнал на телефоне — всплывающее окно */
 .logx{display:none}
-@media(max-width:900px){
+@media all{
   body.ingame .card.pr4{display:none}
   body.ingame.logopen .card.pr4{display:flex;flex-direction:column;position:fixed;left:10px;right:10px;top:max(12px,env(safe-area-inset-top));bottom:calc(92px + env(safe-area-inset-bottom));z-index:60;opacity:1;border-style:solid;box-shadow:0 0 0 100vmax rgba(0,0,0,.6),0 18px 40px rgba(0,0,0,.6);animation:login .18s ease-out}
-  body.ingame.logopen .card.pr4 h3{display:flex;align-items:center;gap:8px;margin:0}
+  body.ingame.logopen .card.pr4 h3{display:flex;align-items:center;gap:8px;margin:0}body.ingame.logopen .card.pr4 .pn{display:none}
   body.ingame.logopen .card.pr4 #log{flex:1;min-height:0;max-height:none;overflow:auto}
   body.ingame.logopen .logx{display:inline-flex;margin-left:auto;padding:4px 12px;font-size:16px}
   body.logopen{overflow:hidden}
@@ -1101,7 +1101,7 @@ body.tutor #app{padding-top:110px}
 
 /* V156: экран партии на телефоне — по макету пользователя */
 .tp-m{display:none}
-@media(max-width:900px){
+@media all{
   body.ingame #top{display:block;position:relative;text-align:center;padding:12px 56px 12px;border-radius:22px}
   body.ingame #top .tp-l,body.ingame #top .tp-st,body.ingame #top #sndbtn{display:none}
   body.ingame #top .tp-r{position:absolute;right:10px;top:10px;display:flex;gap:6px}
@@ -1142,7 +1142,7 @@ body.tutor #app{padding-top:110px}
 }
 
 /* V156b: компактные кнопки действий, «Закончить ход» — круглая кнопка справа внизу */
-@media(max-width:900px){
+@media all{
   .pr1 .mgrid{gap:6px;margin-bottom:4px}
   .pr1 .mgrid .btn{min-height:0!important;padding:7px 8px!important;font-size:13px;gap:4px;border-radius:14px;line-height:1.15}
   .pr1 .mgrid .btn .ac{font-size:11px;padding:2px 8px;margin:0}
@@ -1159,8 +1159,21 @@ body.tutor #app{padding-top:110px}
 #endask .endq .row{display:flex;gap:10px;justify-content:center;width:100%}
 #endask .endq .btn{flex:1;min-height:46px;justify-content:center!important;text-align:center;font-weight:700}
 @media(max-width:900px){body.ingame #ver{right:84px!important}}
+
+/* V157: новый экран партии на компьютере */
+.logbtn{display:none}
+@media(min-width:901px){
+  body.ingame #top .tp-r .logbtn{display:inline-flex;height:40px;padding:0 14px;font-size:14px}
+  body.ingame #top{padding:14px 200px 14px}
+  body.ingame #top .tp-r{top:50%;transform:translateY(-50%);right:14px}
+  body.ingame #top #sndbtn{display:none}
+  body.ingame.logopen .card.pr4{left:auto;right:24px;top:24px;bottom:24px;width:min(560px,92vw)}
+  .endfab{bottom:28px!important;right:28px!important;width:64px;height:64px}
+  .pr1 .mgrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .m-inv .mgcs{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 </style>
-<div id="ver" title="Версия игры">V156</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Версия игры">V157</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=15"></script>
 <script>
@@ -1532,8 +1545,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&window.__mnu){windo
 function logOpen(on){document.body.classList.toggle('logopen',!!on);const b=document.querySelector('#bnav [data-go=".pr4"]');if(b)b.classList.toggle('on',!!on);if(on){const l=document.getElementById('log');if(l)l.scrollTop=0}}
 document.addEventListener('click',e=>{
   if(e.target.closest&&e.target.closest('[data-logx]')){logOpen(false);return}
+  if(e.target.closest&&e.target.closest('[data-logbtn]')){logOpen(!document.body.classList.contains('logopen'));return}
   const b=e.target.closest&&e.target.closest('#bnav [data-go]');
-  if(!b){if(document.body.classList.contains('logopen')&&!(e.target.closest&&e.target.closest('.pr4')))logOpen(false);return}
+  if(!b){if(document.body.classList.contains('logopen')&&!(e.target.closest&&e.target.closest('.pr4,[data-logbtn]')))logOpen(false);return}
   if(b.dataset.go==='.pr4'&&matchMedia('(max-width:900px)').matches){logOpen(!document.body.classList.contains('logopen'));return}
   logOpen(false);const t=document.querySelector(b.dataset.go);if(t)t.scrollIntoView({behavior:'smooth',block:'start'})});
 (function(){const nav=()=>document.querySelectorAll('#bnav [data-go]');let tk=0;
@@ -3320,7 +3334,7 @@ function turnPill(){
   }catch(e){}
   return '';
 }
-const isMob=()=>matchMedia('(max-width:900px)').matches;
+const isMob=()=>true; // V157: новый экран партии и на компьютере
 function mobHead(){ // V156: шапка партии на телефоне
   const p=P(),need=viewerNeeded(),w=G.players[need]||p;
   let t;
@@ -3353,7 +3367,7 @@ function topHtml(){
     +(NET.on&&NET.code?'<span class="pill">Комната '+NET.code+(NET.me>=0?' · вы: '+esc(G.players[NET.me].name):' · наблюдатель')+'</span>':'');
   return mobHead()+'<div class="tp-l"><span class="title">Гранд Лайн</span><span class="pill rnd">Раунд '+G.round+'</span>'+(G.mode&&G.mode!=='std'?'<span class="pill" title="'+esc(modeOf().d)+'">'+esc(modeOf().n)+'</span>':'')+'</div>'
     +'<div class="tp-st">'+st+'</div>'
-    +'<div class="tp-r">'+presBadge()+'<button class="btn ico" id="sndbtn" title="Звук">'+(SFX.on?'🔊':'🔇')+'</button>'+menu+'</div>';
+    +'<div class="tp-r">'+presBadge()+'<button class="btn logbtn" id="logbtn" data-logbtn title="Журнал">📜 Журнал</button><button class="btn ico" id="sndbtn" title="Звук">'+(SFX.on?'🔊':'🔇')+'</button>'+menu+'</div>';
 }
 function actLbl(l){const m=/^(.*?)\s*\(([^()]*)\)\s*$/.exec(l);return m&&m[1]?'<span class="al">'+esc(m[1])+'</span><span class="ac">'+esc(m[2])+'</span>':'<span class="al">'+esc(l)+'</span>'}
 function sideHtml(){
@@ -4246,7 +4260,7 @@ function gdSteps(){return[
  {el:()=>document.querySelector('.pr1 .blk.g-move')||document.querySelector('.pr1'),t:'Как перейти на другую локацию',x:'Нажмите кнопку перехода или прямо на подсвеченную зелёным локацию на карте. Один шаг — 1 ОД. Чтобы попасть в другое море, идите через красный кружок.'},
  {el:()=>document.querySelector('.pr2'),t:'Рука: ваши карты',x:'Тут ваши карты атаки (числа), пассивки и сокровища, а также Атака и Уклонение персонажа. Соперники ваши карты не видят. Раунд дуэли: атака персонажа + карта атаки + 1d12 + пассивки − уклонение соперника.'},
  {el:()=>document.querySelector('.pr3'),t:'Соперники',x:'Берри, флаги, понеглифы и число карт у каждого игрока. Какие именно карты, никто не видит.'},
- {el:()=>document.querySelector(matchMedia('(max-width:900px)').matches?'#bnav [data-go=".pr4"]':'.pr4'),t:'Журнал и уведомления',x:'В журнале все события партии (на телефоне он открывается кнопкой «Журнал» внизу). Самые важные ещё всплывают над картой слева сверху, их можно закрыть крестиком.'},
+ {el:()=>document.querySelector(matchMedia('(max-width:900px)').matches?'#bnav [data-go=".pr4"]':'#logbtn'),t:'Журнал и уведомления',x:'В журнале все события партии (он открывается кнопкой «Журнал»). Самые важные ещё всплывают над картой слева сверху, их можно закрыть крестиком.'},
  {el:()=>document.querySelector('.pr1 .blk.g-end')||document.querySelector('.endfab'),t:'Конец хода',x:'Когда ОД закончились или делать больше нечего, нажмите «Закончить ход». Следующий игрок бросит кубики и начнёт свой ход.'},
  {t:'Это всё!',x:'Гайд можно открыть снова кнопкой «❓ Гайд» вверху. Полные правила: «📖 Правила». Удачного плавания!'}
 ]}
