@@ -146,7 +146,7 @@ function shake(){const s=$('scene');s.classList.remove('ds-shake');void s.offset
 function hitFx(F,col,big){const p=F.W('head'),c=F.W('sh');const x=(p.x+c.x)/2,y=(p.y+c.y)/2;flash(big?.6:.35);ring(x,y,col,big?130:80);burst(x,y,big?22:12,col,big?1.4:1);if(big)shake()}
 
 /* озвучка приёма (голос персонажа), только при обычной скорости и включённом звуке */
-const VOX={};function voice(src){try{if(!API.soundOn()||speed>1)return;const a=VOX[src]||(VOX[src]=new Audio(src));a.currentTime=0;a.volume=1;const q=a.play();if(q&&q.catch)q.catch(()=>{})}catch(e){}}
+const VOX={};function voice(src){try{if(window.GL_NOVOX||!API.soundOn()||speed>1)return;const a=VOX[src]||(VOX[src]=new Audio(src));a.currentTime=0;a.volume=1;const q=a.play();if(q&&q.catch)q.catch(()=>{})}catch(e){}}
 const ABIL={
  none:{n:'Обычный удар',col:'#ffe9a8'},
  fire:{n:'Огненный кулак',col:'#ff7a1a',
@@ -989,7 +989,7 @@ function npcKit(ch,name){
  if(NPCMAP[ch])return kit(NPCMAP[ch]);
  if(CHMAP[ch])return kit(CHMAP[ch]);
  const nm=String(name||'');
- if(/^Эйс/.test(nm))return kit('fire',{sc:1.1,x:620});
+ if(/^(Эйс|Кинг)/.test(nm))return kit('fire',{sc:1.1,x:620});
  if(/Гранд-адмирал/.test(nm))return {id:'gadm',elem:'light',name:nm,col:'#f2f4f8',glow:'230,235,245',sc:1.45,x:660,bg:'admiral',ent:'admiral',l:ADML,h:ADMH};
  if(/Рейли/.test(nm))return kit('shanks',{name:'Тёмный король Рейли',col:'#6a7a96',glow:'150,170,210'});
  if(/Мория/.test(nm))return kit('moria');
