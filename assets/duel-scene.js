@@ -887,6 +887,7 @@ const CHARS={
  lilac:{name:'Сиреневый (конечности)',col:'#c9a0ff',glow:'201,160,255',l:['grabhand','footkick','bodyhands'],h:['gianthand','giantfoot','handforest']},
  red:{name:'Красный (магнит)',col:'#ff4d4d',glow:'255,77,77',l:['junk','blades','magthrow'],h:['bigmetal','metalfist','ironstorm']},
  yellow:{name:'Жёлтый (ноги)',col:'#ffd23a',glow:'255,210,58',l:['rapid','spinkick','skykick'],h:['firekick','firewheel','starkick']},
+ smoke:{name:'Серый (дым)',col:'#9aa1aa',glow:'210,214,222',band:'#e9edf2',jitte:1,cigar:1,l:['smokefist','jittejab','smokebind'],h:['whiteblow','smokestorm','jittecrash']},
  maroon:{name:'Бордовый (вода)',col:'#b02a4a',glow:'176,42,74',l:['jet','orb','swell'],h:['whirl','geyser','tsunami']}
 };
 const BIGCH={
@@ -950,15 +951,35 @@ const SND={
  ent_imu:t=>{tone(t,49,1.6,'sawtooth',.12,36);tone(t,51.5,1.6,'sawtooth',.1,38);tone(t+.4,1661,1.1,'sine',.04,1568);tone(t+.6,2217,.9,'sine',.03,2093);noise(t,1.5,.25,'lowpass',80,700,1)}
 };
 function snd(n){if(!API.soundOn()||!SND[n])return;const c=actx();if(!c)return;try{if(c.state==='suspended')c.resume().catch(()=>{});SND[n](c.currentTime+.02)}catch(e){}}
-const ELEM={sword:'slash',fire:'fire',viol:'mochi',pink:'rubber',blue:'heart',navy:'space',orange:'wind',lilac:'hand',red:'metal',yellow:'kick',maroon:'water',
+const ELEM={sword:'slash',fire:'fire',viol:'mochi',pink:'rubber',blue:'heart',navy:'space',orange:'wind',lilac:'hand',red:'metal',yellow:'kick',maroon:'water',smoke:'punch',
  akainu:'lava',kizaru:'light',fujitora:'grav',aokiji:'ice',shanks:'elec',wb:'quake',kaido:'quake',bm:'slash',hero:'punch',imu:'dark',moria:'dark',marco:'fire',magellan:'poison',neptune:'water',dofla:'string'};
 const MELEM={trident:'slash',phase:'slash',rain:'water',spark:'elec',stormcloud:'elec',hail:'ice',firekick:'fire',firewheel:'fire',starkick:'fire',
  redcut:'slash',fireball:'fire',firebreath:'fire',pinkbolt:'elec',pinkstorm:'elec',flameburst:'fire',fireorbs:'fire',jab:'punch',combo:'punch',giantfist:'punch',
  tremorpunch:'punch',clubswing:'punch',bullcharge:'punch',flamingokick:'kick',tridentthrust:'slash'};
 
+
+/* ---------- Смокер: дым, шест-дзюттэ и сигара (V161) ---------- */
+function puffAt(x,y,r=10,dur=520,col='#dfe3e8',rise=26){const c=el('circle',{cx:x,cy:y,r:r*.4,fill:col,stroke:'#9aa1aa','stroke-width':1.5,opacity:.95});
+ return run(dur,t=>{const k=E.out(t);c.setAttribute('r',r*(.4+.9*k));c.setAttribute('cy',y-rise*k);c.setAttribute('opacity',.95*(1-t));if(t>=1)c.remove()})}
+function smokeCloud(x,y,s=1,n=7){for(let i=0;i<n;i++)puffAt(x+R_(-50,50)*s,y+R_(-36,36)*s,R_(24,40)*s,R_(420,700),i%3?'#e6e9ee':'#c9ced6',R_(10,40))}
+SH.puff=(g,o)=>{const c=o.col||'#e3e6eb';for(const [x,y,r] of [[-14,4,12],[0,-6,15],[14,2,12],[4,10,11]])el('circle',{cx:x,cy:y,r,fill:c,stroke:'#8f979f','stroke-width':2},g)};
+SH.smokefist=(g,o)=>{const r=o.r||22;SH.puff(g,{});el('g',{transform:`scale(${r/16})`},g);SH.fist(g,{r,col:'#eef0f3',st:'#8f979f'})};
+function attachJitte(F){attachSword(F,72);F.inner.querySelectorAll('line[stroke="#f4f8ff"]').forEach(l=>{l.setAttribute('stroke','#a7afb8');l.setAttribute('stroke-width',5)});F.inner.querySelectorAll('line[stroke="#d8b24a"]').forEach(l=>l.setAttribute('stroke','#5f666e'))}
+function attachCigar(F){const g=F.inner,c=el('g',{},g);el('line',{x1:6,y1:4,x2:22,y2:6,stroke:'#0d1118','stroke-width':6,'stroke-linecap':'round'},c);el('line',{x1:6,y1:4,x2:22,y2:6,stroke:'#b07a4a','stroke-width':3.5,'stroke-linecap':'round'},c);el('circle',{cx:23,cy:6,r:3,fill:'#ff7a2e',filter:'drop-shadow(0 0 4px #ff7a2e)'},c);
+ const d0=F.draw.bind(F);F.draw=function(t){d0(t);const h=this.pts.head;c.setAttribute('transform',`translate(${h.x},${h.y})`)};
+ let n=0;const tick=()=>{if(!g.isConnected){subs.delete(tick);return}if(++n%9)return;const h=F.pts&&F.pts.head;if(!h)return;const px=h.x+24,py=h.y+4;puffAt(F.x+px*F.dir*F.sc,GROUND+py*F.sc,R_(4,7),R_(800,1100),'#e9ecf0',R_(30,46))};subs.add(tick)}
+Object.assign(ABIL,{
+ smokefist:MV('Кулак из дыма','#e3e6eb',PS('windup',240,{bu:60,bb:60}),async(F,T)=>{await F.to('cast',90,E.out);const H=F.W('fh');smokeCloud(H.x,H.y,.6,4);const S=stretchArm(F,T,{col:'#d4d8de',w:26,s:1.6,dur:220,tip:g=>SH.fist(g,{r:30,col:'#eef0f3',st:'#8f979f'})});await S.run();const B=T.W('pel');smokeCloud(B.x,B.y,1,8);boom(T,'#e3e6eb',1.4,'pel');await S.back()}),
+ jittejab:MV('Удар шестом','#a7afb8',PS('windup',220,{dx:-14}),async(F,T)=>{await F.to('punch',100,E.in,{dx:DX(F)});const B=T.W('sh');cutAt(B.x,B.y,-.4,120,'#c9ced6',8);await sleep(80);cutAt(B.x,B.y+20,.5,120,'#a7afb8',8);boom(T,'#c9ced6',1);smokeCloud(B.x,B.y,.5,3)}),
+ smokebind:MV('Белая петля','#e3e6eb',PS('cast',240,{fu:70,fb:20}),async(F,T)=>{const B=T.W('pel');const N=10;const ps=[];for(let i=0;i<N;i++){const a=Math.PI*2*i/N;ps.push(puffAt(B.x+Math.cos(a)*95,B.y+Math.sin(a)*70,34,760,'#e6e9ee',0))}await sleep(280);for(let i=0;i<N;i++){const a=Math.PI*2*i/N;puffAt(B.x+Math.cos(a)*42,B.y+Math.sin(a)*34,30,480,'#d4d8de',0)}await sleep(200);boom(T,'#e3e6eb',1.2,'pel')}),
+ whiteblow:MV('Белый удар','#ffffff',PS('windup',280,{bu:70,bb:70}),async(F,T)=>{await F.to('cast',100,E.out);smokeCloud(F.W('sh').x,F.W('sh').y,1.2,10);const S=stretchArm(F,T,{col:'#e6e9ee',w:42,s:2.6,dur:260,tip:g=>SH.fist(g,{r:48,col:'#f4f5f7',st:'#8f979f'})});await S.run();const B=T.W('pel');smokeCloud(B.x,B.y,2,14);boom(T,'#ffffff',2.6,'pel');shake();await S.back()}),
+ smokestorm:MV('Дымовой шквал','#e3e6eb',PS('cast',260,{fu:90,fb:10,bu:90,bb:10}),async(F,T)=>{const A=F.W('sh'),B=T.W('pel');const jobs=[];for(let i=0;i<9;i++){jobs.push(flyer(F,{x:A.x,y:A.y+R_(-30,30)},{x:B.x+R_(-30,30),y:B.y+R_(-50,50)},{dur:260+i*40,ease:E.in,shape:SH.puff,s0:.6,s1:1.6,trail:1,col:'#e3e6eb',trailR:6}));await sleep(40)}await Promise.all(jobs);smokeCloud(B.x,B.y,2,16);boom(T,'#e3e6eb',2.2,'pel');shake()}),
+ jittecrash:MV('Сокрушение шестом','#a7afb8',PS('windup',260,{dx:-20,dy:-30}),async(F,T)=>{await F.to('punch',120,E.in,{dx:DX(F),dy:-60});const B=T.W('sh');await F.to('punch',90,E.in,{dx:DX(F),dy:0});cutAt(B.x,B.y+10,1.45,170,'#d4d8de',12);ring(B.x,B.y+40,'#c9ced6',180);smokeCloud(B.x,GROUND-10,1.6,10);boom(T,'#c9ced6',2.4);shake()})
+});
+
 /* ---------- кто есть кто в игре ---------- */
 BIGCH.roger=Object.assign({},BIGCH.shanks,{name:'Роджер: Камусари',col:'#9a1c2c',glow:'210,40,60',sc:1.12,x:620,ent:'',bg:''});ELEM.roger='elec';
-const CHMAP={zoro:'sword',ace:'fire',kata:'viol',luffy:'pink',hancock:'blue',law:'navy',nami:'orange',robin:'lilac',kid:'red',sanji:'yellow',olesya:'maroon',roger:'roger',smoker:'navy'};
+const CHMAP={zoro:'sword',ace:'fire',kata:'viol',luffy:'pink',hancock:'blue',law:'navy',nami:'orange',robin:'lilac',kid:'red',sanji:'yellow',olesya:'maroon',roger:'roger',smoker:'smoke'};
 const NPCMAP={akainu:'akainu',kizaru:'kizaru',fujitora:'fujitora',aokiji:'aokiji',shanks:'shanks',whitebeard:'wb',kaido:'kaido',bigmom:'bm',imu:'imu'};
 const PIRL=['shanks','wb','kaido','bm'].flatMap(i=>BIGCH[i].l),PIRH=['shanks','wb','kaido','bm'].flatMap(i=>BIGCH[i].h);
 const ADML=['akainu','kizaru','fujitora','aokiji'].flatMap(i=>BIGCH[i].l),ADMH=['akainu','kizaru','fujitora','aokiji'].flatMap(i=>BIGCH[i].h);
@@ -969,6 +990,7 @@ function npcKit(ch,name){
  if(CHMAP[ch])return kit(CHMAP[ch]);
  const nm=String(name||'');
  if(/^Эйс/.test(nm))return kit('fire',{sc:1.1,x:620});
+ if(/Гранд-адмирал/.test(nm))return {id:'gadm',elem:'light',name:nm,col:'#f2f4f8',glow:'230,235,245',sc:1.45,x:660,bg:'admiral',ent:'admiral',l:ADML,h:ADMH};
  if(/Рейли/.test(nm))return kit('shanks',{name:'Тёмный король Рейли',col:'#6a7a96',glow:'150,170,210'});
  if(/Мория/.test(nm))return kit('moria');
  if(/^Марко/.test(nm))return kit('marco');
@@ -990,7 +1012,7 @@ function npcKit(ch,name){
 let FELL=[false,false],LF=[],RF=null,LIVES=[2,2],WN=2,RNG=Math.random,CFG=null;
 const GAP=F=>Math.abs(((F&&F.tgt)||F||{home:0}).home-((F&&F.home)||0));
 function mkF(k,x,dir,sc){const g=document.createElementNS(NS,'g');g.setAttribute('class','ds-rim');g.style.setProperty('--g','rgba('+k.glow+',.6)');$('figs').appendChild(g);
- const F=new Fighter(g,x,dir,k.col);F.sc=sc;F.kit=k;F.last=null;if(k.sword)attachSword(F,k.swordLen||80);if(k.crown)attachCrown(F);if(k.fill){F.inner.querySelectorAll('[stroke="#0d1118"]').forEach(e=>e.setAttribute('stroke',k.fill));F.inner.querySelectorAll('[fill="#0d1118"]').forEach(e=>e.setAttribute('fill',k.fill))}if(k.tail)attachTail(F,k.col);if(k.trident)attachTrident(F);if(k.band){F.band.setAttribute('stroke',k.band);F.band.setAttribute('stroke-width',7)}return F}
+ const F=new Fighter(g,x,dir,k.col);F.sc=sc;F.kit=k;F.last=null;if(k.sword)attachSword(F,k.swordLen||80);if(k.jitte)attachJitte(F);if(k.cigar)attachCigar(F);if(k.crown)attachCrown(F);if(k.fill){F.inner.querySelectorAll('[stroke="#0d1118"]').forEach(e=>e.setAttribute('stroke',k.fill));F.inner.querySelectorAll('[fill="#0d1118"]').forEach(e=>e.setAttribute('fill',k.fill))}if(k.tail)attachTail(F,k.col);if(k.trident)attachTrident(F);if(k.band){F.band.setAttribute('stroke',k.band);F.band.setAttribute('stroke-width',7)}return F}
 function lay(n){return n<=1?{xs:[350],sc:1}:n===2?{xs:[365,255],sc:.92}:n===3?{xs:[372,282,192],sc:.86}:{xs:[378,300,222,144],sc:.8}}
 function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function pick(F,heavy){const all=F.kit[heavy?'h':'l'];let grp=all.filter(k=>k!==F.last);if(!grp.length)grp=all;const m=grp[Math.floor(RNG()*grp.length)];F.last=m;return m}
