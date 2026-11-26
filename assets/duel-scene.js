@@ -1118,8 +1118,27 @@ async function entrance(F,k){const g=F.g,X=F.home;
    await run(1500,t=>{g.style.opacity=t<.3?0:Math.min(1,(Math.sin(t*60)>0?1:.35)*Math.min(1,(t-.3)*2));rg.forEach((e,i)=>{const u=Math.max(0,Math.min(1,t*1.6-i*.3));e.setAttribute('rx',10+220*E.out(u));e.setAttribute('ry',3+32*E.out(u));e.setAttribute('opacity',u>0&&u<1?.8*(1-u):0)})});
    rg.forEach(e=>e.remove());g.style.opacity=1;flash(.35);shake();F.rest()}
 }
-function clear(){for(const F of [...LF,RF])if(F)F.destroy();LF=[];RF=null;fxB.innerHTML='';fxF.innerHTML='';$('figs').innerHTML='';label(1,'');label(2,'');$('banner').style.opacity=0;$('sub').style.opacity=0;ROOT.classList.remove('ds-fast','ds-shake')}
+function clear(){clearPeng();for(const F of [...LF,RF])if(F)F.destroy();LF=[];RF=null;fxB.innerHTML='';fxF.innerHTML='';$('figs').innerHTML='';label(1,'');label(2,'');$('banner').style.opacity=0;$('sub').style.opacity=0;ROOT.classList.remove('ds-fast','ds-shake')}
 function elemOf(F,m){return MELEM[m]||F.kit.elem||'punch'}
+
+/* ---------- пингвин (рисованный под стиль бойцов) ---------- */
+let PL=[];
+function mkPeng(F,side){
+  const col=F.col||'#e8eef5',g=el('g',{},fxB);g.setAttribute('filter','drop-shadow(0 0 5px '+col+')');
+  const ink='#0f141b',sw={stroke:col,'stroke-width':3,'stroke-linejoin':'round'};
+  const wing=el('ellipse',Object.assign({cx:-3,cy:-30,rx:6,ry:16,fill:ink,transform:'rotate(14 -3 -30)'},sw),g);
+  const f1=el('ellipse',{cx:-6,cy:-2,rx:8,ry:3.4,fill:'#ffb43a',stroke:ink,'stroke-width':1.2},g),f2=el('ellipse',{cx:9,cy:-2,rx:8,ry:3.4,fill:'#ffb43a',stroke:ink,'stroke-width':1.2},g);
+  el('ellipse',Object.assign({cx:0,cy:-26,rx:17,ry:25,fill:ink},sw),g);
+  el('ellipse',{cx:3,cy:-22,rx:10,ry:18,fill:'#eef2f6'},g);
+  el('circle',Object.assign({cx:3,cy:-55,r:13,fill:ink},sw),g);
+  el('ellipse',{cx:9,cy:-53,rx:7,ry:8,fill:'#eef2f6'},g);
+  el('circle',{cx:10,cy:-57,r:2.6,fill:'#fff'},g);el('circle',{cx:11,cy:-57,r:1.3,fill:ink},g);
+  el('polygon',{points:'14,-52 25,-49 14,-46',fill:'#ffb43a',stroke:ink,'stroke-width':1},g);
+  const wing2=el('ellipse',Object.assign({cx:5,cy:-30,rx:5,ry:14,fill:ink,transform:'rotate(-18 5 -30)'},sw),g);
+  const st={F,g,side,x:F.x-F.dir*75,busy:false,kick(on){f2.setAttribute('transform',on?'translate(13,-10) rotate(-35 9 -2)':'');wing2.setAttribute('transform',on?'rotate(-60 5 -30)':'rotate(-18 5 -30)')}};
+  st.f=(t)=>{if(st.busy)return;st.x+=(F.x-F.dir*75-st.x)*.18;const bob=Math.abs(Math.sin(t/260+side*2))*3;g.setAttribute('transform','translate('+st.x+','+(GROUND-bob)+') scale('+(F.dir*1.5)+',1.5)')};
+  subs.add(st.f);return st}
+function clearPeng(){for(const st of PL){subs.delete(st.f);if(st.g.parentNode)st.g.parentNode.removeChild(st.g)}PL=[]}
 
 /* ---------- публичное API ---------- */
 const API={
@@ -1135,6 +1154,7 @@ const API={
   for(let i=L.length-1;i>=0;i--){const F=mkF(L[i],ly.xs[i],1,ly.sc);LF[i]=F}
   RF=mkF(R,R.x||610,-1,R.sc||1);
   for(const F of LF)F.tgt=RF;RF.tgt=LF[0];
+  if(cfg.pg){if(cfg.pg[0])PL[0]=mkPeng(LF[0],0);if(cfg.pg[1])PL[1]=mkPeng(RF,1)}
   setSide(1,cfg.nameL||'',L[0].col,L[0].glow);setSide(2,cfg.nameR||'',R.col,R.glow);pips(1);pips(2);
   return API},
  async intro(){const R=RF.kit;await entrance(RF,R.ent||'');snd('horn');
@@ -1166,20 +1186,20 @@ const API={
   label(1,'');label(2,'');W.forEach(F=>{F.x=F.home;F.rest()});
   if(!o.fall)await Promise.all(losers.map(F=>F.to('guard',420,E.io,{dx:0}).then(()=>F.rest())));
  },
- /* пингвин-болельщик: один удар перед первым раундом — взлетает и пинает соперника (side: 0 — левый, 1 — правый) */
- async penguin(side,src){
-  const F=side===0?LF[0]:RF,T=side===0?RF:LF[0];if(!F||!T)return;
-  const w=80,h=w*1.356,dir=F.dir,x0=F.x-dir*70,yg=GROUND-h;
-  const g=el('g',{});const im=el('image',{href:src||'assets/deck/penguin1.webp',width:w,height:h,x:-w/2,y:-h/2,filter:'drop-shadow(0 4px 5px rgba(0,0,0,.45))'},g);
-  const put=(x,y,rot,op)=>{g.setAttribute('transform','translate('+x+','+y+') rotate('+rot+')');g.setAttribute('opacity',op==null?1:op)};
-  put(x0,yg+h/2,0,0);
-  const sh=T.W('sh'),xc=T.x-dir*52,yc=sh.y;
-  await run(520,t=>{const k=E.out(t);put(x0+(xc-x0)*k,yg+h/2+(yc-(yg+h/2))*k-Math.sin(Math.PI*t)*80,-dir*70*E.in(t),Math.min(1,t*5))});
-  hitFx(T,'#bfefff',false);snd('hit');burst(xc+dir*20,yc,10,'#ffffff',.9);
-  const tx=el('text',{x:xc+dir*10,y:yc-40,'text-anchor':'middle','font-size':26,'font-weight':800,fill:'#ffd45a',stroke:'#000','stroke-width':1,'paint-order':'stroke'});tx.textContent='🐧 +1';
+ /* пингвин: всё время стоит за спиной владельца; один раз перед первым раундом взлетает и пинает соперника (side: 0 — левый, 1 — правый) */
+ async penguin(side){
+  const st=PL[side];if(!st)return;const F=st.F,T=side===0?RF:LF[0];if(!T)return;
+  const dir=F.dir,x0=st.x,sh=T.W('sh'),xc=T.x-dir*46,yc=sh.y+24;
+  st.busy=true;fxF.appendChild(st.g);
+  const put=(x,y,rot)=>st.g.setAttribute('transform','translate('+x+','+y+') scale('+(dir*1.5)+',1.5) translate(0,-30) rotate('+rot+') translate(0,30)');
+  st.kick(0);
+  await run(540,t=>{const k=E.out(t);put(x0+(xc-x0)*k,GROUND+(yc-GROUND)*k-Math.sin(Math.PI*t)*90,-75*E.in(t));if(t>.5)st.kick(1)});
+  hitFx(T,'#bfefff',false);snd('hit');burst(xc+dir*22,yc,10,'#ffffff',.9);
+  const tx=el('text',{x:xc+dir*14,y:yc-50,'text-anchor':'middle','font-size':26,'font-weight':800,fill:'#ffd45a',stroke:'#000','stroke-width':1,'paint-order':'stroke'});tx.textContent='🐧 +1';
   T.to('hit',110,E.out,{dx:-30}).then(()=>T.to('guard',320,E.io,{dx:0}));
-  await run(340,t=>{put(xc-dir*34*t,yc+(yg+h/2-yc)*E.in(t),-dir*70*(1-t*.6),1-Math.max(0,t-.6)*2.5);tx.setAttribute('y',yc-40-30*t);tx.setAttribute('opacity',1-Math.max(0,t-.5)*2)});
-  g.remove();tx.remove();F.rest();T.rest()},
+  const bx=F.x-dir*75;
+  await run(520,t=>{const k=E.io(t);put(xc+(bx-xc)*k,yc+(GROUND-yc)*E.in(t)-Math.sin(Math.PI*t)*55,-75*(1-k));tx.setAttribute('y',yc-50-34*t);tx.setAttribute('opacity',1-Math.max(0,t-.5)*2)});
+  tx.remove();st.kick(0);st.x=bx;fxB.appendChild(st.g);st.busy=false;T.rest()},
  async finish(winner,title){title=String(title||'').replace(/\s*\(.*?\)\s*/g,' ').trim();$('banner').style.fontSize=title.length>16?'4.6cqw':'';
   if(!RF)return;
   if((winner===0||winner===1)&&!FELL[1-winner]){FELL[1-winner]=true;const Lo=winner===0?[RF]:LF;await Promise.all(Lo.map((F,i)=>sleep(i*60).then(()=>react(F,{col:'#ffffff'},true))))}
@@ -1197,7 +1217,7 @@ const API={
   const L=team?team.map(p=>kit(CHMAP[p.ch]||'sword')):[kit(CHMAP[s0.ch]||'sword')];
   const R=s1.p?kit(CHMAP[s1.ch]||'fire',{sc:1,x:610,bg:'',ent:''}):npcKit(s1.ch,s1.name||names[1]);
   let seed=7;for(const r of res.rounds)for(const c of r.cur)seed=(seed*31+(c.roll|0)*7+(c.att|0))|0;
-  return {L,R,nameL:team?team.map(p=>p.name).join(' + '):names[0],nameR:names[1],W:res.W||2,seed,fast:!!o.fast}},
+  return {pg:res.pg,L,R,nameL:team?team.map(p=>p.name).join(' + '):names[0],nameR:names[1],W:res.W||2,seed,fast:!!o.fast}},
  /* сценарий раундов: кто кого и кто падает */
  plan(res){const n=res.rounds.length;return res.rounds.map((R,i)=>{const out=R.out;const margin=out>=0?Math.abs((R.sc[out]|0)-(R.sc[1-out]|0)):0;
   return {out,margin,fall:i===n-1&&out>=0&&res.winner===out}})},
