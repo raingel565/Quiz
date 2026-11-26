@@ -1482,7 +1482,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N37</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N38</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -5142,9 +5142,47 @@ function dkZoomApply(){const z=document.querySelector('#deck .dkz');if(z)z.style
     DK.z.x=cx-(cx-DK.z.x)*s1/s0;DK.z.y=cy-(cy-DK.z.y)*s1/s0;DK.z.s=s1;clamp();dkZoomApply()},{passive:false});
 })();
 // плавное отплытие к острову: b — кнопка .dkhit острова; done вызывается после анимации
+// эпичный заплыв на Лафтейл: дорога света к сияющему острову, корабль уменьшается вдаль, вспышка
+function dkSailLaftel(b,done){
+  const el=document.getElementById('deck'),o=dkOv(),z=el&&el.querySelector('.dkz'),sh=el&&el.querySelector('.dkship');
+  if(!el||!o||!z||!sh||!el.animate||el.classList.contains('sail'))return false;
+  const W=el.clientWidth,H=el.clientHeight,bx=parseFloat(b.style.left)+parseFloat(b.style.width)/2,by=parseFloat(b.style.top)+parseFloat(b.style.height)*0.72;
+  DK.z={s:1,x:0,y:0};z.style.transform='';el.classList.add('sail');try{SFX.play('move',250)}catch(e){}
+  const sw=sh.offsetWidth,sx=parseFloat(sh.style.left)+sw/2,sy=parseFloat(sh.style.top)+sh.offsetHeight*0.9,NS='http://www.w3.org/2000/svg';
+  const dim=document.createElement('div');dim.style.cssText='position:absolute;inset:0;background:radial-gradient(ellipse at '+bx.toFixed(0)+'px '+by.toFixed(0)+'px,rgba(30,22,8,.05),rgba(4,3,10,.72) 75%);opacity:0';o.appendChild(dim);
+  dim.animate([{opacity:0},{opacity:1}],{duration:700,fill:'forwards'});
+  const svg=document.createElementNS(NS,'svg');svg.setAttribute('width',W);svg.setAttribute('height',H);svg.style.cssText='position:absolute;inset:0;overflow:visible';
+  svg.innerHTML='<defs><linearGradient id="dklg" gradientUnits="userSpaceOnUse" x1="'+sx+'" y1="'+sy+'" x2="'+bx+'" y2="'+by+'"><stop offset="0" stop-color="#ffe9a8" stop-opacity="0"/><stop offset=".3" stop-color="#ffd978" stop-opacity=".6"/><stop offset="1" stop-color="#fffbe8" stop-opacity=".98"/></linearGradient><filter id="dklb" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter></defs><polygon id="dkrg" fill="url(#dklg)" filter="url(#dklb)"/><polygon id="dkrc" fill="url(#dklg)" opacity=".85"/><line id="dkrl" stroke="#fff" stroke-width="2.2" stroke-dasharray="9 13" stroke-linecap="round" opacity=".9"/>';
+  o.appendChild(svg);
+  const rg=svg.querySelector('#dkrg'),rc=svg.querySelector('#dkrc'),rl=svg.querySelector('#dkrl'),w0=Math.max(46,sw*0.95),w1=Math.max(8,sw*0.12);
+  const road=t=>{const x=sx+(bx-sx)*t,y=sy+(by-sy)*t,w=w0+(w1-w0)*t;
+    rg.setAttribute('points',(sx-w0*.75)+','+sy+' '+(sx+w0*.75)+','+sy+' '+(x+w*.75)+','+y+' '+(x-w*.75)+','+y);
+    rc.setAttribute('points',(sx-w0*.38)+','+sy+' '+(sx+w0*.38)+','+sy+' '+(x+w*.38)+','+y+' '+(x-w*.38)+','+y);
+    rl.setAttribute('x1',sx);rl.setAttribute('y1',sy);rl.setAttribute('x2',x);rl.setAttribute('y2',y)};
+  road(0);const t0=performance.now();let raf=0;const step=n=>{const t=Math.min(1,(n-t0)/1000);road(1-Math.pow(1-t,3));if(t<1)raf=requestAnimationFrame(step)};raf=requestAnimationFrame(step);
+  rl.animate([{strokeDashoffset:0},{strokeDashoffset:-220}],{duration:1400,iterations:3});
+  // искры вдоль дороги
+  for(let i=0;i<22;i++){const u=Math.random(),x=sx+(bx-sx)*u+(Math.random()-.5)*(w0+(w1-w0)*u)*1.2,y=sy+(by-sy)*u,sp=document.createElement('i');
+    sp.style.cssText='position:absolute;left:'+x.toFixed(0)+'px;top:'+y.toFixed(0)+'px;width:'+(2+Math.random()*3).toFixed(1)+'px;height:'+(2+Math.random()*3).toFixed(1)+'px;border-radius:50%;background:#fff3c4;box-shadow:0 0 8px 2px rgba(255,210,100,.9);opacity:0';o.appendChild(sp);
+    sp.animate([{opacity:0,transform:'translateY(0)'},{opacity:1,offset:.3},{opacity:0,transform:'translateY(-'+(30+Math.random()*50).toFixed(0)+'px)'}],{duration:1400+Math.random()*900,delay:300+Math.random()*1500,fill:'both'})}
+  // свечение Лафтейла
+  const gl=document.createElement('div');gl.style.cssText='position:absolute;left:'+(bx-W*0.3).toFixed(0)+'px;top:'+(by-W*0.3).toFixed(0)+'px;width:'+(W*0.6).toFixed(0)+'px;height:'+(W*0.6).toFixed(0)+'px;border-radius:50%;background:radial-gradient(circle,rgba(255,248,214,.95),rgba(255,214,110,.45) 38%,rgba(255,190,70,0) 70%);opacity:0';o.appendChild(gl);
+  gl.animate([{opacity:0,transform:'scale(.3)'},{opacity:.9,transform:'scale(1)',offset:.8},{opacity:1,transform:'scale(1.25)'}],{duration:2600,delay:200,fill:'forwards',easing:'ease-in'});
+  // корабль уходит по дороге
+  const dx=(bx-sx)*0.9,dy=(by-sy)*0.88,kf=[{transform:'translate(0,0) scale(1)',filter:'drop-shadow(0 0 0 rgba(255,220,120,0))'},{transform:'translate('+(dx*.5).toFixed(0)+'px,'+(dy*.5).toFixed(0)+'px) scale(.62)',filter:'drop-shadow(0 0 12px rgba(255,220,120,.9))',offset:.55},{transform:'translate('+dx.toFixed(0)+'px,'+dy.toFixed(0)+'px) scale(.26)',filter:'drop-shadow(0 0 18px rgba(255,240,170,1))'}],op={duration:2400,delay:550,easing:'cubic-bezier(.45,0,.35,1)',fill:'forwards'};
+  try{sh.animate(kf,op);const cx=sh.offsetLeft+sw/2,cy=sh.offsetTop+sh.offsetHeight*0.5;z.querySelectorAll('.dkdolf').forEach(q=>{q.style.transformOrigin=(cx-q.offsetLeft).toFixed(0)+'px '+(cy-q.offsetTop).toFixed(0)+'px';q.animate(kf.map(f=>({transform:f.transform,offset:f.offset})),op)})}catch(_){}
+  // вспышка и прибытие
+  setTimeout(()=>{dkFlash(o,'radial-gradient(circle at '+bx.toFixed(0)+'px '+by.toFixed(0)+'px,#fffdf0,#ffe9a8 45%,rgba(255,220,120,0) 80%)',1,1100);dkShake(480,5);try{SFX.play('win',0)}catch(e){}},2750);
+  setTimeout(()=>dkBanner(o,'ЛАФТЕЙЛ<small>Конец пути Гранд Лайна</small>',false,1700),2900);
+  setTimeout(()=>{cancelAnimationFrame(raf);el.classList.remove('sail');DK.arv=Date.now();DK.sig='';done();
+    [dim,svg,gl].forEach(n=>{if(n.animate)n.animate([{opacity:1},{opacity:0}],{duration:500,fill:'forwards'}).onfinish=()=>n.remove();else n.remove()});
+    o.querySelectorAll('i').forEach(n=>n.remove());setTimeout(()=>{if(!o.children.length)o.remove()},1900)},3500);
+  return true;
+}
 function dkSail(b,done){
   const el=document.getElementById('deck');
   if(!el||!b||el.classList.contains('sail')||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))return false;
+  if(b.dataset&&b.dataset.dk==='L'&&!window.__nor&&dkSailLaftel(b,done))return true;
   {
     const W=el.clientWidth,H=el.clientHeight,bx=parseFloat(b.style.left)+parseFloat(b.style.width)/2,by=parseFloat(b.style.top)+parseFloat(b.style.height)/2;
     const z=el.querySelector('.dkz'),sh=el.querySelector('.dkship'),im=sh&&sh.querySelector('img');DK.z={s:1,x:0,y:0};
