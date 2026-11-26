@@ -4899,10 +4899,11 @@ function dkRender(){
   const wrap=document.getElementById('mapwrap');if(!wrap)return;
   let el=document.getElementById('deck');
   const on=dkOn();
-  const p=on?dkFocus():null;
-  const picks=on?ACTS.filter(a=>a.loc&&!a.dis).map(a=>a.loc):[];
+  const bt=on&&botTurnLock();
+  const p=on?(bt?G.players[viewerNeeded()]:dkFocus()):null;
+  const picks=on&&!bt?ACTS.filter(a=>a.loc&&!a.dis).map(a=>a.loc):[];
   const neigh=p?dkNeigh(p.loc):[];
-  const SKY=new Set(on?ACTS.filter(a=>a.sky&&a.loc&&!a.dis).map(a=>a.loc):[]);
+  const SKY=new Set(on&&!bt?ACTS.filter(a=>a.sky&&a.loc&&!a.dis).map(a=>a.loc):[]);
   const extra=picks.filter(x=>x!==(p&&p.loc)&&!neigh.includes(x)&&!SKY.has(x));
   const show=on&&p&&viewerNeeded()===p.i&&!extra.length&&!(G.pending&&G.pending.pick);
   wrap.classList.toggle('dk',!!show);document.body.classList.toggle('dkon',!!show);
@@ -4918,7 +4919,7 @@ function dkRender(){
   const st=id=>[id,dkArt(id),G.flags[id],playersAt(id).map(q=>q.i).join(''),G.akainu&&G.akainu.loc===id?1:0,G.monster&&G.monster.loc===id?1:0,outAt(id)?'o'+outAt(id).pon.length:'',(G.hunt||[]).some(h=>h.loc===id)?1:0,picks.includes(id)?1:0,G.dead&&G.dead[id]?1:0].join(':');
   let plan=navPlan(p);if(plan&&plan.done){UI.nav.arrived=plan.to;UI.nav.to=null;plan=null}else if(UI.nav&&UI.nav.to)UI.nav.arrived=null;
   const navSig=(UI.nav&&(UI.nav.to||'')+'/'+(UI.nav.arrived||''))+':'+(plan&&plan.steps?plan.steps.map(x=>x.n+x.risk.join('')).join(','):'');
-  const kwOn=!!(DK.kw&&Date.now()<DK.kw),sig=[p.loc,G.ap+'/'+G.apMax,ACTS.map(a=>a.g+a.label+(a.dis?1:0)).join('|'),navSig,kwOn?'kw':'',DK.dark?1:0,DK.lrise?1:0,(DK.flhold?[...DK.flhold].join(','):''),W,H,wk,p.i,p.loc,dkArt(p.loc),mine?1:0,G.zun&&G.zun.cell,neigh.concat([...SKY]).map(st).join('|'),G.flags[p.loc],playersAt(p.loc).length].join('#');
+  const kwOn=!!(DK.kw&&Date.now()<DK.kw),sig=[p.loc,G.ap+'/'+G.apMax,ACTS.map(a=>a.g+a.label+(a.dis?1:0)).join('|'),navSig,kwOn?'kw':'',DK.dark?1:0,DK.lrise?1:0,(DK.flhold?[...DK.flhold].join(','):''),W,H,wk,p.i,p.loc,dkArt(p.loc),mine?1:0,bt?'b':'',G.zun&&G.zun.cell,neigh.concat([...SKY]).map(st).join('|'),G.flags[p.loc],playersAt(p.loc).length].join('#');
   const pl=DK.pl||{};const moves=[];for(const q of G.players){if(q!==p&&pl[q.i]&&pl[q.i]!==q.loc)moves.push({q,from:pl[q.i],to:q.loc})}DK.pl={};for(const q of G.players)DK.pl[q.i]=q.loc;
   if(sig===DK.sig)return;
   const fresh=DK.sig.split('#')[0]!==p.loc;DK.sig=sig;
@@ -4986,12 +4987,12 @@ function dkRender(){
       plan.steps.forEach((st,k)=>{c+='<small>'+(plan.steps.length>1?'Путь '+(k+1)+': ':'')+st.path.map(nn).join(' → ')+(st.risk.length?' · <i class="risk">'+esc(st.risk.join(' '))+'</i>':(plan.steps.length>1&&plan.steps.some(z=>z.risk.length)?' · безопаснее':''))+'</small>'})}
     h+=c+'</div></div>'}
   const cl=dkLabel(p.loc,false),cn=p.loc==='L'?'Лафтейл':p.loc==='Z'?'Зунеша':'№'+numOf(p.loc)+' — '+DK_TN[ca];
-  {const qaOk=G.winner==null&&!G.pending&&(!NET.on||viewerNeeded()===NET.me);
+  {const qaOk=!bt&&G.winner==null&&!G.pending&&(!NET.on||viewerNeeded()===NET.me);
    const SH=[[/Взять задание на ивентовой/,'📜 Задание'],[/Купить карту сокровищ/,'🃏 Карта сокровищ'],[/Купить гостевого/,'🧑 Гость'],[/Нанять охотника за головами на (.+?)(?: за|\s*\(|$)/,'🎯 Охотник: $1'],[/Вызвать хранителя/,'⚔ Хранитель'],[/Карта понеглифа/,'🗿 Задание понеглифа'],[/Выбрать задание Лафтейла/,'🏝 Задание Лафтейла'],[/Карта Лафтейла/,'🏝 Карта Лафтейла']];
    const pr=qaOk?ACTS.map((a,i)=>{const r=SH.find(x=>x[0].test(a.label));return r?[a,i,r[1].replace('$1',(r[0].exec(a.label)||[])[1]||'')]:null}).filter(x=>x&&!x[0].far):[];
    const chip=([a,i,t])=>'<button class="dkchip" data-a="'+i+'"'+(a.dis?' disabled':'')+' title="'+esc(a.label)+'">'+esc(t.replace(/^(.{26}).+$/,'$1…'))+'</button>';
    h+='<div class="dkui bot"><div class="dkqa">'+pr.map(chip).join('')+(G.winner==null?(()=>{const n=Math.max(3,G.apMax||3);return '<span class="dkap">ОД'+Array.from({length:n},(_,i)=>'<i class="'+(i<G.ap?'':'off')+'"></i>').join('')+'</span>'})():'')+'</div>'
-    +'<div class="dkrow3"><span class="dkcur"><span class="dkth"><img src="assets/deck/'+ca+'.webp" alt=""></span><span><b>'+(DK_TI[ca]&&ca!=='base'&&ca!=='fog'?DK_TI[ca]+' ':'')+esc(p===G.players[G.cur]||NET.on?cn.charAt(0).toUpperCase()+cn.slice(1):p.name+': '+cn)+'</b>'+(mine?'<small>Нажмите на остров · 1 ОД</small>':'')+'</span></span>'+'</div></div>'}
+    +'<div class="dkrow3"><span class="dkcur"><span class="dkth"><img src="assets/deck/'+ca+'.webp" alt=""></span><span><b>'+(DK_TI[ca]&&ca!=='base'&&ca!=='fog'?DK_TI[ca]+' ':'')+esc(!bt&&(p===G.players[G.cur]||NET.on)?cn.charAt(0).toUpperCase()+cn.slice(1):p.name+': '+cn)+'</b>'+(mine?'<small>Нажмите на остров · 1 ОД</small>':'')+'</span></span>'+'</div></div>'}
   DK.pos={};for(const o of isl)DK.pos[o.id]={cx:o.cx,ty:o.ty,w:o.w,ih:o.ih,y:o.y};DK.shp={x:W/2,y:shTop+shH*0.25,w:shW,h:shH};DK.fgp={x:-fw*0.54,y:Math.min(H*0.78,shTop+shH*0.9)-fh*0.85,w:fw,h:fh};DK.W=W;DK.H=H;DK.Yh=Yh;
   el.innerHTML=h;
   el.classList.toggle('fresh',fresh);el.classList.toggle('kwon',kwOn);
