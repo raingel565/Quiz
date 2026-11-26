@@ -1334,7 +1334,7 @@ body.tutor #app{padding-top:110px}
 #deck .dkpen{position:absolute;z-index:5;padding:0;border:0;background:none;cursor:pointer;animation:dkbob 7s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
 #deck .dkpen img{width:100%;display:block;pointer-events:none}
 @keyframes dkegght{0%{opacity:0;transform:translateY(6px)}8%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0}}
-#deck .dkegght{position:absolute;z-index:9;padding:8px 12px;border-radius:14px 14px 14px 4px;background:rgba(20,26,34,.82);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.22);color:#eef4fa;font-size:12px;line-height:1.35;font-weight:600;pointer-events:none;animation:dkegght 11s both;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+#deck .dkegght{position:absolute;z-index:9;padding:8px 12px;border-radius:14px 14px 4px 14px;background:rgba(20,26,34,.82);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.22);color:#eef4fa;font-size:12px;line-height:1.35;font-weight:600;pointer-events:none;animation:dkegght 11s both;box-shadow:0 4px 14px rgba(0,0,0,.35)}
 @keyframes dkdolf{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 #deck .dkdolf{position:absolute;z-index:3;height:auto;pointer-events:none;animation:dkdolf 3.2s ease-in-out infinite;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
 #deck .dkpenb{border-color:rgba(160,225,255,.7);color:#cdeeff}
@@ -4923,6 +4923,7 @@ const DKC={
     await dkWait(900);dkBanner(o,'ПОНЕГЛИФ<small>Остров вспыхнул красным</small>',true,1900);await dkWait(2200);
   },
   async jail(c,o){
+    for(let w=0;w<48&&(G.pending||document.querySelector('#modal .ov'));w++)await dkWait(250); // не показывать решётку под окном выбора/результата боя
     const bars=document.createElement('div');bars.className='dkbars';const dim=document.createElement('div');dim.className='dkdim';o.appendChild(dim);
     if(dim.animate)dim.animate([{background:'rgba(5,4,10,0)'},{background:'rgba(5,4,10,.62)'}],{duration:600,fill:'forwards'});
     for(let i=0;i<7;i++)bars.appendChild(document.createElement('i'));o.appendChild(bars);
@@ -4968,7 +4969,7 @@ async function dkPlay(){
 }
 function dkEvents(p,neigh,show){
   const calm=window.__nor||(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches);
-  const cur={g:G,out:Object.keys(G.out||{}).sort().join(','),mon:G.monster?G.monster.loc:'',laf:!!G.laftel,fl:Object.assign({},G.flags),po:{},jail:p?((p.jail|0)>0||(G.type[p.loc]==='jail'?p.loc:0)):0,ak:0};
+  const cur={g:G,out:Object.keys(G.out||{}).sort().join(','),mon:G.monster?G.monster.loc:'',laf:!!G.laftel,fl:Object.assign({},G.flags),po:{},jail:p?((p.jail|0)>0?1:0):0,ak:0};
   for(const id in G.ponAt)cur.po[id]=(G.ponAt[id].owner==null?'o':'c')+(G.type[id]?'r':'h');
   if(p&&G.akainu&&G.akainu.stun<=0&&(G.akainu.loc===p.loc||neigh.includes(G.akainu.loc)))cur.ak=1;
   const pr=DK.ev;DK.ev=cur;DK.dark=!!cur.ak&&show;
@@ -5062,7 +5063,7 @@ function dkRender(){
     if(G.dol&&G.dol.who===p.i&&!G.dol.done)h+=eg('dolpick','dolphins.webp',40,329/640,true)}
   if(p.dolph>0){const fw=Math.min(W*0.34,shW*1.02);h+='<img class="dkdolf" src="assets/deck/dolphins-back.webp" alt="" style="left:'+(W/2-fw/2).toFixed(0)+'px;top:'+(shTop+shH*0.8).toFixed(0)+'px;width:'+fw.toFixed(0)+'px">'}
   if(mine&&!bt){const ht=(G.pen&&G.pen.who===p.i&&!G.pen.done)?'🐧 Где-то рядом слышен странный писк… Присмотрись к воде.':(G.dol&&G.dol.who===p.i&&!G.dol.done)?'🐬 Где-то рядом слышен плеск и свист… Присмотрись к воде.':'';
-    if(ht)h+='<div class="dkegght" style="left:'+(W*0.06).toFixed(0)+'px;top:'+(H*0.17).toFixed(0)+'px;max-width:'+(W*0.56).toFixed(0)+'px">'+ht+'</div>'}
+    if(ht)h+='<div class="dkegght" style="right:'+(W*0.04).toFixed(0)+'px;top:'+(H*0.2).toFixed(0)+'px;max-width:'+(W*0.5).toFixed(0)+'px">'+ht+'</div>'}
   h+='<div class="dkship wx-'+wk+'" style="left:'+(W/2-shW/2).toFixed(0)+'px;top:'+shTop.toFixed(0)+'px;width:'+shW.toFixed(0)+'px"><img src="assets/deck/ship.webp" alt="">'+(p.pengu>0?'<img class="dkpeng" src="assets/deck/penguin1.webp" alt="">':'')+'</div>';
   {const here=playersAt(p.loc).filter(q=>q!==p);here.forEach((q,k)=>{const sh=shH*0.38,sw=sh*360/294;const mv=moves.find(m=>m.q===q&&!fresh);h+='<img class="dkopp fl'+(mv?' arr':'')+'" src="assets/deck/opp'+(q.i%6)+'.webp" alt="" style="left:'+(W*0.97-sw-k*sw*0.5).toFixed(0)+'px;top:'+(shTop+shH*0.62-sh+k*8).toFixed(0)+'px;width:'+sw.toFixed(0)+'px">'})}
   // корабли соперников, которые только что сходили, проплывают между островами
