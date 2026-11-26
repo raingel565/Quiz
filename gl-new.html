@@ -4550,7 +4550,7 @@ function admOpen(){
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#ver'))admOpen()});
 
 // ---------- галерея персонажей (только новая версия) ----------
-const GAL_EXTRA={olesya:[{f:'assets/gallery/olesya-1.webp',s:'assets/gallery/olesya-1-s.webp'}],nami:[{f:'assets/gallery/nami-1.webp',s:'assets/gallery/nami-1-s.webp'},{f:'assets/gallery/nami-2.webp',s:'assets/gallery/nami-2-s.webp'}],hancock:[{f:'assets/gallery/hancock-1.webp',s:'assets/gallery/hancock-1-s.webp'}]};
+const GAL_EXTRA={zoro:[{f:'assets/gallery/zoro-1.webp',s:'assets/gallery/zoro-1-s.webp'}],olesya:[{f:'assets/gallery/olesya-1.webp',s:'assets/gallery/olesya-1-s.webp'},{f:'assets/gallery/olesya-2.webp',s:'assets/gallery/olesya-2-s.webp'}],nami:[{f:'assets/gallery/nami-1.webp',s:'assets/gallery/nami-1-s.webp'},{f:'assets/gallery/nami-2.webp',s:'assets/gallery/nami-2-s.webp'}],hancock:[{f:'assets/gallery/hancock-1.webp',s:'assets/gallery/hancock-1-s.webp'}]};
 const GAL_NPC={hunter1:{n:'Охотник за головами',A:9,U:5,d:'Нанимается на чёрном рынке. Идёт по следу игрока с понеглифом, пока не догонит.'},hunter2:{n:'Охотница за головами',A:9,U:5,d:'Нанимается на чёрном рынке. Идёт по следу игрока с понеглифом, пока не догонит.'}};
 function galInfo(k){return CH[k]||GAL_NPC[k]}
 function galPhotos(k){if(GAL_NPC[k]){const H=HUNTERS.find(x=>x.k===k);return [{f:H.img,s:H.s}]}const a=[];if(CHW[k])a.push({f:'assets/ch/'+(CHIMG[k]||k)+'.webp'});return a.concat(GAL_EXTRA[k]||[])}
