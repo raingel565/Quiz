@@ -1166,6 +1166,20 @@ const API={
   label(1,'');label(2,'');W.forEach(F=>{F.x=F.home;F.rest()});
   if(!o.fall)await Promise.all(losers.map(F=>F.to('guard',420,E.io,{dx:0}).then(()=>F.rest())));
  },
+ /* пингвин-болельщик: один удар перед первым раундом — взлетает и пинает соперника (side: 0 — левый, 1 — правый) */
+ async penguin(side,src){
+  const F=side===0?LF[0]:RF,T=side===0?RF:LF[0];if(!F||!T)return;
+  const w=80,h=w*1.356,dir=F.dir,x0=F.x-dir*70,yg=GROUND-h;
+  const g=el('g',{});const im=el('image',{href:src||'assets/deck/penguin1.webp',width:w,height:h,x:-w/2,y:-h/2,filter:'drop-shadow(0 4px 5px rgba(0,0,0,.45))'},g);
+  const put=(x,y,rot,op)=>{g.setAttribute('transform','translate('+x+','+y+') rotate('+rot+')');g.setAttribute('opacity',op==null?1:op)};
+  put(x0,yg+h/2,0,0);
+  const sh=T.W('sh'),xc=T.x-dir*52,yc=sh.y;
+  await run(520,t=>{const k=E.out(t);put(x0+(xc-x0)*k,yg+h/2+(yc-(yg+h/2))*k-Math.sin(Math.PI*t)*80,-dir*70*E.in(t),Math.min(1,t*5))});
+  hitFx(T,'#bfefff',false);snd('hit');burst(xc+dir*20,yc,10,'#ffffff',.9);
+  const tx=el('text',{x:xc+dir*10,y:yc-40,'text-anchor':'middle','font-size':26,'font-weight':800,fill:'#ffd45a',stroke:'#000','stroke-width':1,'paint-order':'stroke'});tx.textContent='🐧 +1';
+  T.to('hit',110,E.out,{dx:-30}).then(()=>T.to('guard',320,E.io,{dx:0}));
+  await run(340,t=>{put(xc-dir*34*t,yc+(yg+h/2-yc)*E.in(t),-dir*70*(1-t*.6),1-Math.max(0,t-.6)*2.5);tx.setAttribute('y',yc-40-30*t);tx.setAttribute('opacity',1-Math.max(0,t-.5)*2)});
+  g.remove();tx.remove();F.rest();T.rest()},
  async finish(winner,title){title=String(title||'').replace(/\s*\(.*?\)\s*/g,' ').trim();$('banner').style.fontSize=title.length>16?'4.6cqw':'';
   if(!RF)return;
   if((winner===0||winner===1)&&!FELL[1-winner]){FELL[1-winner]=true;const Lo=winner===0?[RF]:LF;await Promise.all(Lo.map((F,i)=>sleep(i*60).then(()=>react(F,{col:'#ffffff'},true))))}
