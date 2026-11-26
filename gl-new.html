@@ -1406,7 +1406,7 @@ body.dkon .tp-m .tm-od{display:none}
 #deck .dkpill{background:rgba(14,20,30,.66);color:#f3ead6;border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:6px 12px;font:600 12.5px/1.2 system-ui,sans-serif;backdrop-filter:blur(6px)}
 #deck .dkpill.btn{cursor:pointer;font-size:13px;padding:7px 12px}
 #deck .dkcur{display:flex;align-items:center;gap:10px;background:rgba(10,14,22,.72);border:1px solid rgba(255,255,255,.12);border-radius:30px;padding:5px 14px 5px 5px;color:#f3ead6;max-width:100%;backdrop-filter:blur(6px)}
-#deck .dkcur{padding:3px 10px 3px 3px;gap:6px}#deck .dkcur b{display:block;font:700 12px/1.2 system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#deck .dkcur small{display:none}#deck .dkcur>span:last-child{min-width:0}
+#deck .dkcur{padding:3px 10px 3px 3px;gap:6px}#deck .dkcur b{display:block;font:700 11.5px/1.2 system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#deck .dkcur small{display:none}#deck .dkcur>span:last-child{min-width:0}
 #deck .dkth{flex:none;width:34px;height:34px;border-radius:50%;overflow:hidden;border:2px solid #c7ccd6;background:#2a4a63;display:flex;align-items:flex-end;justify-content:center}
 #deck .dkth img{width:150%;margin-bottom:6%}
 #dkrev{position:fixed;left:50%;top:38%;z-index:150000;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:10px;color:#f3ead6;font:700 17px/1.2 system-ui,sans-serif;text-shadow:0 2px 6px #000;pointer-events:none;animation:dkrin .5s cubic-bezier(.2,.9,.3,1.3)}
@@ -4972,7 +4972,7 @@ function dkRender(){
     else{const nn=x=>x==='L'?'Лафтейл':x==='Z'?'Зунеша':(seaOf(x)!==seaOf(p.loc)?SEAS[seaOf(x)][0]+'.':'')+numOf(x);c+='<b>🧭 Курс: '+esc(navName(plan.to))+' · '+plan.dist+' '+(plan.dist===1?'ход':plan.dist<5?'хода':'ходов')+(plan.dist>G.ap&&G.players[G.cur]===p?' (в этот ход не успеть)':'')+'</b><button data-navclear aria-label="Сбросить курс">✕</button>';
       plan.steps.forEach((st,k)=>{c+='<small>'+(plan.steps.length>1?'Путь '+(k+1)+': ':'')+st.path.map(nn).join(' → ')+(st.risk.length?' · <i class="risk">'+esc(st.risk.join(' '))+'</i>':(plan.steps.length>1&&plan.steps.some(z=>z.risk.length)?' · безопаснее':''))+'</small>'})}
     h+=c+'</div></div>'}
-  const cl=dkLabel(p.loc,false),cn=p.loc==='L'?'Лафтейл':p.loc==='Z'?'Зунеша':'остров '+numOf(p.loc)+' — '+DK_TN[ca];
+  const cl=dkLabel(p.loc,false),cn=p.loc==='L'?'Лафтейл':p.loc==='Z'?'Зунеша':'№'+numOf(p.loc)+' — '+DK_TN[ca];
   {const qaOk=G.winner==null&&!G.pending&&(!NET.on||viewerNeeded()===NET.me);
    const SH=[[/Взять задание на ивентовой/,'📜 Задание'],[/Купить карту сокровищ/,'🃏 Карта сокровищ'],[/Купить гостевого/,'🧑 Гость'],[/Нанять охотника за головами на (.+?)(?: за|\s*\(|$)/,'🎯 Охотник: $1'],[/Вызвать хранителя/,'⚔ Хранитель'],[/Карта понеглифа/,'🗿 Задание понеглифа'],[/Выбрать задание Лафтейла/,'🏝 Задание Лафтейла'],[/Карта Лафтейла/,'🏝 Карта Лафтейла']];
    const pr=qaOk?ACTS.map((a,i)=>{const r=SH.find(x=>x[0].test(a.label));return r?[a,i,r[1].replace('$1',(r[0].exec(a.label)||[])[1]||'')]:null}).filter(x=>x&&!x[0].far):[];
