@@ -1425,7 +1425,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N26</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N27</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=19"></script>
 <script>
@@ -5036,13 +5036,11 @@ function dkZoomApply(){const z=document.querySelector('#deck .dkz');if(z)z.style
     if(moved)DK.drag=Date.now();p0=null}};
   document.addEventListener('pointerup',up,{passive:true});document.addEventListener('pointercancel',up,{passive:true});
 })();
-document.addEventListener('click',e=>{
-  if(e.target.closest&&e.target.closest('[data-dkmap]')){try{localStorage.setItem('nv_deck','0')}catch(_){}DK.sig='';render();return}
-  if(e.target.closest&&e.target.closest('[data-dkon]')){try{localStorage.setItem('nv_deck','1')}catch(_){}DK.sig='';render();return}
-  const b=e.target.closest&&e.target.closest('#deck .dkhit.pk');if(!b||(DK.drag&&Date.now()-DK.drag<250))return;
-  const id=b.dataset.dk,i=ACTS.findIndex(x=>x.loc===id&&!x.dis);if(i<0)return;
+// плавное отплытие к острову: b — кнопка .dkhit острова; done вызывается после анимации
+function dkSail(b,done){
   const el=document.getElementById('deck');
-  if(el&&!el.classList.contains('sail')&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){
+  if(!el||!b||el.classList.contains('sail')||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))return false;
+  {
     const W=el.clientWidth,H=el.clientHeight,bx=parseFloat(b.style.left)+parseFloat(b.style.width)/2,by=parseFloat(b.style.top)+parseFloat(b.style.height)/2;
     const z=el.querySelector('.dkz'),sh=el.querySelector('.dkship'),im=sh&&sh.querySelector('img');DK.z={s:1,x:0,y:0};
     el.classList.add('sail');
@@ -5051,8 +5049,17 @@ document.addEventListener('click',e=>{
       try{im.animate([{transform:'translate(0,0) rotate(0) scale(1)',offset:0},{transform:'translate(0,0) rotate('+(-2.5*k)+'deg) scale(1)',offset:.12},{transform:'translate('+(dx*.5).toFixed(0)+'px,'+(-H*.05).toFixed(0)+'px) rotate('+(3.5*k)+'deg) scale(.8)',offset:.55},{transform:'translate('+dx.toFixed(0)+'px,'+(-H*.12).toFixed(0)+'px) rotate('+(1.5*k)+'deg) scale(.6)',offset:1}],{duration:1250,easing:'cubic-bezier(.5,0,.3,1)',fill:'forwards'})}catch(_){}
       for(let k2=0;k2<3;k2++){const w=document.createElement('i');w.className='dkwake';w.style.cssText='left:'+(sx-sh.offsetWidth*.5).toFixed(0)+'px;top:'+(sy+sh.offsetHeight*.84).toFixed(0)+'px;width:'+(sh.offsetWidth).toFixed(0)+'px;height:'+(sh.offsetWidth*.22).toFixed(0)+'px;animation-delay:'+(k2*.32).toFixed(2)+'s';z.appendChild(w);w.classList.add('run')}}
     setTimeout(()=>{if(z)z.classList.add('so')},960);
-    setTimeout(()=>{el.classList.remove('sail');DK.arv=Date.now();DK.sig='';submit({t:'a',i})},1300);
-  }else submit({t:'a',i});
+    setTimeout(()=>{if(z)z.classList.add('so')},960);
+    setTimeout(()=>{el.classList.remove('sail');DK.arv=Date.now();DK.sig='';done()},1300);
+  }
+  return true;
+}
+document.addEventListener('click',e=>{
+  if(e.target.closest&&e.target.closest('[data-dkmap]')){try{localStorage.setItem('nv_deck','0')}catch(_){}DK.sig='';render();return}
+  if(e.target.closest&&e.target.closest('[data-dkon]')){try{localStorage.setItem('nv_deck','1')}catch(_){}DK.sig='';render();return}
+  const b=e.target.closest&&e.target.closest('#deck .dkhit.pk');if(!b||(DK.drag&&Date.now()-DK.drag<250))return;
+  const id=b.dataset.dk,i=ACTS.findIndex(x=>x.loc===id&&!x.dis);if(i<0)return;
+  if(!dkSail(b,()=>submit({t:'a',i})))submit({t:'a',i});
 });
 window.addEventListener('resize',()=>{DK.sig='';if(G)try{dkRender()}catch(e){}});
 // круг с картинкой, когда ваш корабль открыл неизвестный остров
@@ -6399,6 +6406,8 @@ function botSchedule(){
     if(FXQ.length||FXBUSY){BOTTIMER=setTimeout(tick,350);return}
     const w2=viewerNeeded();if(w2==null||!G.players[w2].bot){render();return}
     const m=botMove();if(!m){return}
+    try{const a=m.t==='a'&&ACTS[m.i],bt=a&&a.loc&&a.g==='move'&&document.body.classList.contains('dkon')&&document.querySelector('#deck .dkhit[data-dk="'+a.loc+'"]');
+      if(bt){BOTTIMER=setTimeout(()=>{},1600);if(dkSail(bt,()=>{BOTTIMER=null;if(G&&G.winner==null&&!NET.on&&viewerNeeded()===w2)submit(m,true)}))return;clearTimeout(BOTTIMER);BOTTIMER=null}}catch(e){BOTTIMER=null}
     submit(m,true);
   },delay);
 }
