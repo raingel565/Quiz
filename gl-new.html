@@ -4503,7 +4503,7 @@ addEventListener('resize',()=>{clearTimeout(window.__vrt);window.__vrt=setTimeou
 function smokerSees(){const sm=G.players.find(q=>q.ch==='smoker');if(!sm)return false;if(NET.on)return NET.me===sm.i;const hum=G.players.filter(q=>!q.bot);if(hum.length===1)return hum[0]===sm;return UI.viewer===sm.i}
 // ---------- N: сцена «с палубы» — вид от лица игрока, карта по кнопке ----------
 const DK_BG={still:.4037,storm:.4037,aqua:.4262,buster:.4425,belt:.3785,tarai:.3175};
-const DK_ART={start:[720,335],base:[720,295],event:[720,369],market:[720,336],battle:[720,252],jail:[720,321],dozor:[720,302],pon:[720,296],port:[720,323],fin:[720,347],fog:[720,257],zun:[820,428]};
+const DK_ART={start:[720,335],base:[720,295],event:[720,325],market:[720,336],battle:[720,252],jail:[720,321],dozor:[720,302],pon:[720,296],port:[720,323],fin:[720,347],fog:[720,257],zun:[820,428]};
 const DK_TN={start:'Старт',base:'Пустой',event:'Задания',market:'Рынок',battle:'Поле битвы',jail:'Тюрьма',dozor:'База дозора',pon:'Понеглиф',port:'Переход',fin:'Лафтейл',fog:'Неизвестно',zun:'Зунеша'};
 const DK_TI={start:'⚑',event:'❗',market:'💰',battle:'⚔️',jail:'⛓️',dozor:'⚓',pon:'П',port:'⛰',fin:'★',fog:'?',zun:'🦖'};
 const DK_TC={start:'#5fd38a',event:'#f0b35a',market:'#f2c14e',battle:'#ff7b6b',jail:'#c7ccd6',dozor:'#8fb6ff',pon:'#ff8f8f',port:'#b9a6ff',fin:'#f2c14e',fog:'#9fc7e8',zun:'#9fe0a8',base:'#d6dbe2'};
