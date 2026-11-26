@@ -5025,8 +5025,8 @@ function dkRender(){
     h+='<div class="dklb'+(o.far?' far':'')+(pk?' pk':'')+(G.monster&&G.monster.loc===o.id?' mon':'')+(si>=0?' nav':'')+'" style="left:'+o.cx.toFixed(0)+'px;top:'+(o.y+4).toFixed(0)+'px;max-width:'+Math.max(56,o.gap-3).toFixed(0)+'px">'+esc(L.top)+(L.sub?'<small style="color:'+L.c+'">'+esc(L.sub)+'</small>':'')+'</div>'}
   // корабль и текущий остров
   const shH=two?Math.min(H*0.28,W*0.55):Math.min(H*0.33,W*0.62),shW=shH*397/746,shTop=rowNear+H*0.068;
-  if(G.gal&&G.gal.who===p.i&&!G.gal.done){const gw=Math.min(W*0.42,210),gh=gw*673/760,wl=shTop+shH*0.8;
-    h+='<button class="dkgal" data-galopen="1" style="left:'+(W*0.0).toFixed(0)+'px;top:'+(wl-gh*0.93).toFixed(0)+'px;width:'+gw.toFixed(0)+'px" aria-label="Торговый галеон"><img src="assets/deck/galleon.webp" alt=""></button>'+(bt?'':'<button class="dkgalb" data-galopen="1" style="left:'+(W*0.0+gw*0.5).toFixed(0)+'px;top:'+(wl-gh*1.05).toFixed(0)+'px">⛵ Галеон · −10 Берри</button>')}
+  if(G.gal&&G.gal.who===p.i&&!G.gal.done){const gw=Math.min(W*0.28,130),gh=gw*673/760,wl=shTop+shH*0.46,gx=W*0.97-gw;
+    h+='<button class="dkgal" data-galopen="1" style="left:'+gx.toFixed(0)+'px;top:'+(wl-gh*0.93).toFixed(0)+'px;width:'+gw.toFixed(0)+'px" aria-label="Торговый галеон"><img src="assets/deck/galleon.webp" alt=""></button>'+(bt?'':'<button class="dkgalb" data-galopen="1" style="left:'+(gx+gw*0.5).toFixed(0)+'px;top:'+(wl+2).toFixed(0)+'px">⛵ −10 Берри</button>')}
   h+='<div class="dkship wx-'+wk+'" style="left:'+(W/2-shW/2).toFixed(0)+'px;top:'+shTop.toFixed(0)+'px;width:'+shW.toFixed(0)+'px"><img src="assets/deck/ship.webp" alt=""></div>';
   {const here=playersAt(p.loc).filter(q=>q!==p);here.forEach((q,k)=>{const sh=shH*0.38,sw=sh*360/294;const mv=moves.find(m=>m.q===q&&!fresh);h+='<img class="dkopp fl'+(mv?' arr':'')+'" src="assets/deck/opp'+(q.i%6)+'.webp" alt="" style="left:'+(W*0.97-sw-k*sw*0.5).toFixed(0)+'px;top:'+(shTop+shH*0.62-sh+k*8).toFixed(0)+'px;width:'+sw.toFixed(0)+'px">'})}
   // корабли соперников, которые только что сходили, проплывают между островами
