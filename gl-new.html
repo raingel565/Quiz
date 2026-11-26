@@ -1212,8 +1212,107 @@ body.tutor #app{padding-top:110px}
 #galv .galx{position:absolute;top:calc(10px + env(safe-area-inset-top));right:12px;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(20,26,36,.8);color:#fff;font-size:18px;cursor:pointer}
 #galv .galnav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:64px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(20,26,36,.6);color:#fff;font-size:30px;cursor:pointer}
 #galv .galnav.l{left:8px}#galv .galnav.r{right:8px}
+
+/* N: сцена с палубы */
+#deck{position:relative;width:100%;height:min(76svh,calc((100vw - 16px)*1.78));min-height:420px;overflow:hidden;border-radius:12px;background:#0b1220;touch-action:pan-y;user-select:none;-webkit-user-select:none;contain:layout paint}
+@media (min-width:901px){#deck{height:min(80vh,780px)}}
+#deck[hidden]{display:none}
+#mapwrap.dk #mapscroll,#mapwrap.dk #mapz,#mapwrap.dk #mapme,#mapwrap.dk #maplg,#mapwrap.dk #legend,#mapwrap.dk #mapdk{display:none!important}
+#mapdk{margin:0 0 6px 6px;padding:4px 10px;font-size:13px}
+#deck .dkz{position:absolute;inset:0;transform-origin:0 0;transition:transform .5s cubic-bezier(.3,.7,.3,1)}
+#deck .dkz>*{position:absolute}
+#deck img{-webkit-user-drag:none;pointer-events:none}
+#deck .dkbg{max-width:none}
+#deck .dksky{left:0;top:0;width:100%;overflow:hidden;-webkit-mask:linear-gradient(#000 calc(100% - 14px),transparent);mask:linear-gradient(#000 calc(100% - 14px),transparent)}
+#deck .dksky img{position:absolute;max-width:none;animation:dkdrift 36s ease-in-out infinite alternate;will-change:transform}
+@keyframes dkdrift{from{transform:translateX(-7px)}to{transform:translateX(7px)}}
+#deck .dkisl{inset:0}
+#deck .dki{position:absolute;max-width:none}
+#deck .dki.rf{transform:scaleY(-1);opacity:.28;-webkit-mask:linear-gradient(transparent 40%,#000);mask:linear-gradient(transparent 40%,#000)}
+#deck .dki.dead{filter:brightness(.45) sepia(.6) hue-rotate(-20deg)}
+#deck .dkisl.wx-still{filter:sepia(.12) saturate(.95) brightness(.95)}
+#deck .dkisl.wx-storm,#deck .dkship.wx-storm,#deck .dkfg.wx-storm{filter:saturate(.5) brightness(.62) hue-rotate(8deg)}
+#deck .dkisl.wx-aqua,#deck .dkship.wx-aqua,#deck .dkfg.wx-aqua{filter:saturate(.6) brightness(.72) hue-rotate(-8deg)}
+#deck .dkisl.wx-buster,#deck .dkship.wx-buster,#deck .dkfg.wx-buster{filter:sepia(.45) saturate(1.3) brightness(.6) hue-rotate(-18deg)}
+#deck .dkisl.wx-belt,#deck .dkship.wx-belt,#deck .dkfg.wx-belt{filter:saturate(.45) brightness(1.02) contrast(.8)}
+#deck .dkfg{filter:brightness(.62) saturate(.85);transform:scaleX(-1);max-width:none}
+#deck .dkfg.wx-storm,#deck .dkfg.wx-buster{filter:brightness(.45) saturate(.6)}
+#deck .dkship{transform-origin:50% 70%;animation:dkbob 5s ease-in-out infinite;will-change:transform}
+#deck .dkship img{width:100%;display:block;animation:dksway 7s ease-in-out infinite}
+#deck .dkship.wx-storm{animation-duration:2.6s;animation-name:dkbob2}
+#deck .dkship.wx-belt{animation:dkbob3 9s ease-in-out infinite}#deck .dkship.wx-belt img{animation:none;clip-path:inset(0 0 17% 0)}
+@keyframes dkbob{0%{transform:translateY(0) rotate(-.7deg)}25%{transform:translateY(-4px) rotate(0)}50%{transform:translateY(-1px) rotate(.7deg)}75%{transform:translateY(3px) rotate(0)}100%{transform:translateY(0) rotate(-.7deg)}}
+@keyframes dkbob2{0%{transform:translateY(0) rotate(-2.6deg)}25%{transform:translateY(-9px) rotate(0)}50%{transform:translateY(-2px) rotate(2.6deg)}75%{transform:translateY(7px) rotate(0)}100%{transform:translateY(0) rotate(-2.6deg)}}
+@keyframes dkbob3{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.5px)}}
+@keyframes dksway{0%,100%{transform:translateX(0)}50%{transform:translateX(2px)}}
+#deck .dkzun{animation:dkwalk 26s ease-in-out infinite alternate}#deck .dkzun img{width:100%;display:block;filter:sepia(.15) brightness(.92);animation:dkzb 3.4s ease-in-out infinite}
+@keyframes dkwalk{from{transform:translateX(12px)}to{transform:translateX(-14px)}}@keyframes dkzb{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.5px) rotate(-.6deg)}}
+#deck .dkflag{transform-origin:8% 50%;animation:dkwave 2.4s ease-in-out infinite}
+#deck .wx-storm~.dkflag{animation-duration:.9s}
+@keyframes dkwave{0%,100%{transform:skewY(0) scaleX(1)}50%{transform:skewY(-4deg) scaleX(.93)}}
+#deck .dkwho{display:flex;transform:translate(-50%,-100%);gap:0}
+#deck .dkp{width:26px;height:26px;border-radius:50%;border:2px solid var(--pc,#fff);background:#1a1f28;overflow:hidden;margin-left:-6px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+#deck .dkp:first-child{margin-left:0}
+#deck .dkp .dkav{width:100%;height:100%;object-fit:cover}
+#deck .dkp.adm{--pc:#ff3b3b;animation:dkadm 1.4s ease-in-out infinite}
+@keyframes dkadm{0%,100%{box-shadow:0 0 0 0 rgba(255,59,59,.7)}50%{box-shadow:0 0 0 6px rgba(255,59,59,0)}}
+#deck .dkp.hunt{--pc:#ff7b6b}
+#deck .dklb{transform:translateX(-50%);text-align:center;background:rgba(14,20,30,.74);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:4px 9px;color:#f3ead6;font:600 12px/1.25 system-ui,sans-serif;white-space:nowrap;pointer-events:none}
+#deck .dklb small{display:block;font-size:10.5px;font-weight:600}
+#deck .dklb.far{font-size:10.5px;padding:3px 7px;opacity:.92}
+#deck .dklb.pk{border-color:rgba(95,211,138,.75);box-shadow:0 0 0 2px rgba(95,211,138,.25)}
+#deck .dkhit{background:none;border:0;padding:0;cursor:default;-webkit-tap-highlight-color:transparent}
+#deck .dkhit.pk{cursor:pointer}
+#deck .dkhit.pk:focus-visible{outline:2px solid #5fd38a;border-radius:12px}
+#deck.sail .dkship{transition:transform .5s ease-in;transform:translateY(-30px) scale(.8)!important;animation:none}
+#deck .dkspark{width:3px;height:3px;border-radius:50%;background:#fff6dc;box-shadow:0 0 6px 2px rgba(255,236,190,.8);opacity:0;animation:dktw 3.2s ease-in-out infinite}
+@keyframes dktw{0%,100%{opacity:0;transform:scale(.4)}50%{opacity:.95;transform:scale(1)}}
+#deck .dkgull{left:0;width:14px;height:6px;animation:dkfly linear infinite}
+#deck .dkgull path{fill:none;stroke:#2a2530;stroke-width:1.6;stroke-linecap:round;animation:dkflap .7s ease-in-out infinite alternate;transform-origin:50% 100%}
+@keyframes dkflap{from{transform:scaleY(1)}to{transform:scaleY(.35)}}@keyframes dkfly{from{transform:translateX(-40px)}to{transform:translateX(var(--w,460px))}}
+#deck .dksmoke{width:14px;height:14px;border-radius:50%;background:radial-gradient(rgba(90,80,90,.55),rgba(90,80,90,0) 70%);opacity:0;animation:dksmk 5s linear infinite}
+@keyframes dksmk{0%{opacity:0;transform:translate(0,0) scale(.5)}15%{opacity:.9}100%{opacity:0;transform:translate(10px,-40px) scale(2.6)}}
+#deck .dklamp{width:9px;height:9px;margin:-4px 0 0 -4px;border-radius:50%;background:radial-gradient(#fff7d6,rgba(255,220,140,.6) 40%,transparent 70%);animation:dklmp 2.6s ease-in-out infinite}
+@keyframes dklmp{0%,100%{opacity:.25;transform:scale(.8)}45%{opacity:1;transform:scale(2.2)}60%{opacity:.9;transform:scale(1.8)}}
+#deck .dkglow{border-radius:40%;background:radial-gradient(rgba(255,60,60,.55),rgba(255,40,40,0) 70%);mix-blend-mode:screen;animation:dkpulse 2.2s ease-in-out infinite}
+@keyframes dkpulse{0%,100%{opacity:.35}50%{opacity:1}}
+#deck .dkbeam{background:radial-gradient(ellipse at 50% 100%,rgba(255,230,150,.55),transparent 70%);mix-blend-mode:screen;animation:dkpulse 3s ease-in-out infinite}
+#deck .dkrain{left:-10%;top:-60%;width:120%;height:220%;background:url(assets/deck/rain.webp) 0 0/120px 240px;animation:dkrn .45s linear infinite;opacity:.8;pointer-events:none}
+#deck .dkrain.b{background-size:80px 160px;animation-duration:.7s;opacity:.45}
+@keyframes dkrn{from{transform:translate(0,0)}to{transform:translate(-60px,240px)}}
+#deck .dkflash{inset:0;background:#e8f0ff;opacity:0;animation:dkfl 7s linear infinite;pointer-events:none}
+@keyframes dkfl{0%,61%{opacity:0}62%{opacity:.55}63%{opacity:.05}64.5%{opacity:.4}67%,100%{opacity:0}}
+#deck .dkspray{width:4px;height:4px;border-radius:50%;background:#e9fbff;opacity:0;animation:dkspr 2.4s ease-out infinite}
+@keyframes dkspr{0%{opacity:0;transform:translate(0,0)}15%{opacity:.9}100%{opacity:0;transform:translate(-26px,-30px)}}
+#deck .dkzar{left:0;width:100%;background:radial-gradient(ellipse at 50% 70%,rgba(255,90,40,.35),transparent 70%);animation:dkpulse 1.7s ease-in-out infinite alternate;mix-blend-mode:screen}
+#deck .dkboom{width:40px;height:26px;border-radius:50%;background:radial-gradient(rgba(255,230,160,.95),rgba(255,120,40,.6) 35%,rgba(255,60,20,0) 70%);opacity:0;animation:dkbm 4s ease-out infinite;mix-blend-mode:screen}
+@keyframes dkbm{0%,70%{opacity:0;transform:scale(.3)}73%{opacity:1;transform:scale(1.2)}85%{opacity:.4;transform:scale(1.6)}100%{opacity:0;transform:scale(1.8)}}
+#deck .dkshell{left:0;top:0;width:5px;height:5px;border-radius:50%;background:#ffd38a;box-shadow:0 0 8px 3px rgba(255,150,60,.8);opacity:0;animation:dksh linear infinite}
+@keyframes dksh{0%{offset-distance:0%;opacity:0}8%{opacity:1}90%{opacity:1}100%{offset-distance:100%;opacity:0}}
+#deck .dkember{width:3px;height:3px;border-radius:50%;background:#ffb070;opacity:0;animation:dkem 5s linear infinite}
+@keyframes dkem{0%{opacity:0;transform:translate(0,0)}20%{opacity:.9}100%{opacity:0;transform:translate(12px,-120px)}}
+#deck .dkband{left:-50%;width:200%;height:60px;background:url(assets/deck/fogband.webp) 0 0/50% 60px repeat-x;animation:dkbd linear infinite alternate;pointer-events:none}
+@keyframes dkbd{from{transform:translateX(0)}to{transform:translateX(25%)}}
+#deck .dkflow{top:0;width:26px;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,rgba(230,255,255,.9),transparent);opacity:0;offset-rotate:auto;animation:dkflw linear infinite}
+@keyframes dkflw{0%{offset-distance:0%;opacity:0}10%{opacity:.9}85%{opacity:.6}100%{offset-distance:100%;opacity:0}}
+#deck .dkui{position:absolute;display:flex;gap:6px;z-index:3}
+#deck .dkui.tl{left:10px;top:10px;flex-direction:column;align-items:flex-start}
+#deck .dkui.tr{right:10px;top:10px}
+#deck .dkui.bl{left:10px;right:10px;bottom:10px}
+#deck .dkpill{background:rgba(14,20,30,.66);color:#f3ead6;border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:6px 12px;font:600 12.5px/1.2 system-ui,sans-serif;backdrop-filter:blur(6px)}
+#deck .dkpill.btn{cursor:pointer;font-size:13px;padding:7px 12px}
+#deck .dkcur{display:flex;align-items:center;gap:10px;background:rgba(10,14,22,.72);border:1px solid rgba(255,255,255,.12);border-radius:30px;padding:5px 14px 5px 5px;color:#f3ead6;max-width:100%;backdrop-filter:blur(6px)}
+#deck .dkcur b{display:block;font:700 13.5px/1.25 system-ui,sans-serif}#deck .dkcur small{display:block;color:#9fb0bf;font-size:11.5px;margin-top:1px}
+#deck .dkth{flex:none;width:44px;height:44px;border-radius:50%;overflow:hidden;border:2px solid #c7ccd6;background:#2a4a63;display:flex;align-items:flex-end;justify-content:center}
+#deck .dkth img{width:150%;margin-bottom:6%}
+#dkrev{position:fixed;left:50%;top:38%;z-index:150000;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:10px;color:#f3ead6;font:700 17px/1.2 system-ui,sans-serif;text-shadow:0 2px 6px #000;pointer-events:none;animation:dkrin .5s cubic-bezier(.2,.9,.3,1.3)}
+#dkrev .dkrc{width:150px;height:150px;border-radius:50%;overflow:hidden;border:4px solid #f2c14e;background:radial-gradient(#3b6f9a,#1d3a52);box-shadow:0 10px 40px rgba(0,0,0,.6),0 0 0 8px rgba(242,193,78,.2);display:flex;align-items:flex-end;justify-content:center}
+#dkrev .dkrc img{width:150%;margin-bottom:8%}
+#dkrev.out{transition:opacity .5s,transform .5s;opacity:0;transform:translate(-50%,-60%)}
+@keyframes dkrin{from{opacity:0;transform:translate(-50%,-50%) scale(.6)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@media (prefers-reduced-motion:reduce){#deck *{animation:none!important}}
 </style>
-<div id="ver" title="Новая версия">N4</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Новая версия">N5</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=18"></script>
 <script>
@@ -1784,7 +1883,7 @@ function drawToken(loc){
   if(G.ponAt[loc]){ // остров понеглифа сам по себе особая локация: на нём всегда обычная база
     const bx=G.boxes[s],i=bx.lastIndexOf('base');if(i>=0)bx.splice(i,1);t='base';
   }else if(G.fixT&&G.fixT[loc]){t=G.fixT[loc];delete G.fixT[loc]}else t=G.boxes[s].pop();
-  G.type[loc]=t;
+  G.type[loc]=t;try{dkReveal(loc,t)}catch(e){}
   log('Фишка вскрыта на '+SEAS[s]+' '+numOf(loc)+': '+TYPES[t].n+'.');
   if(G.ponAt[loc]&&G.ponAt[loc].owner==null){const gn=GUARD[G.ponAt[loc].g].n;log('Под фишкой найден роад-понеглиф! Его охраняет '+gn+'. Теперь место видно всем.');fxEvent({banner:true,tone:'good',icon:'🗿',title:'Найден роад-понеглиф!',desc:SEAS[s]+' '+numOf(loc)+' · хранитель: '+gn,auto:3200})}
   return t;
@@ -3494,6 +3593,7 @@ function render(){
   if(window.__nor){FXQ.length=0;FXBUSY=false}else if(FXQ.length)setTimeout(flushFx,30);
   renderMap();
   ACTS=actions();
+  try{dkRender()}catch(e){console.error('deck',e)}
   $('#side').innerHTML=sideHtml();
   { const ah=advHtml(),hh=hintHtml(),pr=isMob()&&document.querySelector('#side .pr1 h3');if(pr&&ah){pr.insertAdjacentHTML('afterend',ah);if(hh)$('#now').insertAdjacentHTML('beforeend',hh)}else if(ah+hh)$('#now').insertAdjacentHTML('beforeend',ah+hh);hintMark() }
   $('#legend').innerHTML=Object.entries(TYPES).map(([k,t])=>(BADGE[k]?'<span><i style="background:'+BADGE[k].c+'"></i>'+BADGE[k].i+' '+t.n+'</span>':'<span><i style="background:'+t.c+'"></i>'+t.n+'</span>')).join('')+'<span><i style="background:#cdbdee;border-color:#5b3f99!important"></i>⛰ переход между морями</span><span><i style="background:#ebe1ca"></i>«?» — фишка не вскрыта</span><span><i style="background:var(--gold);transform:rotate(45deg);border-radius:2px"></i><b>П</b> — остров понеглифа</span>';
@@ -4238,7 +4338,7 @@ function qoOpen(k){
   document.body.appendChild(o);if(k==='news'||k==='newspop')newsMark(k==='news');if(k==='hall'){hallLoad();const lb=document.getElementById('hallog');if(lb)lb.onclick=logGate};
 }
 function qoClose(){const o=document.getElementById('qoov');if(o)o.remove()}
-const NEWS=[{"id": "2026-11-26-gallery", "d": "26 ноября", "t": "Галерея персонажей", "x": "В главном меню и в меню игры появилась «Галерея»: фото всех персонажей, у некоторых по несколько. Нажмите на персонажа, листайте фото вбок, закрыть можно смахиванием вниз."}, {"id": "2026-11-26-hunters", "d": "26 ноября", "t": "Охотники за головами и сделки", "x": "На чёрном рынке можно нанять охотника за головами на игрока с понеглифами (200–500 Берри): он идёт по следу, пока не догонит, и при победе отдаёт понеглиф нанимателю. В списке игроков появилась кнопка «Сделка»: купить карту атаки, договориться о ненападении или выкупить понеглиф. Чужие дуэли больше не открываются на весь экран — итог приходит строкой."}, {"id": "2026-11-24-smoker2", "d": "24 ноября", "t": "Смокер: хранилища Дозора", "x": "Сданные понеглифы теперь остаются на базе Дозора под охраной Гранд-адмирала флота (атака 12, уклонение 6). Победи его — и забирай понеглифы. Смокер носит с собой только один понеглиф, а в дуэлях бьёт дымом и железным шестом, не выпуская сигары."}, {"id": "2026-11-23-smoker", "d": "23 ноября", "t": "Новый персонаж: Смокер", "x": "Вице-адмирал Дозора играет по своим правилам: побеждая пиратов в дуэлях, сажает их в тюрьму и конфискует понеглифы. Понеглиф можно взять и у хранителя, но только победив его всухую. Сданные понеглифы охраняет на базе Гранд-адмирал флота — пираты могут отбить их. Три понеглифа на базах — и победа. Всадники его не трогают, а «Дым» раз за дуэль спасает от проигранного раунда."}, {"id": "2026-11-21-tasks", "d": "21 ноября", "t": "Два задания сразу", "x": "Теперь можно держать одновременно задание понеглифа и ивентовое задание. Два ивентовых задания сразу брать нельзя. Правило действует в новых партиях."}, {"id": "2026-11-21-names", "d": "21 ноября", "t": "Введите своё имя", "x": "Перед началом партии каждый игрок вводит своё имя, без него игра не начнётся. Боты называются «Бот 1», «Бот 2» и так далее."}, {"id": "2026-11-21-seas", "d": "21 ноября", "t": "Понятные названия морей", "x": "Моря теперь называются по сторонам света: Север, Восток, Запад и Юг. Так же они подписаны на карте, а острова — «Север 5», «Восток 9» и так далее."}, {"id": "2026-11-20-guard", "d": "20 ноября", "t": "Хранители стали сильнее", "x": "Хранители понеглифов теперь сильнее: атака 11, уклонение 8 (было 9 и 6). Вызвать хранителя можно только один раз за раунд. Найти понеглиф мало: к бою с хранителем стоит подготовить карты атаки и пассивки."}, {"id": "2026-11-19-tutorial", "d": "19 ноября", "t": "Обучение", "x": "На главном экране появилась кнопка «Обучение»: короткая партия, в которой наставник шаг за шагом показывает, как плыть по карте, победить хранителя, получить понеглиф и выиграть на Лафтейле. Занимает пару минут."}, {"id": "2026-11-19-advice", "d": "19 ноября", "t": "Цель и советы", "x": "Над картой теперь всегда видна цель партии и ваш прогресс. Строка «💡 Совет» подсказывает, что сейчас лучше сделать: нужная кнопка и остров подсвечиваются, а кнопка «Сделать» выполнит совет. Отключить: Настройки → «Совет хода»."}, {"id": "2026-11-19-easy2", "d": "19 ноября", "t": "Упрощённый режим стал проще", "x": "В упрощённом режиме теперь только 2 моря (остальные закрыты на карте) и нет всадника. По-прежнему достаточно одного понеглифа, чтобы открыть Лафтейл и победить. В этом режиме игроки могут стартовать в одном море."}, {"id": "2026-11-19-back", "d": "19 ноября", "t": "Кнопка «Назад»", "x": "Кнопка или жест «Назад» на телефоне больше не закрывает игру: он закрывает открытое окно или меню, возвращает на шаг назад при подготовке партии, а во время партии открывает меню. На главном экране нажмите «Назад» дважды, чтобы выйти."}, {"id": "2026-11-18-roger", "d": "18 ноября", "t": "Новый секретный персонаж", "x": "В игре появился ещё один секретный персонаж. Он доступен только по паролю. Кто знает, тот знает."}, {"id": "2026-11-18-duelanim", "d": "18 ноября", "t": "Новая анимация дуэлей", "x": "В каждом раунде бойцы замахиваются одновременно, поэтому по первым кадрам не понять, кто выиграл. При ничьей один из бойцов бьёт, а второй ставит красноватый щит."}, {"id": "2026-11-18-king", "d": "18 ноября", "t": "Воля короля", "x": "Новая карта сокровищ «Воля короля»: чтобы получить её, нужно победить Тёмного короля Рейли (атака 9, уклонение 6). За 1 ОД: все остальные игроки в вашем море и всадник пропускают ход. По островам моря бьют красно-чёрные молнии."}, {"id": "2026-11-18-double", "d": "18 ноября", "t": "Дубль на костях", "x": "Если на костях дохода выпал дубль, бросивший получает +1 очко действия на этот ход."}, {"id": "2026-11-17-exit", "d": "17 ноября", "t": "Выход из партии из меню", "x": "В меню (☰) появились пункты «Выйти с сохранением» и «Выйти из игры». После выхода с сохранением на главном экране будет кнопка «Продолжить партию», а для сетевой игры — «Вернуться в комнату»."}, {"id": "2026-11-17-duelwin", "d": "17 ноября", "t": "Победа по числу выигранных раундов", "x": "Если за 3 раунда никто не набрал 2 победы, теперь побеждает тот, у кого побед больше: например, 1:0 при двух ничьих. Боевая ничья — только при равном счёте (0:0 или 1:1). Бой с хранителем понеглифа считается по-старому. Правило действует в новых партиях."}, {"id": "2026-11-17-duelscene", "d": "17 ноября", "t": "Анимированные дуэли", "x": "Каждый бой теперь видно: бойцы дерутся раунд за раундом по выпавшим цифрам. У каждого персонажа и босса свои приёмы, при разнице в 4 очка и больше — тяжёлые. Кубик бросается сам через 3 секунды. «Ускорить бой» прокручивает анимацию быстро только у вас. Кнопка «Сцена» переключает: показывать, ускоренно или выключить. В боях за карты сокровищ у каждого соперника свой бой: Гекко Мория — тени, Марко — синее пламя, Магеллан — яд и гидра, Король Нептун — трезубец и вода, Дофламинго — нити."}, {"id": "2026-11-17-rearm", "d": "17 ноября", "t": "Новое задание «Перевооружение»", "x": "Победите Босса 2–4 уровня и получите особую карту: пока она у вас, за ход можно купить две карты вместо одной (две атаки, атаку и пассивку или две пассивки). Таких заданий в колоде всего три — успейте забрать!"}, {"id": "2026-11-17-tasks", "d": "17 ноября", "t": "Задания стали интереснее", "x": "Выполните 5 ивентовых заданий — и один раз за игру получите 2 очка к атаке и уклонению, распределяйте как хотите (но атака не выше 8, уклонение не выше 7). Часть боевых заданий теперь можно закрыть картой сокровищ вместо Берри. Зато доход с локаций вдвое меньше, карта сокровищ стоит 50 Берри, гостевой персонаж — 80."}, {"id": "2026-11-16-resume", "d": "16 ноября", "t": "Продолжить партию после обновления страницы", "x": "Случайно обновили страницу или закрыли вкладку? Партию можно продолжить с того же места, в том числе с ботами вместо игроков."}, {"id": "2026-11-16-tv", "d": "16 ноября", "t": "Трансляция на телевизор", "x": "Откройте ссылку комнаты в браузере телевизора (или нажмите «Трансляция» и введите код) — на большом экране будет общая карта и журнал, а играть можно с телефонов."}];
+const NEWS=[{"id": "2026-11-26-deck", "d": "26 ноября", "t": "Вид с палубы", "x": "Вместо карты теперь видно море с палубы вашего корабля: на горизонте острова, куда можно доплыть, с флагами, кораблями соперников, Всадником и охотником. Нажмите на остров, чтобы плыть. Погода меняет море: шторм, Аквалагуна, бомбардировка, Калм Белт, Течение Тарай. Сцену можно увеличить двумя пальцами, а карта открывается кнопкой «Карта»."}, {"id": "2026-11-26-gallery", "d": "26 ноября", "t": "Галерея персонажей", "x": "В главном меню и в меню игры появилась «Галерея»: фото всех персонажей, у некоторых по несколько. Нажмите на персонажа, листайте фото вбок, закрыть можно смахиванием вниз."}, {"id": "2026-11-26-hunters", "d": "26 ноября", "t": "Охотники за головами и сделки", "x": "На чёрном рынке можно нанять охотника за головами на игрока с понеглифами (200–500 Берри): он идёт по следу, пока не догонит, и при победе отдаёт понеглиф нанимателю. В списке игроков появилась кнопка «Сделка»: купить карту атаки, договориться о ненападении или выкупить понеглиф. Чужие дуэли больше не открываются на весь экран — итог приходит строкой."}, {"id": "2026-11-24-smoker2", "d": "24 ноября", "t": "Смокер: хранилища Дозора", "x": "Сданные понеглифы теперь остаются на базе Дозора под охраной Гранд-адмирала флота (атака 12, уклонение 6). Победи его — и забирай понеглифы. Смокер носит с собой только один понеглиф, а в дуэлях бьёт дымом и железным шестом, не выпуская сигары."}, {"id": "2026-11-23-smoker", "d": "23 ноября", "t": "Новый персонаж: Смокер", "x": "Вице-адмирал Дозора играет по своим правилам: побеждая пиратов в дуэлях, сажает их в тюрьму и конфискует понеглифы. Понеглиф можно взять и у хранителя, но только победив его всухую. Сданные понеглифы охраняет на базе Гранд-адмирал флота — пираты могут отбить их. Три понеглифа на базах — и победа. Всадники его не трогают, а «Дым» раз за дуэль спасает от проигранного раунда."}, {"id": "2026-11-21-tasks", "d": "21 ноября", "t": "Два задания сразу", "x": "Теперь можно держать одновременно задание понеглифа и ивентовое задание. Два ивентовых задания сразу брать нельзя. Правило действует в новых партиях."}, {"id": "2026-11-21-names", "d": "21 ноября", "t": "Введите своё имя", "x": "Перед началом партии каждый игрок вводит своё имя, без него игра не начнётся. Боты называются «Бот 1», «Бот 2» и так далее."}, {"id": "2026-11-21-seas", "d": "21 ноября", "t": "Понятные названия морей", "x": "Моря теперь называются по сторонам света: Север, Восток, Запад и Юг. Так же они подписаны на карте, а острова — «Север 5», «Восток 9» и так далее."}, {"id": "2026-11-20-guard", "d": "20 ноября", "t": "Хранители стали сильнее", "x": "Хранители понеглифов теперь сильнее: атака 11, уклонение 8 (было 9 и 6). Вызвать хранителя можно только один раз за раунд. Найти понеглиф мало: к бою с хранителем стоит подготовить карты атаки и пассивки."}, {"id": "2026-11-19-tutorial", "d": "19 ноября", "t": "Обучение", "x": "На главном экране появилась кнопка «Обучение»: короткая партия, в которой наставник шаг за шагом показывает, как плыть по карте, победить хранителя, получить понеглиф и выиграть на Лафтейле. Занимает пару минут."}, {"id": "2026-11-19-advice", "d": "19 ноября", "t": "Цель и советы", "x": "Над картой теперь всегда видна цель партии и ваш прогресс. Строка «💡 Совет» подсказывает, что сейчас лучше сделать: нужная кнопка и остров подсвечиваются, а кнопка «Сделать» выполнит совет. Отключить: Настройки → «Совет хода»."}, {"id": "2026-11-19-easy2", "d": "19 ноября", "t": "Упрощённый режим стал проще", "x": "В упрощённом режиме теперь только 2 моря (остальные закрыты на карте) и нет всадника. По-прежнему достаточно одного понеглифа, чтобы открыть Лафтейл и победить. В этом режиме игроки могут стартовать в одном море."}, {"id": "2026-11-19-back", "d": "19 ноября", "t": "Кнопка «Назад»", "x": "Кнопка или жест «Назад» на телефоне больше не закрывает игру: он закрывает открытое окно или меню, возвращает на шаг назад при подготовке партии, а во время партии открывает меню. На главном экране нажмите «Назад» дважды, чтобы выйти."}, {"id": "2026-11-18-roger", "d": "18 ноября", "t": "Новый секретный персонаж", "x": "В игре появился ещё один секретный персонаж. Он доступен только по паролю. Кто знает, тот знает."}, {"id": "2026-11-18-duelanim", "d": "18 ноября", "t": "Новая анимация дуэлей", "x": "В каждом раунде бойцы замахиваются одновременно, поэтому по первым кадрам не понять, кто выиграл. При ничьей один из бойцов бьёт, а второй ставит красноватый щит."}, {"id": "2026-11-18-king", "d": "18 ноября", "t": "Воля короля", "x": "Новая карта сокровищ «Воля короля»: чтобы получить её, нужно победить Тёмного короля Рейли (атака 9, уклонение 6). За 1 ОД: все остальные игроки в вашем море и всадник пропускают ход. По островам моря бьют красно-чёрные молнии."}, {"id": "2026-11-18-double", "d": "18 ноября", "t": "Дубль на костях", "x": "Если на костях дохода выпал дубль, бросивший получает +1 очко действия на этот ход."}, {"id": "2026-11-17-exit", "d": "17 ноября", "t": "Выход из партии из меню", "x": "В меню (☰) появились пункты «Выйти с сохранением» и «Выйти из игры». После выхода с сохранением на главном экране будет кнопка «Продолжить партию», а для сетевой игры — «Вернуться в комнату»."}, {"id": "2026-11-17-duelwin", "d": "17 ноября", "t": "Победа по числу выигранных раундов", "x": "Если за 3 раунда никто не набрал 2 победы, теперь побеждает тот, у кого побед больше: например, 1:0 при двух ничьих. Боевая ничья — только при равном счёте (0:0 или 1:1). Бой с хранителем понеглифа считается по-старому. Правило действует в новых партиях."}, {"id": "2026-11-17-duelscene", "d": "17 ноября", "t": "Анимированные дуэли", "x": "Каждый бой теперь видно: бойцы дерутся раунд за раундом по выпавшим цифрам. У каждого персонажа и босса свои приёмы, при разнице в 4 очка и больше — тяжёлые. Кубик бросается сам через 3 секунды. «Ускорить бой» прокручивает анимацию быстро только у вас. Кнопка «Сцена» переключает: показывать, ускоренно или выключить. В боях за карты сокровищ у каждого соперника свой бой: Гекко Мория — тени, Марко — синее пламя, Магеллан — яд и гидра, Король Нептун — трезубец и вода, Дофламинго — нити."}, {"id": "2026-11-17-rearm", "d": "17 ноября", "t": "Новое задание «Перевооружение»", "x": "Победите Босса 2–4 уровня и получите особую карту: пока она у вас, за ход можно купить две карты вместо одной (две атаки, атаку и пассивку или две пассивки). Таких заданий в колоде всего три — успейте забрать!"}, {"id": "2026-11-17-tasks", "d": "17 ноября", "t": "Задания стали интереснее", "x": "Выполните 5 ивентовых заданий — и один раз за игру получите 2 очка к атаке и уклонению, распределяйте как хотите (но атака не выше 8, уклонение не выше 7). Часть боевых заданий теперь можно закрыть картой сокровищ вместо Берри. Зато доход с локаций вдвое меньше, карта сокровищ стоит 50 Берри, гостевой персонаж — 80."}, {"id": "2026-11-16-resume", "d": "16 ноября", "t": "Продолжить партию после обновления страницы", "x": "Случайно обновили страницу или закрыли вкладку? Партию можно продолжить с того же места, в том числе с ботами вместо игроков."}, {"id": "2026-11-16-tv", "d": "16 ноября", "t": "Трансляция на телевизор", "x": "Откройте ссылку комнаты в браузере телевизора (или нажмите «Трансляция» и введите код) — на большом экране будет общая карта и журнал, а играть можно с телефонов."}];
 const NEWS_KEY='gl_news_seen';
 function newsSeen(){try{return localStorage.getItem(NEWS_KEY)}catch(e){return null}}
 function newsPopSeen(){try{return localStorage.getItem(NEWS_KEY+'_p')}catch(e){return null}}
@@ -4401,6 +4501,164 @@ function vertify(sv){
 }
 addEventListener('resize',()=>{clearTimeout(window.__vrt);window.__vrt=setTimeout(()=>{try{if(G&&document.getElementById('map')&&(mapVert()!==!!UI.vert||isMob()!==!!UI.mob))render()}catch(e){}},200)});
 function smokerSees(){const sm=G.players.find(q=>q.ch==='smoker');if(!sm)return false;if(NET.on)return NET.me===sm.i;const hum=G.players.filter(q=>!q.bot);if(hum.length===1)return hum[0]===sm;return UI.viewer===sm.i}
+// ---------- N: сцена «с палубы» — вид от лица игрока, карта по кнопке ----------
+const DK_BG={still:.4037,storm:.4037,aqua:.4262,buster:.4425,belt:.3785,tarai:.3175};
+const DK_ART={start:[720,335],base:[720,295],event:[720,369],market:[720,336],battle:[720,252],jail:[720,321],dozor:[720,302],pon:[720,296],port:[720,323],fin:[720,347],fog:[720,257],zun:[820,428]};
+const DK_TN={start:'Старт',base:'Пустой',event:'Задания',market:'Рынок',battle:'Поле битвы',jail:'Тюрьма',dozor:'База дозора',pon:'Понеглиф',port:'Переход',fin:'Лафтейл',fog:'Неизвестно',zun:'Зунеша'};
+const DK_TI={start:'⚑',event:'❗',market:'💰',battle:'⚔️',jail:'⛓️',dozor:'⚓',pon:'П',port:'⛰',fin:'★',fog:'?',zun:'🦖'};
+const DK_TC={start:'#5fd38a',event:'#f0b35a',market:'#f2c14e',battle:'#ff7b6b',jail:'#c7ccd6',dozor:'#8fb6ff',pon:'#ff8f8f',port:'#b9a6ff',fin:'#f2c14e',fog:'#9fc7e8',zun:'#9fe0a8',base:'#d6dbe2'};
+const DK_SEAN={N:'Море Севера',W:'Море Запада',E:'Море Востока',S:'Море Юга'};
+const DK_WN={still:'',storm:'⛈️ Шторм',aqua:'🌊 Аквалагуна',buster:'💥 Бомбардировка',belt:'🌫️ Калм Белт · −1 ОД',tarai:'🌀 Течение Тарай · +1 ОД'};
+const DK={sig:'',z:{s:1,x:0,y:0}};
+function dkOn(){if(!G||G.tut||G.coop||document.body.classList.contains('stream'))return false;try{return localStorage.getItem('nv_deck')!=='0'}catch(e){return true}}
+function dkFocus(){
+  if(NET.on&&G.players[NET.me])return G.players[NET.me];
+  const c=G.players[G.cur];if(c&&!c.bot)return c;
+  if(UI.viewer!=null&&UI.viewer>=0&&G.players[UI.viewer]&&!G.players[UI.viewer].bot)return G.players[UI.viewer];
+  return G.players.find(q=>!q.bot)||c;
+}
+function dkSea(id){return id==='Z'?(G.zun?seaOf(G.zun.cell):'N'):id==='L'?'L':seaOf(id)}
+function dkArt(id){
+  if(id==='L')return'fin';if(id==='Z')return'zun';
+  if(REDL.includes(id))return'port';
+  const t=G.type[id];if(!t)return'fog';
+  if(G.ponAt[id])return'pon';
+  return DK_ART[t]?t:'base';
+}
+function dkWeather(){const k=G.lastWeather&&G.lastWeather.k;return DK_BG[k]!=null?k:'still'}
+function dkNeigh(loc){return (ADJ[loc]||[]).filter(x=>x&&x!==loc&&!(G.seas&&x!=='L'&&x!=='Z'&&!G.seas.includes(x[0])))}
+function dkLabel(id,far){
+  const a=dkArt(id),num=id==='L'?'':id==='Z'?'':(far?SEAS[seaOf(id)]+' ':'')+numOf(id);
+  let ic=DK_TI[a]||'';if(a==='port'||a==='fog'||a==='base')ic=a==='port'?'⛰':a==='fog'?'?':'';
+  return {top:(ic?ic+' ':'')+(num||DK_TN[a]),sub:id==='Z'||id==='L'?'':DK_TN[a],c:DK_TC[a]||'#d6dbe2'};
+}
+function dkAv(k,cls){return AVS[k]?'<img class="dkav '+(cls||'')+'" src="'+AVS[k]+'" alt="">':''}
+function dkRender(){
+  const wrap=document.getElementById('mapwrap');if(!wrap)return;
+  let el=document.getElementById('deck');
+  const on=dkOn();
+  const p=on?dkFocus():null;
+  const picks=on?ACTS.filter(a=>a.loc&&!a.dis).map(a=>a.loc):[];
+  const neigh=p?dkNeigh(p.loc):[];
+  const extra=picks.filter(x=>x!==(p&&p.loc)&&!neigh.includes(x));
+  const show=on&&p&&!extra.length&&!(G.pending&&G.pending.pick);
+  wrap.classList.toggle('dk',!!show);
+  if(!show){if(el)el.hidden=true;return}
+  if(!el){el=document.createElement('div');el.id='deck';wrap.insertBefore(el,wrap.firstChild)}
+  el.hidden=false;
+  const W=Math.round(el.clientWidth)||360,H=Math.round(el.clientHeight)||600;
+  const wk=dkWeather(),mine=picks.length&&(!NET.on||viewerNeeded()===NET.me);
+  const near=neigh.filter(x=>dkSea(x)===dkSea(p.loc)||x==='Z'||x==='L').sort((a,b)=>nodeNum(a)-nodeNum(b));
+  const far=neigh.filter(x=>!near.includes(x)).sort();
+  const st=id=>[id,dkArt(id),G.flags[id],playersAt(id).map(q=>q.i).join(''),G.akainu&&G.akainu.loc===id?1:0,(G.hunt||[]).some(h=>h.loc===id)?1:0,picks.includes(id)?1:0,G.dead&&G.dead[id]?1:0].join(':');
+  const sig=[W,H,wk,p.i,p.loc,dkArt(p.loc),mine?1:0,G.zun&&G.zun.cell,neigh.map(st).join('|'),G.flags[p.loc],playersAt(p.loc).length].join('#');
+  if(sig===DK.sig)return;
+  const fresh=DK.sig.split('#')[4]!==p.loc;DK.sig=sig;
+  // геометрия
+  const hf=DK_BG[wk],bs=Math.max(W/1080,H/1935),bw=1080*bs,bh=1935*bs;
+  let Yh=H*0.40;let top=Yh-hf*bh;top=Math.min(0,Math.max(H-bh,top));Yh=top+hf*bh;
+  const two=far.length>0;
+  const rowNear=two?Yh+H*0.15:Yh+H*0.012,rowFar=Yh+H*0.004;
+  const isl=[];
+  const place=(arr,y,maxW,scale)=>{const n=arr.length;if(!n)return;const gap=W/(n);const w=Math.min(gap*0.92,maxW)*scale;arr.forEach((id,i)=>isl.push({id,cx:gap*(i+.5),y,w,far:scale<1}))};
+  place(far,rowFar,Math.min(W*0.28,H*0.3),0.62);
+  place(near,rowNear,two?Math.min(W*0.36,H*0.36):Math.min(W*0.42,H*0.42),1);
+  let h='<div class="dkz"><img class="dkbg" src="assets/deck/bg-'+wk+'.webp" alt="" style="left:'+((W-bw)/2).toFixed(1)+'px;top:'+top.toFixed(1)+'px;width:'+bw.toFixed(1)+'px;height:'+bh.toFixed(1)+'px">';
+  if(wk==='still'||wk==='tarai'||wk==='storm'||wk==='buster')h+='<div class="dksky" style="height:'+(Yh+4).toFixed(0)+'px"><img src="assets/deck/bg-'+wk+'.webp" alt="" style="left:'+((W-bw)/2-8).toFixed(1)+'px;top:'+top.toFixed(1)+'px;width:'+(bw+16).toFixed(1)+'px;height:'+(bh).toFixed(1)+'px"></div>';
+  h+=dkFx(wk,W,H,Yh,'back');
+  // Зунеша на горизонте как декорация
+  if(G.zun&&!neigh.includes('Z')&&p.loc!=='Z'&&dkSea('Z')===dkSea(p.loc)){const zw=Math.min(W*0.34,H*0.3);h+='<div class="dkzun" style="left:'+(W*0.62).toFixed(0)+'px;top:'+(Yh-zw*0.52*0.92).toFixed(0)+'px;width:'+zw.toFixed(0)+'px"><img src="assets/deck/zun.webp" alt=""></div>'}
+  // острова
+  h+='<div class="dkisl wx-'+wk+'">';
+  for(const o of isl){const a=dkArt(o.id),[aw,ah]=DK_ART[a],ih=o.w*ah/aw,x=o.cx-o.w/2,ty=o.y-ih*0.9;o.ih=ih;o.ty=ty;
+    h+='<img class="dki'+(G.dead&&G.dead[o.id]?' dead':'')+'" src="assets/deck/'+a+'.webp" alt="" style="left:'+x.toFixed(1)+'px;top:'+ty.toFixed(1)+'px;width:'+o.w.toFixed(1)+'px">';
+    h+='<img class="dki rf" src="assets/deck/'+a+'.webp" alt="" style="left:'+x.toFixed(1)+'px;top:'+(o.y-ih*0.1-2).toFixed(1)+'px;width:'+o.w.toFixed(1)+'px;height:'+(ih*0.45).toFixed(1)+'px">'}
+  h+='</div>';
+  // эффекты островов, флаги, аватарки, подписи
+  for(const o of isl){const a=dkArt(o.id),L=dkLabel(o.id,o.far),pk=picks.includes(o.id)&&mine;
+    if(a==='battle')for(let k=0;k<3;k++)h+='<i class="dksmoke" style="left:'+(o.cx+o.w*(k*0.12-0.08)).toFixed(0)+'px;top:'+(o.ty+o.ih*0.2).toFixed(0)+'px;animation-delay:-'+(k*1.6).toFixed(1)+'s"></i>';
+    if(a==='port')h+='<i class="dklamp" style="left:'+(o.cx-o.w*0.17).toFixed(0)+'px;top:'+(o.ty+o.ih*0.04).toFixed(0)+'px"></i>';
+    if(a==='pon')h+='<i class="dkglow" style="left:'+(o.cx-o.w*0.2).toFixed(0)+'px;top:'+(o.ty+o.ih*0.3).toFixed(0)+'px;width:'+(o.w*0.36).toFixed(0)+'px;height:'+(o.ih*0.45).toFixed(0)+'px"></i>';
+    if(a==='fin')h+='<i class="dkbeam" style="left:'+(o.cx-o.w*0.25).toFixed(0)+'px;top:'+(o.ty-o.ih*0.3).toFixed(0)+'px;width:'+(o.w*0.5).toFixed(0)+'px;height:'+(o.ih*0.7).toFixed(0)+'px"></i>';
+    if(G.flags[o.id]!=null){const fh=Math.max(24,o.w*(o.far?0.34:0.3));h+='<img class="dkflag" src="assets/deck/flag'+(G.flags[o.id]%6)+'.webp" alt="" style="left:'+(o.cx-o.w*0.26).toFixed(0)+'px;top:'+(o.ty+o.ih*0.35-fh).toFixed(0)+'px;height:'+fh.toFixed(0)+'px">'}
+    const who=playersAt(o.id).map(q=>'<span class="dkp" style="--pc:'+q.color+'">'+dkAv(q.ch)+'</span>');
+    if(G.akainu&&G.akainu.loc===o.id)who.push('<span class="dkp adm">'+dkAv(G.adm)+'</span>');
+    if((G.hunt||[]).some(hh=>hh.loc===o.id))who.push('<span class="dkp hunt">🎯</span>');
+    if(who.length)h+='<div class="dkwho" style="left:'+o.cx.toFixed(0)+'px;top:'+(o.ty-4).toFixed(0)+'px">'+who.join('')+'</div>';
+    h+='<button class="dkhit'+(pk?' pk':'')+'" data-dk="'+o.id+'" style="left:'+(o.cx-o.w/2).toFixed(0)+'px;top:'+o.ty.toFixed(0)+'px;width:'+o.w.toFixed(0)+'px;height:'+(o.ih+30).toFixed(0)+'px" aria-label="'+esc(L.top)+'"'+(pk?'':' tabindex="-1"')+'></button>';
+    h+='<div class="dklb'+(o.far?' far':'')+(pk?' pk':'')+'" style="left:'+o.cx.toFixed(0)+'px;top:'+(o.y+4).toFixed(0)+'px">'+esc(L.top)+(L.sub?'<small style="color:'+L.c+'">'+esc(L.sub)+'</small>':'')+'</div>'}
+  // корабль и текущий остров
+  const shH=two?Math.min(H*0.28,W*0.55):Math.min(H*0.33,W*0.62),shW=shH*397/746,shTop=rowNear+H*0.068;
+  h+='<div class="dkship wx-'+wk+'" style="left:'+(W/2-shW/2).toFixed(0)+'px;top:'+shTop.toFixed(0)+'px;width:'+shW.toFixed(0)+'px"><img src="assets/deck/ship.webp" alt=""></div>';
+  const ca=dkArt(p.loc),[caw,cah]=DK_ART[ca],fw=Math.min(W*0.8,H*0.62),fh=fw*cah/caw;
+  h+='<img class="dkfg wx-'+wk+'" src="assets/deck/'+ca+'.webp" alt="" style="left:'+(-fw*0.54).toFixed(0)+'px;top:'+(Math.min(H*0.78,shTop+shH*0.9)-fh*0.85).toFixed(0)+'px;width:'+fw.toFixed(0)+'px">';
+  h+=dkFx(wk,W,H,Yh,'front');
+  h+='</div>';
+  // интерфейс сцены
+  const wn=DK_WN[wk];
+  h+='<div class="dkui tl"><span class="dkpill">🧭 '+(p.loc==='L'?'Лафтейл':DK_SEAN[dkSea(p.loc)]||'')+'</span>'+(wn?'<span class="dkpill w">'+wn+'</span>':'')+'</div>';
+  h+='<div class="dkui tr"><button class="dkpill btn" data-dkmap>🗺 Карта</button></div>';
+  const cl=dkLabel(p.loc,false),cn=p.loc==='L'?'Лафтейл':p.loc==='Z'?'Зунеша':'остров '+numOf(p.loc)+' — '+DK_TN[ca];
+  h+='<div class="dkui bl"><span class="dkcur"><span class="dkth"><img src="assets/deck/'+ca+'.webp" alt=""></span><span><b>'+(DK_TI[ca]&&ca!=='base'&&ca!=='fog'?DK_TI[ca]+' ':'')+esc(p===G.players[G.cur]||NET.on?'Вы у '+cn.replace('остров','острова'):p.name+': '+cn)+'</b>'+(mine?'<small>Нажмите на остров, чтобы плыть · 1 ОД</small>':'')+'</span></span></div>';
+  el.innerHTML=h;
+  el.classList.toggle('fresh',fresh);
+  dkZoomApply();
+}
+function dkFx(wk,W,H,Yh,layer){
+  let h='',s=(W*7+H*3)|0;const r=()=>(s=(s*9301+49297)%233280)/233280;
+  if(layer==='back'){
+    if(wk==='still'||wk==='tarai'){for(let i=0;i<Math.round(W/12);i++){const x=W*0.35+Math.pow(r(),.6)*W*0.62,y=Yh+H*0.02+r()*H*0.2;h+='<i class="dkspark" style="left:'+x.toFixed(0)+'px;top:'+y.toFixed(0)+'px;animation-delay:-'+(r()*3.2).toFixed(2)+'s;animation-duration:'+(2.4+r()*2).toFixed(1)+'s"></i>'}
+      for(const g of [[0.13,19,0],[0.15,23,-4],[0.08,30,-14]])h+='<svg class="dkgull" viewBox="0 0 14 6" style="top:'+(H*g[0]).toFixed(0)+'px;animation-duration:'+g[1]+'s;animation-delay:'+g[2]+'s;--w:'+(W+60)+'px"><path d="M1 5 Q4 0 7 4 Q10 0 13 5"/></svg>'}
+    if(wk==='buster'){h+='<i class="dkzar" style="top:'+(Yh-H*0.12).toFixed(0)+'px;height:'+(H*0.2).toFixed(0)+'px"></i>';
+      for(let i=0;i<6;i++)h+='<i class="dkboom" style="left:'+(W*(0.05+i*0.17+r()*0.05)-20).toFixed(0)+'px;top:'+(Yh-13).toFixed(0)+'px;animation-delay:-'+(r()*4).toFixed(1)+'s;animation-duration:'+(3.4+r()*1.5).toFixed(1)+'s"></i>';
+      for(let i=0;i<4;i++){const x0=W*(0.1+r()*0.3),x1=W*(0.55+r()*0.35),cy=Yh-H*(0.15+r()*0.1);const d=r()<.5?'M '+x0.toFixed(0)+' '+Yh.toFixed(0)+' Q '+((x0+x1)/2).toFixed(0)+' '+cy.toFixed(0)+' '+x1.toFixed(0)+' '+Yh.toFixed(0):'M '+x1.toFixed(0)+' '+Yh.toFixed(0)+' Q '+((x0+x1)/2).toFixed(0)+' '+cy.toFixed(0)+' '+x0.toFixed(0)+' '+Yh.toFixed(0);h+='<i class="dkshell" style="offset-path:path(\''+d+'\');animation-duration:'+(3.2+r()*1.4).toFixed(1)+'s;animation-delay:-'+(r()*3).toFixed(1)+'s"></i>'}}
+    if(wk==='aqua')for(let i=0;i<22;i++)h+='<i class="dkspray" style="left:'+(W*(0.42+r()*0.55)).toFixed(0)+'px;top:'+(Yh-H*(0.2+r()*0.1)).toFixed(0)+'px;animation-delay:-'+(r()*2.4).toFixed(2)+'s"></i>';
+    if(wk==='tarai'){const path='M '+(W*0.52).toFixed(0)+' '+H+' C '+(W*0.3).toFixed(0)+' '+(H*0.78).toFixed(0)+', '+(W*0.82).toFixed(0)+' '+(H*0.66).toFixed(0)+', '+(W*0.57).toFixed(0)+' '+(H*0.56).toFixed(0)+' S '+(W*0.42).toFixed(0)+' '+(Yh+H*0.08).toFixed(0)+', '+(W*0.51).toFixed(0)+' '+(Yh+4).toFixed(0);
+      for(let i=0;i<20;i++)h+='<i class="dkflow" style="left:'+(r()*W*0.2-W*0.1).toFixed(0)+'px;offset-path:path(\''+path+'\');animation-duration:'+(2.6+r()*1.6).toFixed(1)+'s;animation-delay:-'+(r()*4).toFixed(2)+'s"></i>'}
+  }else{
+    if(wk==='storm')h+='<i class="dkrain b"></i><i class="dkrain"></i><i class="dkflash"></i>';
+    if(wk==='belt')for(const b of [[0,40,.8],[0.045,55,.6],[0.1,70,.4]])h+='<i class="dkband" style="top:'+(Yh-H*0.03+H*b[0]).toFixed(0)+'px;animation-duration:'+b[1]+'s;opacity:'+b[2]+'"></i>';
+    if(wk==='buster')for(let i=0;i<14;i++)h+='<i class="dkember" style="left:'+(r()*W).toFixed(0)+'px;top:'+(Yh+r()*H*0.18).toFixed(0)+'px;animation-delay:-'+(r()*5).toFixed(2)+'s"></i>';
+  }
+  return h;
+}
+// зум двумя пальцами, перетаскивание при увеличении, двойной тап — сброс
+function dkZoomApply(){const z=document.querySelector('#deck .dkz');if(z)z.style.transform=DK.z.s>1.01?'translate('+DK.z.x.toFixed(1)+'px,'+DK.z.y.toFixed(1)+'px) scale('+DK.z.s.toFixed(3)+')':''}
+(function(){const pts=new Map();let p0=null,lastTap=0,moved=false;
+  const clamp=()=>{const el=document.getElementById('deck');if(!el)return;const W=el.clientWidth,H=el.clientHeight,s=DK.z.s;DK.z.x=Math.min(0,Math.max(W-W*s,DK.z.x));DK.z.y=Math.min(0,Math.max(H-H*s,DK.z.y))};
+  document.addEventListener('pointerdown',e=>{const el=e.target.closest&&e.target.closest('#deck');if(!el||e.target.closest('.dkui'))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=false;
+    if(pts.size===2){const a=[...pts.values()],r=el.getBoundingClientRect();p0={d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),s:DK.z.s,x:DK.z.x,y:DK.z.y,cx:(a[0].x+a[1].x)/2-r.left,cy:(a[0].y+a[1].y)/2-r.top}}
+    else if(pts.size===1)p0={pan:1,x0:e.clientX,y0:e.clientY,x:DK.z.x,y:DK.z.y}},{passive:true});
+  document.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId)||!p0)return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size===2&&p0.d){const a=[...pts.values()],d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),s=Math.min(3,Math.max(1,p0.s*d/p0.d));DK.z.x=p0.cx-(p0.cx-p0.x)*s/p0.s;DK.z.y=p0.cy-(p0.cy-p0.y)*s/p0.s;DK.z.s=s;moved=true;clamp();dkZoomApply()}
+    else if(p0.pan&&DK.z.s>1.01){const dx=e.clientX-p0.x0,dy=e.clientY-p0.y0;if(Math.abs(dx)+Math.abs(dy)>6)moved=true;DK.z.x=p0.x+dx;DK.z.y=p0.y+dy;clamp();dkZoomApply()}},{passive:true});
+  const up=e=>{if(!pts.has(e.pointerId))return;pts.delete(e.pointerId);if(pts.size<2&&p0&&p0.d)p0=null;if(!pts.size){
+    if(!moved&&e.type==='pointerup'&&e.target.closest&&e.target.closest('#deck')&&!e.target.closest('.dkhit.pk,.dkui')){const t=Date.now();if(t-lastTap<320){DK.z={s:1,x:0,y:0};dkZoomApply();lastTap=0}else lastTap=t}
+    if(moved)DK.drag=Date.now();p0=null}};
+  document.addEventListener('pointerup',up,{passive:true});document.addEventListener('pointercancel',up,{passive:true});
+})();
+document.addEventListener('click',e=>{
+  if(e.target.closest&&e.target.closest('[data-dkmap]')){try{localStorage.setItem('nv_deck','0')}catch(_){}DK.sig='';render();return}
+  if(e.target.closest&&e.target.closest('[data-dkon]')){try{localStorage.setItem('nv_deck','1')}catch(_){}DK.sig='';render();return}
+  const b=e.target.closest&&e.target.closest('#deck .dkhit.pk');if(!b||(DK.drag&&Date.now()-DK.drag<250))return;
+  const id=b.dataset.dk,i=ACTS.findIndex(x=>x.loc===id&&!x.dis);if(i<0)return;
+  const el=document.getElementById('deck');
+  if(el&&!el.classList.contains('sail')&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){
+    const W=el.clientWidth,H=el.clientHeight,bx=parseFloat(b.style.left)+parseFloat(b.style.width)/2,by=parseFloat(b.style.top)+parseFloat(b.style.height)/2;
+    const z=el.querySelector('.dkz');DK.z={s:1,x:0,y:0};
+    if(z){z.style.transformOrigin=bx.toFixed(0)+'px '+by.toFixed(0)+'px';z.style.transform='scale(1.35)'}
+    el.classList.add('sail');setTimeout(()=>{el.classList.remove('sail');if(z){z.style.transform='';z.style.transformOrigin=''}DK.sig='';submit({t:'a',i})},520);
+  }else submit({t:'a',i});
+});
+window.addEventListener('resize',()=>{DK.sig='';if(G)try{dkRender()}catch(e){}});
+// круг с картинкой, когда ваш корабль открыл неизвестный остров
+function dkReveal(loc,t){
+  if(window.__nor||!G||!dkOn())return;const p=dkFocus();if(!p||p.loc!==loc)return;
+  const a=G.ponAt[loc]?'pon':(DK_ART[t]?t:'base');
+  setTimeout(()=>{let o=document.getElementById('dkrev');if(o)o.remove();o=document.createElement('div');o.id='dkrev';
+    o.innerHTML='<div class="dkrc"><img src="assets/deck/'+a+'.webp" alt=""></div><b>Остров '+numOf(loc)+' — '+esc(DK_TN[a])+'</b>';
+    document.body.appendChild(o);setTimeout(()=>{o.classList.add('out');setTimeout(()=>o.remove(),500)},2600)},250);
+}
 function renderMap(){let PTOP=''; // понеглиф-метки рисуем поверх кораблей и всадников
   const R=44; // V153: острова крупнее
   let s='';
@@ -5777,7 +6035,7 @@ function backStep(){
       if(guards>0){const n=guards;guards=0;try{history.go(-n)}catch(e){}}}
   });
 })();
-window.__g={galOpen,galClose,galHtml,botMove:()=>botMove(),huntPhase,huntResolve,dealAsk,dealOpen,dealCan,pactOn,duelSpect,akFx,smokerArrest,smokerDeliver,runDuel,akainuPhase,actions:()=>actions(),setGuard:(a,u)=>{GUARD_A3=a;GUARD_U3=u},startTutorial,tutIntro,backStep,devInfo,logRec,logCsv,logLocalGet,logSave,logLoad,hallHtml,LOGH,giveTask,stats,statRoom,completeTask,checkTasks,eventFx,SFX,useTre,akScene,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode,tb:meta.tb});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,startPvp,guardFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
+window.__g={dkRender,dkReveal,get DK(){return DK},galOpen,galClose,galHtml,botMove:()=>botMove(),huntPhase,huntResolve,dealAsk,dealOpen,dealCan,pactOn,duelSpect,akFx,smokerArrest,smokerDeliver,runDuel,akainuPhase,actions:()=>actions(),setGuard:(a,u)=>{GUARD_A3=a;GUARD_U3=u},startTutorial,tutIntro,backStep,devInfo,logRec,logCsv,logLocalGet,logSave,logLoad,hallHtml,LOGH,giveTask,stats,statRoom,completeTask,checkTasks,eventFx,SFX,useTre,akScene,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode,tb:meta.tb});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,startPvp,guardFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,bStepToward,bMap,bFreePons,bUnknown,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
