@@ -1346,7 +1346,7 @@ body.tutor #app{padding-top:110px}
 @keyframes dkrin{from{opacity:0;transform:translate(-50%,-50%) scale(.6)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 @media (prefers-reduced-motion:reduce){#deck *{animation:none!important}}
 </style>
-<div id="ver" title="Новая версия">N7a</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="ver" title="Новая версия">N7b</div><div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=18"></script>
 <script>
@@ -3629,6 +3629,7 @@ function render(){
   document.body.classList.toggle('ingame',!!G);
   if(!G){if(NET.on)renderLobby();else renderSetup();return}
   if(STREAM.on){renderStream();return}
+  if(window.DKHOLD>Date.now()&&(G.pending||FXQ.length)&&!(G.pending&&G.pending.pick)){clearTimeout(render.hd);render.hd=setTimeout(render,window.DKHOLD-Date.now()+40);return}
   const need=viewerNeeded();
   if(G.turnNo!==SNDT){SNDT=G.turnNo;if(!window.__nor&&(!NET.on||need===NET.me))fxSnd('turn')}
   if(G.pending&&G.pending.type==='duelResult'&&SNDD!==G.pending&&!duelSpect(G.pending)){SNDD=G.pending;fxSnd('duel')}
@@ -4722,10 +4723,11 @@ window.addEventListener('resize',()=>{DK.sig='';if(G)try{dkRender()}catch(e){}})
 // круг с картинкой, когда ваш корабль открыл неизвестный остров
 function dkReveal(loc,t){
   if(window.__nor||!G||!dkOn())return;const p=dkFocus();if(!p||p.loc!==loc)return;
+  window.DKHOLD=Date.now()+2300;FXHOLD=Math.max(FXHOLD,window.DKHOLD);
   const a=G.ponAt[loc]?'pon':(DK_ART[t]?t:'base');
   setTimeout(()=>{let o=document.getElementById('dkrev');if(o)o.remove();o=document.createElement('div');o.id='dkrev';
     o.innerHTML='<div class="dkrc"><img src="assets/deck/'+a+'.webp" alt=""></div><b>Остров '+numOf(loc)+' — '+esc(DK_TN[a])+'</b>';
-    document.body.appendChild(o);setTimeout(()=>{o.classList.add('out');setTimeout(()=>o.remove(),500)},2600)},250);
+    document.body.appendChild(o);setTimeout(()=>{o.classList.add('out');setTimeout(()=>o.remove(),500)},1700)},250);
 }
 // ---------- N: навигатор курса для вида с палубы ----------
 function navBfs(from){const dist={},q=[from];dist[from]=0;while(q.length){const c=q.shift();for(const n of (ADJ[c]||[])){if(dist[n]!=null||deadAt(n))continue;dist[n]=dist[c]+1;q.push(n)}}return dist}
