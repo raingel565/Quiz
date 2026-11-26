@@ -1196,7 +1196,9 @@ body.tutor #app{padding-top:110px}
 .dealm select,.dealm input{width:110px;padding:8px 10px;border-radius:10px;border:1px solid var(--line,#444);background:var(--sunk,#111);color:inherit;font:inherit}
 .dealm .row{display:flex;gap:10px;margin-top:10px}.dealm .row .btn{flex:1;justify-content:center}
 
-.galg{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:10px;max-height:62vh;overflow:auto;padding:2px}
+.galh{margin:16px 0 0;font-size:15px}
+.galwrap{max-height:62vh;overflow:auto;margin-top:10px;padding:2px}
+.galg{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:10px}
 .galc{display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:6px;border-radius:14px;border:1px solid var(--line,#3e4654);background:rgba(255,255,255,.04);cursor:pointer;color:inherit;text-align:left;font:inherit}
 .galsec .galt{display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#1a1f28 0 10px,#202633 10px 20px)}
 .galq{font:800 52px/1 system-ui,sans-serif;color:#6b7280}
@@ -2685,6 +2687,20 @@ function gadmFight(p,loc){ // V161: пират отбивает понеглиф
 // ---------- V164: охотники за головами ----------
 const HUNT={n:'Охотник за головами',A:9,U:5};
 const huntPrice=q=>Math.min(500,100+100*q.pon.length);
+
+// N: охотники за головами — двое, внешность выбирается по паре «наниматель+цель» (одинаково у всех игроков)
+const HUNTERS=[{k:'hunter1',n:'Охотник за головами',img:'assets/npc/hunter1.webp',s:'assets/npc/hunter1-s.webp',av:'assets/npc/hunter1-av.webp'},{k:'hunter2',n:'Охотница за головами',img:'assets/npc/hunter2.webp',s:'assets/npc/hunter2-s.webp',av:'assets/npc/hunter2-av.webp'}];
+function huntV(h){return HUNTERS[((h&&h.by|0)+(h&&h.tg|0))%2]}
+function huntIntro(h,q){
+  if(window.__nor||!document.body)return;const fast=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const H=huntV(h);if(fast){fxEvent({banner:true,tone:'bad',icon:'🎯',title:'Нанят охотник за головами',desc:'Цель: '+q.name,auto:2600});return}
+  const old=document.getElementById('akvid');if(old)old.remove();
+  const o=document.createElement('div');o.id='akvid';
+  o.innerHTML='<div class="avbox"><img src="'+H.img+'" alt="" style="display:block;width:100%;height:auto"><button class="avx" aria-label="Закрыть">✕ Закрыть</button><div class="avc">🎯 '+esc(H.n)+' вышел на охоту · цель: '+esc(q.name)+'</div></div>';
+  if(H.k==='hunter2')o.querySelector('.avc').textContent='🎯 '+H.n+' вышла на охоту · цель: '+q.name;
+  document.body.appendChild(o);let fin=false;const end=()=>{if(fin)return;fin=true;o.classList.add('out');setTimeout(()=>o.remove(),260)};
+  o.querySelector('.avx').onclick=e=>{e.stopPropagation();end()};o.onclick=()=>end();setTimeout(end,4000);
+}
 function huntOf(i){return (G.hunt||[]).find(h=>h.tg===i)}
 function huntLoc(l){if(l==='Z')return G.zun&&G.zun.cell;if(l==='L')return G.laftel&&G.laftel.anch&&G.laftel.anch[0];return l}
 function huntPath(a,b){ // кратчайший путь по карте (тюрьмы и базы Дозора охотнику не мешают)
@@ -3095,7 +3111,7 @@ function actions(){
   }
   if(atMarket&&!G.coop)for(const q of G.players){if(q===p||!q.pon.length||huntOf(q.i))continue;const pr=huntPrice(q);
     add('market','🎯 Нанять охотника за головами на '+q.name+' ('+pr+' Берри, 1 ОД)',()=>{G.ap-=1;pay(p,pr);G.hunt=G.hunt||[];G.hunt.push({by:p.i,tg:q.i,loc:p.loc,pr});G.tm.buy++;
-      log('🎯 '+p.name+' нанимает охотника за головами на '+q.name+' за '+pr+' Берри.');fxEvent({banner:true,tone:'bad',icon:'🎯',title:'Нанят охотник за головами',desc:'Цель: '+q.name,auto:2600})},ap<1||p.berries<pr)}
+      log('🎯 '+p.name+' нанимает охотника за головами на '+q.name+' за '+pr+' Берри.');huntIntro(G.hunt[G.hunt.length-1],q)},ap<1||p.berries<pr)}
   for(const h of (G.hunt||[]))if(h.loc===p.loc&&h.by!==p.i)add('duel','🎯 Вызвать охотника за головами (А'+HUNT.A+' / У'+HUNT.U+', 1 ОД)'+(h.tg===p.i?' — он охотится за вами':' · победа +100 Берри'),()=>{G.ap-=1;log(p.name+' вызывает охотника за головами.');huntFight(p,h,'chal')},ap<1||G.duels>=3);
   if(atMarket&&!G.guestBought)add('market','Купить гостевого персонажа ('+(G.tb?80:50)+' Берри)',()=>{pay(p,G.tb?80:50);G.tm.buy++;G.guestBought=true;const c=card('tre',{key:G.guest});p.tre.push(c);fxCard(p,c);logP(p.i,p.name+' нанимает гостя: «'+TRE[c.key].n+'».',p.name+' нанимает гостя.')},p.berries<(G.tb?80:50)||p.tre.length>=3);
   if(p.ltask){
@@ -4300,19 +4316,22 @@ document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#ve
 
 // ---------- галерея персонажей (только новая версия) ----------
 const GAL_EXTRA={olesya:[{f:'assets/gallery/olesya-1.webp',s:'assets/gallery/olesya-1-s.webp'}],nami:[{f:'assets/gallery/nami-1.webp',s:'assets/gallery/nami-1-s.webp'},{f:'assets/gallery/nami-2.webp',s:'assets/gallery/nami-2-s.webp'}],hancock:[{f:'assets/gallery/hancock-1.webp',s:'assets/gallery/hancock-1-s.webp'}]};
-function galPhotos(k){const a=[];if(CHW[k])a.push({f:'assets/ch/'+(CHIMG[k]||k)+'.webp'});return a.concat(GAL_EXTRA[k]||[])}
+const GAL_NPC={hunter1:{n:'Охотник за головами',A:9,U:5,d:'Нанимается на чёрном рынке. Идёт по следу игрока с понеглифом, пока не догонит.'},hunter2:{n:'Охотница за головами',A:9,U:5,d:'Нанимается на чёрном рынке. Идёт по следу игрока с понеглифом, пока не догонит.'}};
+function galInfo(k){return CH[k]||GAL_NPC[k]}
+function galPhotos(k){if(GAL_NPC[k]){const H=HUNTERS.find(x=>x.k===k);return [{f:H.img,s:H.s}]}const a=[];if(CHW[k])a.push({f:'assets/ch/'+(CHIMG[k]||k)+'.webp'});return a.concat(GAL_EXTRA[k]||[])}
 function galHtml(){
   const keys=Object.keys(CH).filter(k=>galPhotos(k).length);
-  return '<h2>Галерея персонажей</h2><div class="small">Нажмите на персонажа, чтобы посмотреть его фото.</div><div class="galg">'+keys.map(k=>{const ph=galPhotos(k),t=ph[ph.length-1];
+  const npc='<h3 class="galh">Охотники за головами</h3><div class="galg">'+Object.keys(GAL_NPC).map(k=>{const t=galPhotos(k)[0];return '<button class="galc" data-gal="'+k+'"><span class="galt"><img loading="lazy" src="'+t.s+'" alt=""></span><b>'+esc(GAL_NPC[k].n)+'</b><small>1 фото</small></button>'}).join('')+'</div>';
+  return '<h2>Галерея персонажей</h2><div class="small">Нажмите на персонажа, чтобы посмотреть его фото.</div><div class="galwrap"><div class="galg">'+keys.map(k=>{const ph=galPhotos(k),t=ph[ph.length-1];
     if(SECRETS[k]&&!secretOk(k))return '<button class="galc galsec" data-galsec="'+k+'"><span class="galt"><span class="galq">?</span></span><b>???</b><small>Секретный персонаж · нужен пароль</small></button>';
-    return '<button class="galc" data-gal="'+k+'"><span class="galt"><img loading="lazy" src="'+(t.s||t.f)+'" alt=""></span><b>'+esc(CH[k].n)+'</b><small>'+ph.length+' фото</small></button>'}).join('')+'</div>';
+    return '<button class="galc" data-gal="'+k+'"><span class="galt"><img loading="lazy" src="'+(t.s||t.f)+'" alt=""></span><b>'+esc(CH[k].n)+'</b><small>'+ph.length+' фото</small></button>'}).join('')+'</div>'+npc+'</div>';
 }
 let GALV=null;
 function galOpen(k,i){
   if(SECRETS[k]&&!secretOk(k))return;
   const ph=galPhotos(k);if(!ph.length)return;GALV={k,i:Math.max(0,Math.min(i||0,ph.length-1))};
   let o=document.getElementById('galv');if(!o){o=document.createElement('div');o.id='galv';document.body.appendChild(o)}
-  const c=CH[k],p=ph[GALV.i];
+  const c=galInfo(k),p=ph[GALV.i];
   o.innerHTML='<div class="galimg"><img src="'+p.f+'" alt="'+esc(c.n)+'"></div>'
    +(ph.length>1?'<button class="galnav l" data-galgo="-1" aria-label="Назад">‹</button><button class="galnav r" data-galgo="1" aria-label="Вперёд">›</button>':'')
    +'<button class="galx" data-galx aria-label="Закрыть">✕</button>'
@@ -4583,7 +4602,7 @@ function dkRender(){
     if(G.flags[o.id]!=null){const fh=Math.max(24,o.w*(o.far?0.34:0.3));h+='<img class="dkflag" src="assets/deck/flag'+(G.flags[o.id]%6)+'.webp" alt="" style="left:'+(o.cx-o.w*0.26).toFixed(0)+'px;top:'+(o.ty+o.ih*0.35-fh).toFixed(0)+'px;height:'+fh.toFixed(0)+'px">'}
     const who=playersAt(o.id).map(q=>'<span class="dkp" style="--pc:'+q.color+'">'+dkAv(q.ch)+'</span>');
     if(G.akainu&&G.akainu.loc===o.id)who.push('<span class="dkp adm">'+dkAv(G.adm)+'</span>');
-    if((G.hunt||[]).some(hh=>hh.loc===o.id))who.push('<span class="dkp hunt">🎯</span>');
+    for(const hh of (G.hunt||[]))if(hh.loc===o.id)who.push('<span class="dkp hunt"><img class="dkav" src="'+huntV(hh).av+'" alt=""></span>');
     if(who.length)h+='<div class="dkwho" style="left:'+o.cx.toFixed(0)+'px;top:'+(o.ty-4).toFixed(0)+'px">'+who.join('')+'</div>';
     h+='<button class="dkhit'+(pk?' pk':'')+'" data-dk="'+o.id+'" style="left:'+(o.cx-o.w/2).toFixed(0)+'px;top:'+o.ty.toFixed(0)+'px;width:'+o.w.toFixed(0)+'px;height:'+(o.ih+30).toFixed(0)+'px" aria-label="'+esc(L.top)+'"'+(pk?'':' tabindex="-1"')+'></button>';
     h+='<div class="dklb'+(o.far?' far':'')+(pk?' pk':'')+'" style="left:'+o.cx.toFixed(0)+'px;top:'+(o.y+4).toFixed(0)+'px">'+esc(L.top)+(L.sub?'<small style="color:'+L.c+'">'+esc(L.sub)+'</small>':'')+'</div>'}
