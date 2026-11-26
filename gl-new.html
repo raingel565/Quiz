@@ -1482,7 +1482,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N33</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N34</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -2155,6 +2155,7 @@ function arrive(p,loc,o,cb){
   if(loc==='L'){log(pname(p)+' прибыл на Лафтейл!');checkLaftelArrival(p)}
   if(G.grav&&G.grav[loc]&&!o.quiet&&G.tm&&!G.tm.gvd&&p.ch!=='smoker'){G.tm.gvd=true;p.skip=(p.skip||0)+1;log(pname(p)+' попал под гравитацию Багиро на '+locName(loc)+' и пропустит следующий ход.');fxEvent({banner:true,tone:'bad',icon:'⬇',title:'Гравитация!',desc:pname(p)+' пропустит следующий ход',auto:2600})}
   if(G.akainu&&G.akainu.loc===loc&&G.akainu.stun<=0&&!o.noBoss&&p.ch!=='smoker'){const AD=adm();log(pname(p)+' встретил на '+locName(loc)+' всадника '+AD.short+'!');fxSnd('enemy');fxEvent({banner:true,tone:'bad',icon:'☠',title:'Встреча с '+AD.short+'!',desc:pname(p)+' · атака '+AD.a+' / уклонение '+AD.u,auto:2800});startNpcFight(p,G.adm||'akainu',cb);return}
+  if(G.monster&&G.monster.loc===loc&&p.dolph>0&&!o.quiet&&!o.noBoss&&p.jail<=0&&G.tm&&!G.tm.mon&&p===G.players[G.cur]){G.tm.mon=1;log('🐬 '+pname(p)+': дельфины проводят корабль мимо Морского короля на '+locName(loc)+'.')}
   if(G.monster&&G.monster.loc===loc&&!o.quiet&&!o.noBoss&&p.ch!=='smoker'&&p.jail<=0&&G.tm&&!G.tm.mon&&p===G.players[G.cur]){G.tm.mon=1;log(pname(p)+' встретил на '+locName(loc)+' Морского короля!');fxSnd('enemy');fxEvent({banner:true,tone:'bad',icon:'🐉',title:'Встреча с Морским королём!',desc:pname(p)+' · атака '+MONSTER.a+' / уклонение '+MONSTER.u,auto:2800});startMonsterFight(p,ok=>{if(ok&&t)tokenFx(p,loc,t,cb);else cb&&cb()});return}
   {const og=outAt(loc);if(og&&og.o!==p.i&&!o.quiet&&!o.noBoss&&p.ch!=='smoker'&&p.jail<=0&&p===G.players[G.cur]){outGate(p,loc,ok=>{if(ok&&t&&!o.quiet)tokenFx(p,loc,t,cb);else cb&&cb()});return}}
   if(o.quiet||!t){cb&&cb();return}
@@ -2243,7 +2244,8 @@ function incomeRoll(){
 function beginTurn(){
   const p=P();
   (G.marks=G.marks||[]).push({pi:p.i,n:G.logN||0,r:G.round,name:p.name});if(G.marks.length>80)G.marks.shift();
-  G.ap=Math.max(1,3+(p.ch==='nami'?Math.max(0,G.apMod):G.apMod));G.apMax=G.ap;G.duels=0;G.turnNo=(G.turnNo||0)+1;G.tm={mv0:p.cnt.moves,buy:0,pvp:0};
+  if(p.dolph>0&&G.apMod<0&&p.ch!=='nami')log('🐬 '+p.name+': дельфины выводят корабль из Калм Белта, ОД не теряются.');
+  G.ap=Math.max(1,3+(p.ch==='nami'||p.dolph>0?Math.max(0,G.apMod):G.apMod));G.apMax=G.ap;G.duels=0;G.turnNo=(G.turnNo||0)+1;G.tm={mv0:p.cnt.moves,buy:0,pvp:0};
   G.stolen=false;G.cardBought=false;G.endAfter=false;
   {const ol=outOf(p);if(ol){p.berries+=OUT_INCOME;log(p.name+': форпост на '+locName(ol)+' приносит '+OUT_INCOME+' Берри.')}}
   if(G.fire&&G.fire.by===p.i){log('Огненная стена на '+locName(G.fire.loc)+' гаснет.');G.fire=null}
@@ -2546,12 +2548,13 @@ function endRound(cb){
     if(w.k==='belt'){G.apMod=-1;if(!G.monster)spawnMonster()}
     else if(G.monster){G.monster=null;log('Калм Белт закончился: Морской король ушёл на глубину.')}
     if(w.k==='aqua'){const n=d(12);fxRoll('Погода · Аквалагуна',[n],12);log('Бросок 1d12: '+n+'. Флаги на локациях №'+n+' смываются.');
-      for(const l of Object.keys(G.flags)){if(numOf(l)!==n)continue;const o=G.players[G.flags[l]];if(o.ch==='nami'){log('Флаг Наоми устоял (иммунитет).');continue}if(outAt(l)){log('Форпост '+o.name+' на '+locName(l)+' выстоял.');continue}delete G.flags[l];o.fl++;log('Флаг '+o.name+' на '+locName(l)+' смыт.')}}
+      for(const l of Object.keys(G.flags)){if(numOf(l)!==n)continue;const o=G.players[G.flags[l]];if(o.ch==='nami'){log('Флаг Наоми устоял (иммунитет).');continue}if(o.dolph>0){log('🐬 Флаг '+o.name+' устоял: дельфины гасят волну.');continue}if(outAt(l)){log('Форпост '+o.name+' на '+locName(l)+' выстоял.');continue}delete G.flags[l];o.fl++;log('Флаг '+o.name+' на '+locName(l)+' смыт.')}}
     if(w.k==='buster'){const n=d(12);G.busterN=n;fxRoll('Погода · Buster Call',[n],12);log('Бросок 1d12: '+n+'. Локации №'+n+' бомбардируются!');
       for(const l of Object.keys(G.flags)){if(numOf(l)!==n)continue;const o=G.players[G.flags[l]];if(o.ch==='nami')continue;if(outAt(l)){log('Форпост '+o.name+' на '+locName(l)+' выстоял.');continue}delete G.flags[l];o.fl++;log('Флаг '+o.name+' на '+locName(l)+' сгорел.')}
       for(const q of G.players){if(q.ch==='nami'||q.loc==='Z'||q.loc==='L'||numOf(q.loc)!==n)continue;if(hasTre(q,'key')){log(q.name+': Ключ от Импел Даун спасает от тюрьмы.');continue}q.jail=2;log(q.name+' отправлен в тюрьму бомбардировкой.')}}
     if(w.k==='storm')for(const q of G.players){
       if(q.ch==='nami'||q.loc==='Z'||q.loc==='L')continue;
+      if(q.dolph>0){log('🐬 '+q.name+': дельфины удерживают корабль, шторм его не уносит.');continue}
       const opts=nbrsOf(q).filter(x=>x!=='Z'&&x!=='L'&&G.type[x]&&!['dozor','battle','jail'].includes(G.type[x]));
       if(opts.length){const t=opts[d(opts.length)-1];q.prev=q.loc;q.loc=t;q.sea=seaOf(t);log(q.name+' унесён штормом на '+locName(t)+'.')}
     }
