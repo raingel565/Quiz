@@ -4197,7 +4197,7 @@ function admOpen(){
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#ver'))admOpen()});
 
 // ---------- галерея персонажей (только новая версия) ----------
-const GAL_EXTRA={olesya:[{f:'assets/gallery/olesya-1.webp',s:'assets/gallery/olesya-1-s.webp'}],nami:[{f:'assets/gallery/nami-1.webp',s:'assets/gallery/nami-1-s.webp'}]};
+const GAL_EXTRA={olesya:[{f:'assets/gallery/olesya-1.webp',s:'assets/gallery/olesya-1-s.webp'}],nami:[{f:'assets/gallery/nami-1.webp',s:'assets/gallery/nami-1-s.webp'}],hancock:[{f:'assets/gallery/hancock-1.webp',s:'assets/gallery/hancock-1-s.webp'}]};
 function galPhotos(k){const a=[];if(CHW[k])a.push({f:'assets/ch/'+(CHIMG[k]||k)+'.webp'});return a.concat(GAL_EXTRA[k]||[])}
 function galHtml(){
   const keys=Object.keys(CH).filter(k=>galPhotos(k).length);
