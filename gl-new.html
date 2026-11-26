@@ -1398,7 +1398,7 @@ body.tutor #app{padding-top:110px}
 #deck .dkmw{left:8px;right:8px;bottom:70px;top:auto;max-height:52%;z-index:8;flex-direction:column;gap:6px;overflow:auto;background:rgba(10,14,22,.92);border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:10px;backdrop-filter:blur(8px)}
 #deck .dkmw .dkchip{width:100%;border-color:rgba(255,255,255,.18)}#deck .dkmw .dkmh{display:flex;justify-content:space-between;color:#cfd8e0;font:700 13px system-ui;padding:0 2px 4px}
 body.dkon .g-move{display:none!important}
-body.dkon #deck .dkrow3{padding-right:136px}
+body.dkon #deck .dkrow3{padding-right:118px}
 #deck .dkap{display:flex;align-items:center;gap:7px;background:rgba(14,20,30,.66);color:#f3ead6;border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:6px 12px;font:700 12.5px/1 system-ui,sans-serif;backdrop-filter:blur(6px)}
 #deck .dkap i{width:14px;height:14px;border-radius:50%;background:#34c46d;box-shadow:0 0 8px rgba(52,196,109,.8)}#deck .dkap i.off{opacity:.2;box-shadow:none}
 body.dkon .tp-m .tm-od{display:none}
@@ -1406,7 +1406,7 @@ body.dkon .tp-m .tm-od{display:none}
 #deck .dkpill{background:rgba(14,20,30,.66);color:#f3ead6;border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:6px 12px;font:600 12.5px/1.2 system-ui,sans-serif;backdrop-filter:blur(6px)}
 #deck .dkpill.btn{cursor:pointer;font-size:13px;padding:7px 12px}
 #deck .dkcur{display:flex;align-items:center;gap:10px;background:rgba(10,14,22,.72);border:1px solid rgba(255,255,255,.12);border-radius:30px;padding:5px 14px 5px 5px;color:#f3ead6;max-width:100%;backdrop-filter:blur(6px)}
-#deck .dkcur{padding:3px 14px 3px 3px;gap:8px}#deck .dkcur b{display:block;font:700 13px/1.2 system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#deck .dkcur small{display:none}#deck .dkcur>span:last-child{min-width:0}
+#deck .dkcur{padding:3px 10px 3px 3px;gap:6px}#deck .dkcur b{display:block;font:700 12px/1.2 system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#deck .dkcur small{display:none}#deck .dkcur>span:last-child{min-width:0}
 #deck .dkth{flex:none;width:34px;height:34px;border-radius:50%;overflow:hidden;border:2px solid #c7ccd6;background:#2a4a63;display:flex;align-items:flex-end;justify-content:center}
 #deck .dkth img{width:150%;margin-bottom:6%}
 #dkrev{position:fixed;left:50%;top:38%;z-index:150000;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:10px;color:#f3ead6;font:700 17px/1.2 system-ui,sans-serif;text-shadow:0 2px 6px #000;pointer-events:none;animation:dkrin .5s cubic-bezier(.2,.9,.3,1.3)}
@@ -4978,7 +4978,7 @@ function dkRender(){
    const pr=qaOk?ACTS.map((a,i)=>{const r=SH.find(x=>x[0].test(a.label));return r?[a,i,r[1].replace('$1',(r[0].exec(a.label)||[])[1]||'')]:null}).filter(x=>x&&!x[0].far):[];
    const chip=([a,i,t])=>'<button class="dkchip" data-a="'+i+'"'+(a.dis?' disabled':'')+' title="'+esc(a.label)+'">'+esc(t.replace(/^(.{26}).+$/,'$1…'))+'</button>';
    h+='<div class="dkui bot"><div class="dkqa">'+pr.map(chip).join('')+(G.winner==null?(()=>{const n=Math.max(3,G.apMax||3);return '<span class="dkap">ОД'+Array.from({length:n},(_,i)=>'<i class="'+(i<G.ap?'':'off')+'"></i>').join('')+'</span>'})():'')+'</div>'
-    +'<div class="dkrow3"><span class="dkcur"><span class="dkth"><img src="assets/deck/'+ca+'.webp" alt=""></span><span><b>'+(DK_TI[ca]&&ca!=='base'&&ca!=='fog'?DK_TI[ca]+' ':'')+esc(p===G.players[G.cur]||NET.on?'Вы у '+cn.replace('остров','острова'):p.name+': '+cn)+'</b>'+(mine?'<small>Нажмите на остров · 1 ОД</small>':'')+'</span></span>'+'</div></div>'}
+    +'<div class="dkrow3"><span class="dkcur"><span class="dkth"><img src="assets/deck/'+ca+'.webp" alt=""></span><span><b>'+(DK_TI[ca]&&ca!=='base'&&ca!=='fog'?DK_TI[ca]+' ':'')+esc(p===G.players[G.cur]||NET.on?cn.charAt(0).toUpperCase()+cn.slice(1):p.name+': '+cn)+'</b>'+(mine?'<small>Нажмите на остров · 1 ОД</small>':'')+'</span></span>'+'</div></div>'}
   DK.pos={};for(const o of isl)DK.pos[o.id]={cx:o.cx,ty:o.ty,w:o.w,ih:o.ih,y:o.y};DK.shp={x:W/2,y:shTop+shH*0.25,w:shW,h:shH};DK.fgp={x:-fw*0.54,y:Math.min(H*0.78,shTop+shH*0.9)-fh*0.85,w:fw,h:fh};DK.W=W;DK.H=H;DK.Yh=Yh;
   el.innerHTML=h;
   el.classList.toggle('fresh',fresh);el.classList.toggle('kwon',kwOn);
