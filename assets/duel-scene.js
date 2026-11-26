@@ -850,6 +850,18 @@ Object.assign(ABIL,{
  tridentthrow:MV('Бросок трезубца','#4fb6ff',PS('windup',300,{bu:172,bb:0,fu:150,fb:0}),async(F,T)=>{await F.to('punch',110,E.in,{dx:40});const h=F.W('fh'),B=T.W('sh');
   await flyer(F,{x:h.x,y:h.y-30},{x:B.x-F.dir*20,y:B.y},{dur:240,ease:E.in,aim:1,shape:SH.trid,s0:1.2,s1:1.6,trail:1,col:'#bfeaff',trailR:6});flash(.6);shake();boom(T,'#4fb6ff',2.6,'pel');
   for(let i=0;i<10;i++)flyer(F,{x:B.x,y:B.y},{x:B.x+R_(-140,140),y:B.y+R_(-120,60)},{dur:420,ease:E.out,shape:SH.bubble,r:R_(5,10)});ring(B.x,B.y,'#4fb6ff',180)}),
+
+ serpbite:MV('Укус из глубины','#2fb8b0',async(F)=>{F.jaw=0;await F.to('windup',320,E.out,{dx:-80,dy:-24});await sleep(70)},async(F,T)=>{
+  const B=T.W('sh'),d=Math.max(40,Math.min(230,Math.abs(B.x-F.W('head').x)/F.sc-60));F.jaw=1;await F.to('punch',130,E.in,{dx:d});
+  boom(T,'#7fe8e0',1.5,'sh');burst(B.x,B.y,22,'#eafcff',1.6);ring(B.x,B.y,'#2fb8b0',95);
+  for(let i=0;i<10;i++)tdot(B.x+R_(-34,34),B.y+R_(-34,14),'#bfeaff',5);
+  await sleep(140);F.jaw=0}),
+ abyssjet:MV('Струя бездны','#2fb8b0',async(F)=>{await F.to('cast',380,E.out,{fu:150,fb:0,bu:150,bb:0,dy:-16});F.jaw=1;await sleep(160)},async(F,T)=>{
+  const B=T.W('pel');const o=el('path',{fill:'none',stroke:'#0f4f63','stroke-width':0,'stroke-linecap':'round',opacity:.95,filter:'drop-shadow(0 0 12px #2fb8b0)'}),i2=el('path',{fill:'none',stroke:'#bff6f0','stroke-width':0,'stroke-linecap':'round',opacity:.9});
+  await run(560,t=>{const H=F.W('head'),w=Math.min(1,t*5)*(1-Math.max(0,(t-.82)/.18)),my=(H.y+B.y)/2+Math.sin(t*34)*12,d=`M ${H.x+F.dir*44} ${H.y+8} Q ${(H.x+B.x)/2} ${my} ${B.x} ${B.y}`;
+   o.setAttribute('d',d);i2.setAttribute('d',d);o.setAttribute('stroke-width',38*w);i2.setAttribute('stroke-width',16*w);
+   if(Math.random()<.85)tdot(B.x+R_(-28,28),B.y+R_(-44,44),'#eafcff',5);if(Math.random()<.5)tdot(H.x+F.dir*R_(60,200),(H.y+B.y)/2+R_(-30,30),'#7fe8e0',4)});
+  o.remove();i2.remove();boom(T,'#2fb8b0',2.8,'pel');burst(B.x,B.y,36,'#bfeaff',2.1);ring(B.x,B.y,'#7fe8e0',140);await sleep(120);F.jaw=0}),
  tidal:MV('Удар прилива','#4fb6ff',PS('cast',280,{fu:172,fb:0,bu:172,bb:0}),async(F,T)=>{const B=T.W('pel');const w=el('path',{fill:'url(#seaG)',opacity:.9,filter:'drop-shadow(0 0 12px #4fb6ff)'});const sx=F.home-F.dir*40;
   await run(620,t=>{const k=E.in(t),x=L_(sx,B.x+F.dir*40,k),h=60+200*Math.sin(Math.PI*Math.min(1,t*1.2));const s=F.dir;
    w.setAttribute('d',`M ${x-s*260} ${GROUND} Q ${x-s*120} ${GROUND-h*.6} ${x-s*30} ${GROUND-h} Q ${x+s*30} ${GROUND-h-30} ${x+s*20} ${GROUND-h+40} Q ${x+s*10} ${GROUND-h*.4} ${x+s*40} ${GROUND} Z`);if(Math.random()<.6)tdot(x+R_(-20,20),GROUND-h+R_(0,30),'#eafcff',5)});
@@ -905,6 +917,7 @@ BIGCH.moria={name:'Гекко Мория: тени',col:'#6e5c94',glow:'170,130,
 BIGCH.marco={name:'Марко: синее пламя',col:'#ffd23a',glow:'79,182,255',band:'#4fb6ff',ent:'phoenix',bg:'boss',sc:1.3,x:650,l:['bluekick','phoenixdash','flamekicks'],h:['phoenixkick','phoenixdive','bluewheel']};
 BIGCH.magellan={name:'Магеллан: яд и гидра',col:'#e0303a',fill:'#b48cff',glow:'224,48,58',ent:'boss',fog:'#9a6ac8',bg:'boss',sc:1.5,x:660,l:['poisonspit','poisoncoat','hydrabite'],h:['hydra3','poisonrain','poisonflood']};
 BIGCH.neptune={name:'Король Нептун: трезубец и вода',col:'#4fb6ff',glow:'79,182,255',ent:'sea',bg:'sea',sc:1.5,x:660,tail:1,trident:1,l:['tridentthrust','tridentwave','bubbles'],h:['tridentthrow','tidal','tridentstorm']};
+BIGCH.seaking={name:'Морской король: змей бездны',col:'#2a9d98',glow:'47,184,176',ent:'sea',bg:'sea',sc:1.5,x:660,serpent:1,l:['serpbite'],h:['abyssjet']};
 BIGCH.dofla={name:'Дофламинго: нити',col:'#ff6fae',glow:'255,111,174',band:'#ffe14a',ent:'strings',bg:'boss',sc:1.5,x:660,l:['stringcut','flamingokick','stringbullet'],h:['puppet','birdcage','overheat']};
 BIGCH.imu={name:'Има: чёрная сущность в короне',col:'#f4f4f8',glow:'208,49,74',ent:'imu',bg:'imu',sc:1.6,x:670,crown:1,l:['demonclaws','shadowbolt','soulgrab'],h:['giantclaws','hellportal','soulstorm']};
 const HEAVY=new Set();for(const id in CHARS)CHARS[id].h.forEach(k=>HEAVY.add(k));for(const id in BIGCH)BIGCH[id].h.forEach(k=>HEAVY.add(k));
@@ -952,7 +965,7 @@ const SND={
 };
 function snd(n){if(!API.soundOn()||!SND[n])return;const c=actx();if(!c)return;try{if(c.state==='suspended')c.resume().catch(()=>{});SND[n](c.currentTime+.02)}catch(e){}}
 const ELEM={sword:'slash',fire:'fire',viol:'mochi',pink:'rubber',blue:'heart',navy:'space',orange:'wind',lilac:'hand',red:'metal',yellow:'kick',maroon:'water',smoke:'punch',
- akainu:'lava',kizaru:'light',fujitora:'grav',aokiji:'ice',shanks:'elec',wb:'quake',kaido:'quake',bm:'slash',hero:'punch',imu:'dark',moria:'dark',marco:'fire',magellan:'poison',neptune:'water',dofla:'string'};
+ akainu:'lava',kizaru:'light',fujitora:'grav',aokiji:'ice',shanks:'elec',wb:'quake',kaido:'quake',bm:'slash',hero:'punch',imu:'dark',moria:'dark',marco:'fire',magellan:'poison',neptune:'water',seaking:'water',dofla:'string'};
 const MELEM={trident:'slash',phase:'slash',rain:'water',spark:'elec',stormcloud:'elec',hail:'ice',firekick:'fire',firewheel:'fire',starkick:'fire',
  redcut:'slash',fireball:'fire',firebreath:'fire',pinkbolt:'elec',pinkstorm:'elec',flameburst:'fire',fireorbs:'fire',jab:'punch',combo:'punch',giantfist:'punch',
  tremorpunch:'punch',clubswing:'punch',bullcharge:'punch',flamingokick:'kick',tridentthrust:'slash'};
@@ -996,6 +1009,7 @@ function npcKit(ch,name){
  if(/^Марко/.test(nm))return kit('marco');
  if(/Магеллан/.test(nm))return kit('magellan');
  if(/Нептун/.test(nm))return kit('neptune');
+ if(/Морской король/.test(nm))return kit('seaking');
  if(/Дофламинго/.test(nm))return kit('dofla');
  let lv=DOZN.indexOf(nm);
  if(lv===4)return kit('hero');
@@ -1011,8 +1025,40 @@ function npcKit(ch,name){
 /* ---------- бойцы на сцене ---------- */
 let FELL=[false,false],LF=[],RF=null,LIVES=[2,2],WN=2,RNG=Math.random,CFG=null;
 const GAP=F=>Math.abs(((F&&F.tgt)||F||{home:0}).home-((F&&F.home)||0));
+
+/* ---------- морской король: змей с головой дракона ---------- */
+function attachSerpent(F,col){const g=F.inner;[...g.childNodes].forEach(n=>{if(n.style)n.style.display='none'});
+ const S=el('g',{},g),dark='#0b3340',mid=col,hi='#8ff0e6';F.jaw=0;
+ const sp=el('ellipse',{cx:-90,cy:8,rx:92,ry:12,fill:'rgba(120,220,230,.35)'},S);
+ const c1=el('path',{fill:'none',stroke:dark,'stroke-width':36,'stroke-linecap':'round'},S),c2=el('path',{fill:'none',stroke:mid,'stroke-width':26,'stroke-linecap':'round'},S),c3=el('path',{fill:'none',stroke:'#cfeee8','stroke-width':8,'stroke-linecap':'round',opacity:.5,'stroke-dasharray':'2 9'},S);
+ const nk=el('path',{fill:'none',stroke:dark,'stroke-width':50,'stroke-linecap':'round'},S),ns=el('path',{fill:'none',stroke:hi,'stroke-width':66,'stroke-dasharray':'3 17','stroke-linecap':'butt',opacity:.75},S);S.insertBefore(ns,nk);
+ const nm=el('path',{fill:'none',stroke:mid,'stroke-width':40,'stroke-linecap':'round'},S),nb=el('path',{fill:'none',stroke:'#d8f2d0','stroke-width':14,'stroke-linecap':'round',opacity:.55,transform:'translate(5,6)'},S);
+ const HG=el('g',{},S),
+  horn=el('path',{d:'M-14 -22 Q-44 -50 -72 -40 Q-46 -34 -22 -12Z',fill:dark,stroke:hi,'stroke-width':2},HG),
+  horn2=el('path',{d:'M-2 -26 Q-18 -58 -44 -64 Q-28 -48 -12 -20Z',fill:dark,stroke:hi,'stroke-width':2},HG),
+  frill=el('path',{d:'M-20 -6 L-54 -14 L-34 0 L-60 8 L-30 12 L-52 28 L-18 18Z',fill:'#176a78',stroke:hi,'stroke-width':1.5,opacity:.95},HG),
+  jaw=el('g',{},HG),
+  jp=el('path',{d:'M-14 12 Q12 22 52 12 L60 20 Q26 38 -8 28Z',fill:dark,stroke:mid,'stroke-width':2},jaw),
+  skull=el('path',{d:'M-24 -14 Q-10 -32 16 -26 L54 -10 Q64 -2 54 8 L20 14 Q0 24 -22 14Z',fill:mid,stroke:dark,'stroke-width':3},HG),
+  bel=el('path',{d:'M-14 8 Q16 22 54 8 L54 4 Q20 14 -14 2Z',fill:'#d8f2d0',opacity:.5},HG),
+  tt=el('path',{d:'M20 12 l4 10 l4 -10 M34 11 l4 10 l4 -10 M47 9 l3 8 l3 -8',fill:'#fff',stroke:'#fff','stroke-width':1.4,'stroke-linejoin':'round'},HG),
+  eye=el('circle',{cx:16,cy:-11,r:5,fill:'#ffd24a',stroke:'#7a1d00','stroke-width':1.5,filter:'drop-shadow(0 0 6px #ff9a30)'},HG),
+  pup=el('ellipse',{cx:17,cy:-11,rx:1.6,ry:4,fill:'#200'},HG),
+  nos=el('circle',{cx:50,cy:-4,r:2,fill:dark},HG);
+ jaw.appendChild(el('path',{d:'M20 14 l4 -9 l4 9 M34 15 l4 -9 l4 9 M47 13 l3 -8 l3 8',fill:'#fff',stroke:'#fff','stroke-width':1.4,'stroke-linejoin':'round'},jaw));
+ const old=F.draw.bind(F);F.draw=function(t){old(t);const p=this.pts,h=p.head,b={x:-70,y:8},w=Math.sin(t/430)*5;
+  const cx1={x:b.x-6,y:b.y-(b.y-h.y)*.85},cx2={x:h.x-96,y:h.y+64+Math.sin(t/310)*7},ex={x:h.x-8,y:h.y+10};
+  const nd=`M ${b.x} ${b.y} C ${cx1.x} ${cx1.y} ${cx2.x} ${cx2.y} ${ex.x} ${ex.y}`;
+  for(const e of [nk,ns,nm,nb])e.setAttribute('d',nd);
+  const cd=`M ${b.x} ${b.y} Q ${b.x-34} ${-62-w} ${b.x-70} ${b.y} Q ${b.x-106} ${-52+w} ${b.x-140} ${b.y} Q ${b.x-170} ${-40-w} ${b.x-196} ${b.y}`;
+  for(const e of [c1,c2,c3])e.setAttribute('d',cd);
+  const ang=Math.atan2(ex.y-cx2.y,ex.x-cx2.x)*180/Math.PI*.55+6,k=1.2;
+  HG.setAttribute('transform',`translate(${h.x},${h.y}) rotate(${ang}) scale(${k})`);
+  jaw.setAttribute('transform',`rotate(${(this.jaw||0)*30} -8 14)`);
+  eye.setAttribute('r',5+(this.jaw?1.5:0))}
+}
 function mkF(k,x,dir,sc){const g=document.createElementNS(NS,'g');g.setAttribute('class','ds-rim');g.style.setProperty('--g','rgba('+k.glow+',.6)');$('figs').appendChild(g);
- const F=new Fighter(g,x,dir,k.col);F.sc=sc;F.kit=k;F.last=null;if(k.sword)attachSword(F,k.swordLen||80);if(k.jitte)attachJitte(F);if(k.cigar)attachCigar(F);if(k.crown)attachCrown(F);if(k.fill){F.inner.querySelectorAll('[stroke="#0d1118"]').forEach(e=>e.setAttribute('stroke',k.fill));F.inner.querySelectorAll('[fill="#0d1118"]').forEach(e=>e.setAttribute('fill',k.fill))}if(k.tail)attachTail(F,k.col);if(k.trident)attachTrident(F);if(k.band){F.band.setAttribute('stroke',k.band);F.band.setAttribute('stroke-width',7)}return F}
+ const F=new Fighter(g,x,dir,k.col);F.sc=sc;F.kit=k;F.last=null;if(k.sword)attachSword(F,k.swordLen||80);if(k.jitte)attachJitte(F);if(k.cigar)attachCigar(F);if(k.crown)attachCrown(F);if(k.fill){F.inner.querySelectorAll('[stroke="#0d1118"]').forEach(e=>e.setAttribute('stroke',k.fill));F.inner.querySelectorAll('[fill="#0d1118"]').forEach(e=>e.setAttribute('fill',k.fill))}if(k.tail)attachTail(F,k.col);if(k.trident)attachTrident(F);if(k.serpent)attachSerpent(F,k.col);if(k.band){F.band.setAttribute('stroke',k.band);F.band.setAttribute('stroke-width',7)}return F}
 function lay(n){return n<=1?{xs:[350],sc:1}:n===2?{xs:[365,255],sc:.92}:n===3?{xs:[372,282,192],sc:.86}:{xs:[378,300,222,144],sc:.8}}
 function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function pick(F,heavy){const all=F.kit[heavy?'h':'l'];let grp=all.filter(k=>k!==F.last);if(!grp.length)grp=all;const m=grp[Math.floor(RNG()*grp.length)];F.last=m;return m}
