@@ -1333,7 +1333,7 @@ body.tutor #app{padding-top:110px}
 /* пингвины */
 #deck .dkpen{position:absolute;z-index:5;padding:0;border:0;background:none;cursor:pointer;animation:dkbob 7s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
 #deck .dkpen img{width:100%;display:block;pointer-events:none}
-@keyframes dkdolf{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-9px) rotate(2deg)}}
+@keyframes dkdolf{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 #deck .dkdolf{position:absolute;z-index:3;height:auto;pointer-events:none;animation:dkdolf 3.2s ease-in-out infinite;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
 #deck .dkpenb{border-color:rgba(160,225,255,.7);color:#cdeeff}
 #deck .dkship{position:absolute}
@@ -5046,7 +5046,7 @@ function dkRender(){
     h+='<button class="dkpen" data-penpick="1" style="left:'+px.toFixed(0)+'px;top:'+(wl2-ph*0.9).toFixed(0)+'px;width:'+pw.toFixed(0)+'px" aria-label="Пингвины"><img src="assets/deck/penguins.webp" alt=""></button>'+(bt?'':'<button class="dkgalb dkpenb" data-penpick="1" style="left:'+(px+pw*0.5).toFixed(0)+'px;top:'+(wl2+2).toFixed(0)+'px">🐧 Пингвины</button>')}
   if(G.dol&&G.dol.who===p.i&&!G.dol.done){const dw=Math.min(W*0.34,150),dh=dw*329/640,wl3=shTop+shH*0.5,dx=W-dw-W*0.05;
     h+='<button class="dkpen dkdol" data-dolpick="1" style="left:'+dx.toFixed(0)+'px;top:'+(wl3-dh*0.8).toFixed(0)+'px;width:'+dw.toFixed(0)+'px" aria-label="Дельфины"><img src="assets/deck/dolphins.webp" alt=""></button>'+(bt?'':'<button class="dkgalb dkpenb" data-dolpick="1" style="left:'+(dx+dw*0.5).toFixed(0)+'px;top:'+(wl3+2).toFixed(0)+'px">🐬 Дельфины</button>')}
-  if(p.dolph>0){const fw=Math.min(W*0.26,115);h+='<img class="dkdolf" src="assets/deck/dolphins.webp" alt="" style="left:'+Math.max(2,W/2-shW/2-fw*0.55).toFixed(0)+'px;top:'+(shTop+shH*0.62).toFixed(0)+'px;width:'+fw.toFixed(0)+'px">'}
+  if(p.dolph>0){const fw=Math.min(W*0.5,shW*1.5);h+='<img class="dkdolf" src="assets/deck/dolphins-back.webp" alt="" style="left:'+(W/2-fw/2).toFixed(0)+'px;top:'+(shTop+shH*0.8).toFixed(0)+'px;width:'+fw.toFixed(0)+'px">'}
   h+='<div class="dkship wx-'+wk+'" style="left:'+(W/2-shW/2).toFixed(0)+'px;top:'+shTop.toFixed(0)+'px;width:'+shW.toFixed(0)+'px"><img src="assets/deck/ship.webp" alt="">'+(p.pengu>0?'<img class="dkpeng" src="assets/deck/penguin1.webp" alt="">':'')+'</div>';
   {const here=playersAt(p.loc).filter(q=>q!==p);here.forEach((q,k)=>{const sh=shH*0.38,sw=sh*360/294;const mv=moves.find(m=>m.q===q&&!fresh);h+='<img class="dkopp fl'+(mv?' arr':'')+'" src="assets/deck/opp'+(q.i%6)+'.webp" alt="" style="left:'+(W*0.97-sw-k*sw*0.5).toFixed(0)+'px;top:'+(shTop+shH*0.62-sh+k*8).toFixed(0)+'px;width:'+sw.toFixed(0)+'px">'})}
   // корабли соперников, которые только что сходили, проплывают между островами
