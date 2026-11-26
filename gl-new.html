@@ -1685,13 +1685,15 @@ const OLESYA_MP3='assets/sfx_olesya.mp3'+SFXV;
 const HANCOCK_MP3='assets/sfx_hancock.mp3'+SFXV;
 const LAW_MP3='assets/sfx_law.mp3'+SFXV;
 const BUSTER_MP3='assets/sfx_buster.mp3'+SFXV;
+const STILL_MP3='assets/sfx_still.mp3'+SFXV;
 const TARAI_MP3='assets/sfx_tarai.mp3'+SFXV;
 const STORM_MP3='assets/sfx_storm.mp3'+SFXV;
 const SFX=(()=>{
-  let XB=null,XBP=false,SB=null,SBP=false,SV=null,TB=null,TBP=false;
+  let XB=null,XBP=false,SB=null,SBP=false,SV=null,TB=null,TBP=false,CB=null,CBP=false;
+  function loadStill(){if(CB||CBP||!ctx)return;CBP=true;try{loadSnd(STILL_MP3,b=>{CB=b},()=>{CBP=false})}catch(e){CBP=false}}
   function loadTarai(){if(TB||TBP||!ctx)return;TBP=true;try{loadSnd(TARAI_MP3,b=>{TB=b},()=>{TBP=false})}catch(e){TBP=false}}
   function loadStorm(){if(SB||SBP||!ctx)return;SBP=true;try{loadSnd(STORM_MP3,b=>{SB=b},()=>{SBP=false})}catch(e){SBP=false}}
-  function playStorm(t,fallback,tar){const B=tar?TB:SB;if(!B){tar?loadTarai():loadStorm();fallback(t);return}if(SV){try{SV.stop()}catch(e){}SV=null}const s=ctx.createBufferSource();s.buffer=B;const g=ctx.createGain();g.gain.value=1.15;s.connect(g);g.connect(master);s.start(t);SV=s;s.onended=()=>{if(SV===s)SV=null}}
+  function playStorm(t,fallback,tar){const B=tar===2?CB:tar?TB:SB;if(!B){tar===2?loadStill():tar?loadTarai():loadStorm();fallback(t);return}if(SV){try{SV.stop()}catch(e){}SV=null}const s=ctx.createBufferSource();s.buffer=B;const g=ctx.createGain();g.gain.value=1.15;s.connect(g);g.connect(master);s.start(t);SV=s;s.onended=()=>{if(SV===s)SV=null}}
   function loadSnd(url,ok,fail){fetch(url).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(ab=>{const p=ctx.decodeAudioData(ab,ok,fail);if(p&&p.catch)p.catch(fail)}).catch(fail)}
   function loadBuster(){if(XB||XBP||!ctx)return;XBP=true;try{loadSnd(BUSTER_MP3,b=>{XB=b},()=>{XBP=false})}catch(e){XBP=false}}
   let FWB=null,FWBP=false,KB=null,KBP=false,AB=null,ABP=false,AV=null,NB=null,NBP=false,NV=null,OB=null,OBP=false,OV=[],HB=null,HBP=false,HV=null,KV=null;
@@ -1708,7 +1710,7 @@ const SFX=(()=>{
   function loadWtf(){if(WB||WBP||!ctx)return;WBP=true;try{loadSnd(WTF_MP3,b=>{WB=b},()=>{WBP=false})}catch(e){WBP=false}}
   function loadEnemy(){if(EB||EBP||!ctx)return;EBP=true;try{loadSnd(ENEMY_MP3,b=>{EB=b},()=>{EBP=false})}catch(e){EBP=false}}
   try{on=localStorage.getItem('gl_snd')!=='0'}catch(e){}
-  const init=()=>{if(ctx)return ctx;try{const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;ctx=new A();master=ctx.createGain();master.gain.value=.55;master.connect(ctx.destination);loadEnemy();loadWtf();loadZoro();setTimeout(loadStorm,400);setTimeout(loadTarai,700);setTimeout(loadLuffy,1500);setTimeout(loadAce,2200);setTimeout(loadFire,2600);setTimeout(loadSanji,2800);setTimeout(loadOlesya,3400);setTimeout(loadHancock,4000);loadLaw();loadBuster()}catch(e){ctx=null}return ctx};
+  const init=()=>{if(ctx)return ctx;try{const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;ctx=new A();master=ctx.createGain();master.gain.value=.55;master.connect(ctx.destination);loadEnemy();loadWtf();loadZoro();setTimeout(loadStorm,400);setTimeout(loadTarai,700);setTimeout(loadStill,1000);setTimeout(loadLuffy,1500);setTimeout(loadAce,2200);setTimeout(loadFire,2600);setTimeout(loadSanji,2800);setTimeout(loadOlesya,3400);setTimeout(loadHancock,4000);loadLaw();loadBuster()}catch(e){ctx=null}return ctx};
   const tone=(t0,f,d,type,v,f2)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t0);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+d);g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(v||.15,t0+.012);g.gain.exponentialRampToValueAtTime(0.0001,t0+d);o.connect(g);g.connect(master);o.start(t0);o.stop(t0+d+.05)};
   let nb=null;const nbuf=()=>{if(nb)return nb;nb=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);const a=nb.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1;return nb};
   const noise=(t0,d,v,ft,f0,f1,q)=>{const s=ctx.createBufferSource();s.buffer=nbuf();const fl=ctx.createBiquadFilter();fl.type=ft||'bandpass';fl.frequency.setValueAtTime(f0,t0);if(f1)fl.frequency.exponentialRampToValueAtTime(f1,t0+d);fl.Q.value=q||1;const g=ctx.createGain();g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(v,t0+Math.min(.04,d/3));g.gain.exponentialRampToValueAtTime(0.0001,t0+d);s.connect(fl);fl.connect(g);g.connect(master);s.start(t0,Math.random());s.stop(t0+d+.05)};
@@ -1743,7 +1745,7 @@ const SFX=(()=>{
     w_zun:t=>{tone(t,98,.9,'sawtooth',.1,82);tone(t,147,.9,'sine',.12,123);tone(t+.5,110,.6,'sawtooth',.07)},
     w_aqua:t=>playStorm(t,t=>{noise(t,.9,.35,'lowpass',900,300,1);for(let i=0;i<5;i++)tone(t+i*.14,500+Math.random()*700,.12,'sine',.08,1400)}),
     w_buster:t=>{if(!XB){loadBuster();return}const s=ctx.createBufferSource();s.buffer=XB;const g=ctx.createGain();g.gain.value=1.2;s.connect(g);g.connect(master);s.start(t)},
-    w_still:t=>{tone(t,1047,.7,'sine',.1);tone(t+.15,1319,.7,'sine',.08)},
+    w_still:t=>playStorm(t,t=>{tone(t,1047,.7,'sine',.1);tone(t+.15,1319,.7,'sine',.08)},2),
     w_belt:t=>{noise(t,1.2,.3,'lowpass',320,160,2);tone(t,82,1.2,'sine',.1)},
     w_storm:t=>playStorm(t,t=>{noise(t,1.3,.5,'lowpass',260,90,1);noise(t+.25,.18,.7,'highpass',1800,null,1);for(let i=0;i<10;i++)noise(t+i*.1,.05,.12,'highpass',5000,null,1)}),
     w_tarai:t=>playStorm(t,t=>{noise(t,.7,.35,'bandpass',300,2600,1.5);tone(t,220,.7,'sine',.07,660)},1)
@@ -1765,8 +1767,7 @@ const SFX=(()=>{
     duel:[['impact_punch_heavy_002',0,1,1.2],['impact_metal_light_002',.1,1,.9]],
     turn:[['bong_001',0,1,1]],
     diceEnd:[['impact_wood_medium_000',0,1,1.1]],
-    w_zun:[['impact_soft_heavy_003',0,.38,2.2,520],['impact_soft_heavy_003',.62,.32,2,460],['impact_soft_heavy_003',1.3,.28,1.6,400]],
-    w_still:[['glass_006',0,.9,1],['glass_002',.18,.7,.9]]
+    w_zun:[['impact_soft_heavy_003',0,.38,2.2,520],['impact_soft_heavy_003',.62,.32,2,460],['impact_soft_heavy_003',1.3,.28,1.6,400]]
   };
   const loadPk=n=>{if(PK[n]!==undefined||!ctx)return;PK[n]=null;try{loadSnd('assets/snd/'+n+'.mp3'+SFXV,b=>{PK[n]=b},()=>{PK[n]=undefined})}catch(e){PK[n]=undefined}};
   function preloadPk(){const seen=new Set();for(const k in MAP)for(const x of MAP[k])seen.add(x[0]);seen.forEach(loadPk)}
