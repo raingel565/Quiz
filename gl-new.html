@@ -1484,7 +1484,7 @@ body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,
 </style>
 <div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N33</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
-<script src="assets/duel-scene.js?v=19"></script>
+<script src="assets/duel-scene.js?v=21"></script>
 <script>
 (function(){
 'use strict';
@@ -2818,7 +2818,7 @@ function runDuel(S1,S2,full){
       for(const c of cards){val+=c.v;if(x.s.ch==='luffy')val+=3;if(x.has('mihawk')&&c.v>=7)val+=4}
       const nodice=x.s.ch==='sanji'&&GIRLS.includes(opp.s.ch);
       const roll=nodice?0:(x.keys.includes('jinwoo')?d(20):d(12));
-      let pa=0;if(x.has('will'))pa+=2;if(x.rumble)pa+=3;
+      let pa=0;if(x.has('will'))pa+=2;if(x.rumble)pa+=3;if(x.s.p&&x.s.p.pengu>0)pa+=1; // пингвин на корабле: +1 к атаке
       const att=x.s.A+val+roll+pa+x.tA+x.carry;
       let ev=x.s.U+x.tU+(x.has('chopper')?2:0);
       if(x.keys.includes('fist')&&!opp.has('will'))ev+=10;
@@ -2847,7 +2847,7 @@ function runDuel(S1,S2,full){
   let winner=-1;if(st[0].wins>=2)winner=0;else if(st[1].wins>=2)winner=1;
   // V127: в новых партиях (tb≥2) после всех раундов побеждает тот, у кого больше побед; хранитель (full) — по-старому
   if(winner===-1&&!full&&G&&G.tb>=2){if(st[0].wins>st[1].wins)winner=0;else if(st[1].wins>st[0].wins)winner=1}
-  return{rounds,winner,st,used,w:[st[0].wins,st[1].wins],draws:rounds.filter(x=>x.out===-1).length};
+  return{rounds,winner,st,used,pg:st.map(x=>!!(x.s.p&&x.s.p.pengu>0)),w:[st[0].wins,st[1].wins],draws:rounds.filter(x=>x.out===-1).length};
 }
 function applyDuelCards(res){
   // списать открытые карты атаки, Рамбл Болл, потерю карт-сокровищ при проигрыше
@@ -4210,7 +4210,7 @@ function dsCompactHtml(pe,Z,side,line,wins){
   const res=pe.res,n=res.rounds.length,W=res.W||2,last=Z.shown>0?res.rounds[Z.shown-1].out:-2;
   const crowns=i=>Array.from({length:W},(_,k)=>'<i class="dscr'+(k<wins[i]?' on'+(k===wins[i]-1&&last===i?' pop':''):'')+'">'+(k<wins[i]?'👑':'')+'</i>').join('');
   let h='<div class="ov"><div class="modal dsw"><div class="dshd"><h2>'+esc(pe.title)+'</h2><div class="dsctl">'+(Z.shown<n?'<button class="dsch" data-dz="skip" aria-label="Ускорить бой" title="Ускорить бой">⏩</button>':'')+'<button class="dsch'+(dsMode()==='off'?' off':'')+'" data-dz="mode" aria-label="Сцена: '+DS_MODE_N[dsMode()]+'" title="Сцена боя: '+DS_MODE_N[dsMode()]+' (нажмите, чтобы сменить)">🎬'+(dsMode()==='fast'?'<sup>⏩</sup>':'')+'</button></div></div><div id="dsslot" class="dsslot"></div><div class="dsp">';
-  h+='<div class="dsscore"><div class="dsrn">'+(Z.shown<n?'Раунд '+(Z.shown+1):'Итог')+'</div><div class="dsn"><b>'+esc(pe.names[0])+'</b><span>'+crowns(0)+'</span></div><div class="dsn dsr"><b>'+esc(pe.names[1])+'</b><span>'+crowns(1)+'</span></div></div>';
+  h+='<div class="dsscore"><div class="dsrn">'+(Z.shown<n?'Раунд '+(Z.shown+1):'Итог')+'</div><div class="dsn"><b>'+esc(pe.names[0])+(res.pg&&res.pg[0]?' 🐧':'')+'</b><span>'+crowns(0)+'</span></div><div class="dsn dsr"><b>'+esc(pe.names[1])+(res.pg&&res.pg[1]?' 🐧':'')+'</b><span>'+crowns(1)+'</span></div></div>';
   if(Z.shown<n){
     const R=res.rounds[Z.shown],c=R.cur;
     c.forEach((x,k)=>{if(x.nodice)Z.done[k]=true});
@@ -4237,7 +4237,8 @@ function dzNext(Z){
   const adv=()=>{if(UI.dz!==Z||Z.shown!==r)return;Z.busy=false;clearTimeout(Z.at);Z.at=0;Z.shown=r+1;Z.done=[false,false];render()};
   if(!Z.sc){setTimeout(()=>{if(UI.dz===Z&&G.pending===Z.key)adv()},Z.fast?150:900);return}
   Z.busy=true;const sc=Z.sc,pl=Z.plan[r];
-  Z.q=Z.q.then(()=>Z.sc===sc?sc.round(pl):null).then(()=>{
+  const pk=r===0&&pe.res.pg?[0,1].filter(k=>pe.res.pg[k]):[];
+  Z.q=Z.q.then(()=>Z.sc===sc?pk.reduce((pr,k)=>pr.then(()=>sc.penguin?sc.penguin(k):null),Promise.resolve()):null).then(()=>Z.sc===sc?sc.round(pl):null).then(()=>{
     adv();
     if(r===n-1&&Z.sc===sc){const w=pe.res.winner;return sc.finish(w,w===-1?'БОЕВАЯ НИЧЬЯ':'ПОБЕДА: '+String(pe.names[w]).toUpperCase())}
   }).catch(()=>{adv()});
@@ -4285,7 +4286,7 @@ function resultHtml(pe){
     const col=(s0.p&&s0.p.color)||(ADMS[s0.ch]?ADMS[s0.ch].col:'#8a8f98');
     const por=(AVS[s0.ch]&&(s0.p||ADMS[s0.ch]))?av(s0.ch,'por'):'<div class="por boss">⚔</div>';
     const last=Z.shown>0?res.rounds[Z.shown-1].out:-2;
-    return '<div class="dfc" style="--pcol:'+col+'">'+por+'<h3>'+esc(pe.names[i])+'</h3><div class="small">'+(s0.p?esc(CH[s0.ch].n)+' · ':'')+'атака '+s0.A+' / уклонение '+s0.U+'</div>'
+    return '<div class="dfc" style="--pcol:'+col+'">'+por+'<h3>'+esc(pe.names[i])+'</h3><div class="small">'+(s0.p?esc(CH[s0.ch].n)+' · ':'')+'атака '+s0.A+(res.pg&&res.pg[i]?' <b title="Пингвин на корабле">🐧+1</b>':'')+' / уклонение '+s0.U+'</div>'
       +'<div class="small">Пассивные: '+(pas.length?esc(pas.join(', ')):'нет')+(blocked?' (отключены Найри)':'')+'</div>'
       +'<div style="margin-top:6px">'+[0,1].map(k=>'<span class="pip'+(k<wins[i]?' on'+((k===wins[i]-1&&last===i)?' pop':''):'')+'"></span>').join('')+'</div></div>';
   };
