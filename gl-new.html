@@ -948,6 +948,38 @@ html,body{overscroll-behavior-y:none}
 .modal.dsw .arena{min-height:0}
 .modal.dsw .arena .dfc{padding:6px 8px}
 .modal.dsw .arena .dfc h3{margin:0}
+
+/* ===== дуэль: аккуратная вёрстка (N28) ===== */
+.modal.dsw{gap:10px}
+.dshd{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:36px}
+.dshd h2{margin:0;font-size:17px;font-weight:800;letter-spacing:.01em;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dsctl{display:flex;gap:6px;flex:none}
+.dsch{position:relative;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;font-size:16px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.06);color:inherit;font:600 12.5px/1 var(--f-body,inherit);cursor:pointer;white-space:nowrap}
+.dsch.off{opacity:.45}.dsch sup{position:absolute;right:1px;top:1px;font-size:9px}.dsch:active{transform:scale(.94)}
+.dsp{gap:12px;padding:12px;border-radius:18px}
+.dsscore{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;gap:8px 12px}
+.dsscore .dsrn{grid-column:1/-1;justify-self:center;padding:4px 14px;border-radius:99px;background:rgba(255,255,255,.08);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;opacity:1}
+.dsn b{font-size:15px;font-weight:700}.dsn span{gap:5px}
+.dsn.dsr span{justify-content:flex-end}
+.dsdice{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:6px;min-height:0;align-items:start}
+.dsdc{gap:8px;min-width:0}
+.dsvs{align-self:center;font-weight:800;font-size:12px;letter-spacing:.12em;opacity:.45}
+.dsdc .pd{width:76px;height:76px;font-size:28px;background:linear-gradient(150deg,#f3dc9c,#cfa24a);box-shadow:inset 0 -6px 12px #0003,0 4px 14px rgba(0,0,0,.35)}
+.dsdc .pd.s20{background:linear-gradient(150deg,#cdb6ff,#8a5cf0)}
+.dssum{font-size:12.5px;line-height:1.35;opacity:.85}.dssum .num{font-size:20px;opacity:1}
+.dssum.small{opacity:.6;font-size:12px}
+.dsroll{width:100%;min-width:0;padding:14px;font-size:16px;border-radius:14px}
+.dswait{text-align:center;font-size:13.5px;opacity:.7;padding:14px 0;min-width:0}
+.dsfin{text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0 2px;animation:finin .6s}
+.dsfk{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent,#f2b01e)}
+.dsfin.draw .dsfk{color:#aab3bd}
+.dsfw{font-size:26px;font-weight:800;line-height:1.15;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.dsfs{font-size:15px;font-weight:700;padding:3px 14px;border-radius:99px;background:rgba(255,255,255,.08);margin-top:2px}
+.dscont{width:100%;padding:14px;font-size:16px;border-radius:14px}
+.dshist{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px}
+.dshist span{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 8px;border-radius:10px;background:rgba(255,255,255,.05);font-size:12.5px;white-space:nowrap;overflow:hidden}
+.dshist span i{font-style:normal;opacity:.55;font-weight:700}
+.dsdet{border-radius:14px}.dsdet summary{font-size:13.5px;opacity:.75}
 #fxbd{position:fixed;inset:0;z-index:99997;background:rgba(5,10,8,.62);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);opacity:0;transition:opacity .25s ease;pointer-events:none}
 #fxbd.on{opacity:1}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
@@ -1425,7 +1457,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N27</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N28</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=19"></script>
 <script>
@@ -1990,6 +2022,9 @@ function cdesc(c){if(c.kind==='atk')return'Прибавляет '+c.v+' к ат�
 function ask(type,data){
   G.pending=Object.assign({type},data);
   if(G.pending.who==null)G.pending.who=G.cur;
+  // чужой бой (бот/соперник против NPC, босса, охотника и т. п.): итог в мини-окне; дуэль игроков показывает свой баннер
+  try{if(type==='duelResult'&&data.title!=='Итог дуэли'&&data.res&&data.names&&data.res.w&&duelSpect(G.pending)){const r=data.res,w=r.winner;
+    fxEvent({stage:'post',banner:1,tone:'',icon:'⚔',title:(data.title||'Бой')+': '+data.names[0]+' — '+data.names[1],desc:(w===-1||w==null?'Боевая ничья':'Победил '+(w===0?data.names[0]:data.names[1]))+', счёт '+r.w[0]+':'+r.w[1],auto:3200,snd:null})}}catch(e){}
 }
 const optsOf=()=>G.pending.opts||[];
 function deadAt(l){return !!(G.dead&&G.dead[l])||!!(G.seas&&l&&l!=='L'&&l!=='Z'&&!G.seas.includes(l[0]))} // V142: в упрощённом режиме играют 2 моря
@@ -4126,7 +4161,7 @@ function dzRoll(pe,ks){
 function dsCompactHtml(pe,Z,side,line,wins){
   const res=pe.res,n=res.rounds.length,W=res.W||2,last=Z.shown>0?res.rounds[Z.shown-1].out:-2;
   const crowns=i=>Array.from({length:W},(_,k)=>'<i class="dscr'+(k<wins[i]?' on'+(k===wins[i]-1&&last===i?' pop':''):'')+'">'+(k<wins[i]?'👑':'')+'</i>').join('');
-  let h='<div class="ov"><div class="modal dsw"><h2>'+esc(pe.title)+'</h2><div id="dsslot" class="dsslot"></div><div class="dsp">';
+  let h='<div class="ov"><div class="modal dsw"><div class="dshd"><h2>'+esc(pe.title)+'</h2><div class="dsctl">'+(Z.shown<n?'<button class="dsch" data-dz="skip" aria-label="Ускорить бой" title="Ускорить бой">⏩</button>':'')+'<button class="dsch'+(dsMode()==='off'?' off':'')+'" data-dz="mode" aria-label="Сцена: '+DS_MODE_N[dsMode()]+'" title="Сцена боя: '+DS_MODE_N[dsMode()]+' (нажмите, чтобы сменить)">🎬'+(dsMode()==='fast'?'<sup>⏩</sup>':'')+'</button></div></div><div id="dsslot" class="dsslot"></div><div class="dsp">';
   h+='<div class="dsscore"><div class="dsrn">'+(Z.shown<n?'Раунд '+(Z.shown+1):'Итог')+'</div><div class="dsn"><b>'+esc(pe.names[0])+'</b><span>'+crowns(0)+'</span></div><div class="dsn dsr"><b>'+esc(pe.names[1])+'</b><span>'+crowns(1)+'</span></div></div>';
   if(Z.shown<n){
     const R=res.rounds[Z.shown],c=R.cur;
@@ -4138,15 +4173,15 @@ function dsCompactHtml(pe,Z,side,line,wins){
       return '<div class="dsdc">'+die+sum+'</div>';
     };
     const left=[0,1].some(k=>!Z.done[k]&&!Z.spin[k]);
-    const mid=left&&!Z.busy?'<button class="btn primary dsroll" data-dz="roll">🎲 Бросить<br>кубики</button>':'<div class="dswait small">'+(Z.busy?'⚔ бой…':'🎲 …')+'</div>';
-    h+='<div class="dsdice">'+col(0)+mid+col(1)+'</div>';
+    const mid=left&&!Z.busy?'<button class="btn primary dsroll" data-dz="roll">🎲 Бросить кубики</button>':'<div class="dswait">'+(Z.busy?'⚔ Идёт бой…':'🎲 Кубики катятся…')+'</div>';
+    h+='<div class="dsdice">'+col(0)+'<div class="dsvs">VS</div>'+col(1)+'</div>'+mid;
   }else{
-    h+='<div class="fin'+(res.winner===-1?'':' win')+'">'+(res.winner===-1?'Боевая ничья':'Победа: '+esc(pe.names[res.winner]))+' ('+res.w[0]+' : '+res.w[1]+')</div><button class="btn primary" data-a="0">Продолжить</button>';
+    h+='<div class="dsfin'+(res.winner===-1?' draw':'')+'"><div class="dsfk">'+(res.winner===-1?'Боевая ничья':'🏆 Победа')+'</div>'+(res.winner===-1?'':'<div class="dsfw">'+esc(pe.names[res.winner])+'</div>')+'<div class="dsfs">'+res.w[0]+' : '+res.w[1]+'</div></div><button class="btn primary dscont" data-a="0">Продолжить</button>';
   }
-  if(Z.shown>0)h+='<div class="dshist">'+res.rounds.slice(0,Z.shown).map((R,r)=>'<span>Р'+(r+1)+': '+(R.out===-1?'ничья':'👑 '+esc(pe.names[R.out]))+' <b>'+R.sc[0]+':'+R.sc[1]+'</b></span>').join('')+'</div>';
-  h+='</div><div class="row dsbtns">'+(Z.shown<n?'<button class="btn" data-dz="skip">'+(Z.fast?'⏩ Ускорено':'⏩ Ускорить бой')+'</button>':'')+'<button class="btn" data-dz="mode" title="Анимация боя: показывать, ускоренно или выключить">🎬 Сцена: '+DS_MODE_N[dsMode()]+'</button></div>';
+  if(Z.shown>0)h+='<div class="dshist">'+res.rounds.slice(0,Z.shown).map((R,r)=>'<span><i>Р'+(r+1)+'</i>'+(R.out===-1?'ничья':'👑 '+esc(pe.names[R.out]))+' <b>'+R.sc[0]+':'+R.sc[1]+'</b></span>').join('')+'</div>';
+  h+='</div>';
   let det='<div class="arena">'+side(0)+'<div class="vs">VS</div>'+side(1)+'</div>';for(let r=0;r<Z.shown;r++)det+=line(r);
-  h+='<details class="dsdet"'+(UI.dsDet?' open':'')+'><summary>Подробности: статы, пассивки и расчёт раундов</summary>'+det+'</details>';
+  h+='<details class="dsdet"'+(UI.dsDet?' open':'')+'><summary>Подробности боя</summary>'+det+'</details>';
   return h+'</div></div>';
 }
 function dzNext(Z){
