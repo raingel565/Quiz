@@ -1330,6 +1330,13 @@ body.tutor #app{padding-top:110px}
 #deck .dkout{position:absolute;pointer-events:none;z-index:2;filter:drop-shadow(0 3px 4px rgba(0,0,0,.55))}
 #deck .dkout svg{width:100%;height:100%;overflow:visible;display:block}
 #deck .dkmon{position:absolute;pointer-events:none;z-index:6}
+/* пингвины */
+#deck .dkpen{position:absolute;z-index:5;padding:0;border:0;background:none;cursor:pointer;animation:dkbob 7s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
+#deck .dkpen img{width:100%;display:block;pointer-events:none}
+#deck .dkpenb{border-color:rgba(160,225,255,.7);color:#cdeeff}
+#deck .dkship{position:absolute}
+#deck .dkship .dkpeng{position:absolute;left:35%;top:58%;width:30%;height:auto;animation:none;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
+
 /* торговый галеон */
 #deck .dkgal{position:absolute;z-index:5;padding:0;border:0;background:none;cursor:pointer;animation:dkbob 6s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.45))}
 #deck .dkgal img{width:100%;display:block;pointer-events:none}
@@ -1471,7 +1478,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N29</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N30</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=19"></script>
 <script>
@@ -2252,12 +2259,14 @@ function beginTurn(){
 }
 // торговый галеон: ~22% на каждый ход игрока (в среднем раз в 4–5 ходов), появляется рядом с кораблём этого игрока; карта сокровищ и гость на 10 Берри дешевле
 function galRoll(p){G.gal=null;if(G.coop||G.tut)return;if(d(100)<=22){G.gal={who:p.i,done:false};log('⛵ К кораблю '+p.name+' подходит торговый галеон: карта сокровищ и гость на 10 Берри дешевле.')}}
-function startTurnMain(){const p=P();galRoll(p);if(p.ch==='zoro'&&p.zfog)return resolveFog(p,incomeRoll);incomeRoll()}
+// пингвины на льдине: ~15% на ход игрока, рядом с его кораблём; нажать = +10 Берри и пингвин на корабле на 3 хода
+function penRoll(p){G.pen=null;if(G.coop||G.tut)return;if(d(100)<=15){G.pen={who:p.i,done:false};log('🐧 Рядом с кораблём '+p.name+' проплывает льдина с пингвинами.')}}
+function startTurnMain(){const p=P();galRoll(p);penRoll(p);if(p.ch==='zoro'&&p.zfog)return resolveFog(p,incomeRoll);incomeRoll()}
 function endTurn(){
   if(G.winner!=null)return;
   marchCheck(P());
   if(P().task&&P().task.armed)P().task.armed=false;
-  G.pending=null;G.gal=null;
+  G.pending=null;G.gal=null;G.pen=null;if(P().pengu>0)P().pengu--;
   G.cur++;
   if(G.cur>=G.players.length){G.cur=0;endRound(()=>akainuPhase(beginTurn))}else beginTurn();
 }
@@ -3400,6 +3409,7 @@ function actions(){
       p.berries<cp||p.tre.length>=3||(!G.decks.tre.length&&!G.discard.some(c=>c.kind==='tre'&&!TRE[c.key].guest)));
     if(!G.guestBought)add('market','⛵ Галеон: нанять гостя ('+gp+' Берри)',()=>{pay(p,gp);G.tm.buy++;G.guestBought=true;G.gal.done=true;const c=card('tre',{key:G.guest});p.tre.push(c);fxCard(p,c);logP(p.i,p.name+' нанимает у галеона гостя: «'+TRE[c.key].n+'».',p.name+' нанимает у галеона гостя.')},p.berries<gp||p.tre.length>=3);
   }
+  if(G.pen&&G.pen.who===p.i&&!G.pen.done&&!G.coop)add('market','🐧 Пингвины: поздороваться (+10 Берри)',()=>{p.berries+=10;G.pen.done=true;p.pengu=3;log('🐧 '+p.name+' здоровается с пингвинами: +10 Берри. Один пингвин садится на корабль на 3 хода.')},false);
   if(p.ltask){
     const lt2=p.ltask,kk=lt2.def.k,atL=p.loc==='L';
     const payCube=()=>{if(p.pon.length)p.pon.pop();else{const l=outOf(p);if(l&&G.out[l].pon.length)G.out[l].pon.pop()}log(p.name+' сбрасывает куб роад-понеглифа.')};
@@ -4978,7 +4988,7 @@ function dkRender(){
   const st=id=>[id,dkArt(id),G.flags[id],playersAt(id).map(q=>q.i).join(''),G.akainu&&G.akainu.loc===id?1:0,G.monster&&G.monster.loc===id?1:0,outAt(id)?'o'+outAt(id).pon.length:'',(G.hunt||[]).some(h=>h.loc===id)?1:0,picks.includes(id)?1:0,G.dead&&G.dead[id]?1:0].join(':');
   let plan=navPlan(p);if(plan&&plan.done){UI.nav.arrived=plan.to;UI.nav.to=null;plan=null}else if(UI.nav&&UI.nav.to)UI.nav.arrived=null;
   const navSig=(UI.nav&&(UI.nav.to||'')+'/'+(UI.nav.arrived||''))+':'+(plan&&plan.steps?plan.steps.map(x=>x.n+x.risk.join('')).join(','):'');
-  const kwOn=!!(DK.kw&&Date.now()<DK.kw),sig=[p.loc,G.ap+'/'+G.apMax,ACTS.map(a=>a.g+a.label+(a.dis?1:0)).join('|'),navSig,kwOn?'kw':'',DK.dark?1:0,DK.lrise?1:0,(DK.flhold?[...DK.flhold].join(','):''),W,H,wk,p.i,p.loc,dkArt(p.loc),mine?1:0,bt?'b':'',(G.gal?G.gal.who+':'+(G.gal.done?1:0)+':'+(DK.galOpen?1:0):''),G.zun&&G.zun.cell,neigh.concat([...SKY]).map(st).join('|'),G.flags[p.loc],playersAt(p.loc).length].join('#');
+  const kwOn=!!(DK.kw&&Date.now()<DK.kw),sig=[p.loc,G.ap+'/'+G.apMax,ACTS.map(a=>a.g+a.label+(a.dis?1:0)).join('|'),navSig,kwOn?'kw':'',DK.dark?1:0,DK.lrise?1:0,(DK.flhold?[...DK.flhold].join(','):''),W,H,wk,p.i,p.loc,dkArt(p.loc),mine?1:0,bt?'b':'',(G.gal?G.gal.who+':'+(G.gal.done?1:0)+':'+(DK.galOpen?1:0):''),(G.pen?G.pen.who+':'+(G.pen.done?1:0):''),p.pengu|0,G.zun&&G.zun.cell,neigh.concat([...SKY]).map(st).join('|'),G.flags[p.loc],playersAt(p.loc).length].join('#');
   const pl=DK.pl||{};const moves=[];for(const q of G.players){if(q!==p&&pl[q.i]&&pl[q.i]!==q.loc)moves.push({q,from:pl[q.i],to:q.loc})}DK.pl={};for(const q of G.players)DK.pl[q.i]=q.loc;
   if(sig===DK.sig)return;
   const fresh=DK.sig.split('#')[0]!==p.loc;DK.sig=sig;
@@ -5027,7 +5037,9 @@ function dkRender(){
   const shH=two?Math.min(H*0.28,W*0.55):Math.min(H*0.33,W*0.62),shW=shH*397/746,shTop=rowNear+H*0.068;
   if(G.gal&&G.gal.who===p.i&&!G.gal.done){const gw=Math.min(W*0.28,130),gh=gw*673/760,wl=shTop+shH*0.46,gx=W*0.97-gw;
     h+='<button class="dkgal" data-galopen="1" style="left:'+gx.toFixed(0)+'px;top:'+(wl-gh*0.93).toFixed(0)+'px;width:'+gw.toFixed(0)+'px" aria-label="Торговый галеон"><img src="assets/deck/galleon.webp" alt=""></button>'+(bt?'':'<button class="dkgalb" data-galopen="1" style="left:'+(gx+gw*0.5).toFixed(0)+'px;top:'+(wl+2).toFixed(0)+'px">⛵ Торговец</button>')}
-  h+='<div class="dkship wx-'+wk+'" style="left:'+(W/2-shW/2).toFixed(0)+'px;top:'+shTop.toFixed(0)+'px;width:'+shW.toFixed(0)+'px"><img src="assets/deck/ship.webp" alt=""></div>';
+  if(G.pen&&G.pen.who===p.i&&!G.pen.done){const pw=Math.min(W*0.3,135),ph=pw*481/900,wl2=shTop+shH*0.5,px=W*0.04;
+    h+='<button class="dkpen" data-penpick="1" style="left:'+px.toFixed(0)+'px;top:'+(wl2-ph*0.9).toFixed(0)+'px;width:'+pw.toFixed(0)+'px" aria-label="Пингвины"><img src="assets/deck/penguins.webp" alt=""></button>'+(bt?'':'<button class="dkgalb dkpenb" data-penpick="1" style="left:'+(px+pw*0.5).toFixed(0)+'px;top:'+(wl2+2).toFixed(0)+'px">🐧 Пингвины</button>')}
+  h+='<div class="dkship wx-'+wk+'" style="left:'+(W/2-shW/2).toFixed(0)+'px;top:'+shTop.toFixed(0)+'px;width:'+shW.toFixed(0)+'px"><img src="assets/deck/ship.webp" alt="">'+(p.pengu>0?'<img class="dkpeng" src="assets/deck/penguin1.webp" alt="">':'')+'</div>';
   {const here=playersAt(p.loc).filter(q=>q!==p);here.forEach((q,k)=>{const sh=shH*0.38,sw=sh*360/294;const mv=moves.find(m=>m.q===q&&!fresh);h+='<img class="dkopp fl'+(mv?' arr':'')+'" src="assets/deck/opp'+(q.i%6)+'.webp" alt="" style="left:'+(W*0.97-sw-k*sw*0.5).toFixed(0)+'px;top:'+(shTop+shH*0.62-sh+k*8).toFixed(0)+'px;width:'+sw.toFixed(0)+'px">'})}
   // корабли соперников, которые только что сходили, проплывают между островами
   if(!fresh){const pos=id=>{const o=isl.find(x=>x.id===id);if(o){const sh=o.w*(o.far?0.26:0.32),sw=sh*360/294,fl=o.cx>W/2,l=o.cx+(fl?-o.w*0.12-sw:o.w*0.12);return{x:l+sw/2,y:o.y,s:sh}}if(id===p.loc){const sh=shH*0.38,sw=sh*360/294;return{x:W*0.97-sw/2,y:shTop+shH*0.62,s:sh}}return null};
@@ -5121,6 +5133,7 @@ function dkSail(b,done){
 document.addEventListener('click',e=>{
   if(e.target.closest&&e.target.closest('[data-dkmap]')){try{localStorage.setItem('nv_deck','0')}catch(_){}DK.sig='';render();return}
   if(e.target.closest&&e.target.closest('[data-galopen]')){DK.galOpen=!DK.galOpen;DK.sig='';render();return}
+  if(e.target.closest&&e.target.closest('[data-penpick]')){const i=ACTS.findIndex(a=>/Пингвины/.test(a.label)&&!a.dis);if(i>=0)submit({t:'a',i});return}
   if(e.target.closest&&e.target.closest('[data-galclose]')){DK.galOpen=false;DK.sig='';render();return}
   if(e.target.closest&&e.target.closest('[data-dkon]')){try{localStorage.setItem('nv_deck','1')}catch(_){}DK.sig='';render();return}
   const b=e.target.closest&&e.target.closest('#deck .dkhit.pk');if(!b||(DK.drag&&Date.now()-DK.drag<250))return;
@@ -6447,6 +6460,7 @@ function bTurn(p,A){
   return endI();
 }
 function bGal(p,A){ // бот покупает у галеона, если остаётся запас Берри
+  if(G.pen&&G.pen.who===p.i&&!G.pen.done){const k=A.findIndex(a=>!a.dis&&/Пингвины/.test(a.label));if(k>=0)return k}
   if(!G.gal||G.gal.who!==p.i||G.gal.done)return -1;
   const g=A.findIndex(a=>!a.dis&&/Галеон: нанять гостя/.test(a.label));if(g>=0&&p.berries-((G.tb?80:50)-10)>=15)return g;
   const c=A.findIndex(a=>!a.dis&&/Галеон: купить карту/.test(a.label));if(c>=0&&p.berries-((G.tb?50:30)-10)>=15)return c;
