@@ -1767,8 +1767,7 @@ const SFX=(()=>{
     duel:[['impact_punch_heavy_002',0,1,1.2],['impact_metal_light_002',.1,1,.9]],
     turn:[['bong_001',0,1,1]],
     diceEnd:[['impact_wood_medium_000',0,1,1.1]],
-    w_zun:[['impact_soft_heavy_003',0,.38,2.2,520],['impact_soft_heavy_003',.62,.32,2,460],['impact_soft_heavy_003',1.3,.28,1.6,400]],
-    w_still:[['glass_006',0,.9,1],['glass_002',.18,.7,.9]]
+    w_zun:[['impact_soft_heavy_003',0,.38,2.2,520],['impact_soft_heavy_003',.62,.32,2,460],['impact_soft_heavy_003',1.3,.28,1.6,400]]
   };
   const loadPk=n=>{if(PK[n]!==undefined||!ctx)return;PK[n]=null;try{loadSnd('assets/snd/'+n+'.mp3'+SFXV,b=>{PK[n]=b},()=>{PK[n]=undefined})}catch(e){PK[n]=undefined}};
   function preloadPk(){const seen=new Set();for(const k in MAP)for(const x of MAP[k])seen.add(x[0]);seen.forEach(loadPk)}
