@@ -5703,8 +5703,8 @@ function secretAsk(done,k){
   else alert('Неверный пароль.');
 }
 const charBtn=k=>(SECRETS[k]&&!secretOk(k))?'<button class="btn" data-secret="'+k+'"><span class="avw" style="--pc:#555;font-size:28px;font-weight:800;display:flex;align-items:center;justify-content:center">?</span><b>???</b><span>Секретный персонаж</span><span class="small">Нужен пароль</span></button>':null;
-const CHIMG={zoro:'reid',luffy:'ronnie',hancock:'nairi',law:'mark',nami:'naomi',robin:'robi',ace:'king',sanji:'sendo',kid:'child',kata:'keiran'}; // N: обезличенные персонажи — свои картинки
-const CHW={smoker:1,roger:1,kid:1,ace:1,zoro:1,sanji:1,nami:1,robin:1,hancock:1,kata:1,law:1,luffy:1,olesya:1},CHV={smoker:1,roger:1,olesya:1}; // CHV: есть видео assets/ch/<id>.mp4 // персонажи с фото по пояс: assets/ch/<id>.webp
+const CHIMG={zoro:'reid',luffy:'ronnie',hancock:'nairi',law:'mark',nami:'naomi',robin:'robi',ace:'king',sanji:'sendo',kid:'child',kata:'keiran',olesya:'olesya'}; // N: обезличенные персонажи — свои картинки
+const CHW={smoker:1,roger:1,kid:1,ace:1,zoro:1,sanji:1,nami:1,robin:1,hancock:1,kata:1,law:1,luffy:1,olesya:1},CHV={smoker:1,roger:1}; // CHV: есть видео assets/ch/<id>.mp4 // персонажи с фото по пояс: assets/ch/<id>.webp
 const chBtn=(k,attr,dis,sel)=>charBtn(k)||'<button class="btn cc'+(sel?' sel':'')+'" '+attr+'="'+k+'"'+(dis?' disabled':'')+'><span class="ccg"></span>'+(CHW[k]?'<img class="ccfig'+(CHIMG[k]?' ccbg':'')+'" loading="lazy" src="assets/ch/'+(CHIMG[k]||k)+'.webp" alt="">'+(CHV[k]&&sel?'<canvas class="ccv" data-k="'+k+'" width="260" height="360"></canvas>':''):'<span class="ccav">'+av(k)+'</span>')+'<span class="ccn">'+CH[k].n+'</span><span class="ccs">атака '+CH[k].A+' · уклонение '+CH[k].U+'</span>'+(sel?'<span class="cci"><span class="ccst"><span>Атака <b>'+CH[k].A+'</b></span><span>Уклонение <b>'+CH[k].U+'</b></span></span><span class="ccd">'+esc(CH[k].d)+'</span></span>':'')+'</button>';
 // видео выбранного персонажа: белый фон роликов убирается на лету (canvas), чтобы фигура «жила» на тёмной карточке
 // плавное раскрытие/перестановка карточек: запоминаем положение до перерисовки и «доезжаем» после неё (FLIP)
