@@ -933,7 +933,7 @@ const BIGCH={
  shanks:{name:'Хранитель: меч и красные молнии',col:'#c43a3a',glow:'196,58,58',ent:'guardian',bg:'guardian',sc:1.25,x:645,sword:1,l:['swordbolt','sparkdash','redcut'],h:['stormslash','redstorm','thunderblade']},
  wb:{name:'Хранитель: землетрясения',col:'#e8e0d0',glow:'232,224,208',ent:'guardian',bg:'guardian',sc:1.25,x:645,l:['tremorpunch','shockstomp','airshock'],h:['quakebig','airquake','tremorwave']},
  kaido:{name:'Хранитель: булава и огонь изо рта',col:'#8a5a34',glow:'138,90,52',ent:'guardian',bg:'guardian',sc:1.25,x:645,l:['clubswing','fireball','bullcharge'],h:['clubsmash','firebreath','clubspin']},
- bm:{name:'Хранитель: огромный меч и розовые молнии',col:'#ff8ec4',glow:'255,142,196',ent:'guardian',bg:'guardian',sc:1.25,x:645,sword:1,swordLen:170,l:['swordchop','pinkbolt','flameburst'],h:['giantblade','pinkstorm','fireorbs']},
+ bm:{name:'Хранитель: Небесная Айрис — ветер и бури',col:'#7fd4ff',glow:'127,212,255',ent:'guardian',bg:'guardian',sc:1.25,x:645,l:['gust','whirl','skykick'],h:['tornado','stormcloud','hail']},
  hero:{name:'Босс 5 уровня: белый (кулаки)',col:'#ffffff',glow:'255,255,255',ent:'boss',bg:'boss',sc:1.4,x:655,l:['jab','combo','forcepulse'],h:['giantfist','wavebarrage','shockpunch']}
 };
 BIGCH.moria={name:'Гекко Мория: тени',col:'#6e5c94',glow:'170,130,255',ent:'boss',bg:'boss',sc:1.5,x:660,l:['shadowsteal','shadowbats','shadowblade'],h:['shadowclones','shadowarmy','shadowgiant']};
