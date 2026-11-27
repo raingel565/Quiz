@@ -1482,7 +1482,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N38</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N39</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -3627,6 +3627,24 @@ function kwFx(ev,done){
   setTimeout(()=>{if(!fin&&v.readyState<2&&v.currentTime===0)end(true)},4000);
   if(STREAM.on)setTimeout(()=>end(),6000);
 }
+const AQVID='assets/aqua.mp4'+SFXV;
+function aquaFx(ev,done){ // заставка Аквалагуны: звук берётся из самого видео
+  if(window.__nor||!document.body||!Element.prototype.animate||(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)){return eventFx(ev,done)}
+  const old=document.getElementById('akvid');if(old)old.remove();
+  const o=document.createElement('div');o.id='akvid';
+  o.innerHTML='<div class="avbox" style="box-shadow:0 0 0 2px rgba(80,170,255,.7),0 0 60px rgba(40,120,220,.45)"><video playsinline preload="auto" src="'+AQVID+'"></video><button class="avx" aria-label="Закрыть">✕ Закрыть</button><button class="avm" hidden>🔇 Включить звук</button></div>';
+  document.body.appendChild(o);
+  const v=o.querySelector('video'),mb=o.querySelector('.avm');
+  let fin=false;const end=(bad)=>{if(fin)return;fin=true;try{v.pause()}catch(e){}if(bad===true){o.remove();return eventFx(ev,done)}o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},260)};
+  o.querySelector('.avx').onclick=e=>{e.stopPropagation();end()};
+  o.onclick=e=>{if(e.target===o)end()};
+  v.onended=()=>end();v.onerror=()=>end(true);
+  mb.onclick=e=>{e.stopPropagation();v.muted=false;v.play().catch(()=>{});mb.hidden=true};
+  if(!SFX.on)v.muted=true;
+  const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{v.muted=true;v.play().then(()=>{mb.hidden=!SFX.on}).catch(()=>end(true))});
+  setTimeout(()=>{if(!fin&&v.readyState<2&&v.currentTime===0)end(true)},4000);
+  if(STREAM.on)setTimeout(()=>end(),6000);
+}
 let ADMMUS=null,ADMEL=null;
 // V130: «разрешаем» трек всадника при первом касании экрана (тихий запуск и пауза),
 // чтобы потом он сам включился сразу после видео, без касания
@@ -3715,7 +3733,7 @@ function eventFx(ev,done){
    +(pre?'<div class="evd">'+esc(ev.desc)+'</div>':'<div class="evl">'+ev.lines.map(l=>'<div class="evr">'+esc(l)+'</div>').join('')+'</div>')
    +(pre?'<div class="dhint">нажмите, чтобы пропустить</div>':'<button class="btn primary">Понятно</button>')+'</div>';
   document.body.appendChild(o);
-  if(ev.sfx){SFX.play(ev.sfx,0)}else if(ev.banner){SFX.play(ev.tone==='good'?'result':'alert',0)}else if(pre&&ev.title==='Buster Call')SFX.play('w_buster',0);else if(!(ev.snd==='buster'))SFX.play(pre?'alert':(ev.snd&&ev.snd!=='coin'?'w_'+ev.snd:'result'),0);if(!pre&&ev.snd==='coin')SFX.play('coin',0);
+  if(ev.wk==='aqua'){/* звук Аквалагуны — в видео-заставке */}else if(ev.sfx){SFX.play(ev.sfx,0)}else if(ev.banner){SFX.play(ev.tone==='good'?'result':'alert',0)}else if(pre&&ev.title==='Buster Call')SFX.play('w_buster',0);else if(!(ev.snd==='buster'))SFX.play(pre?'alert':(ev.snd&&ev.snd!=='coin'?'w_'+ev.snd:'result'),0);if(!pre&&ev.snd==='coin')SFX.play('coin',0);
   let fin=false;const end=()=>{if(fin)return;fin=true;o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},280)};
   o.onclick=end;setTimeout(end,ev.auto||(pre?2800:8000));
 }
@@ -3801,6 +3819,7 @@ function flushFx(){
   if(FXQ[0].t==='s'){SFX.play(FXQ.shift().n,0);next();return}
   if(FXQ[0].t==='kw'){kwFx(FXQ.shift(),next)}
   else if(FXQ[0].t==='k'){akFx(FXQ.shift(),next)}
+  else if(FXQ[0].t==='e'&&FXQ[0].wk==='aqua'&&FXQ[0].stage==='pre'){aquaFx(FXQ.shift(),next)}
   else if(FXQ[0].t==='e'){eventFx(FXQ.shift(),next)}
   else if(FXQ[0].t==='c'){const g=[],w=FXQ[0].who;while(FXQ.length&&FXQ[0].t==='c'&&FXQ[0].who===w)g.push(FXQ.shift());cardFx(g,next)}
   else{const g=[];while(FXQ.length&&FXQ[0].t==='d')g.push(FXQ.shift());diceFx(g,next)}
@@ -6683,7 +6702,7 @@ function backStep(){
       if(guards>0){const n=guards;guards=0;try{history.go(-n)}catch(e){}}}
   });
 })();
-window.__g={SFX,fxSnd,kwFx,diceFx,eventFx,cardFx,fxCard,fxAnchor,randomPrep,sideFromPrep,runDuel,stats,outStorm,outAt,outOf,ponN,spawnMonster,startMonsterFight,monsterReward,dkCine:(k,o)=>{DK.cq=DK.cq||[];DK.cq.push(Object.assign({k},o||{}));dkPlay()},navOpen,navPlan,navBfs,dkRender,dkReveal,get DK(){return DK},galOpen,galClose,galHtml,botMove:()=>botMove(),huntPhase,huntResolve,dealAsk,dealOpen,dealCan,pactOn,duelSpect,akFx,smokerArrest,smokerDeliver,runDuel,akainuPhase,actions:()=>actions(),setGuard:(a,u)=>{GUARD_A3=a;GUARD_U3=u},startTutorial,tutIntro,backStep,devInfo,logRec,logCsv,logLocalGet,logSave,logLoad,hallHtml,LOGH,giveTask,stats,statRoom,completeTask,checkTasks,eventFx,SFX,useTre,akScene,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode,tb:meta.tb});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,startPvp,guardFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
+window.__g={endRound,SFX,fxSnd,kwFx,diceFx,eventFx,cardFx,fxCard,fxAnchor,randomPrep,sideFromPrep,runDuel,stats,outStorm,outAt,outOf,ponN,spawnMonster,startMonsterFight,monsterReward,dkCine:(k,o)=>{DK.cq=DK.cq||[];DK.cq.push(Object.assign({k},o||{}));dkPlay()},navOpen,navPlan,navBfs,dkRender,dkReveal,get DK(){return DK},galOpen,galClose,galHtml,botMove:()=>botMove(),huntPhase,huntResolve,dealAsk,dealOpen,dealCan,pactOn,duelSpect,akFx,smokerArrest,smokerDeliver,runDuel,akainuPhase,actions:()=>actions(),setGuard:(a,u)=>{GUARD_A3=a;GUARD_U3=u},startTutorial,tutIntro,backStep,devInfo,logRec,logCsv,logLocalGet,logSave,logLoad,hallHtml,LOGH,giveTask,stats,statRoom,completeTask,checkTasks,eventFx,SFX,useTre,akScene,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode,tb:meta.tb});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,startPvp,guardFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,bStepToward,bMap,bFreePons,bUnknown,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
