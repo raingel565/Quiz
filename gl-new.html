@@ -1351,7 +1351,9 @@ body.tutor #app{padding-top:110px}
 #dkcine .dkbars.h i{width:100%;height:2.6%;transform:translateX(-105%)}
 #dkcine .dkdim{position:absolute;inset:0;background:rgba(5,4,10,.0)}
 #deck .dkout{position:absolute;pointer-events:none;z-index:2;filter:drop-shadow(0 3px 4px rgba(0,0,0,.55))}
-#deck .dkout svg{width:100%;height:100%;overflow:visible;display:block}
+#deck .dkout img{position:absolute;inset:0;width:100%;height:100%;display:block}
+#deck .dkout .dkoutc{position:absolute;inset:0;mix-blend-mode:multiply;-webkit-mask:url(assets/deck/outpost.webp) center/100% 100% no-repeat;mask:url(assets/deck/outpost.webp) center/100% 100% no-repeat;clip-path:inset(1% 26% 67% 40%)}
+#deck .dkout .dkoutp{position:absolute;left:62%;top:-9%;width:16%;aspect-ratio:1;background:#ffcf5a;border:1.5px solid #fff6d0;transform:rotate(45deg);box-shadow:0 0 8px rgba(255,207,90,.8);animation:dkpulse 2.4s ease-in-out infinite}
 #deck .dkmon{position:absolute;pointer-events:none;z-index:6}
 /* пингвины */
 #deck .dkpen{position:absolute;z-index:5;padding:0;border:0;background:none;cursor:pointer;animation:dkbob 7s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
@@ -1505,7 +1507,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N43</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N46</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -1753,7 +1755,7 @@ const P=()=>G.players[G.cur];
 let LOGCAP=null;
 // ---------- звуки (синтез WebAudio, без файлов; на ход игры не влияют) ----------
 const MAPV='?v=5'; // менять при замене assets/map.webp
-const SFXV='?v=69'; // менять при замене любого звука: иначе браузер/GitHub Pages отдают старую копию из кэша
+const SFXV='?v=70'; // менять при замене любого звука: иначе браузер/GitHub Pages отдают старую копию из кэша
 const ENEMY_MP3='assets/sfx_enemy.mp3'+SFXV;
 const WTF_MP3='assets/sfx_wtf.mp3'+SFXV;
 const ZORO_MP3='assets/sfx_zoro.mp3'+SFXV;
@@ -1768,6 +1770,7 @@ const BUSTER_MP3='assets/sfx_buster.mp3'+SFXV;
 const SAIL_MP3='assets/sfx_sail.mp3'+SFXV;
 const PENGU_MP3='assets/sfx_pengu.mp3'+SFXV;
 const DOLPH_MP3='assets/sfx_dolph.mp3'+SFXV;
+const OUTP_MP3='assets/sfx_outpost.mp3'+SFXV;
 const DICE_MP3='assets/sfx_dice.mp3'+SFXV;
 const BELT_MP3='assets/sfx_belt.mp3'+SFXV;
 const ZUN_MP3='assets/sfx_zun.mp3'+SFXV;
@@ -1775,7 +1778,8 @@ const STILL_MP3='assets/sfx_still.mp3'+SFXV;
 const TARAI_MP3='assets/sfx_tarai.mp3'+SFXV;
 const STORM_MP3='assets/sfx_storm.mp3'+SFXV;
 const SFX=(()=>{
-  let XB=null,XBP=false,SB=null,SBP=false,SV=null,TB=null,TBP=false,CB=null,CBP=false,ZN=null,ZNP=false,BL=null,BLP=false,DB=null,DBP=false,SL=null,SLP=false,PG=null,PGP=false,DL=null,DLP=false;
+  let XB=null,XBP=false,SB=null,SBP=false,SV=null,TB=null,TBP=false,CB=null,CBP=false,ZN=null,ZNP=false,BL=null,BLP=false,DB=null,DBP=false,SL=null,SLP=false,PG=null,PGP=false,DL=null,DLP=false,OT=null,OTP=false;
+  function loadOutp(){if(OT||OTP||!ctx)return;OTP=true;try{loadSnd(OUTP_MP3,b=>{OT=b},()=>{OTP=false})}catch(e){OTP=false}}
   function loadDolph(){if(DL||DLP||!ctx)return;DLP=true;try{loadSnd(DOLPH_MP3,b=>{DL=b},()=>{DLP=false})}catch(e){DLP=false}}
   function loadPengu(){if(PG||PGP||!ctx)return;PGP=true;try{loadSnd(PENGU_MP3,b=>{PG=b},()=>{PGP=false})}catch(e){PGP=false}}
   function loadSail(){if(SL||SLP||!ctx)return;SLP=true;try{loadSnd(SAIL_MP3,b=>{SL=b},()=>{SLP=false})}catch(e){SLP=false}}
@@ -1785,7 +1789,7 @@ const SFX=(()=>{
   function loadStill(){if(CB||CBP||!ctx)return;CBP=true;try{loadSnd(STILL_MP3,b=>{CB=b},()=>{CBP=false})}catch(e){CBP=false}}
   function loadTarai(){if(TB||TBP||!ctx)return;TBP=true;try{loadSnd(TARAI_MP3,b=>{TB=b},()=>{TBP=false})}catch(e){TBP=false}}
   function loadStorm(){if(SB||SBP||!ctx)return;SBP=true;try{loadSnd(STORM_MP3,b=>{SB=b},()=>{SBP=false})}catch(e){SBP=false}}
-  function playStorm(t,fallback,tar){const B=tar===8?DL:tar===7?PG:tar===6?SL:tar===5?DB:tar===4?BL:tar===3?ZN:tar===2?CB:tar?TB:SB;if(!B){tar===8?loadDolph():tar===7?loadPengu():tar===6?loadSail():tar===5?loadDice():tar===4?loadBelt():tar===3?loadZun():tar===2?loadStill():tar?loadTarai():loadStorm();fallback(t);return}if(tar<5&&SV){try{SV.stop()}catch(e){}SV=null}const s=ctx.createBufferSource();s.buffer=B;const g=ctx.createGain();g.gain.value=1.15;s.connect(g);g.connect(master);s.start(t);if(tar<5){SV=s;s.onended=()=>{if(SV===s)SV=null}}}
+  function playStorm(t,fallback,tar){const B=tar===9?OT:tar===8?DL:tar===7?PG:tar===6?SL:tar===5?DB:tar===4?BL:tar===3?ZN:tar===2?CB:tar?TB:SB;if(!B){tar===9?loadOutp():tar===8?loadDolph():tar===7?loadPengu():tar===6?loadSail():tar===5?loadDice():tar===4?loadBelt():tar===3?loadZun():tar===2?loadStill():tar?loadTarai():loadStorm();fallback(t);return}if(tar<5&&SV){try{SV.stop()}catch(e){}SV=null}const s=ctx.createBufferSource();s.buffer=B;const g=ctx.createGain();g.gain.value=1.15;s.connect(g);g.connect(master);s.start(t);if(tar<5){SV=s;s.onended=()=>{if(SV===s)SV=null}}}
   function loadSnd(url,ok,fail){fetch(url).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(ab=>{const p=ctx.decodeAudioData(ab,ok,fail);if(p&&p.catch)p.catch(fail)}).catch(fail)}
   function loadBuster(){if(XB||XBP||!ctx)return;XBP=true;try{loadSnd(BUSTER_MP3,b=>{XB=b},()=>{XBP=false})}catch(e){XBP=false}}
   let FWB=null,FWBP=false,KB=null,KBP=false,AB=null,ABP=false,AV=null,NB=null,NBP=false,NV=null,OB=null,OBP=false,OV=[],HB=null,HBP=false,HV=null,KV=null;
@@ -1819,6 +1823,7 @@ const SFX=(()=>{
     law:t=>{return;stopLuffy();if(!KB){loadLaw();return}const s=ctx.createBufferSource();s.buffer=KB;const g=ctx.createGain();g.gain.value=1.3;s.connect(g);g.connect(master);s.start(t);KV=s;s.onended=()=>{if(KV===s)KV=null}},
     enemy:t=>{if(!EB){loadEnemy();return}const s=ctx.createBufferSource();s.buffer=EB;const g=ctx.createGain();g.gain.value=1.4;s.connect(g);g.connect(master);s.start(t)},
     dolph:t=>playStorm(t,t=>{tone(t,2200,.1,'sine',.05);tone(t+.12,2800,.1,'sine',.05)},8),
+    outpost:t=>playStorm(t,t=>{tone(t,330,.18,'triangle',.07);tone(t+.16,495,.18,'triangle',.07);tone(t+.32,660,.3,'triangle',.07)},9),
     pengu:t=>playStorm(t,t=>{tone(t,1500,.12,'square',.05);tone(t+.14,1900,.12,'square',.05)},7),
     dice:t=>playStorm(t,t=>{for(let i=0;i<9;i++)noise(t+i*.1+Math.random()*.04,.05,.35,'bandpass',1800+Math.random()*2200,null,4);tone(t,140,.9,'sine',.04,90)},5),
     diceEnd:t=>{tone(t,120,.18,'sine',.3,60);noise(t,.06,.3,'bandpass',2600,null,3);tone(t+.12,660,.25,'triangle',.08)},
@@ -3385,7 +3390,7 @@ function actions(){
     const ownSame=ownFlagNum(p,loc)&&!(fo===p.i);
     if(fo==null)add('flag','Поставить флаг (2 ОД)',()=>{G.ap-=2;G.flags[loc]=p.i;p.fl--;log(p.name+' ставит флаг на '+locName(loc)+'.')},ap<2||p.fl<1||ownSame||lt==='start');
     else if(fo!==p.i&&!outAt(loc))add('flag','Сжечь флаг '+G.players[fo].name+' и поставить свой (2 ОД)',()=>{const o=G.players[fo];G.ap-=2;o.fl++;G.flags[loc]=p.i;p.fl--;log(p.name+' сжигает флаг '+o.name+' и ставит свой.')},ap<2||p.fl<1||ownSame);
-    if(fo===p.i&&!outAt(loc)&&p.ch!=='smoker'){const hasO=!!outOf(p);add('flag','Улучшить флаг до форпоста ('+OUT_COST+' Берри)'+(p.fl>0?' · нужны все 4 флага на карте':hasO?' · форпост уже есть':G.players.some(q=>q!==p&&q.loc===loc)?' · на острове враг':''),()=>{pay(p,OUT_COST);(G.out=G.out||{})[loc]={o:p.i,pon:[]};log(p.name+' строит форпост на '+locName(loc)+'.');fxEvent({banner:true,tone:'good',icon:'🏰',title:'Форпост!',desc:p.name+' · '+locName(loc),auto:2600})},p.berries<OUT_COST||p.fl>0||hasO||G.players.some(q=>q!==p&&q.loc===loc))}
+    if(fo===p.i&&!outAt(loc)&&p.ch!=='smoker'){const hasO=!!outOf(p);add('flag','Улучшить флаг до форпоста ('+OUT_COST+' Берри)'+(p.fl>0?' · нужны все 4 флага на карте':hasO?' · форпост уже есть':G.players.some(q=>q!==p&&q.loc===loc)?' · на острове враг':''),()=>{pay(p,OUT_COST);(G.out=G.out||{})[loc]={o:p.i,pon:[]};log(p.name+' строит форпост на '+locName(loc)+'.');fxEvent({sfx:'outpost',banner:true,tone:'good',icon:'🏰',title:'Форпост!',desc:p.name+' · '+locName(loc),auto:2600})},p.berries<OUT_COST||p.fl>0||hasO||G.players.some(q=>q!==p&&q.loc===loc))}
     if(fo===p.i&&!outAt(loc))add('flag','Поднять свой флаг (бесплатно)',()=>{delete G.flags[loc];p.fl++;log(p.name+' поднимает свой флаг.')});
   }
   {const oo=outAt(p.loc);
@@ -5104,8 +5109,8 @@ function dkRender(){
       if(a==='pon')h+=[[0.50,0.40],[0.58,0.50],[0.44,0.55],[0.62,0.34]].map((q,k)=>E('dkgl',q[0],q[1],dl(k,40))).join('');
       if(a==='fin')h+=[[0.50,0.22],[0.42,0.45],[0.58,0.50],[0.53,0.08],[0.38,0.62],[0.62,0.62]].map((q,k)=>E('dkgl gold',q[0],q[1],dl(k,40))).join('');
       if(a==='fog')h+=[0,1,2].map(k=>E('dkmist',0.22+k*0.08,0.28+k*0.12,'width:'+(o.w*0.5).toFixed(0)+'px;height:'+(o.ih*0.36).toFixed(0)+'px;animation-duration:'+(9+k*3)+'s;'+dl(k+2,90))).join('')}
-    if(G.flags[o.id]!=null){const fh=Math.max(24,o.w*(o.far?0.34:0.3));h+='<img class="dkflag'+(DK.flhold&&DK.flhold.has(o.id)?' pre':'')+'" data-fid="'+o.id+'" src="assets/deck/flag'+(G.flags[o.id]%6)+'.webp" alt="" style="left:'+(o.cx-o.w*0.26).toFixed(0)+'px;top:'+(o.ty+o.ih*0.35-fh).toFixed(0)+'px;height:'+fh.toFixed(0)+'px">'}
-    {const ou=outAt(o.id);if(ou){const th=Math.max(34,o.w*(o.far?0.42:0.46)),tw=th*0.62,fb=o.ty+o.ih*0.35;h+='<div class="dkout" style="left:'+(o.cx-o.w*0.26+Math.max(24,o.w*0.3)*0.5).toFixed(0)+'px;top:'+(fb-th).toFixed(0)+'px;width:'+tw.toFixed(0)+'px;height:'+th.toFixed(0)+'px"><svg viewBox="0 0 40 64"><defs><linearGradient id="tg'+o.id+'" x1="0" x2="1"><stop offset="0" stop-color="#8a8f98"/><stop offset=".55" stop-color="#b9bec7"/><stop offset="1" stop-color="#5f646d"/></linearGradient></defs><path d="M6 64 L9 22 H31 L34 64Z" fill="url(#tg'+o.id+')" stroke="#33363c" stroke-width="1.2"/><path d="M5 22 V14 H11 V18 H15 V14 H25 V18 H29 V14 H35 V22Z" fill="#c7ccd4" stroke="#33363c" stroke-width="1.2"/><rect x="17" y="34" width="6" height="10" rx="3" fill="#1b1d22"/><rect x="6" y="60" width="28" height="4" fill="'+G.players[ou.o].color+'"/>'+(ou.pon.length?'<path d="M20 0 L25 7 L20 13 L15 7Z" fill="#ffcf5a" stroke="#fff6d0" stroke-width="1"/>':'')+'</svg></div>'}}
+    if(G.flags[o.id]!=null&&!outAt(o.id)){const fh=Math.max(24,o.w*(o.far?0.34:0.3));h+='<img class="dkflag'+(DK.flhold&&DK.flhold.has(o.id)?' pre':'')+'" data-fid="'+o.id+'" src="assets/deck/flag'+(G.flags[o.id]%6)+'.webp" alt="" style="left:'+(o.cx-o.w*0.26).toFixed(0)+'px;top:'+(o.ty+o.ih*0.35-fh).toFixed(0)+'px;height:'+fh.toFixed(0)+'px">'}
+    {const ou=outAt(o.id);if(ou){const ow=o.w*(o.far?0.26:0.29),oh=ow*509/561,col=G.players[ou.o].color;h+='<div class="dkout" style="left:'+(o.cx-o.w/2+o.w*0.62-ow/2).toFixed(0)+'px;top:'+(o.ty+o.ih*0.86-oh).toFixed(0)+'px;width:'+ow.toFixed(0)+'px;height:'+oh.toFixed(0)+'px"><img src="assets/deck/outpost.webp" alt=""><i class="dkoutc" style="background:'+col+'"></i>'+(ou.pon.length?'<b class="dkoutp"></b>':'')+'</div>'}}
     for(const q of playersAt(o.id)){if(q===p)continue;const sh=o.w*(o.far?0.26:0.32),sw=sh*360/294,fl=o.cx>W/2;const mv=moves.find(m=>m.q===q&&!fresh);h+='<img class="dkopp'+(mv?' arr':'')+(fl?' fl':'')+'" src="assets/deck/opp'+(q.i%6)+'.webp" alt="" style="left:'+(o.cx+(fl?-o.w*0.12-sw:o.w*0.12)).toFixed(0)+'px;top:'+(o.y-sh*0.86).toFixed(0)+'px;width:'+sw.toFixed(0)+'px">'}
     const who=playersAt(o.id).map(q=>'<span class="dkp" style="--pc:'+q.color+'">'+dkAv(q.ch)+'</span>');
     if(G.akainu&&G.akainu.loc===o.id)who.push('<span class="dkp adm">'+dkAv(G.adm)+'</span>');
