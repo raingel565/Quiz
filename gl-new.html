@@ -1463,6 +1463,7 @@ body.tutor #app{padding-top:110px}
 #deck .dklb small{display:block;font-size:10.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis}
 #deck .dklb{box-sizing:border-box;overflow:hidden;text-overflow:ellipsis;padding:4px 5px}
 #deck .dklb small{font-size:10px;letter-spacing:-.2px}
+#deck .dklb.wrap{white-space:normal;line-height:1.15}
 #deck .dklb.far{font-size:10.5px;padding:3px 7px;opacity:.92}
 #deck .dklb.pk{border-color:rgba(95,211,138,.75);box-shadow:0 0 0 2px rgba(95,211,138,.25)}
 #deck .dkhit{background:none;border:0;padding:0;cursor:default;-webkit-tap-highlight-color:transparent}
@@ -1486,6 +1487,7 @@ body.tutor #app{padding-top:110px}
 @keyframes dklmp{0%,100%{opacity:.25;transform:scale(.8)}45%{opacity:1;transform:scale(2.2)}60%{opacity:.9;transform:scale(1.8)}}
 #deck .dkglow{border-radius:40%;background:radial-gradient(rgba(255,60,60,.55),rgba(255,40,40,0) 70%);mix-blend-mode:screen;animation:dkpulse 2.2s ease-in-out infinite}
 @keyframes dkpulse{0%,100%{opacity:.35}50%{opacity:1}}
+#deck .dkvx{position:absolute;border-radius:50%;background:radial-gradient(ellipse,rgba(255,120,60,.75),rgba(150,40,200,.35) 55%,transparent 72%);mix-blend-mode:screen;pointer-events:none;animation:dkpulse 3.4s ease-in-out infinite}
 #deck .dkbeam{background:radial-gradient(ellipse at 50% 100%,rgba(255,230,150,.55),transparent 70%);mix-blend-mode:screen;animation:dkpulse 3s ease-in-out infinite}
 #deck .dkrain{left:-10%;top:-60%;width:120%;height:220%;background:url(assets/deck/rain.webp) 0 0/120px 240px;animation:dkrn .45s linear infinite;opacity:.8;pointer-events:none}
 #deck .dkrain.b{background-size:80px 160px;animation-duration:.7s;opacity:.45}
@@ -2155,7 +2157,7 @@ function drawToken(loc){
   return t;
 }
 function nodeNum(id){return id==='Z'?numOf(G.zun.cell):(id==='L'?0:numOf(id))}
-function locName(id){if(id==='Z')return'Зунеша (остров Зоя)';if(id==='L')return'Лафтейл';return SEAS[seaOf(id)]+' '+numOf(id)}
+function locName(id){if(id==='Z')return'Зунеша (остров Зоя)';if(id==='L')return'Бездна Миров';return SEAS[seaOf(id)]+' '+numOf(id)}
 function flagCount(p){return 4-p.fl}
 function playersAt(id){return G.players.filter(q=>q.loc===id)}
 // ---------- arrival ----------
@@ -2697,7 +2699,7 @@ function doSearchEasy(){
   x=Math.max(70,Math.min(1518,x));
   G.laftel={x:Math.round(x),y:Math.round(MT[1]-20),anch:ids.slice()};
   for(const a of ids)link('L',a);
-  log('Роад-понеглифы указали дорогу: Лафтейл появился возле '+ids.map(locName).join(' и ')+'!');
+  log('Роад-понеглифы указали дорогу: Бездна Миров появилась возле '+ids.map(locName).join(' и ')+'!');
   S.phase='done';
 }
 function doSearchRoll(){
@@ -2721,7 +2723,7 @@ function doSearchRoll(){
     const [x,y]=inter(E,W,N,Sx);
     G.laftel={x:Math.round(x),y:Math.round(y),anch:S.rolls.slice()};
     for(const a of S.rolls)link('L',a);
-    log('Нитки пересеклись: появился остров Лафтейл!');
+    log('Нитки пересеклись: появилась Бездна Миров!');
     S.phase='done';
   }
 }
@@ -4072,7 +4074,7 @@ function goalHtml(){ // V141: цель партии одной строкой и
     const need=modeOf().need,have=ponN(vp);
     let st;
     if(vp.gold)st='🌟 золотой понеглиф: плыви на Лафтейл!';
-    else if(G.laftel)st='Лафтейл открыт! Понеглифы у тебя: '+have+' из '+need;
+    else if(G.laftel)st='Бездна Миров открыта! Понеглифы у тебя: '+have+' из '+need;
     else st='Понеглифы у тебя: '+have+' из '+need;
     return '<span class="goal">🎯 <b>Цель:</b> найти '+need+' '+(need===1?'понеглиф':'понеглифа')+' и первым добраться до Лафтейла · '+st+'</span>';
   }catch(e){return ''}
@@ -4954,8 +4956,8 @@ addEventListener('resize',()=>{clearTimeout(window.__vrt);window.__vrt=setTimeou
 function smokerSees(){const sm=G.players.find(q=>q.ch==='smoker');if(!sm)return false;if(NET.on)return NET.me===sm.i;const hum=G.players.filter(q=>!q.bot);if(hum.length===1)return hum[0]===sm;return UI.viewer===sm.i}
 // ---------- N: сцена «с палубы» — вид от лица игрока, карта по кнопке ----------
 const DK_BG={kw:.4,still:.4037,storm:.4037,aqua:.4262,buster:.4425,belt:.3785,tarai:.3175};
-const DK_ART={start:[720,335],base:[720,295],event:[720,325],market:[720,336],battle:[720,252],jail:[720,321],dozor:[720,302],pon:[720,296],port:[720,323],fin:[720,347],fog:[720,257],zun:[820,428]};
-const DK_TN={start:'Старт',base:'Пустой',event:'Задания',market:'Рынок',battle:'Поле битвы',jail:'Тюрьма',dozor:'База дозора',pon:'Понеглиф',port:'Переход',fin:'Лафтейл',fog:'Неизвестно',zun:'Зунеша'};
+const DK_ART={start:[720,335],base:[720,295],event:[720,325],market:[720,336],battle:[720,252],jail:[720,321],dozor:[720,302],pon:[720,296],port:[720,323],fin:[761,1100],fog:[720,257],zun:[820,428]};
+const DK_TN={start:'Старт',base:'Пустой',event:'Задания',market:'Рынок',battle:'Поле битвы',jail:'Тюрьма',dozor:'База дозора',pon:'Понеглиф',port:'Переход',fin:'Бездна Миров',fog:'Неизвестно',zun:'Зунеша'};
 const DK_TI={start:'⚑',event:'❗',market:'💰',battle:'⚔️',jail:'⛓️',dozor:'⚓',pon:'П',port:'⛰',fin:'★',fog:'?',zun:'🦖'};
 const DK_TC={start:'#5fd38a',event:'#f0b35a',market:'#f2c14e',battle:'#ff7b6b',jail:'#c7ccd6',dozor:'#8fb6ff',pon:'#ff8f8f',port:'#b9a6ff',fin:'#f2c14e',fog:'#9fc7e8',zun:'#9fe0a8',base:'#d6dbe2'};
 const DK_SEAN={N:'Север',W:'Запад',E:'Восток',S:'Юг'};
@@ -5053,7 +5055,7 @@ const DKC={
     const lf=document.querySelector('#deck .dki.lrise');
     dkFlash(o,'radial-gradient(120% 90% at 50% 38%,rgba(255,45,30,.8),rgba(120,0,10,.55) 55%,rgba(0,0,0,.5))',1,3400);
     dkShake(1100,7);await dkWait(500);dkShake(900,5);
-    await dkWait(700);dkBanner(o,'ЛАФТЕЙЛ<small>🏝 Остров появился на горизонте</small>',false,2600);
+    await dkWait(700);dkBanner(o,'БЕЗДНА МИРОВ<small>🌀 Бездна открылась на горизонте</small>',false,2600);
     dkFlash(o,'radial-gradient(circle at 50% 40%,rgba(255,225,150,.95),rgba(255,160,40,.4) 45%,rgba(0,0,0,0) 75%)',.9,1500);
     await dkWait(2500);
   }
@@ -5137,9 +5139,9 @@ function dkRender(){
     fwF='<img class="dkfw fr" src="assets/deck/firewall.webp" alt="" style="'+st+'">'+[0,1,2,3,4,5].map(k=>'<i class="dkember" style="left:'+(fx+rw*(0.2+k*0.12)).toFixed(0)+'px;top:'+(fy+rh*0.45).toFixed(0)+'px;animation-delay:-'+(k*0.9).toFixed(1)+'s"></i>').join('')}}
   // острова
   h+='<div class="dkisl wx-'+wk+'">';
-  for(const o of isl){const a=dkArt(o.id),[aw,ah]=DK_ART[a],ih=o.w*ah/aw,x=o.cx-o.w/2,ty=o.y-ih*0.9;o.ih=ih;o.ty=ty;
-    h+='<img class="dki'+(G.monster&&G.monster.loc===o.id?' mk':'')+(G.dead&&G.dead[o.id]?' dead':'')+(a==='fin'&&DK.lrise?' lrise':'')+'" src="assets/deck/'+a+'.webp" alt="" style="left:'+x.toFixed(1)+'px;top:'+ty.toFixed(1)+'px;width:'+o.w.toFixed(1)+'px">';
-    h+='<img class="dki rf" src="assets/deck/'+a+'.webp" alt="" style="left:'+x.toFixed(1)+'px;top:'+(o.y-ih*0.1-2).toFixed(1)+'px;width:'+o.w.toFixed(1)+'px;height:'+(ih*0.45).toFixed(1)+'px">';
+  for(const o of isl){const a=dkArt(o.id),[aw,ah]=DK_ART[a],fk=a==='fin'?1:1,iw=o.w*fk,ih=iw*ah/aw,x=o.cx-iw/2,ty=o.y-ih*(a==='fin'?0.97:0.9);o.ih=ih;o.ty=ty;o.iw=iw;
+    h+='<img class="dki'+(G.monster&&G.monster.loc===o.id?' mk':'')+(G.dead&&G.dead[o.id]?' dead':'')+(a==='fin'&&DK.lrise?' lrise':'')+'" src="assets/deck/'+a+'.webp" alt="" style="left:'+x.toFixed(1)+'px;top:'+ty.toFixed(1)+'px;width:'+iw.toFixed(1)+'px">';
+    if(a!=='fin')h+='<img class="dki rf" src="assets/deck/'+a+'.webp" alt="" style="left:'+x.toFixed(1)+'px;top:'+(o.y-ih*0.1-2).toFixed(1)+'px;width:'+o.w.toFixed(1)+'px;height:'+(ih*0.45).toFixed(1)+'px">';
     {const fw=o.w*1.12,fh=Math.max(14,o.w*0.2);h+='<i class="dkfoam" style="left:'+(o.cx-fw/2).toFixed(1)+'px;top:'+(o.y-ih*0.1-fh*0.55).toFixed(1)+'px;width:'+fw.toFixed(1)+'px;height:'+fh.toFixed(1)+'px;animation-delay:-'+(o.cx%3).toFixed(1)+'s"></i><i class="dkfoam b" style="left:'+(o.cx-fw*0.42).toFixed(1)+'px;top:'+(o.y-ih*0.1-fh*0.1).toFixed(1)+'px;width:'+(fw*0.84).toFixed(1)+'px;height:'+(fh*0.8).toFixed(1)+'px;animation-delay:-'+(o.cx%2+0.7).toFixed(1)+'s"></i>'}}
   h+='</div>'+fwF;
   // эффекты островов, флаги, аватарки, подписи
@@ -5150,7 +5152,7 @@ function dkRender(){
     if(a==='battle')for(let k=0;k<3;k++)h+='<i class="dksmoke" style="left:'+(o.cx+o.w*(k*0.12-0.08)).toFixed(0)+'px;top:'+(o.ty+o.ih*0.2).toFixed(0)+'px;animation-delay:-'+(k*1.6).toFixed(1)+'s"></i>';
     if(a==='port')h+='<i class="dklamp" style="left:'+(o.cx-o.w*0.17).toFixed(0)+'px;top:'+(o.ty+o.ih*0.04).toFixed(0)+'px"></i>';
     if(a==='pon')h+='<i class="dkglow" style="left:'+(o.cx-o.w*0.2).toFixed(0)+'px;top:'+(o.ty+o.ih*0.3).toFixed(0)+'px;width:'+(o.w*0.36).toFixed(0)+'px;height:'+(o.ih*0.45).toFixed(0)+'px"></i>';
-    if(a==='fin')h+='<i class="dkbeam" style="left:'+(o.cx-o.w*0.25).toFixed(0)+'px;top:'+(o.ty-o.ih*0.3).toFixed(0)+'px;width:'+(o.w*0.5).toFixed(0)+'px;height:'+(o.ih*0.7).toFixed(0)+'px"></i>';
+    if(a==='fin')h+='<i class="dkvx" style="left:'+(o.cx-o.iw*0.13).toFixed(0)+'px;top:'+(o.ty+o.ih*0.37).toFixed(0)+'px;width:'+(o.iw*0.26).toFixed(0)+'px;height:'+(o.ih*0.14).toFixed(0)+'px"></i>';
     {const E=(c,x,y,st)=>'<i class="'+c+'" style="left:'+(o.cx-o.w/2+x*o.w).toFixed(0)+'px;top:'+(o.ty+y*o.ih).toFixed(0)+'px;'+(st||'')+'"></i>',dl=(k,m)=>'animation-delay:-'+(((o.cx*7+k*13)%(m*10))/10).toFixed(1)+'s;',wn=(pts,c)=>pts.map((q,k)=>E('dkwin'+(c?' '+c:''),q[0],q[1],dl(k,30))).join('');
       if(a==='start')h+=E('dksmoke',0.40,0.40,'animation-delay:-1s')+E('dksmoke',0.40,0.40,'animation-delay:-3.4s')+wn([[0.33,0.50],[0.50,0.47],[0.62,0.50]]);
       if(a==='base')h+=E('dksmoke',0.55,0.46,'animation-delay:-2s')+E('dkgl',0.62,0.12,dl(1,40))+E('dkgl',0.30,0.62,dl(2,40));
@@ -5161,7 +5163,6 @@ function dkRender(){
       if(a==='battle')h+=E('dkglow',0.55,0.34,'width:'+(o.w*0.22).toFixed(0)+'px;height:'+(o.ih*0.2).toFixed(0)+'px;animation-delay:-1.3s')+[0,1,2,3,4].map(k=>E('dkember',0.52+k*0.07,0.36,dl(k,50))).join('');
       if(a==='port')h+=E('dksweep',0.33,0.12,'width:'+(o.w*0.62).toFixed(0)+'px;height:'+Math.max(10,o.w*0.1).toFixed(0)+'px')+E('dkgl',0.33,0.12,dl(0,30));
       if(a==='pon')h+=[[0.50,0.40],[0.58,0.50],[0.44,0.55],[0.62,0.34]].map((q,k)=>E('dkgl',q[0],q[1],dl(k,40))).join('');
-      if(a==='fin')h+=[[0.50,0.22],[0.42,0.45],[0.58,0.50],[0.53,0.08],[0.38,0.62],[0.62,0.62]].map((q,k)=>E('dkgl gold',q[0],q[1],dl(k,40))).join('');
       if(a==='fog')h+=[0,1,2].map(k=>E('dkmist',0.22+k*0.08,0.28+k*0.12,'width:'+(o.w*0.5).toFixed(0)+'px;height:'+(o.ih*0.36).toFixed(0)+'px;animation-duration:'+(9+k*3)+'s;'+dl(k+2,90))).join('')}
     if(G.flags[o.id]!=null){const fh=Math.max(24,o.w*(o.far?0.34:0.3));h+='<img class="dkflag'+(DK.flhold&&DK.flhold.has(o.id)?' pre':'')+'" data-fid="'+o.id+'" src="assets/deck/flag'+(G.flags[o.id]%6)+'.webp" alt="" style="left:'+(o.cx-o.w*0.26).toFixed(0)+'px;top:'+(o.ty+o.ih*0.35-fh).toFixed(0)+'px;height:'+fh.toFixed(0)+'px">'}
     {const ou=outAt(o.id);if(ou){const th=Math.max(34,o.w*(o.far?0.42:0.46)),tw=th*0.62,fb=o.ty+o.ih*0.35;h+='<div class="dkout" style="left:'+(o.cx-o.w*0.26+Math.max(24,o.w*0.3)*0.5).toFixed(0)+'px;top:'+(fb-th).toFixed(0)+'px;width:'+tw.toFixed(0)+'px;height:'+th.toFixed(0)+'px"><svg viewBox="0 0 40 64"><defs><linearGradient id="tg'+o.id+'" x1="0" x2="1"><stop offset="0" stop-color="#8a8f98"/><stop offset=".55" stop-color="#b9bec7"/><stop offset="1" stop-color="#5f646d"/></linearGradient></defs><path d="M6 64 L9 22 H31 L34 64Z" fill="url(#tg'+o.id+')" stroke="#33363c" stroke-width="1.2"/><path d="M5 22 V14 H11 V18 H15 V14 H25 V18 H29 V14 H35 V22Z" fill="#c7ccd4" stroke="#33363c" stroke-width="1.2"/><rect x="17" y="34" width="6" height="10" rx="3" fill="#1b1d22"/><rect x="6" y="60" width="28" height="4" fill="'+G.players[ou.o].color+'"/>'+(ou.pon.length?'<path d="M20 0 L25 7 L20 13 L15 7Z" fill="#ffcf5a" stroke="#fff6d0" stroke-width="1"/>':'')+'</svg></div>'}}
@@ -5172,7 +5173,7 @@ function dkRender(){
     if(who.length)h+='<div class="dkwho" style="left:'+o.cx.toFixed(0)+'px;top:'+(o.ty-4).toFixed(0)+'px">'+who.join('')+'</div>';
     h+='<button class="dkhit'+(pk?' pk':'')+'" data-dk="'+o.id+'" style="left:'+(o.cx-o.w/2).toFixed(0)+'px;top:'+o.ty.toFixed(0)+'px;width:'+o.w.toFixed(0)+'px;height:'+(o.ih+30).toFixed(0)+'px" aria-label="'+esc(L.top)+'"'+(pk?'':' tabindex="-1"')+'></button>';
     const si=plan&&plan.steps?plan.steps.findIndex(x=>x.n===o.id):-1;if(si>=0)h+='<div class="dknav" style="left:'+o.cx.toFixed(0)+'px;top:'+(o.y+(o.far?36:44)).toFixed(0)+'px">'+(plan.steps.length>1?'путь '+(si+1):'по курсу')+(o.id===plan.to?' · цель':'')+'</div>';
-    h+='<div class="dklb'+(o.far?' far':'')+(pk?' pk':'')+(G.monster&&G.monster.loc===o.id?' mon':'')+(si>=0?' nav':'')+'" style="left:'+o.cx.toFixed(0)+'px;top:'+(o.y+4).toFixed(0)+'px;max-width:'+Math.max(56,o.gap-3).toFixed(0)+'px">'+esc(L.top)+(L.sub?'<small style="color:'+L.c+'">'+esc(L.sub)+'</small>':'')+'</div>'}
+    h+='<div class="dklb'+(a==='fin'?' wrap':'')+(o.far?' far':'')+(pk?' pk':'')+(G.monster&&G.monster.loc===o.id?' mon':'')+(si>=0?' nav':'')+'" style="left:'+o.cx.toFixed(0)+'px;top:'+(o.y+4).toFixed(0)+'px;max-width:'+Math.max(56,o.gap-3).toFixed(0)+'px">'+esc(L.top)+(L.sub?'<small style="color:'+L.c+'">'+esc(L.sub)+'</small>':'')+'</div>'}
   // корабль и текущий остров
   const shH=two?Math.min(H*0.28,W*0.55):Math.min(H*0.33,W*0.62),shW=shH*397/746,shTop=rowNear+H*0.068;
   if(G.gal&&G.gal.who===p.i&&!G.gal.done){const gw=Math.min(W*0.28,130),gh=gw*673/760,wl=shTop+shH*0.46,gx=W*0.97-gw;
@@ -5198,15 +5199,15 @@ function dkRender(){
   h+='</div>';
   // интерфейс сцены
   const wn=DK_WN[wk];
-  h+='<div class="dkui tl"><span class="dkpill">'+(p.loc==='L'?'Лафтейл':DK_SEAN[dkSea(p.loc)]||'')+'</span>'+(wn?'<span class="dkpill w">'+wn+'</span>':'')+'</div>';
+  h+='<div class="dkui tl"><span class="dkpill">'+(p.loc==='L'?'Бездна Миров':DK_SEAN[dkSea(p.loc)]||'')+'</span>'+(wn?'<span class="dkpill w">'+wn+'</span>':'')+'</div>';
   h+='<div class="dkui tr"><button class="dkpill btn" data-navopen>🧭 Навигатор</button><button class="dkpill btn" data-dkmap>🗺 Карта</button></div>';
   if(plan||(UI.nav&&UI.nav.arrived&&UI.nav.arrived===p.loc)){let c='<div class="dkui tc"><div class="dkcourse">';
     if(!plan)c+='<b>✅ Вы прибыли: '+esc(navName(UI.nav.arrived))+'</b>';
     else if(plan.none)c+='<b>🧭 '+esc(navName(plan.to))+'</b><small>Туда сейчас не доплыть</small><button data-navclear aria-label="Сбросить курс">✕</button>';
-    else{const nn=x=>x==='L'?'Лафтейл':x==='Z'?'Зунеша':(seaOf(x)!==seaOf(p.loc)?SEAS[seaOf(x)][0]+'.':'')+numOf(x);c+='<b>🧭 Курс: '+esc(navName(plan.to))+' · '+plan.dist+' '+(plan.dist===1?'ход':plan.dist<5?'хода':'ходов')+(plan.dist>G.ap&&G.players[G.cur]===p?' (в этот ход не успеть)':'')+'</b><button data-navclear aria-label="Сбросить курс">✕</button>';
+    else{const nn=x=>x==='L'?'Бездна Миров':x==='Z'?'Зунеша':(seaOf(x)!==seaOf(p.loc)?SEAS[seaOf(x)][0]+'.':'')+numOf(x);c+='<b>🧭 Курс: '+esc(navName(plan.to))+' · '+plan.dist+' '+(plan.dist===1?'ход':plan.dist<5?'хода':'ходов')+(plan.dist>G.ap&&G.players[G.cur]===p?' (в этот ход не успеть)':'')+'</b><button data-navclear aria-label="Сбросить курс">✕</button>';
       plan.steps.forEach((st,k)=>{c+='<small>'+(plan.steps.length>1?'Путь '+(k+1)+': ':'')+st.path.map(nn).join(' → ')+(st.risk.length?' · <i class="risk">'+esc(st.risk.join(' '))+'</i>':(plan.steps.length>1&&plan.steps.some(z=>z.risk.length)?' · безопаснее':''))+'</small>'})}
     h+=c+'</div></div>'}
-  const cl=dkLabel(p.loc,false),cn=p.loc==='L'?'Лафтейл':p.loc==='Z'?'Зунеша':'№'+numOf(p.loc)+' — '+DK_TN[ca];
+  const cl=dkLabel(p.loc,false),cn=p.loc==='L'?'Бездна Миров':p.loc==='Z'?'Зунеша':'№'+numOf(p.loc)+' — '+DK_TN[ca];
   {if(G.gal&&G.gal.who===p.i&&!G.gal.done&&DK.galOpen&&!bt){const gi=re=>ACTS.findIndex(a=>re.test(a.label)),a1=gi(/Галеон: купить карту/),a2=gi(/Галеон: нанять гостя/);
     const opt=(i,ic,t)=>i<0?'':'<button class="dkgo'+(ACTS[i].dis?' dis':'')+'" data-a="'+i+'"'+(ACTS[i].dis?' disabled':'')+'><i>'+ic+'</i><span>'+esc(t)+'</span><b>'+(/\((\d+) Берри/.exec(ACTS[i].label)||[])[1]+' ⓑ</b></button>';
     h+='<div class="dkgalp"><div class="dkgalh"><b>⛵ Торговый галеон</b><button class="dkgalx" data-galclose="1" aria-label="Закрыть">✕</button></div><small>Всё на 10 Берри дешевле, чем на рынке. Одна покупка за визит.</small><div class="dkgalo">'+opt(a1,'🃏','Карта сокровищ')+opt(a2,'🧑','Гостевой персонаж')+'</div></div>'}}
@@ -5306,7 +5307,7 @@ function dkSailLaftel(b,done){
   try{sh.animate(kf,op);const cx=sh.offsetLeft+sw/2,cy=sh.offsetTop+sh.offsetHeight*0.5;z.querySelectorAll('.dkdolf').forEach(q=>{q.style.transformOrigin=(cx-q.offsetLeft).toFixed(0)+'px '+(cy-q.offsetTop).toFixed(0)+'px';q.animate(kf.map(f=>({transform:f.transform,offset:f.offset})),op)})}catch(_){}
   // вспышка и прибытие
   setTimeout(()=>{dkFlash(o,'radial-gradient(circle at '+bx.toFixed(0)+'px '+by.toFixed(0)+'px,#fffdf0,#ffe9a8 45%,rgba(255,220,120,0) 80%)',1,1100);dkShake(480,5);try{SFX.play('win',0)}catch(e){}},2750);
-  setTimeout(()=>dkBanner(o,'ЛАФТЕЙЛ<small>Конец пути Гранд Лайна</small>',false,1700),2900);
+  setTimeout(()=>dkBanner(o,'БЕЗДНА МИРОВ<small>Конец пути Гранд Лайна</small>',false,1700),2900);
   setTimeout(()=>{cancelAnimationFrame(raf);el.classList.remove('sail');DK.arv=Date.now();DK.sig='';done();
     [dim,svg,gl].forEach(n=>{if(n.animate)n.animate([{opacity:1},{opacity:0}],{duration:500,fill:'forwards'}).onfinish=()=>n.remove();else n.remove()});
     o.querySelectorAll('i').forEach(n=>n.remove());setTimeout(()=>{if(!o.children.length)o.remove()},1900)},3500);
@@ -5370,7 +5371,7 @@ function navDanger(id){
   const t=G.type[id];if(t==='battle')return'⚔️';if(t==='dozor')return'⚓';return'';
 }
 function navRisk(id){return navDanger(id)?1:0}
-function navName(id){return id==='L'?'Лафтейл':id==='Z'?'Зунеша':SEAS[seaOf(id)]+' '+numOf(id)}
+function navName(id){return id==='L'?'Бездна Миров':id==='Z'?'Зунеша':SEAS[seaOf(id)]+' '+numOf(id)}
 function navQuick(p){
   const d=navBfs(p.loc),near=f=>Object.keys(d).filter(x=>x!==p.loc&&f(x)).sort((a,b)=>d[a]-d[b]||nodeNum(a)-nodeNum(b))[0]||null;
   const own=Object.keys(G.ponAt).filter(k=>G.ponAt[k].owner==null&&k!=='Z');
@@ -5459,7 +5460,7 @@ function renderMap(){let PTOP=''; // понеглиф-метки рисуем п
   }
   PT.t=PTnext;PT.n++;
   // Laftel & Zunesha
-  if(G.laftel){const {x,y}=G.laftel;const on=pickable.has('L');s+='<g data-id="L" style="cursor:pointer"><circle cx="'+x+'" cy="'+y+'" r="38" fill="#d9a21b" stroke="#5a3b1f" stroke-width="4"/><text x="'+x+'" y="'+(y+6)+'" text-anchor="middle" font-size="16" font-weight="700" fill="#2a2118">Лафтейл</text>'+(on?'<circle class="ring" cx="'+x+'" cy="'+y+'" r="48" fill="none" stroke="#12a05a" stroke-width="6"/>':'')+'</g>'}
+  if(G.laftel){const {x,y}=G.laftel;const on=pickable.has('L');s+='<g data-id="L" style="cursor:pointer"><circle cx="'+x+'" cy="'+y+'" r="54" fill="#1a0a24" opacity=".55"/><g><image href="assets/abyss-top.webp" x="'+(x-52)+'" y="'+(y-52)+'" width="104" height="104"/><animateTransform attributeName="transform" type="rotate" from="0 '+x+' '+y+'" to="360 '+x+' '+y+'" dur="40s" repeatCount="indefinite"/></g><text x="'+x+'" y="'+(y+72)+'" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" stroke="#1a0a24" stroke-width="4" paint-order="stroke">Бездна Миров</text>'+(on?'<circle class="ring" cx="'+x+'" cy="'+y+'" r="62" fill="none" stroke="#12a05a" stroke-width="6"/>':'')+'</g>'}
   for(const ol in (G.out||{})){const pt=MAPD.nodes[ol];if(pt)s+='<text x="'+(pt[0]+30)+'" y="'+(pt[1]-34)+'" font-size="30" pointer-events="none">🏰'+(G.out[ol].pon.length?'<tspan font-size="20">🗿</tspan>':'')+'</text>'}
   if(G.monster){const pt=MAPD.nodes[G.monster.loc];if(pt)s+='<g class="akm" pointer-events="none"><circle cx="'+pt[0]+'" cy="'+pt[1]+'" r="40" fill="rgba(255,60,40,.14)" stroke="#ff4a3a" stroke-width="5"><animate attributeName="r" values="36;50;36" dur="1.5s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values="1;.3;1" dur="1.5s" repeatCount="indefinite"/></circle><ellipse cx="'+pt[0]+'" cy="'+(pt[1]+46)+'" rx="46" ry="10" fill="rgba(20,60,80,.55)" stroke="#fff" stroke-width="2"/><text x="'+pt[0]+'" y="'+(pt[1]+40)+'" text-anchor="middle" font-size="44">🐉</text></g>'}
   if(G.akainu){const L0=G.akainu.loc,pt=L0==='L'?(G.laftel?[G.laftel.x,G.laftel.y]:null):MAPD.nodes[L0];if(pt){const bx=pt[0],by=pt[1]-36;s+='<g class="akm'+(window.__akborn&&Date.now()-window.__akborn<3500?' born':'')+'" pointer-events="none"><ellipse cx="'+bx+'" cy="'+(by+8)+'" rx="46" ry="10" fill="rgba(200,30,20,.4)" stroke="#fff" stroke-width="2"/><image href="'+AKSHIP.u+'" x="'+(bx-AKSHIP.w/2)+'" y="'+(by+12-AKSHIP.h)+'" width="'+AKSHIP.w+'" height="'+AKSHIP.h+'"/><text x="'+bx+'" y="'+(by-AKSHIP.h-2)+'" text-anchor="middle" font-size="19" font-weight="800" fill="'+adm().col+'" stroke="#fff6df" stroke-width="4" paint-order="stroke">'+adm().short+(G.akainu.stun>0?' 💫':'')+'</text></g>'}}
@@ -6731,7 +6732,7 @@ function startTutorial(){
 }
 function tutTarget(A,p){ // какое действие сейчас нужно новичку
   const X=G.tut.X,f=re=>A.findIndex(a=>!a.dis&&re.test(a.label));
-  if(G.laftel){const i=A.findIndex(a=>a.loc==='L');if(i>=0)return[i,'🏝 Лафтейл появился рядом! Нажми на него: с понеглифом в руках ты сразу победишь.'];
+  if(G.laftel){const i=A.findIndex(a=>a.loc==='L');if(i>=0)return[i,'🌀 Бездна Миров появилась рядом! Нажми на него: с понеглифом в руках ты сразу победишь.'];
     const st=bStepToward(p,['L'],{});if(st){const j=A.findIndex(a=>a.g==='move'&&a.loc===st.step);if(j>=0)return[j,'🏝 Плыви к Лафтейлу: нажми на светящийся остров.']}}
   if(p.pon.length){const i=A.findIndex(a=>a.g==='end');return[i,'🗿 Понеглиф твой! Теперь нажми «Закончить ход»: в конце хода понеглиф укажет путь к Лафтейлу.']}
   if(p.loc===X){const i=f(/Вызвать хранителя/);if(i>=0)return[i,'❗ Под фишкой нашёлся понеглиф, но его охраняет хранитель. Нажми «Вызвать хранителя» — начнётся бой (1 ОД).'];
