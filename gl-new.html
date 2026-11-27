@@ -420,6 +420,20 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 #splash.wt .wtc{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;opacity:0;animation:spup 1s var(--cd,3.4s) ease both;text-shadow:0 2px 16px #000}
 #splash.wt .spt{opacity:1;animation:spsh 3.2s infinite ease-in-out;font-size:clamp(34px,11vw,72px)}
 #splash.wt .sps2{opacity:1;animation:none;color:#d8c9a4}
+/* всплывашка хранителя при вызове на дуэль */
+#grfx{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(4,8,20,.9);animation:dfin .25s ease both;padding:12px}
+#grfx.out{animation:dfout .26s ease both}
+#grfx .grbox{position:relative;width:min(100%,900px);max-height:100%;border-radius:14px;overflow:hidden;background:#000;box-shadow:0 0 0 2px rgba(127,212,255,.75),0 0 60px rgba(80,160,255,.45)}
+#grfx .grbox img{display:block;width:100%;height:auto;max-height:calc(100vh - 24px);object-fit:cover;animation:grz 5s ease-out both}
+@keyframes grz{from{transform:scale(1.08)}to{transform:scale(1)}}
+#grfx .grnone{height:min(60vh,420px);display:flex;align-items:center;justify-content:center;font-size:96px;background:radial-gradient(circle,#26324f,#0a0d18)}
+#grfx video{display:block;width:100%;height:auto;max-height:calc(100vh - 24px);background:#000}
+#grfx .grm{position:absolute;top:10px;left:10px;border:0;border-radius:99px;padding:9px 16px;font:700 14px/1 inherit;color:#fff;background:rgba(10,14,28,.78);box-shadow:0 0 0 1px rgba(255,255,255,.25);cursor:pointer}
+#grfx .grx{position:absolute;top:10px;right:10px;border:0;border-radius:99px;padding:9px 16px;font:700 14px/1 inherit;color:#fff;background:rgba(10,14,28,.78);box-shadow:0 0 0 1px rgba(255,255,255,.25);cursor:pointer}
+#grfx .grc{position:absolute;left:0;right:0;bottom:0;padding:34px 16px 14px;background:linear-gradient(transparent,rgba(2,6,18,.88));color:#e8f6ff;text-align:left}
+#grfx .grk{font-size:11px;letter-spacing:.22em;font-weight:800;color:#7fd4ff}
+#grfx .grn{font-size:clamp(24px,7vw,40px);font-weight:900;line-height:1.1;margin-top:3px;text-shadow:0 0 18px rgba(80,170,255,.7)}
+#grfx .grs{font-size:13px;margin-top:4px;color:#bcd9ee}
 /* заставка «Бездна» */
 #splash.ab{background:#05060a;--cd:2.2s}
 #splash.ab .abbg{position:absolute;inset:-6%;background:url(assets/abyss.webp) 50% 40%/cover;filter:blur(18px) brightness(.45) saturate(1.2)}
@@ -1977,7 +1991,7 @@ const TOAST_SKIP=/^Доход:|^Погода:|бросает 2d6|^Бросок 1
 let TOAST_TICK=null;
 function toastTick(){
   const h=document.getElementById('toasts');if(!h){return}
-  const paused=!!document.querySelector('#dicefx,#cardfx,#evfx,#akfx,#akvid,#modal .ov');
+  const paused=!!document.querySelector('#dicefx,#cardfx,#evfx,#akfx,#akvid,#grfx,#modal .ov');
   const list=h.querySelectorAll('.toast:not(.out)');
   if(!list.length){clearInterval(TOAST_TICK);TOAST_TICK=null;return}
   if(paused)return;
@@ -2161,7 +2175,7 @@ function locName(id){if(id==='Z')return'Зунеша (остров Зоя)';if(i
 function flagCount(p){return 4-p.fl}
 function playersAt(id){return G.players.filter(q=>q.loc===id)}
 // ---------- arrival ----------
-const GUARD={bigmom:{n:'Небесная Айрис'},kaido:{n:'Кайдо, царь зверей'},shanks:{n:'Рыжеволосый Шанкс'},whitebeard:{n:'Эдвард Ньюгейт Белоус'}};
+const GUARD={bigmom:{n:'Небесная Айрис',img:'assets/guards/iris-pop.webp',vid:'assets/guards/iris.mp4'},kaido:{n:'Кайдо, царь зверей'},shanks:{n:'Рыжеволосый Шанкс'},whitebeard:{n:'Эдвард Ньюгейт Белоус'}};
 const GUARD_A=9,GUARD_U=6;
 // V148: в новых партиях (tb≥3) хранитель сильнее и вызывается не чаще раза за раунд
 let GUARD_A3=11,GUARD_U3=8;
@@ -2174,6 +2188,7 @@ function guardFight(p,loc){
   const pa=G.ponAt[loc],gd=GUARD[pa.g];
   G.duels++;
   const GA=gA(),GU=gU();if(G.tb>=3)p.gRound=G.round;
+  fxGuard(pa.g,GA,GU,p.name);
   reqPrep(p,'Хранитель понеглифа: '+gd.n+' (А'+GA+' / У'+GU+'). '+(p.ch==='smoker'?'Понеглиф — только за победу всухую':'Достаточно выиграть один раунд или сыграть вничью'),{name:gd.n,npc:true,A:GA,U:GU},pp=>{
     const a=sideFromPrep(p,pp);
     const bs={p:null,A:GA,U:GU,slots:[],pas:[],ch:pa.g,name:gd.n};
@@ -3632,6 +3647,7 @@ function ponDie(){
 const FXQ=[];
 function fxRoll(label,vals,sides,opt){if(window.__nor)return;FXQ.push(Object.assign({t:'d',label,vals:vals.slice(),sides:sides||6},opt||{}))}
 function fxEvent(ev){if(window.__nor)return;FXQ.push(Object.assign({t:'e'},ev))}
+function fxGuard(g,A,U,who){if(window.__nor)return;FXQ.push({t:'g',g,A,U,who})}
 function fxAkainu(locn,hits,lines){if(window.__nor)return;FXQ.push({t:'k',loc:locn,hits:hits||[],lines:lines||[],adm:G.adm||'akainu'})}
 const AKVID=k=>'assets/'+k+'.mp4'+SFXV;
 function akFx(ev,done){
@@ -3798,6 +3814,24 @@ function akScene(ev,done){
   o.onclick=()=>{if(Date.now()-t0>900)end()};const t0=Date.now();
   if(fast)setTimeout(end,1500);else if(STREAM.on)setTimeout(end,ev.hits&&ev.hits.length?12500:(ev.lines&&ev.lines.length?10000:7500)); // обычная игра: окно держится, пока не нажмут
 }
+function grFx(ev,done){
+  const fast=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches,gd=GUARD[ev.g];
+  if(window.__nor||fast||!document.body||!gd){done&&done();return}
+  const old=document.getElementById('grfx');if(old)old.remove();
+  const o=document.createElement('div');o.id='grfx';
+  o.innerHTML='<div class="grbox">'+(gd.vid?'<video playsinline preload="auto" poster="'+(gd.img||'')+'" src="'+gd.vid+SFXV+'"></video><button class="grm" hidden>🔊 Включить звук</button>':gd.img?'<img src="'+gd.img+'" alt="">':'<div class="grnone">🗿</div>')+'<button class="grx">✕ Закрыть</button><div class="grc"><div class="grk">ХРАНИТЕЛЬ ПОНЕГЛИФА</div><div class="grn">'+esc(gd.n)+'</div><div class="grs">Атака '+ev.A+' · Уклонение '+ev.U+(ev.who?' · вызов: '+esc(ev.who):'')+'</div></div></div>';
+  document.body.appendChild(o);
+  let fin=false;const end=()=>{if(fin)return;fin=true;o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},260)};
+  o.querySelector('.grx').onclick=e=>{e.stopPropagation();end()};
+  const v=o.querySelector('video');
+  if(v){const mb=o.querySelector('.grm');o.onclick=e=>{if(e.target===o)end()};v.onended=()=>setTimeout(end,600);v.onerror=end;
+   mb.onclick=e=>{e.stopPropagation();v.muted=false;v.play().catch(()=>{});mb.hidden=true};
+   const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{v.muted=true;v.play().then(()=>{mb.hidden=false}).catch(()=>{})});
+   setTimeout(()=>{if(!fin&&v.readyState<2&&v.currentTime===0){v.remove();o.onclick=()=>end();setTimeout(end,3500)}},6000);
+   if(STREAM.on)setTimeout(end,8000);return}
+  o.onclick=()=>end();
+  setTimeout(end,STREAM.on?2500:4200);
+}
 let FXBUSY=false;
 function eventFx(ev,done){
   const fast=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3898,6 +3932,7 @@ function flushFx(){
   if(FXQ[0].t==='s'){SFX.play(FXQ.shift().n,0);next();return}
   if(FXQ[0].t==='kw'){kwFx(FXQ.shift(),next)}
   else if(FXQ[0].t==='k'){akFx(FXQ.shift(),next)}
+  else if(FXQ[0].t==='g'){grFx(FXQ.shift(),next)}
   else if(FXQ[0].t==='e'&&WXVID[FXQ[0].wk]&&FXQ[0].stage==='pre'){aquaFx(FXQ.shift(),next)}
   else if(FXQ[0].t==='e'){eventFx(FXQ.shift(),next)}
   else if(FXQ[0].t==='c'){const g=[],w=FXQ[0].who;while(FXQ.length&&FXQ[0].t==='c'&&FXQ[0].who===w)g.push(FXQ.shift());cardFx(g,next)}
@@ -5640,7 +5675,7 @@ setInterval(()=>{
     let off=false;try{off=localStorage.getItem('gl_guide_off')==='1'}catch(_){}
     if(off){GDASKED=G;return}
     if(NET.on&&!(NET.me>=0))return;
-    if(FXBUSY||FXQ.length||document.querySelector('#dicefx,#cardfx,#evfx,#akfx,#akvid,#modal .ov,#gd-askw'))return;
+    if(FXBUSY||FXQ.length||document.querySelector('#dicefx,#cardfx,#evfx,#akfx,#akvid,#grfx,#modal .ov,#gd-askw'))return;
     GDASKED=G;gdAsk();
   }catch(e){}
 },900);
@@ -6817,7 +6852,7 @@ function backStep(){
       if(guards>0){const n=guards;guards=0;try{history.go(-n)}catch(e){}}}
   });
 })();
-window.__g={endRound,SFX,fxSnd,kwFx,diceFx,eventFx,cardFx,fxCard,fxAnchor,randomPrep,sideFromPrep,runDuel,stats,outStorm,outAt,outOf,ponN,spawnMonster,startMonsterFight,monsterReward,dkCine:(k,o)=>{DK.cq=DK.cq||[];DK.cq.push(Object.assign({k},o||{}));dkPlay()},navOpen,navPlan,navBfs,dkRender,dkReveal,get DK(){return DK},galOpen,galClose,galHtml,botMove:()=>botMove(),huntPhase,huntResolve,dealAsk,dealOpen,dealCan,pactOn,duelSpect,akFx,smokerArrest,smokerDeliver,runDuel,akainuPhase,actions:()=>actions(),setGuard:(a,u)=>{GUARD_A3=a;GUARD_U3=u},startTutorial,tutIntro,backStep,devInfo,logRec,logCsv,logLocalGet,logSave,logLoad,hallHtml,LOGH,giveTask,stats,statRoom,completeTask,checkTasks,eventFx,SFX,useTre,akScene,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode,tb:meta.tb});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,startPvp,guardFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
+window.__g={grFx,fxGuard,endRound,SFX,fxSnd,kwFx,diceFx,eventFx,cardFx,fxCard,fxAnchor,randomPrep,sideFromPrep,runDuel,stats,outStorm,outAt,outOf,ponN,spawnMonster,startMonsterFight,monsterReward,dkCine:(k,o)=>{DK.cq=DK.cq||[];DK.cq.push(Object.assign({k},o||{}));dkPlay()},navOpen,navPlan,navBfs,dkRender,dkReveal,get DK(){return DK},galOpen,galClose,galHtml,botMove:()=>botMove(),huntPhase,huntResolve,dealAsk,dealOpen,dealCan,pactOn,duelSpect,akFx,smokerArrest,smokerDeliver,runDuel,akainuPhase,actions:()=>actions(),setGuard:(a,u)=>{GUARD_A3=a;GUARD_U3=u},startTutorial,tutIntro,backStep,devInfo,logRec,logCsv,logLocalGet,logSave,logLoad,hallHtml,LOGH,giveTask,stats,statRoom,completeTask,checkTasks,eventFx,SFX,useTre,akScene,NET,STREAM,hashState,encMove,doMove,netWatch,streamLeave,gen:(meta,n)=>{window.__nor=true;seedv=meta.seed|0;newGame({players:meta.players.map(p=>({name:p.name,ch:p.ch,sea:p.sea})),wseed:meta.wseed,mode:meta.mode,tb:meta.tb});const out=[];for(let i=0;i<n&&G.winner==null;i++){const m=botMove();if(!m)break;doMove(m,true);out.push(encMove(m,hashState()))}window.__nor=false;return out},devInfo,ADJ,akPath,actions,link,endTurn,beginTurn,lavaRain,akainuPhase,fxAkainu,kizaruBlind,fujiMarks,admDefeat,startNpcFight,startPvp,guardFight,ADMS,statLine,achCheck,statsHtml,ACH,reactSub,reactSend,
   botMove,bGoal,bPrep,bPrepFor,bTurn,botSchedule,bStepToward,bMap,bFreePons,bUnknown,
   netJoin,netRollOrder,netStart,setSeat,genWorld,worldDist,segX,MAPD0:BASEN,setWorld,worldPreviewHtml,render:()=>render(),setViewer:v=>{UI.viewer=v},seed:n=>{seedv=n|0},noRender:v=>{window.__nor=v},
   start:(n,seed)=>{if(seed!=null)seedv=seed|0;const names=['A','B','C','D'].slice(0,n);const chs=shuffle(Object.keys(CH));const seas=shuffle(SEAK.slice());newGame({players:names.map((nm,i)=>({name:nm,ch:chs[i],sea:seas[i]}))});},
