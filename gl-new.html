@@ -1417,6 +1417,7 @@ body.tutor #app{padding-top:110px}
 #deck .dkdolf{position:absolute;z-index:3;height:auto;pointer-events:none;animation:dkdolf 3.2s ease-in-out infinite;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
 #deck .dkpenb{border-color:rgba(160,225,255,.7);color:#cdeeff}
 #deck .dkship{position:absolute}
+#deck .dkship .dkcat{position:absolute;left:54%;top:46%;width:27%;height:auto;pointer-events:none;filter:drop-shadow(0 0 2px rgba(200,225,255,.95)) drop-shadow(0 0 6px rgba(150,200,255,.6))}
 #deck .dkship .dkpeng{position:absolute;left:37%;top:50%;width:27%;height:auto;animation:none;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
 
 /* торговый галеон */
@@ -2222,7 +2223,7 @@ function kidDuel(p,loc){
   let k,q;
   if(p.ch==='kid'){k=p;q=G.players.find(x=>x!==p&&x.loc===loc&&x.jail<=0)}
   else{k=G.players.find(x=>x.ch==='kid'&&x!==p&&x.loc===loc&&x.jail<=0);q=p}
-  if(!k||!q||pactOn(k.i,q.i))return;
+  if(!k||!q||pactOn(k.i,q.i)||q.cat>0)return;
   if(k===P())G.tm.pvp++;
   if(evT(k)&&evT(k).def.k==='bribe')cancelTask(k,'дуэль с игроком');
   log(pname(k)+' и '+q.name+' оказываются на одном острове: Чилд сразу нападает!');
@@ -2250,6 +2251,7 @@ function arrive(p,loc,o,cb){
   tokenFx(p,loc,t,cb);
 }
 function tokenFx(p,loc,t,cb){
+  if(p.cat>0&&(t==='dozor'||t==='battle'||t==='jail')){log('🐈 '+pname(p)+': кот сидит на корабле, '+(t==='dozor'?'дозорные':t==='battle'?'боссы':'стража')+' не трогают. Бой пропущен.');cb&&cb();return}
   if((t==='dozor'||t==='battle')&&G.duels>=3){
     const back=p.prev;log(pname(p)+': лимит 3 дуэли за ход исчерпан, бой не начинается — возврат на '+locName(back)+'.');
     p.loc=back;if(back!=='Z'&&back!=='L')p.sea=seaOf(back);cb&&cb();return}
@@ -2365,12 +2367,14 @@ function galRoll(p){G.gal=null;if(G.coop||G.tut)return;if(d(100)<=22){G.gal={who
 function penRoll(p){G.pen=null;if(G.coop||G.tut)return;if(d(100)<=15){G.pen={who:p.i,done:false};log('🐧 Где-то рядом слышен странный писк… Присмотрись к воде.')}}
 // дельфины: ~15% на ход игрока (не одновременно с пингвинами); нажать = +10 Берри и дельфины плывут рядом 3 хода
 function dolRoll(p){G.dol=null;if(G.coop||G.tut||G.pen)return;if(d(100)<=15){G.dol={who:p.i,done:false};log('🐬 Где-то рядом слышен плеск и свист… Присмотрись к воде.')}}
-function startTurnMain(){const p=P();galRoll(p);penRoll(p);dolRoll(p);if(p.ch==='zoro'&&p.zfog)return resolveFog(p,incomeRoll);incomeRoll()}
+// кот: ~15% на ход игрока (не одновременно с пингвинами и дельфинами); взять = кот на корабле 3 хода: никто не вызывает на дуэль, База Дозора, Тюрьма и Поле битвы пропускаются без боя
+function catRoll(p){G.cat=null;if(G.coop||G.tut||G.pen||G.dol)return;if(d(100)<=15){G.cat={who:p.i,done:false};log('🐈 Где-то рядом слышно тихое мяуканье… Присмотрись к воде.')}}
+function startTurnMain(){const p=P();galRoll(p);penRoll(p);dolRoll(p);catRoll(p);if(p.ch==='zoro'&&p.zfog)return resolveFog(p,incomeRoll);incomeRoll()}
 function endTurn(){
   if(G.winner!=null)return;
   marchCheck(P());
   if(P().task&&P().task.armed)P().task.armed=false;
-  G.pending=null;G.gal=null;G.pen=null;G.dol=null;if(P().pengu>0)P().pengu--;if(P().dolph>0)P().dolph--;
+  G.pending=null;G.gal=null;G.pen=null;G.dol=null;G.cat=null;if(P().pengu>0)P().pengu--;if(P().dolph>0)P().dolph--;if(P().cat>0)P().cat--;
   G.cur++;
   if(G.cur>=G.players.length){G.cur=0;endRound(()=>akainuPhase(beginTurn))}else beginTurn();
 }
@@ -3440,7 +3444,7 @@ function actions(){
     }
   }
   // duel
-  for(const q of G.players)if(q!==p&&q.loc===p.loc&&(q.jail<=0||q.ch==='kid')&&!pactOn(p.i,q.i))add('duel','Вызвать на дуэль: '+pname(q)+(evT(p)&&evT(p).def.k==='bribe'?' (отменит задание)':''),()=>{G.ap-=1;G.tm.pvp++;if(evT(p)&&evT(p).def.k==='bribe')cancelTask(p,'дуэль с игроком');log(p.name+' вызывает '+q.name+' на дуэль.');startPvp(p.i,q.i)},ap<1||G.duels>=3);
+  for(const q of G.players)if(q!==p&&q.loc===p.loc&&!(q.cat>0)&&(q.jail<=0||q.ch==='kid')&&!pactOn(p.i,q.i))add('duel','Вызвать на дуэль: '+pname(q)+(evT(p)&&evT(p).def.k==='bribe'?' (отменит задание)':''),()=>{G.ap-=1;G.tm.pvp++;if(evT(p)&&evT(p).def.k==='bribe')cancelTask(p,'дуэль с игроком');log(p.name+' вызывает '+q.name+' на дуэль.');startPvp(p.i,q.i)},ap<1||G.duels>=3);
   // flags
   const loc=p.loc;
   const here=loc!=='Z'&&loc!=='L';
@@ -3515,6 +3519,7 @@ function actions(){
     if(!G.guestBought)add('market','⛵ Галеон: нанять гостя ('+gp+' Берри)',()=>{pay(p,gp);G.tm.buy++;G.guestBought=true;G.gal.done=true;const c=card('tre',{key:G.guest});p.tre.push(c);fxCard(p,c);logP(p.i,p.name+' нанимает у галеона гостя: «'+TRE[c.key].n+'».',p.name+' нанимает у галеона гостя.')},p.berries<gp||p.tre.length>=3);
   }
   if(G.pen&&G.pen.who===p.i&&!G.pen.done&&!G.coop){add('market','🐧 Пингвины: поздороваться (+10 Берри)',()=>{p.berries+=10;G.pen.done=true;p.pengu=3;log('🐧 '+p.name+' здоровается с пингвинами: +10 Берри. Один пингвин садится на корабль на 3 хода.')},false);A[A.length-1].far=true}
+  if(G.cat&&G.cat.who===p.i&&!G.cat.done&&!G.coop){add('market','🐈 Кот: взять на корабль (никто не вызовет на дуэль)',()=>{G.cat.done=true;p.cat=3;log('🐈 '+p.name+' берёт на корабль чёрного кота. 3 хода никто не может вызвать его на дуэль, а База Дозора, Тюрьма и Поле битвы проходятся без боя.')},false);A[A.length-1].far=true}
   if(G.dol&&G.dol.who===p.i&&!G.dol.done&&!G.coop){add('market','🐬 Дельфины: поплавать вместе (+10 Берри)',()=>{p.berries+=10;G.dol.done=true;p.dolph=3;log('🐬 '+p.name+' играет с дельфинами: +10 Берри. Стая плывёт рядом с кораблём 3 хода.')},false);A[A.length-1].far=true}
   if(p.ltask){
     const lt2=p.ltask,kk=lt2.def.k,atL=p.loc==='L';
@@ -5147,7 +5152,7 @@ function dkRender(){
   const st=id=>[id,dkArt(id),G.flags[id],playersAt(id).map(q=>q.i).join(''),G.akainu&&G.akainu.loc===id?1:0,G.monster&&G.monster.loc===id?1:0,outAt(id)?'o'+outAt(id).pon.length:'',(G.hunt||[]).some(h=>h.loc===id)?1:0,picks.includes(id)?1:0,G.dead&&G.dead[id]?1:0].join(':');
   let plan=navPlan(p);if(plan&&plan.done){UI.nav.arrived=plan.to;UI.nav.to=null;plan=null}else if(UI.nav&&UI.nav.to)UI.nav.arrived=null;
   const navSig=(UI.nav&&(UI.nav.to||'')+'/'+(UI.nav.arrived||''))+':'+(plan&&plan.steps?plan.steps.map(x=>x.n+x.risk.join('')).join(','):'');
-  const wv=(DK.wv&&Date.now()<DK.wv.until&&DK.wv.wk===wk)?DK.wv:null,kwOn=!!(DK.kw&&Date.now()<DK.kw),sig=[wv?'wv':'',p.ch||'',G.fire?'f'+G.fire.loc:'',p.loc,G.ap+'/'+G.apMax,ACTS.map(a=>a.g+a.label+(a.dis?1:0)).join('|'),navSig,kwOn?'kw':'',DK.dark?1:0,DK.lrise?1:0,(DK.flhold?[...DK.flhold].join(','):''),W,H,wk,p.i,p.loc,dkArt(p.loc),mine?1:0,bt?'b':'',(G.gal?G.gal.who+':'+(G.gal.done?1:0)+':'+(DK.galOpen?1:0):''),(G.pen?G.pen.who+':'+(G.pen.done?1:0):''),p.pengu|0,(G.dol?G.dol.who+':'+(G.dol.done?1:0):''),p.dolph|0,G.zun&&G.zun.cell,neigh.concat([...SKY]).map(st).join('|'),G.flags[p.loc],playersAt(p.loc).length].join('#');
+  const wv=(DK.wv&&Date.now()<DK.wv.until&&DK.wv.wk===wk)?DK.wv:null,kwOn=!!(DK.kw&&Date.now()<DK.kw),sig=[wv?'wv':'',p.ch||'',G.fire?'f'+G.fire.loc:'',p.loc,G.ap+'/'+G.apMax,ACTS.map(a=>a.g+a.label+(a.dis?1:0)).join('|'),navSig,kwOn?'kw':'',DK.dark?1:0,DK.lrise?1:0,(DK.flhold?[...DK.flhold].join(','):''),W,H,wk,p.i,p.loc,dkArt(p.loc),mine?1:0,bt?'b':'',(G.gal?G.gal.who+':'+(G.gal.done?1:0)+':'+(DK.galOpen?1:0):''),(G.pen?G.pen.who+':'+(G.pen.done?1:0):'',G.cat?'c'+G.cat.who+':'+(G.cat.done?1:0):''),p.pengu|0,p.cat|0,(G.dol?G.dol.who+':'+(G.dol.done?1:0):''),p.dolph|0,G.zun&&G.zun.cell,neigh.concat([...SKY]).map(st).join('|'),G.flags[p.loc],playersAt(p.loc).length].join('#');
   const pl=DK.pl||{};const moves=[];for(const q of G.players){if(q!==p&&pl[q.i]&&pl[q.i]!==q.loc)moves.push({q,from:pl[q.i],to:q.loc})}DK.pl={};for(const q of G.players)DK.pl[q.i]=q.loc;
   if(sig===DK.sig)return;
   const fresh=DK.sig.split('#')[0]!==p.loc;DK.sig=sig;
@@ -5214,15 +5219,16 @@ function dkRender(){
   if(G.gal&&G.gal.who===p.i&&!G.gal.done){const gw=Math.min(W*0.28,130),gh=gw*673/760,wl=shTop+shH*0.46,gx=W*0.97-gw;
     h+='<button class="dkgal" data-galopen="1" style="left:'+gx.toFixed(0)+'px;top:'+(wl-gh*0.93).toFixed(0)+'px;width:'+gw.toFixed(0)+'px" aria-label="Торговый галеон"><img src="assets/deck/galleon.webp" alt=""></button>'+(bt?'':'<button class="dkgalb" data-galopen="1" style="left:'+(gx+gw*0.5).toFixed(0)+'px;top:'+(wl+2).toFixed(0)+'px">⛵ Торговец</button>')}
   {const eg=(k,img,wMax,ar,right)=>{const w=Math.min(W*0.085,wMax),hh=w*ar,wl=shTop+shH*0.5,sh=(((G.turnNo|0)*37+(p.i|0)*11)%100)/100,x=right?W*0.58+sh*W*0.3:W*0.06+sh*W*0.26;
-      return '<button class="dkpen dkegg" data-'+k+'="1" style="left:'+x.toFixed(0)+'px;top:'+(wl-hh*0.8-sh*shH*0.18).toFixed(0)+'px;width:'+w.toFixed(0)+'px" aria-label="'+(k==='penpick'?'Пингвины':'Дельфины')+'"><img src="assets/deck/'+img+'" alt=""></button>'};
+      return '<button class="dkpen dkegg" data-'+k+'="1" style="left:'+x.toFixed(0)+'px;top:'+(wl-hh*0.8-sh*shH*0.18).toFixed(0)+'px;width:'+w.toFixed(0)+'px" aria-label="'+(k==='penpick'?'Пингвины':k==='catpick'?'Кот':'Дельфины')+'"><img src="assets/deck/'+img+'" alt=""></button>'};
     if(G.pen&&G.pen.who===p.i&&!G.pen.done)h+=eg('penpick','penguins.webp',38,481/900,false);
-    if(G.dol&&G.dol.who===p.i&&!G.dol.done)h+=eg('dolpick','dolphins.webp',40,329/640,true)}
+    if(G.dol&&G.dol.who===p.i&&!G.dol.done)h+=eg('dolpick','dolphins.webp',40,329/640,true);
+    if(G.cat&&G.cat.who===p.i&&!G.cat.done)h+=eg('catpick','catboat.webp',46,760/1250,true)}
   if(p.dolph>0){const fw=Math.min(W*0.34,shW*1.02);h+='<img class="dkdolf" src="assets/deck/dolphins-back.webp" alt="" style="left:'+(W/2-fw/2).toFixed(0)+'px;top:'+(shTop+shH*0.8).toFixed(0)+'px;width:'+fw.toFixed(0)+'px">'}
-  if(mine&&!bt){const ht=(G.pen&&G.pen.who===p.i&&!G.pen.done)?'🐧 Где-то рядом слышен странный писк… Присмотрись к воде.':(G.dol&&G.dol.who===p.i&&!G.dol.done)?'🐬 Где-то рядом слышен плеск и свист… Присмотрись к воде.':'';
+  if(mine&&!bt){const ht=(G.pen&&G.pen.who===p.i&&!G.pen.done)?'🐧 Где-то рядом слышен странный писк… Присмотрись к воде.':(G.dol&&G.dol.who===p.i&&!G.dol.done)?'🐬 Где-то рядом слышен плеск и свист… Присмотрись к воде.':(G.cat&&G.cat.who===p.i&&!G.cat.done)?'🐈 Где-то рядом слышно тихое мяуканье… Присмотрись к воде.':'';
     if(ht)h+='<div class="dkegght" style="right:'+(W*0.04).toFixed(0)+'px;top:'+(H*0.2).toFixed(0)+'px;max-width:'+(W*0.5).toFixed(0)+'px">'+ht+'</div>'}
   const sd=DK_SHIPS[p.ch];let sx=W/2-shW/2,sy=shTop,sw=shW,sim='assets/deck/ship.webp';
   if(sd){const nh=shH*sd[1];sw=nh*sd[0]/900;sx=W/2-sw/2;sy=shTop+shH-nh+(sd[2]||0)*nh;sim='assets/deck/ships/'+p.ch+'.webp'}
-  h+='<div class="dkship wx-'+wk+'" style="left:'+sx.toFixed(0)+'px;top:'+sy.toFixed(0)+'px;width:'+sw.toFixed(0)+'px"><img src="'+sim+'" alt="">'+(p.pengu>0?'<img class="dkpeng" src="assets/deck/penguin1.webp" alt="">':'')+'</div>';
+  h+='<div class="dkship wx-'+wk+'" style="left:'+sx.toFixed(0)+'px;top:'+sy.toFixed(0)+'px;width:'+sw.toFixed(0)+'px"><img src="'+sim+'" alt="">'+(p.pengu>0?'<img class="dkpeng" src="assets/deck/penguin1.webp" alt="">':'')+(p.cat>0?'<img class="dkcat" src="assets/deck/cat.webp" alt="">':'')+'</div>';
   {const here=playersAt(p.loc).filter(q=>q!==p);here.forEach((q,k)=>{const sh=shH*0.38,sw=sh*360/294;const mv=moves.find(m=>m.q===q&&!fresh);h+='<img class="dkopp fl'+(mv?' arr':'')+'" src="assets/deck/opp'+(q.i%6)+'.webp" alt="" style="left:'+(W*0.97-sw-k*sw*0.5).toFixed(0)+'px;top:'+(shTop+shH*0.62-sh+k*8).toFixed(0)+'px;width:'+sw.toFixed(0)+'px">'})}
   // корабли соперников, которые только что сходили, проплывают между островами
   if(!fresh){const pos=id=>{const o=isl.find(x=>x.id===id);if(o){const sh=o.w*(o.far?0.26:0.32),sw=sh*360/294,fl=o.cx>W/2,l=o.cx+(fl?-o.w*0.12-sw:o.w*0.12);return{x:l+sw/2,y:o.y,s:sh}}if(id===p.loc){const sh=shH*0.38,sw=sh*360/294;return{x:W*0.97-sw/2,y:shTop+shH*0.62,s:sh}}return null};
@@ -5370,6 +5376,7 @@ document.addEventListener('click',e=>{
   if(e.target.closest&&e.target.closest('[data-dkmap]')){try{localStorage.setItem('nv_deck','0')}catch(_){}DK.sig='';render();return}
   if(e.target.closest&&e.target.closest('[data-galopen]')){DK.galOpen=!DK.galOpen;DK.sig='';render();return}
   if(e.target.closest&&e.target.closest('[data-dolpick]')){if(!(DK.z.s>=1.5)||botTurnLock())return;const i=ACTS.findIndex(a=>/Дельфины/.test(a.label)&&!a.dis);if(i>=0)submit({t:'a',i});return}
+  if(e.target.closest&&e.target.closest('[data-catpick]')){if(!(DK.z.s>=1.5)||botTurnLock())return;const i=ACTS.findIndex(a=>/Кот:/.test(a.label)&&!a.dis);if(i>=0)submit({t:'a',i});return}
   if(e.target.closest&&e.target.closest('[data-penpick]')){if(!(DK.z.s>=1.5)||botTurnLock())return;const i=ACTS.findIndex(a=>/Пингвины/.test(a.label)&&!a.dis);if(i>=0)submit({t:'a',i});return}
   if(e.target.closest&&e.target.closest('[data-galclose]')){DK.galOpen=false;DK.sig='';render();return}
   if(e.target.closest&&e.target.closest('[data-dkon]')){try{localStorage.setItem('nv_deck','1')}catch(_){}DK.sig='';render();return}
