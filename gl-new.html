@@ -438,9 +438,9 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 #splash.ab{background:#05060a;--cd:2.2s}
 #splash.ab .abbg{position:absolute;inset:-6%;background:url(assets/abyss.webp) 50% 40%/cover;filter:blur(18px) brightness(.45) saturate(1.2)}
 #splash.ab .abp{position:absolute;left:0;top:0;width:1408px;height:768px;transform-origin:0 0;-webkit-mask:linear-gradient(#000 82%,transparent);mask:linear-gradient(#000 82%,transparent)}
-#splash.ab .abz{position:absolute;inset:0;transform-origin:700px 440px;animation:abzm 26s ease-in-out infinite alternate;transition:transform 1.15s cubic-bezier(.55,0,.9,.4),opacity 1s}
+#splash.ab .abz{position:absolute;inset:0;transform-origin:700px 440px;animation:abzm 26s ease-in-out infinite alternate;transition:transform 1.5s cubic-bezier(.4,.05,.3,1),opacity 1.2s ease-in .2s,filter 1.4s ease-in}
 @keyframes abzm{from{transform:scale(1)}to{transform:scale(1.1)}}
-#splash.ab.dive .abz{animation:none;transform:scale(11);opacity:.2}
+#splash.ab.dive .abz{transform:scale(1.75);opacity:0;filter:blur(7px) brightness(1.5)}
 #splash.ab .abz>img{position:absolute;inset:0;width:100%;height:100%;display:block;max-width:none}
 #splash.ab .abz>*{pointer-events:none}
 #splash.ab .abcol{position:absolute;left:585px;top:60px;width:250px;height:540px;mix-blend-mode:screen;opacity:.55;-webkit-mask:linear-gradient(90deg,transparent,#000 32%,#000 68%,transparent),linear-gradient(transparent,#000 14%,#000 80%,transparent);-webkit-mask-composite:source-in;mask:linear-gradient(90deg,transparent,#000 32%,#000 68%,transparent),linear-gradient(transparent,#000 14%,#000 80%,transparent);mask-composite:intersect;background:repeating-linear-gradient(112deg,transparent 0 15px,rgba(255,150,50,.75) 15px 21px,transparent 21px 44px);animation:abcol 1.6s linear infinite}
@@ -465,7 +465,7 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 #splash.ab .wtc{position:absolute;left:0;right:0;bottom:7%;padding:0 18px}
 #splash.ab .spt{font-size:clamp(30px,9.4vw,76px);letter-spacing:.14em;white-space:nowrap;text-align:center}
 #splash.ab .sps2{color:#c9bde0;text-shadow:0 2px 14px #000}
-#splash.ab .abwh{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .45s .7s ease-in}
+#splash.ab .abwh{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .6s .75s ease-in}
 #splash.ab.dive .abwh{opacity:1}
 #splash.ab.dive .wtc,#splash.ab.dive .spf,#splash.ab.dive .abshade{opacity:0;transition:opacity .4s}
 @media(prefers-reduced-motion:reduce){#splash *{animation-duration:.01s!important;animation-delay:0s!important}}
@@ -6980,7 +6980,7 @@ window.__g={grFx,fxGuard,endRound,SFX,fxSnd,kwFx,diceFx,eventFx,cardFx,fxCard,fx
   fit();addEventListener('resize',fit);
   let gone=false;
   const iv=setInterval(()=>{const e=o.querySelector('.spo');if(!e)return;if(PRES.ok){e.hidden=false;e.querySelector('b').textContent=PRES.n}},800);
-  const go=()=>{if(gone||!o.classList.contains('rdy'))return;gone=true;clearInterval(iv);try{SFX.unlock();SFX.play('splash',0)}catch(e){}o.classList.add('dive');setTimeout(()=>{o.classList.add('out');setTimeout(()=>{o.remove();removeEventListener('resize',fit)},700)},1250)};
+  const go=()=>{if(gone||!o.classList.contains('rdy'))return;gone=true;clearInterval(iv);try{SFX.unlock();SFX.play('splash',0)}catch(e){}const z=o.querySelector('.abz');try{const t=getComputedStyle(z).transform;z.style.animation='none';z.style.transform=t==='none'?'scale(1)':t;void z.offsetWidth;z.style.transform=''}catch(e){}o.classList.add('dive');setTimeout(()=>{o.classList.add('out');setTimeout(()=>{o.remove();removeEventListener('resize',fit)},700)},1550)};
   setTimeout(()=>o.classList.add('rdy'),3200);
   o.addEventListener('click',go);
   document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go()});
