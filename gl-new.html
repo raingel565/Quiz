@@ -1827,6 +1827,7 @@ const SFX=(()=>{
   function loadTarai(){if(TB||TBP||!ctx)return;TBP=true;try{loadSnd(TARAI_MP3,b=>{TB=b},()=>{TBP=false})}catch(e){TBP=false}}
   function loadStorm(){if(SB||SBP||!ctx)return;SBP=true;try{loadSnd(STORM_MP3,b=>{SB=b},()=>{SBP=false})}catch(e){SBP=false}}
   function playStorm(t,fallback,tar){const B=tar===8?DL:tar===7?PG:tar===6?SL:tar===5?DB:tar===4?BL:tar===3?ZN:tar===2?CB:tar?TB:SB;if(!B){tar===8?loadDolph():tar===7?loadPengu():tar===6?loadSail():tar===5?loadDice():tar===4?loadBelt():tar===3?loadZun():tar===2?loadStill():tar?loadTarai():loadStorm();fallback(t);return}if(tar<5&&SV){try{SV.stop()}catch(e){}SV=null}const s=ctx.createBufferSource();s.buffer=B;const g=ctx.createGain();g.gain.value=1.15;s.connect(g);g.connect(master);s.start(t);if(tar<5){SV=s;s.onended=()=>{if(SV===s)SV=null}}}
+  let SKB=null,SKP=false;function loadSeaKing(){if(SKB||SKP||!ctx)return;SKP=true;try{loadSnd('assets/sfx_seaking.mp3?v=1',b=>{SKB=b},()=>{SKP=false})}catch(e){SKP=false}}
   function loadSnd(url,ok,fail){fetch(url).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(ab=>{const p=ctx.decodeAudioData(ab,ok,fail);if(p&&p.catch)p.catch(fail)}).catch(fail)}
   function loadBuster(){if(XB||XBP||!ctx)return;XBP=true;try{loadSnd(BUSTER_MP3,b=>{XB=b},()=>{XBP=false})}catch(e){XBP=false}}
   let FWB=null,FWBP=false,KB=null,KBP=false,AB=null,ABP=false,AV=null,NB=null,NBP=false,NV=null,OB=null,OBP=false,OV=[],HB=null,HBP=false,HV=null,KV=null;
@@ -1843,7 +1844,7 @@ const SFX=(()=>{
   function loadWtf(){if(WB||WBP||!ctx)return;WBP=true;try{loadSnd(WTF_MP3,b=>{WB=b},()=>{WBP=false})}catch(e){WBP=false}}
   function loadEnemy(){if(EB||EBP||!ctx)return;EBP=true;try{loadSnd(ENEMY_MP3,b=>{EB=b},()=>{EBP=false})}catch(e){EBP=false}}
   try{on=localStorage.getItem('gl_snd')!=='0'}catch(e){}
-  const init=()=>{if(ctx)return ctx;try{const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;ctx=new A();master=ctx.createGain();master.gain.value=.55;master.connect(ctx.destination);loadEnemy();loadWtf();loadZoro();setTimeout(loadStorm,400);setTimeout(loadTarai,700);setTimeout(loadStill,1000);setTimeout(loadZun,1300);setTimeout(loadBelt,1600);setTimeout(loadDice,1900);setTimeout(loadSail,2200);setTimeout(loadPengu,2400);setTimeout(loadDolph,2600);setTimeout(loadLuffy,1500);setTimeout(loadAce,2200);setTimeout(loadFire,2600);setTimeout(loadSanji,2800);setTimeout(loadOlesya,3400);setTimeout(loadHancock,4000);loadLaw();loadBuster()}catch(e){ctx=null}return ctx};
+  const init=()=>{if(ctx)return ctx;try{const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;ctx=new A();setTimeout(()=>{try{loadSeaKing()}catch(e){}},1500);master=ctx.createGain();master.gain.value=.55;master.connect(ctx.destination);loadEnemy();loadWtf();loadZoro();setTimeout(loadStorm,400);setTimeout(loadTarai,700);setTimeout(loadStill,1000);setTimeout(loadZun,1300);setTimeout(loadBelt,1600);setTimeout(loadDice,1900);setTimeout(loadSail,2200);setTimeout(loadPengu,2400);setTimeout(loadDolph,2600);setTimeout(loadLuffy,1500);setTimeout(loadAce,2200);setTimeout(loadFire,2600);setTimeout(loadSanji,2800);setTimeout(loadOlesya,3400);setTimeout(loadHancock,4000);loadLaw();loadBuster()}catch(e){ctx=null}return ctx};
   const tone=(t0,f,d,type,v,f2)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t0);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+d);g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(v||.15,t0+.012);g.gain.exponentialRampToValueAtTime(0.0001,t0+d);o.connect(g);g.connect(master);o.start(t0);o.stop(t0+d+.05)};
   let nb=null;const nbuf=()=>{if(nb)return nb;nb=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);const a=nb.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1;return nb};
   const noise=(t0,d,v,ft,f0,f1,q)=>{const s=ctx.createBufferSource();s.buffer=nbuf();const fl=ctx.createBiquadFilter();fl.type=ft||'bandpass';fl.frequency.setValueAtTime(f0,t0);if(f1)fl.frequency.exponentialRampToValueAtTime(f1,t0+d);fl.Q.value=q||1;const g=ctx.createGain();g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(v,t0+Math.min(.04,d/3));g.gain.exponentialRampToValueAtTime(0.0001,t0+d);s.connect(fl);fl.connect(g);g.connect(master);s.start(t0,Math.random());s.stop(t0+d+.05)};
@@ -1867,6 +1868,7 @@ const SFX=(()=>{
     cardget:t=>{[659,880,1175].forEach((f,i)=>tone(t+i*.08,f,.35,'sine',.13))},
     splash:t=>{noise(t,1.8,.2,'lowpass',260,1400);tone(t+.04,880,1.3,'sine',.16);tone(t+.04,1320,1,'sine',.08);tone(t+.12,1760,.8,'sine',.05);tone(t,110,.9,'sine',.12,70)},
     akent:t=>{tone(t,46,2.6,'sawtooth',.2,28);tone(t,92,2.2,'square',.07,50);noise(t,2.4,.3,'lowpass',260,70);noise(t+1.5,1.4,.22,'bandpass',2400,500,1.2);tone(t+1.55,58,1.3,'sine',.55,30);tone(t+1.6,180,.5,'sawtooth',.1,60);tone(t+2.5,330,.9,'triangle',.07,320)},
+    seaking:t=>{if(!SKB){loadSeaKing();tone(t,440,.18,'triangle',.14);tone(t+.2,660,.28,'triangle',.14);return}const s=ctx.createBufferSource();s.buffer=SKB;const g=ctx.createGain();g.gain.value=1.3;s.connect(g);g.connect(master);s.start(t)},
     alert:t=>{tone(t,440,.18,'triangle',.14);tone(t+.2,660,.28,'triangle',.14)},
     result:t=>{tone(t,520,.3,'sine',.14,780);tone(t+.12,780,.35,'sine',.1)},
     coin:t=>{tone(t,1320,.08,'square',.06);tone(t+.08,1760,.25,'square',.06)},
@@ -2220,7 +2222,7 @@ function arrive(p,loc,o,cb){
   if(G.grav&&G.grav[loc]&&!o.quiet&&G.tm&&!G.tm.gvd&&p.ch!=='smoker'){G.tm.gvd=true;p.skip=(p.skip||0)+1;log(pname(p)+' попал под гравитацию Багиро на '+locName(loc)+' и пропустит следующий ход.');fxEvent({banner:true,tone:'bad',icon:'⬇',title:'Гравитация!',desc:pname(p)+' пропустит следующий ход',auto:2600})}
   if(G.akainu&&G.akainu.loc===loc&&G.akainu.stun<=0&&!o.noBoss&&p.ch!=='smoker'){const AD=adm();log(pname(p)+' встретил на '+locName(loc)+' всадника '+AD.short+'!');fxSnd('enemy');fxEvent({banner:true,tone:'bad',icon:'☠',title:'Встреча с '+AD.short+'!',desc:pname(p)+' · атака '+AD.a+' / уклонение '+AD.u,auto:2800});startNpcFight(p,G.adm||'akainu',cb);return}
   if(G.monster&&G.monster.loc===loc&&p.dolph>0&&!o.quiet&&!o.noBoss&&p.jail<=0&&G.tm&&!G.tm.mon&&p===G.players[G.cur]){G.tm.mon=1;log('🐬 '+pname(p)+': дельфины проводят корабль мимо Морского короля на '+locName(loc)+'.')}
-  if(G.monster&&G.monster.loc===loc&&!o.quiet&&!o.noBoss&&p.ch!=='smoker'&&p.jail<=0&&G.tm&&!G.tm.mon&&p===G.players[G.cur]){G.tm.mon=1;log(pname(p)+' встретил на '+locName(loc)+' Морского короля!');fxSnd('enemy');fxEvent({banner:true,tone:'bad',icon:'🐉',title:'Встреча с Морским королём!',desc:pname(p)+' · атака '+MONSTER.a+' / уклонение '+MONSTER.u,auto:2800});startMonsterFight(p,ok=>{if(ok&&t)tokenFx(p,loc,t,cb);else cb&&cb()});return}
+  if(G.monster&&G.monster.loc===loc&&!o.quiet&&!o.noBoss&&p.ch!=='smoker'&&p.jail<=0&&G.tm&&!G.tm.mon&&p===G.players[G.cur]){G.tm.mon=1;log(pname(p)+' встретил на '+locName(loc)+' Морского короля!');fxSnd('enemy');fxEvent({sfx:'seaking',banner:true,tone:'bad',icon:'🐉',title:'Встреча с Морским королём!',desc:pname(p)+' · атака '+MONSTER.a+' / уклонение '+MONSTER.u,auto:2800});startMonsterFight(p,ok=>{if(ok&&t)tokenFx(p,loc,t,cb);else cb&&cb()});return}
   {const og=outAt(loc);if(og&&og.o!==p.i&&!o.quiet&&!o.noBoss&&p.ch!=='smoker'&&p.jail<=0&&p===G.players[G.cur]){outGate(p,loc,ok=>{if(ok&&t&&!o.quiet)tokenFx(p,loc,t,cb);else cb&&cb()});return}}
   if(o.quiet||!t){cb&&cb();return}
   tokenFx(p,loc,t,cb);
@@ -2514,7 +2516,7 @@ function spawnMonster(){
   if(!c.length)return;
   const loc=c[d(c.length)-1];G.monster={loc};
   log('🐉 Калм Белт: из глубины всплыл Морской король. Он караулит '+locName(loc)+' (атака '+MONSTER.a+', уклонение '+MONSTER.u+').');
-  fxEvent({banner:true,tone:'bad',icon:'🐉',title:'Морской король!',desc:'Он караулит '+locName(loc)+' до конца Калм Белта',auto:3200});
+  fxEvent({sfx:'seaking',banner:true,tone:'bad',icon:'🐉',title:'Морской король!',desc:'Он караулит '+locName(loc)+' до конца Калм Белта',auto:3200});
 }
 function monsterReward(p){
   const gold=()=>{p.berries+=100;log(p.name+' получает за победу 100 Берри.')};
