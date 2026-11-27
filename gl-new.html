@@ -1350,6 +1350,11 @@ body.tutor #app{padding-top:110px}
 #dkcine .dkbars.h{flex-direction:column;padding:0;justify-content:space-around;top:0}
 #dkcine .dkbars.h i{width:100%;height:2.6%;transform:translateX(-105%)}
 #dkcine .dkdim{position:absolute;inset:0;background:rgba(5,4,10,.0)}
+#deck .dkfw{max-width:none;pointer-events:none;transform-origin:50% 92%;animation:dkfwv 2.3s ease-in-out infinite alternate}
+#deck .dkfw.bk{-webkit-mask:linear-gradient(#000 38%,transparent 48%);mask:linear-gradient(#000 38%,transparent 48%)}
+#deck .dkfw.fr{-webkit-mask:linear-gradient(transparent 38%,#000 48%);mask:linear-gradient(transparent 38%,#000 48%)}
+@keyframes dkfwv{from{transform:scale(1,.97) skewX(-.6deg)}to{transform:scale(1.015,1.04) skewX(.6deg)}}
+#deck .dkfwg{border-radius:50%;background:radial-gradient(ellipse,rgba(255,140,40,.5),rgba(255,90,20,.18) 50%,transparent 72%);mix-blend-mode:screen;pointer-events:none;animation:dkpulse 1.6s ease-in-out infinite}
 #deck .dkout{position:absolute;pointer-events:none;z-index:2;filter:drop-shadow(0 3px 4px rgba(0,0,0,.55))}
 #deck .dkout svg{width:100%;height:100%;overflow:visible;display:block}
 #deck .dkmon{position:absolute;pointer-events:none;z-index:6}
@@ -4992,6 +4997,11 @@ const DKC={
     dkFlash(o,'radial-gradient(circle at '+sp.x.toFixed(0)+'px '+sp.y.toFixed(0)+'px,rgba(255,215,110,.9),rgba(255,160,40,.35) 40%,rgba(0,0,0,0) 70%)',.9,1800);
     dkShake(500,4);await dkWait(300);dkBanner(o,'ФОРПОСТ<small>🏰 Флаг стал крепостью</small>',false,2000);await dkWait(2000);
   },
+  async fire(c,o){
+    const sp=dkSpot(c.id);if(!sp)return;
+    dkFlash(o,'radial-gradient(circle at '+sp.x.toFixed(0)+'px '+sp.y.toFixed(0)+'px,rgba(255,200,90,.95),rgba(255,90,20,.45) 38%,rgba(0,0,0,0) 72%)',1,2000);
+    dkShake(700,5);await dkWait(300);dkBanner(o,'ОГНЕННАЯ СТЕНА<small>🔥 Остров в огне до конца хода Кинга</small>',true,2200);await dkWait(2200);
+  },
   async monster(c,o){
     dkFlash(o,'radial-gradient(120% 90% at 50% 60%,rgba(10,70,90,.8),rgba(2,12,24,.7))',1,2600);dkShake(1000,6);
     await dkWait(500);dkBanner(o,'МОРСКОЙ КОРОЛЬ<small>🐉 Всплыл у '+esc(G.monster?locName(G.monster.loc):'острова')+'</small>',true,2400);await dkWait(2300);
@@ -5017,7 +5027,7 @@ async function dkPlay(){
 }
 function dkEvents(p,neigh,show){
   const calm=window.__nor||(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches);
-  const cur={g:G,out:Object.keys(G.out||{}).sort().join(','),mon:G.monster?G.monster.loc:'',laf:!!G.laftel,fl:Object.assign({},G.flags),po:{},jail:p?((p.jail|0)>0?1:0):0,ak:0};
+  const cur={g:G,out:Object.keys(G.out||{}).sort().join(','),mon:G.monster?G.monster.loc:'',fire:G.fire?G.fire.loc:'',laf:!!G.laftel,fl:Object.assign({},G.flags),po:{},jail:p?((p.jail|0)>0?1:0):0,ak:0};
   for(const id in G.ponAt)cur.po[id]=(G.ponAt[id].owner==null?'o':'c')+(G.type[id]?'r':'h');
   if(p&&G.akainu&&G.akainu.stun<=0&&(G.akainu.loc===p.loc||neigh.includes(G.akainu.loc)))cur.ak=1;
   const pr=DK.ev;DK.ev=cur;DK.dark=!!cur.ak&&show;
@@ -5029,6 +5039,7 @@ function dkEvents(p,neigh,show){
   if(cur.jail&&!pr.jail)DK.cq.push({k:'jail'});
   if(cur.ak&&!pr.ak)DK.cq.push({k:'rider'});
   if(cur.mon&&cur.mon!==pr.mon)DK.cq.push({k:'monster'});
+  if(cur.fire&&cur.fire!==pr.fire&&(cur.fire===p.loc||neigh.includes(cur.fire)))DK.cq.push({k:'fire',id:cur.fire});
   for(const id of (cur.out?cur.out.split(','):[])){if(!(pr.out||'').split(',').includes(id)&&(id===p.loc||neigh.includes(id)))DK.cq.push({k:'outpost',id})}
   if(DK.cq.length)setTimeout(dkPlay,80);
 }
@@ -5056,7 +5067,7 @@ function dkRender(){
   const st=id=>[id,dkArt(id),G.flags[id],playersAt(id).map(q=>q.i).join(''),G.akainu&&G.akainu.loc===id?1:0,G.monster&&G.monster.loc===id?1:0,outAt(id)?'o'+outAt(id).pon.length:'',(G.hunt||[]).some(h=>h.loc===id)?1:0,picks.includes(id)?1:0,G.dead&&G.dead[id]?1:0].join(':');
   let plan=navPlan(p);if(plan&&plan.done){UI.nav.arrived=plan.to;UI.nav.to=null;plan=null}else if(UI.nav&&UI.nav.to)UI.nav.arrived=null;
   const navSig=(UI.nav&&(UI.nav.to||'')+'/'+(UI.nav.arrived||''))+':'+(plan&&plan.steps?plan.steps.map(x=>x.n+x.risk.join('')).join(','):'');
-  const wv=(DK.wv&&Date.now()<DK.wv.until&&DK.wv.wk===wk)?DK.wv:null,kwOn=!!(DK.kw&&Date.now()<DK.kw),sig=[wv?'wv':'',p.loc,G.ap+'/'+G.apMax,ACTS.map(a=>a.g+a.label+(a.dis?1:0)).join('|'),navSig,kwOn?'kw':'',DK.dark?1:0,DK.lrise?1:0,(DK.flhold?[...DK.flhold].join(','):''),W,H,wk,p.i,p.loc,dkArt(p.loc),mine?1:0,bt?'b':'',(G.gal?G.gal.who+':'+(G.gal.done?1:0)+':'+(DK.galOpen?1:0):''),(G.pen?G.pen.who+':'+(G.pen.done?1:0):''),p.pengu|0,(G.dol?G.dol.who+':'+(G.dol.done?1:0):''),p.dolph|0,G.zun&&G.zun.cell,neigh.concat([...SKY]).map(st).join('|'),G.flags[p.loc],playersAt(p.loc).length].join('#');
+  const wv=(DK.wv&&Date.now()<DK.wv.until&&DK.wv.wk===wk)?DK.wv:null,kwOn=!!(DK.kw&&Date.now()<DK.kw),sig=[wv?'wv':'',G.fire?'f'+G.fire.loc:'',p.loc,G.ap+'/'+G.apMax,ACTS.map(a=>a.g+a.label+(a.dis?1:0)).join('|'),navSig,kwOn?'kw':'',DK.dark?1:0,DK.lrise?1:0,(DK.flhold?[...DK.flhold].join(','):''),W,H,wk,p.i,p.loc,dkArt(p.loc),mine?1:0,bt?'b':'',(G.gal?G.gal.who+':'+(G.gal.done?1:0)+':'+(DK.galOpen?1:0):''),(G.pen?G.pen.who+':'+(G.pen.done?1:0):''),p.pengu|0,(G.dol?G.dol.who+':'+(G.dol.done?1:0):''),p.dolph|0,G.zun&&G.zun.cell,neigh.concat([...SKY]).map(st).join('|'),G.flags[p.loc],playersAt(p.loc).length].join('#');
   const pl=DK.pl||{};const moves=[];for(const q of G.players){if(q!==p&&pl[q.i]&&pl[q.i]!==q.loc)moves.push({q,from:pl[q.i],to:q.loc})}DK.pl={};for(const q of G.players)DK.pl[q.i]=q.loc;
   if(sig===DK.sig)return;
   const fresh=DK.sig.split('#')[0]!==p.loc;DK.sig=sig;
@@ -5076,13 +5087,18 @@ function dkRender(){
   if(DK.dark)h+='<i class="dkwave" style="top:'+(Yh+H*0.02).toFixed(0)+'px"></i><i class="dkwave b" style="top:'+(Yh+H*0.06).toFixed(0)+'px"></i>';
   // Зунеша на горизонте как декорация
   if(G.zun&&!neigh.includes('Z')&&p.loc!=='Z'&&dkSea('Z')===dkSea(p.loc)){const zw=Math.min(W*0.34,H*0.3);h+='<div class="dkzun" style="left:'+(W*0.62).toFixed(0)+'px;top:'+(Yh-zw*0.52*0.92).toFixed(0)+'px;width:'+zw.toFixed(0)+'px"><img src="assets/deck/zun.webp" alt=""></div>'}
+  // огненная стена Кинга: задняя дуга за островом, передняя перед ним
+  let fwF='';
+  if(G.fire){const o=isl.find(x=>x.id===G.fire.loc);if(o){const art=DK_ART[dkArt(o.id)]||DK_ART.base,ih0=o.w*art[1]/art[0],rw=o.w*1.32,rh=rw*702/1135,fx=o.cx-0.44*rw,fy=(o.y-ih0*0.30)-0.60*rh,st='left:'+fx.toFixed(0)+'px;top:'+fy.toFixed(0)+'px;width:'+rw.toFixed(0)+'px;height:'+rh.toFixed(0)+'px';
+    h+='<i class="dkfwg" style="left:'+(o.cx-rw*0.55).toFixed(0)+'px;top:'+(fy+rh*0.25).toFixed(0)+'px;width:'+(rw*1.1).toFixed(0)+'px;height:'+(rh*0.8).toFixed(0)+'px"></i><img class="dkfw bk" src="assets/deck/firewall.webp" alt="" style="'+st+'">';
+    fwF='<img class="dkfw fr" src="assets/deck/firewall.webp" alt="" style="'+st+'">'+[0,1,2,3,4,5].map(k=>'<i class="dkember" style="left:'+(fx+rw*(0.2+k*0.12)).toFixed(0)+'px;top:'+(fy+rh*0.45).toFixed(0)+'px;animation-delay:-'+(k*0.9).toFixed(1)+'s"></i>').join('')}}
   // острова
   h+='<div class="dkisl wx-'+wk+'">';
   for(const o of isl){const a=dkArt(o.id),[aw,ah]=DK_ART[a],ih=o.w*ah/aw,x=o.cx-o.w/2,ty=o.y-ih*0.9;o.ih=ih;o.ty=ty;
     h+='<img class="dki'+(G.monster&&G.monster.loc===o.id?' mk':'')+(G.dead&&G.dead[o.id]?' dead':'')+(a==='fin'&&DK.lrise?' lrise':'')+'" src="assets/deck/'+a+'.webp" alt="" style="left:'+x.toFixed(1)+'px;top:'+ty.toFixed(1)+'px;width:'+o.w.toFixed(1)+'px">';
     h+='<img class="dki rf" src="assets/deck/'+a+'.webp" alt="" style="left:'+x.toFixed(1)+'px;top:'+(o.y-ih*0.1-2).toFixed(1)+'px;width:'+o.w.toFixed(1)+'px;height:'+(ih*0.45).toFixed(1)+'px">';
     {const fw=o.w*1.12,fh=Math.max(14,o.w*0.2);h+='<i class="dkfoam" style="left:'+(o.cx-fw/2).toFixed(1)+'px;top:'+(o.y-ih*0.1-fh*0.55).toFixed(1)+'px;width:'+fw.toFixed(1)+'px;height:'+fh.toFixed(1)+'px;animation-delay:-'+(o.cx%3).toFixed(1)+'s"></i><i class="dkfoam b" style="left:'+(o.cx-fw*0.42).toFixed(1)+'px;top:'+(o.y-ih*0.1-fh*0.1).toFixed(1)+'px;width:'+(fw*0.84).toFixed(1)+'px;height:'+(fh*0.8).toFixed(1)+'px;animation-delay:-'+(o.cx%2+0.7).toFixed(1)+'s"></i>'}}
-  h+='</div>';
+  h+='</div>'+fwF;
   // эффекты островов, флаги, аватарки, подписи
   for(const o of isl){const a=dkArt(o.id),L=dkLabel(o.id,o.far&&!SKY.has(o.id)),pk=picks.includes(o.id)&&mine;
     if(SKY.has(o.id))L.sub=(L.sub&&L.sub!=='Неизвестно'?L.sub+' · ':'')+'☁ перелёт';
