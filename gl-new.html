@@ -4308,7 +4308,7 @@ function dzRoll(pe,ks){
 function dsCompactHtml(pe,Z,side,line,wins){
   const res=pe.res,n=res.rounds.length,W=res.W||2,last=Z.shown>0?res.rounds[Z.shown-1].out:-2;
   const crowns=i=>Array.from({length:W},(_,k)=>'<i class="dscr'+(k<wins[i]?' on'+(k===wins[i]-1&&last===i?' pop':''):'')+'">'+(k<wins[i]?'👑':'')+'</i>').join('');
-  let h='<div class="ov"><div class="modal dsw"><div class="dshd"><h2>'+esc(pe.title)+'</h2><div class="dsctl">'+(Z.shown<n?'<button class="dsch" data-dz="skip" aria-label="Ускорить бой" title="Ускорить бой">⏩</button>':'')+'<button class="dsch'+(dsMode()==='off'?' off':'')+'" data-dz="mode" aria-label="Сцена: '+DS_MODE_N[dsMode()]+'" title="Сцена боя: '+DS_MODE_N[dsMode()]+' (нажмите, чтобы сменить)">🎬'+(dsMode()==='fast'?'<sup>⏩</sup>':'')+'</button></div></div><div id="dsslot" class="dsslot"></div><div class="dsp">';
+  let h='<div class="ov"><div class="modal dsw"><div class="dshd"><h2>'+(Z.shown<n?'Раунд '+(Z.shown+1)+' из '+n:esc(pe.title))+'</h2><div class="dsctl">'+(Z.shown<n?'<button class="dsch" data-dz="skip" aria-label="Ускорить бой" title="Ускорить бой">⏩</button>':'')+'<button class="dsch'+(dsMode()==='off'?' off':'')+'" data-dz="mode" aria-label="Сцена: '+DS_MODE_N[dsMode()]+'" title="Сцена боя: '+DS_MODE_N[dsMode()]+' (нажмите, чтобы сменить)">🎬'+(dsMode()==='fast'?'<sup>⏩</sup>':'')+'</button></div></div><div id="dsslot" class="dsslot"></div><div class="dsp">';
   h+='<div class="dsscore"><div class="dsrn">'+(Z.shown<n?'Раунд '+(Z.shown+1):'Итог')+'</div><div class="dsn"><b>'+esc(pe.names[0])+(res.pg&&res.pg[0]?' 🐧':'')+'</b><span>'+crowns(0)+'</span></div><div class="dsn dsr"><b>'+esc(pe.names[1])+(res.pg&&res.pg[1]?' 🐧':'')+'</b><span>'+crowns(1)+'</span></div></div>';
   if(Z.shown<n){
     const R=res.rounds[Z.shown],c=R.cur;
@@ -4320,7 +4320,7 @@ function dsCompactHtml(pe,Z,side,line,wins){
       return '<div class="dsdc">'+die+sum+'</div>';
     };
     const left=[0,1].some(k=>!Z.done[k]&&!Z.spin[k]);
-    const mid=left&&!Z.busy?'<button class="btn primary dsroll" data-dz="roll">🎲 Бросить кубики</button>':'<div class="dswait">'+(Z.busy?'⚔ Идёт бой…':'🎲 Кубики катятся…')+'</div>';
+    const mid=left&&!Z.busy?'<button class="btn primary dsroll" data-dz="roll">🎲 Бросить кубики</button>':(!Z.busy&&Z.done[0]&&Z.done[1]?'<div class="dswait">&nbsp;</div>':'<div class="dswait">'+(Z.busy?'⚔ Идёт бой…':'🎲 Кубики катятся…')+'</div>');
     h+='<div class="dsdice">'+col(0)+'<div class="dsvs">VS</div>'+col(1)+'</div>'+mid;
   }else{
     h+='<div class="dsfin'+(res.winner===-1?' draw':'')+'"><div class="dsfk">'+(res.winner===-1?'Боевая ничья':'🏆 Победа')+'</div>'+(res.winner===-1?'':'<div class="dsfw">'+esc(pe.names[res.winner])+'</div>')+'<div class="dsfs">'+res.w[0]+' : '+res.w[1]+'</div></div><button class="btn primary dscont" data-a="0">Продолжить</button>';
