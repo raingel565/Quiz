@@ -420,6 +420,28 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 #splash.wt .wtc{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;opacity:0;animation:spup 1s var(--cd,3.4s) ease both;text-shadow:0 2px 16px #000}
 #splash.wt .spt{opacity:1;animation:spsh 3.2s infinite ease-in-out;font-size:clamp(34px,11vw,72px)}
 #splash.wt .sps2{opacity:1;animation:none;color:#d8c9a4}
+/* комикс-сцены хранителей (тест) */
+#comic{position:fixed;inset:0;z-index:100001;background:#0b0d16 radial-gradient(120% 80% at 50% 0,#1b2146,#0b0d16 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:14px 10px;overflow:auto;opacity:0;transition:opacity .35s}
+#comic.in{opacity:1}
+#comic .cm-t{color:#9fd8ff;font:700 13px/1 system-ui,sans-serif;letter-spacing:.18em;text-transform:uppercase;opacity:.8}
+#comic .cm-pg{width:min(94vw,520px);background:#f6f3ea;padding:8px;border-radius:4px;box-shadow:0 10px 40px rgba(0,0,0,.6);display:flex;flex-direction:column;gap:8px}
+#comic .cm-row{display:flex;gap:8px}
+#comic .cm-p{position:relative;flex:1;overflow:hidden;border:3px solid #111;background-color:#222;background-repeat:no-repeat;opacity:0;transform:scale(1.12) rotate(var(--r,0deg));transition:opacity .35s,transform .5s cubic-bezier(.2,.9,.3,1.2)}
+#comic .cm-p.on{opacity:1;transform:none}
+#comic .cm-p .kb{position:absolute;inset:0;background-repeat:no-repeat;animation:cmkb 7s ease-out both}
+@keyframes cmkb{from{transform:scale(1)}to{transform:scale(1.07)}}
+#comic .cm-b{position:absolute;max-width:62%;background:#fff;color:#111;border:2.5px solid #111;border-radius:50% / 40%;padding:8px 13px;font:700 13.5px/1.25 'Comic Sans MS','Marker Felt',system-ui,sans-serif;text-align:center;opacity:0;transform:scale(.6);transition:opacity .25s,transform .3s cubic-bezier(.2,1.4,.4,1)}
+#comic .cm-b.on{opacity:1;transform:none}
+#comic .cm-b:after{content:'';position:absolute;width:14px;height:14px;background:#fff;border-right:2.5px solid #111;border-bottom:2.5px solid #111;left:var(--tx,30%);bottom:-9px;transform:rotate(45deg)}
+#comic .cm-b.up:after{bottom:auto;top:-9px;transform:rotate(225deg)}
+#comic .cm-b.me{background:#ffe9a8}#comic .cm-b.me:after{background:#ffe9a8}
+#comic .cm-c{position:absolute;left:0;top:0;background:#111;color:#fff;font:600 11.5px/1.25 system-ui,sans-serif;padding:5px 9px;opacity:0;transition:opacity .3s}
+#comic .cm-c.on{opacity:1}
+#comic .cm-x{position:absolute;font:900 26px/1 Impact,'Arial Black',system-ui,sans-serif;color:#fff;-webkit-text-stroke:2px #1a6fd6;text-shadow:3px 3px 0 #1a6fd6;transform:rotate(-8deg) scale(.5);opacity:0;transition:opacity .2s,transform .35s cubic-bezier(.2,1.6,.4,1)}
+#comic .cm-x.on{opacity:1;transform:rotate(-8deg) scale(1)}
+#comic .cm-bt{margin-top:2px;background:linear-gradient(#7fd4ff,#3c9be6);color:#06223d;border:0;border-radius:999px;padding:11px 26px;font:800 15px system-ui,sans-serif;box-shadow:0 4px 18px rgba(80,170,255,.5);opacity:0;transition:opacity .3s;cursor:pointer}
+#comic .cm-bt.on{opacity:1}
+#comic .cm-sk{position:absolute;top:10px;right:12px;color:#fff;opacity:.6;font:600 12px system-ui,sans-serif;background:none;border:0;cursor:pointer}
 /* заставка «Бездна» */
 #splash.ab{background:#05060a;--cd:2.2s}
 #splash.ab .abbg{position:absolute;inset:-6%;background:url(assets/abyss.webp) 50% 40%/cover;filter:blur(18px) brightness(.45) saturate(1.2)}
@@ -6939,6 +6961,32 @@ window.__g={endRound,SFX,fxSnd,kwFx,diceFx,eventFx,cardFx,fxCard,fxAnchor,random
   o.addEventListener('click',go);
   document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go()});
 })();
+
+// ---------- комикс-сцены хранителей (тест: ?comic=iris) ----------
+const COMICS={iris:{img:'assets/guards/iris-art.webp',ar:1678/937,title:'Небесная Айрис',
+ // кадры: crop[x,y,w,h] в долях картинки, row — ряд, flex — ширина, ratio — пропорции кадра
+ rows:[[{crop:[0,0,1,1],ratio:16/8.6,cap:'Над облаками, на краю Бездны Миров…',bub:[{t:'Ты дошёл так далеко… Ветер шепчет мне о тебе.',x:'58%',y:'12%',tx:'20%',w:'40%'}]}],
+  [{crop:[.12,0,.5,.62],ratio:1,flex:1,bub:[{t:'Докажи, что ты сильнее бури!',x:'34%',y:'58%',tx:'20%',w:'62%'}],fx:{t:'ВЖУУХ!',x:'4%',y:'8%'}},
+   {crop:[.30,.28,.5,.72],ratio:1,flex:1,r:'.6deg',bub:[{t:'Я готов.',x:'4%',y:'6%',tx:'50%',w:'46%',me:1},{t:'Тогда держись за ветер!',x:'30%',y:'62%',tx:'40%',w:'66%'}]}]]}};
+async function comicPlay(id){const C=COMICS[id];if(!C)return;
+ return new Promise(res=>{const o=document.createElement('div');o.id='comic';
+  const crop=c=>{const[x,y,w,h]=c;const bs=100/w;return 'background-image:url('+C.img+');background-size:'+bs+'% auto;background-position:'+(w>=1?0:x/(1-w)*100)+'% '+(h>=1?0:y/(1-h)*100)+'%'};
+  let h='<button class="cm-sk">Пропустить ▸▸</button><div class="cm-t">'+C.title+'</div><div class="cm-pg">';const seq=[];
+  C.rows.forEach(r=>{h+='<div class="cm-row">';r.forEach(f=>{const i=seq.length;seq.push(f);
+    h+='<div class="cm-p" data-i="'+i+'" style="flex:'+(f.flex||1)+';aspect-ratio:'+f.ratio+(f.r?';--r:'+f.r:'')+'"><div class="kb" style="'+crop(f.crop)+'"></div>'+
+     (f.cap?'<div class="cm-c">'+f.cap+'</div>':'')+(f.fx?'<div class="cm-x" style="left:'+f.fx.x+';top:'+f.fx.y+'">'+f.fx.t+'</div>':'')+
+     (f.bub||[]).map(b=>'<div class="cm-b'+(b.me?' me':'')+'" style="left:'+b.x+';top:'+b.y+';width:'+b.w+';--tx:'+b.tx+'">'+b.t+'</div>').join('')+'</div>'});h+='</div>'});
+  h+='</div><button class="cm-bt">Начать бой ▶</button>';o.innerHTML=h;document.body.appendChild(o);requestAnimationFrame(()=>o.classList.add('in'));
+  let done=false,skip=false;const fin=()=>{if(done)return;done=true;o.classList.remove('in');setTimeout(()=>{o.remove();res()},350)};
+  o.querySelector('.cm-sk').onclick=()=>{skip=true;o.querySelectorAll('.cm-p,.cm-b,.cm-c,.cm-x,.cm-bt').forEach(e=>e.classList.add('on'))};
+  o.querySelector('.cm-bt').onclick=fin;
+  const w=ms=>new Promise(r=>{const t=setInterval(()=>{if(skip){clearInterval(t);r()}},60);setTimeout(()=>{clearInterval(t);r()},skip?0:ms)});
+  (async()=>{await w(500);for(const p of o.querySelectorAll('.cm-p')){if(skip)break;p.classList.add('on');const c=p.querySelector('.cm-c');if(c){await w(300);c.classList.add('on')}
+    const fx=p.querySelector('.cm-x');if(fx){await w(500);fx.classList.add('on')}
+    for(const b of p.querySelectorAll('.cm-b')){await w(900);if(skip)break;b.classList.add('on');await w(1500+b.textContent.length*28)}await w(400)}
+   o.querySelectorAll('.cm-p,.cm-b,.cm-c,.cm-x').forEach(e=>e.classList.add('on'));o.querySelector('.cm-bt').classList.add('on')})()})}
+window.comicPlay=comicPlay;
+(()=>{const m=location.search.match(/[?&]comic=([a-z]+)/);if(m)setTimeout(()=>{const sp=document.getElementById('splash');if(sp)sp.remove();comicPlay(m[1])},900)})();
 
 // ---------- автосохранение партии (против ботов / за одним устройством): переживёт случайное обновление страницы ----------
 const SAVEKEY='nv_save';
