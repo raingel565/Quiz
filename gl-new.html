@@ -1298,6 +1298,27 @@ body.tutor #app{padding-top:110px}
 #deck .dksky img{position:absolute;max-width:none;animation:dkdrift 36s ease-in-out infinite alternate;will-change:transform}
 @keyframes dkdrift{from{transform:translateX(-7px)}to{transform:translateX(7px)}}
 #deck .dkisl{inset:0}
+#deck .dkisl .dki:not(.rf):not(.dead){transform-origin:50% 88%;animation:dkibob 5.2s ease-in-out infinite alternate}
+#deck .dkisl .dki[src*="/fog."]{animation:dkbreath 7s ease-in-out infinite alternate}
+@keyframes dkbreath{from{transform:scale(1);opacity:.9}to{transform:scale(1.03,1.05);opacity:1}}
+#deck.wvon .dkisl .dki:not(.rf){animation-duration:3.4s;-webkit-mask:linear-gradient(#000 80%,transparent 98%);mask:linear-gradient(#000 80%,transparent 98%)}
+#deck.wvon .dkisl{filter:saturate(.7) brightness(.78) contrast(1.06) hue-rotate(-10deg) drop-shadow(0 6px 8px rgba(0,20,30,.5))}
+@keyframes dkibob{from{transform:translateY(-1px) rotate(-.3deg)}to{transform:translateY(2px) rotate(.35deg)}}
+#deck:not(.wvon) .dkfoam{filter:opacity(.45)}
+#deck .dkfoam{position:absolute;pointer-events:none;border-radius:50%;background:radial-gradient(ellipse at 50% 55%,rgba(235,250,255,.9) 0,rgba(210,240,250,.55) 40%,rgba(190,230,245,0) 72%);animation:dkfoam 2.6s ease-in-out infinite;mix-blend-mode:screen}
+#deck .dkfoam.b{animation-duration:3.3s;opacity:.7}
+#deck .dkwin{width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:radial-gradient(#fff0b8,rgba(255,196,90,.55) 45%,transparent 72%);mix-blend-mode:screen;animation:dkfk 3.1s steps(1,end) infinite}
+#deck .dkwin.t{width:9px;height:11px;background:radial-gradient(#ffe0a0,rgba(255,120,30,.6) 45%,transparent 72%);animation-duration:1.7s}
+#deck .dkwin.c{background:radial-gradient(#e8f6ff,rgba(150,200,255,.5) 45%,transparent 72%);animation-duration:4.3s}
+@keyframes dkfk{0%{opacity:.95;transform:scale(1)}18%{opacity:.5;transform:scale(.8)}34%{opacity:1;transform:scale(1.15)}52%{opacity:.65;transform:scale(.9)}71%{opacity:1;transform:scale(1.05)}86%{opacity:.55;transform:scale(.85)}}
+#deck .dkgl{width:7px;height:7px;margin:-3px 0 0 -3px;background:radial-gradient(#fff,rgba(255,255,255,.4) 35%,transparent 70%);mix-blend-mode:screen;opacity:0;animation:dktw 3.6s ease-in-out infinite}
+#deck .dkgl.gold{background:radial-gradient(#fff6c8,rgba(255,215,100,.55) 40%,transparent 72%);width:9px;height:9px}
+#deck .dksweep{margin:0 0 -5px 0;transform-origin:0 50%;background:linear-gradient(90deg,rgba(255,244,190,.7),rgba(255,244,190,0));clip-path:polygon(0 42%,100% 0,100% 100%,0 58%);mix-blend-mode:screen;animation:dksweep 7s ease-in-out infinite;pointer-events:none}
+@keyframes dksweep{0%{transform:scaleX(1);opacity:0}8%{opacity:.8}40%{transform:scaleX(.15);opacity:.15}50%{transform:scaleX(-.15);opacity:.15}92%{opacity:.8}100%{transform:scaleX(-1);opacity:0}}
+#deck .dkmist{border-radius:50%;background:radial-gradient(ellipse,rgba(238,242,255,.75),rgba(220,230,250,0) 70%);filter:blur(4px);opacity:0;animation:dkmist 10s ease-in-out infinite;pointer-events:none}
+@keyframes dkmist{0%{opacity:0;transform:translateX(-14%) scale(.9)}35%{opacity:.7}65%{opacity:.6}100%{opacity:0;transform:translateX(18%) scale(1.1)}}
+@media (prefers-reduced-motion:reduce){#deck .dkisl .dki,#deck .dkfoam,#deck .dkwin,#deck .dkgl,#deck .dksweep,#deck .dkmist{animation:none!important}}
+@keyframes dkfoam{0%,100%{transform:scale(.92,.8);opacity:.55}50%{transform:scale(1.08,1.15);opacity:1}}
 #deck .dki{position:absolute;max-width:none}
 #deck .dki.rf{transform:scaleY(-1);opacity:.28;-webkit-mask:linear-gradient(transparent 40%,#000);mask:linear-gradient(transparent 40%,#000)}
 #deck .dki.dead{filter:brightness(.45) sepia(.6) hue-rotate(-20deg)}
@@ -5059,7 +5080,8 @@ function dkRender(){
   h+='<div class="dkisl wx-'+wk+'">';
   for(const o of isl){const a=dkArt(o.id),[aw,ah]=DK_ART[a],ih=o.w*ah/aw,x=o.cx-o.w/2,ty=o.y-ih*0.9;o.ih=ih;o.ty=ty;
     h+='<img class="dki'+(G.monster&&G.monster.loc===o.id?' mk':'')+(G.dead&&G.dead[o.id]?' dead':'')+(a==='fin'&&DK.lrise?' lrise':'')+'" src="assets/deck/'+a+'.webp" alt="" style="left:'+x.toFixed(1)+'px;top:'+ty.toFixed(1)+'px;width:'+o.w.toFixed(1)+'px">';
-    h+='<img class="dki rf" src="assets/deck/'+a+'.webp" alt="" style="left:'+x.toFixed(1)+'px;top:'+(o.y-ih*0.1-2).toFixed(1)+'px;width:'+o.w.toFixed(1)+'px;height:'+(ih*0.45).toFixed(1)+'px">'}
+    h+='<img class="dki rf" src="assets/deck/'+a+'.webp" alt="" style="left:'+x.toFixed(1)+'px;top:'+(o.y-ih*0.1-2).toFixed(1)+'px;width:'+o.w.toFixed(1)+'px;height:'+(ih*0.45).toFixed(1)+'px">';
+    {const fw=o.w*1.12,fh=Math.max(14,o.w*0.2);h+='<i class="dkfoam" style="left:'+(o.cx-fw/2).toFixed(1)+'px;top:'+(o.y-ih*0.1-fh*0.55).toFixed(1)+'px;width:'+fw.toFixed(1)+'px;height:'+fh.toFixed(1)+'px;animation-delay:-'+(o.cx%3).toFixed(1)+'s"></i><i class="dkfoam b" style="left:'+(o.cx-fw*0.42).toFixed(1)+'px;top:'+(o.y-ih*0.1-fh*0.1).toFixed(1)+'px;width:'+(fw*0.84).toFixed(1)+'px;height:'+(fh*0.8).toFixed(1)+'px;animation-delay:-'+(o.cx%2+0.7).toFixed(1)+'s"></i>'}}
   h+='</div>';
   // эффекты островов, флаги, аватарки, подписи
   for(const o of isl){const a=dkArt(o.id),L=dkLabel(o.id,o.far&&!SKY.has(o.id)),pk=picks.includes(o.id)&&mine;
@@ -5070,6 +5092,18 @@ function dkRender(){
     if(a==='port')h+='<i class="dklamp" style="left:'+(o.cx-o.w*0.17).toFixed(0)+'px;top:'+(o.ty+o.ih*0.04).toFixed(0)+'px"></i>';
     if(a==='pon')h+='<i class="dkglow" style="left:'+(o.cx-o.w*0.2).toFixed(0)+'px;top:'+(o.ty+o.ih*0.3).toFixed(0)+'px;width:'+(o.w*0.36).toFixed(0)+'px;height:'+(o.ih*0.45).toFixed(0)+'px"></i>';
     if(a==='fin')h+='<i class="dkbeam" style="left:'+(o.cx-o.w*0.25).toFixed(0)+'px;top:'+(o.ty-o.ih*0.3).toFixed(0)+'px;width:'+(o.w*0.5).toFixed(0)+'px;height:'+(o.ih*0.7).toFixed(0)+'px"></i>';
+    {const E=(c,x,y,st)=>'<i class="'+c+'" style="left:'+(o.cx-o.w/2+x*o.w).toFixed(0)+'px;top:'+(o.ty+y*o.ih).toFixed(0)+'px;'+(st||'')+'"></i>',dl=(k,m)=>'animation-delay:-'+(((o.cx*7+k*13)%(m*10))/10).toFixed(1)+'s;',wn=(pts,c)=>pts.map((q,k)=>E('dkwin'+(c?' '+c:''),q[0],q[1],dl(k,30))).join('');
+      if(a==='start')h+=E('dksmoke',0.40,0.40,'animation-delay:-1s')+E('dksmoke',0.40,0.40,'animation-delay:-3.4s')+wn([[0.33,0.50],[0.50,0.47],[0.62,0.50]]);
+      if(a==='base')h+=E('dksmoke',0.55,0.46,'animation-delay:-2s')+E('dkgl',0.62,0.12,dl(1,40))+E('dkgl',0.30,0.62,dl(2,40));
+      if(a==='event')h+=wn([[0.59,0.15],[0.66,0.18],[0.72,0.14],[0.48,0.31],[0.41,0.39]]);
+      if(a==='market')h+=wn([[0.80,0.46],[0.86,0.50],[0.72,0.52],[0.63,0.45]])+E('dksmoke',0.84,0.42,'animation-delay:-2.2s');
+      if(a==='jail')h+=wn([[0.28,0.36],[0.50,0.47],[0.62,0.52]],'t');
+      if(a==='dozor')h+=wn([[0.55,0.20],[0.50,0.32],[0.63,0.33]],'c')+E('dkgl',0.53,0.06,dl(3,40));
+      if(a==='battle')h+=E('dkglow',0.55,0.34,'width:'+(o.w*0.22).toFixed(0)+'px;height:'+(o.ih*0.2).toFixed(0)+'px;animation-delay:-1.3s')+[0,1,2,3,4].map(k=>E('dkember',0.52+k*0.07,0.36,dl(k,50))).join('');
+      if(a==='port')h+=E('dksweep',0.33,0.12,'width:'+(o.w*0.62).toFixed(0)+'px;height:'+Math.max(10,o.w*0.1).toFixed(0)+'px')+E('dkgl',0.33,0.12,dl(0,30));
+      if(a==='pon')h+=[[0.50,0.40],[0.58,0.50],[0.44,0.55],[0.62,0.34]].map((q,k)=>E('dkgl',q[0],q[1],dl(k,40))).join('');
+      if(a==='fin')h+=[[0.50,0.22],[0.42,0.45],[0.58,0.50],[0.53,0.08],[0.38,0.62],[0.62,0.62]].map((q,k)=>E('dkgl gold',q[0],q[1],dl(k,40))).join('');
+      if(a==='fog')h+=[0,1,2].map(k=>E('dkmist',0.22+k*0.08,0.28+k*0.12,'width:'+(o.w*0.5).toFixed(0)+'px;height:'+(o.ih*0.36).toFixed(0)+'px;animation-duration:'+(9+k*3)+'s;'+dl(k+2,90))).join('')}
     if(G.flags[o.id]!=null){const fh=Math.max(24,o.w*(o.far?0.34:0.3));h+='<img class="dkflag'+(DK.flhold&&DK.flhold.has(o.id)?' pre':'')+'" data-fid="'+o.id+'" src="assets/deck/flag'+(G.flags[o.id]%6)+'.webp" alt="" style="left:'+(o.cx-o.w*0.26).toFixed(0)+'px;top:'+(o.ty+o.ih*0.35-fh).toFixed(0)+'px;height:'+fh.toFixed(0)+'px">'}
     {const ou=outAt(o.id);if(ou){const th=Math.max(34,o.w*(o.far?0.42:0.46)),tw=th*0.62,fb=o.ty+o.ih*0.35;h+='<div class="dkout" style="left:'+(o.cx-o.w*0.26+Math.max(24,o.w*0.3)*0.5).toFixed(0)+'px;top:'+(fb-th).toFixed(0)+'px;width:'+tw.toFixed(0)+'px;height:'+th.toFixed(0)+'px"><svg viewBox="0 0 40 64"><defs><linearGradient id="tg'+o.id+'" x1="0" x2="1"><stop offset="0" stop-color="#8a8f98"/><stop offset=".55" stop-color="#b9bec7"/><stop offset="1" stop-color="#5f646d"/></linearGradient></defs><path d="M6 64 L9 22 H31 L34 64Z" fill="url(#tg'+o.id+')" stroke="#33363c" stroke-width="1.2"/><path d="M5 22 V14 H11 V18 H15 V14 H25 V18 H29 V14 H35 V22Z" fill="#c7ccd4" stroke="#33363c" stroke-width="1.2"/><rect x="17" y="34" width="6" height="10" rx="3" fill="#1b1d22"/><rect x="6" y="60" width="28" height="4" fill="'+G.players[ou.o].color+'"/>'+(ou.pon.length?'<path d="M20 0 L25 7 L20 13 L15 7Z" fill="#ffcf5a" stroke="#fff6d0" stroke-width="1"/>':'')+'</svg></div>'}}
     for(const q of playersAt(o.id)){if(q===p)continue;const sh=o.w*(o.far?0.26:0.32),sw=sh*360/294,fl=o.cx>W/2;const mv=moves.find(m=>m.q===q&&!fresh);h+='<img class="dkopp'+(mv?' arr':'')+(fl?' fl':'')+'" src="assets/deck/opp'+(q.i%6)+'.webp" alt="" style="left:'+(o.cx+(fl?-o.w*0.12-sw:o.w*0.12)).toFixed(0)+'px;top:'+(o.y-sh*0.86).toFixed(0)+'px;width:'+sw.toFixed(0)+'px">'}
@@ -5123,7 +5157,7 @@ function dkRender(){
     +'<div class="dkrow3"><span class="dkcur"><span class="dkth"><img src="assets/deck/'+ca+'.webp" alt=""></span><span><b>'+(DK_TI[ca]&&ca!=='base'&&ca!=='fog'?DK_TI[ca]+' ':'')+esc(!bt&&(p===G.players[G.cur]||NET.on)?cn.charAt(0).toUpperCase()+cn.slice(1):p.name+': '+cn)+'</b>'+(mine?'<small>Нажмите на остров · 1 ОД</small>':'')+'</span></span>'+'</div></div>'}
   DK.pos={};for(const o of isl)DK.pos[o.id]={cx:o.cx,ty:o.ty,w:o.w,ih:o.ih,y:o.y};DK.shp={x:W/2,y:shTop+shH*0.25,w:shW,h:shH};DK.fgp={x:-fw*0.54,y:Math.min(H*0.78,shTop+shH*0.9)-fh*0.85,w:fw,h:fh};DK.W=W;DK.H=H;DK.Yh=Yh;
   el.innerHTML=h;
-  el.classList.toggle('fresh',fresh);el.classList.toggle('kwon',kwOn||!!wv);dkWv(el,wv);
+  el.classList.toggle('fresh',fresh);el.classList.toggle('kwon',kwOn||!!wv);el.classList.toggle('wvon',!!wv);dkWv(el,wv);
   if(DK.arv&&Date.now()-DK.arv<4000){DK.arv=0;const z0=el.querySelector('.dkz'),im0=el.querySelector('.dkship img');if(z0)z0.classList.add('arv');
     if(im0){try{im0.animate([{transform:'translate(0,14px) rotate(-2deg)'},{transform:'translate(0,-3px) rotate(1.2deg)',offset:.6},{transform:'translate(0,0) rotate(0)'}],{duration:1100,easing:'ease-out'})}catch(_){}}}
   el.querySelectorAll('.dkmov').forEach(m=>{requestAnimationFrame(()=>requestAnimationFrame(()=>{m.style.transform='translate('+m.dataset.dx+'px,'+m.dataset.dy+'px) scale('+m.dataset.sc+')'}));setTimeout(()=>m.remove(),2600)});
