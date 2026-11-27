@@ -1827,6 +1827,7 @@ const LAW_MP3='assets/sfx_law.mp3'+SFXV;
 const BUSTER_MP3='assets/sfx_buster.mp3'+SFXV;
 const SAIL_MP3='assets/sfx_sail.mp3'+SFXV;
 const PENGU_MP3='assets/sfx_pengu.mp3'+SFXV;
+const CAT_MP3='assets/sfx_cat.mp3'+SFXV;
 const DOLPH_MP3='assets/sfx_dolph.mp3'+SFXV;
 const DICE_MP3='assets/sfx_dice.mp3'+SFXV;
 const BELT_MP3='assets/sfx_belt.mp3'+SFXV;
@@ -1835,7 +1836,8 @@ const STILL_MP3='assets/sfx_still.mp3'+SFXV;
 const TARAI_MP3='assets/sfx_tarai.mp3'+SFXV;
 const STORM_MP3='assets/sfx_storm.mp3'+SFXV;
 const SFX=(()=>{
-  let XB=null,XBP=false,SB=null,SBP=false,SV=null,TB=null,TBP=false,CB=null,CBP=false,ZN=null,ZNP=false,BL=null,BLP=false,DB=null,DBP=false,SL=null,SLP=false,PG=null,PGP=false,DL=null,DLP=false;
+  let XB=null,XBP=false,SB=null,SBP=false,SV=null,TB=null,TBP=false,CB=null,CBP=false,ZN=null,ZNP=false,BL=null,BLP=false,DB=null,DBP=false,SL=null,SLP=false,PG=null,PGP=false,DL=null,DLP=false,CT=null,CTP=false;
+  function loadCat(){if(CT||CTP||!ctx)return;CTP=true;try{loadSnd(CAT_MP3,b=>{CT=b},()=>{CTP=false})}catch(e){CTP=false}}
   function loadDolph(){if(DL||DLP||!ctx)return;DLP=true;try{loadSnd(DOLPH_MP3,b=>{DL=b},()=>{DLP=false})}catch(e){DLP=false}}
   function loadPengu(){if(PG||PGP||!ctx)return;PGP=true;try{loadSnd(PENGU_MP3,b=>{PG=b},()=>{PGP=false})}catch(e){PGP=false}}
   function loadSail(){if(SL||SLP||!ctx)return;SLP=true;try{loadSnd(SAIL_MP3,b=>{SL=b},()=>{SLP=false})}catch(e){SLP=false}}
@@ -1845,7 +1847,7 @@ const SFX=(()=>{
   function loadStill(){if(CB||CBP||!ctx)return;CBP=true;try{loadSnd(STILL_MP3,b=>{CB=b},()=>{CBP=false})}catch(e){CBP=false}}
   function loadTarai(){if(TB||TBP||!ctx)return;TBP=true;try{loadSnd(TARAI_MP3,b=>{TB=b},()=>{TBP=false})}catch(e){TBP=false}}
   function loadStorm(){if(SB||SBP||!ctx)return;SBP=true;try{loadSnd(STORM_MP3,b=>{SB=b},()=>{SBP=false})}catch(e){SBP=false}}
-  function playStorm(t,fallback,tar){const B=tar===8?DL:tar===7?PG:tar===6?SL:tar===5?DB:tar===4?BL:tar===3?ZN:tar===2?CB:tar?TB:SB;if(!B){tar===8?loadDolph():tar===7?loadPengu():tar===6?loadSail():tar===5?loadDice():tar===4?loadBelt():tar===3?loadZun():tar===2?loadStill():tar?loadTarai():loadStorm();fallback(t);return}if(tar<5&&SV){try{SV.stop()}catch(e){}SV=null}const s=ctx.createBufferSource();s.buffer=B;const g=ctx.createGain();g.gain.value=1.15;s.connect(g);g.connect(master);s.start(t);if(tar<5){SV=s;s.onended=()=>{if(SV===s)SV=null}}}
+  function playStorm(t,fallback,tar){const B=tar===9?CT:tar===8?DL:tar===7?PG:tar===6?SL:tar===5?DB:tar===4?BL:tar===3?ZN:tar===2?CB:tar?TB:SB;if(!B){tar===9?loadCat():tar===8?loadDolph():tar===7?loadPengu():tar===6?loadSail():tar===5?loadDice():tar===4?loadBelt():tar===3?loadZun():tar===2?loadStill():tar?loadTarai():loadStorm();fallback(t);return}if(tar<5&&SV){try{SV.stop()}catch(e){}SV=null}const s=ctx.createBufferSource();s.buffer=B;const g=ctx.createGain();g.gain.value=1.15;s.connect(g);g.connect(master);s.start(t);if(tar<5){SV=s;s.onended=()=>{if(SV===s)SV=null}}}
   let SKB=null,SKP=false;function loadSeaKing(){if(SKB||SKP||!ctx)return;SKP=true;try{loadSnd('assets/sfx_seaking.mp3?v=1',b=>{SKB=b},()=>{SKP=false})}catch(e){SKP=false}}
   function loadSnd(url,ok,fail){fetch(url).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(ab=>{const p=ctx.decodeAudioData(ab,ok,fail);if(p&&p.catch)p.catch(fail)}).catch(fail)}
   function loadBuster(){if(XB||XBP||!ctx)return;XBP=true;try{loadSnd(BUSTER_MP3,b=>{XB=b},()=>{XBP=false})}catch(e){XBP=false}}
@@ -1880,6 +1882,7 @@ const SFX=(()=>{
     ace:t=>{stopLuffy();if(!AB){loadAce();return}const s=ctx.createBufferSource();s.buffer=AB;const g=ctx.createGain();g.gain.value=1.3;s.connect(g);g.connect(master);s.start(t);AV=s;s.onended=()=>{if(AV===s)AV=null}},
     law:t=>{return;stopLuffy();if(!KB){loadLaw();return}const s=ctx.createBufferSource();s.buffer=KB;const g=ctx.createGain();g.gain.value=1.3;s.connect(g);g.connect(master);s.start(t);KV=s;s.onended=()=>{if(KV===s)KV=null}},
     enemy:t=>{if(!EB){loadEnemy();return}const s=ctx.createBufferSource();s.buffer=EB;const g=ctx.createGain();g.gain.value=1.4;s.connect(g);g.connect(master);s.start(t)},
+    cat:t=>playStorm(t,t=>{tone(t,700,.18,'sine',.06,1000);tone(t+.2,900,.14,'sine',.05,600)},9),
     dolph:t=>playStorm(t,t=>{tone(t,2200,.1,'sine',.05);tone(t+.12,2800,.1,'sine',.05)},8),
     pengu:t=>playStorm(t,t=>{tone(t,1500,.12,'square',.05);tone(t+.14,1900,.12,'square',.05)},7),
     dice:t=>playStorm(t,t=>{for(let i=0;i<9;i++)noise(t+i*.1+Math.random()*.04,.05,.35,'bandpass',1800+Math.random()*2200,null,4);tone(t,140,.9,'sine',.04,90)},5),
@@ -1962,6 +1965,7 @@ function logSnd(s){
   else if(/проиграл боссу/.test(s))fxSnd('lose');
   else if(/странный писк/.test(s))fxSnd('pengu');
   else if(/плеск и свист/.test(s))fxSnd('dolph');
+  else if(/тихое мяуканье/.test(s))fxSnd('cat');
 }
 document.addEventListener('click',e=>{if(document.body.classList.contains('dgate')&&e.target&&e.target.id==='fxbd'){let b=document.querySelector('.dgplate');if(!b){b=document.createElement('div');b.className='dgplate';b.textContent='🎲 Сначала бросьте кубики';document.body.appendChild(b);setTimeout(()=>b.remove(),1700)}}},true);
 document.addEventListener('pointerdown',e=>{SFX.unlock();},true); // звук на каждое нажатие убран (раздражал)
