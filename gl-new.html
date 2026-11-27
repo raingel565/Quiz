@@ -1290,7 +1290,7 @@ body.tutor #app{padding-top:110px}
 .galc b{font-size:13px;line-height:1.2}.galc small{font-size:11px;opacity:.65}
 #galv{position:fixed;inset:0;z-index:200000;background:rgba(6,9,14,.94);display:flex;align-items:center;justify-content:center;touch-action:pan-y}
 #galv .galimg{position:absolute;inset:0 0 110px 0;display:flex;align-items:center;justify-content:center;padding:12px}
-#galv .galimg img{max-width:100%;max-height:100%;object-fit:contain;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.6)}
+#galv .galimg img,#galv .galimg video{max-width:100%;max-height:100%;object-fit:contain;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.6);background:#000}
 #galv .galcap{position:absolute;left:0;right:0;bottom:0;padding:14px 18px calc(16px + env(safe-area-inset-bottom));color:#f3ead6;background:linear-gradient(transparent,rgba(0,0,0,.6));display:flex;flex-direction:column;gap:3px}
 #galv .galcap b{font-size:18px}#galv .galcap span{font-size:13px;opacity:.8}#galv .galcap small{font-size:12px;opacity:.7}
 #galv .galx{position:absolute;top:calc(10px + env(safe-area-inset-top));right:12px;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(20,26,36,.8);color:#fff;font-size:18px;cursor:pointer}
@@ -4826,10 +4826,10 @@ function admOpen(){
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#ver'))admOpen()});
 
 // ---------- галерея персонажей (только новая версия) ----------
-const GAL_EXTRA={zoro:[{f:'assets/gallery/zoro-1.webp',s:'assets/gallery/zoro-1-s.webp'},{f:'assets/gallery/zoro-2.webp',s:'assets/gallery/zoro-2-s.webp'}],olesya:[{f:'assets/gallery/olesya-1.webp',s:'assets/gallery/olesya-1-s.webp'},{f:'assets/gallery/olesya-2.webp',s:'assets/gallery/olesya-2-s.webp'},{f:'assets/gallery/olesya-3.webp',s:'assets/gallery/olesya-3-s.webp'},{f:'assets/gallery/olesya-4.webp',s:'assets/gallery/olesya-4-s.webp'}],nami:[{f:'assets/gallery/nami-1.webp',s:'assets/gallery/nami-1-s.webp'},{f:'assets/gallery/nami-2.webp',s:'assets/gallery/nami-2-s.webp'}],hancock:[{f:'assets/gallery/hancock-1.webp',s:'assets/gallery/hancock-1-s.webp'}]};
+const GAL_EXTRA={zoro:[{f:'assets/gallery/zoro-1.webp',s:'assets/gallery/zoro-1-s.webp'},{f:'assets/gallery/zoro-2.webp',s:'assets/gallery/zoro-2-s.webp'}],olesya:[{f:'assets/gallery/olesya-1.webp',s:'assets/gallery/olesya-1-s.webp'},{f:'assets/gallery/olesya-2.webp',s:'assets/gallery/olesya-2-s.webp'},{f:'assets/gallery/olesya-3.webp',s:'assets/gallery/olesya-3-s.webp'},{f:'assets/gallery/olesya-4.webp',s:'assets/gallery/olesya-4-s.webp'},{f:'assets/gallery/olesya-v.webp',s:'assets/gallery/olesya-v-s.webp',v:'assets/gallery/olesya-v.mp4'}],nami:[{f:'assets/gallery/nami-1.webp',s:'assets/gallery/nami-1-s.webp'},{f:'assets/gallery/nami-2.webp',s:'assets/gallery/nami-2-s.webp'}],hancock:[{f:'assets/gallery/hancock-1.webp',s:'assets/gallery/hancock-1-s.webp'}]};
 const GAL_NPC={hunter1:{n:'Охотник за головами',A:9,U:5,d:'Нанимается на чёрном рынке. Идёт по следу игрока с понеглифом, пока не догонит.'},hunter2:{n:'Охотница за головами',A:9,U:5,d:'Нанимается на чёрном рынке. Идёт по следу игрока с понеглифом, пока не догонит.'}};
 function galInfo(k){return CH[k]||GAL_NPC[k]}
-function galPhotos(k){if(GAL_NPC[k]){const H=HUNTERS.find(x=>x.k===k);return [{f:H.img,s:H.s}]}const a=[];if(CHW[k])a.push({f:'assets/ch/'+(CHIMG[k]||k)+'.webp'});return a.concat(GAL_EXTRA[k]||[])}
+function galPhotos(k){if(GAL_NPC[k]){const H=HUNTERS.find(x=>x.k===k);return [{f:H.img,s:H.s}]}const a=[];if(CHW[k]&&k!=='olesya')a.push({f:'assets/ch/'+(CHIMG[k]||k)+'.webp'});return a.concat(GAL_EXTRA[k]||[])}
 function galHtml(){
   const keys=Object.keys(CH).filter(k=>galPhotos(k).length);
   const npc='<h3 class="galh">Охотники за головами</h3><div class="galg">'+Object.keys(GAL_NPC).map(k=>{const t=galPhotos(k)[0];return '<button class="galc" data-gal="'+k+'"><span class="galt"><img loading="lazy" src="'+t.s+'" alt=""></span><b>'+esc(GAL_NPC[k].n)+'</b><small>1 фото</small></button>'}).join('')+'</div>';
@@ -4843,12 +4843,13 @@ function galOpen(k,i){
   const ph=galPhotos(k);if(!ph.length)return;GALV={k,i:Math.max(0,Math.min(i||0,ph.length-1))};
   let o=document.getElementById('galv');if(!o){o=document.createElement('div');o.id='galv';document.body.appendChild(o)}
   const c=galInfo(k),p=ph[GALV.i];
-  o.innerHTML='<div class="galimg"><img src="'+p.f+'" alt="'+esc(c.n)+'"></div>'
+  o.innerHTML='<div class="galimg">'+(p.v?'<video src="'+p.v+'" poster="'+p.f+'" controls playsinline loop preload="auto"></video>':'<img src="'+p.f+'" alt="'+esc(c.n)+'">')+'</div>'
    +(ph.length>1?'<button class="galnav l" data-galgo="-1" aria-label="Назад">‹</button><button class="galnav r" data-galgo="1" aria-label="Вперёд">›</button>':'')
    +'<button class="galx" data-galx aria-label="Закрыть">✕</button>'
    +'<div class="galcap"><b>'+esc(c.n)+'</b><span>Атака '+c.A+' · Уклонение '+c.U+(ph.length>1?' · '+(GALV.i+1)+' / '+ph.length:'')+'</span><small>'+esc(c.d)+'</small></div>';
+  {const vd=o.querySelector('video');if(vd){const pl=vd.play();if(pl&&pl.catch)pl.catch(()=>{try{vd.muted=true;vd.play().catch(()=>{})}catch(e){}})}}
   // preload neighbours
-  [GALV.i+1,GALV.i-1].forEach(j=>{if(ph[j]){const im=new Image();im.src=ph[j].f}});
+  [GALV.i+1,GALV.i-1].forEach(j=>{if(ph[j]&&!ph[j].v){const im=new Image();im.src=ph[j].f}});
 }
 function galClose(){const o=document.getElementById('galv');if(o)o.remove();GALV=null}
 function galStep(d){if(!GALV)return;const n=galPhotos(GALV.k).length;galOpen(GALV.k,(GALV.i+d+n)%n)}
