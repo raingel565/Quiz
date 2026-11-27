@@ -53,7 +53,10 @@ const $=id=>id==='scene'?ROOT:ROOT.querySelector('#ds_'+id);
 const GROUND=438;
 let speed=1,CLOCK=0,last=performance.now(),RAF=0;
 const subs=new Set();
-function frame(n){RAF=0;const dt=Math.min(60,n-last)*speed;last=n;CLOCK+=dt;for(const f of [...subs])f(CLOCK,dt);if(LIVE)RAF=requestAnimationFrame(frame)}
+let HOLD=0,HOLDAT=0;
+/* hitstop: на долю секунды замораживает сценическое время (бойцы, эффекты, таймеры) в момент сильного попадания; не чаще раза в 350 мс */
+function hitstop(ms){if(speed>1)return;const n=performance.now();if(n-HOLDAT<350)return;HOLDAT=n;HOLD=Math.max(HOLD,ms)}
+function frame(n){RAF=0;const real=Math.min(60,n-last);last=n;if(HOLD>0){HOLD-=real;if(LIVE)RAF=requestAnimationFrame(frame);return}const dt=real*speed;CLOCK+=dt;for(const f of [...subs])f(CLOCK,dt);if(LIVE)RAF=requestAnimationFrame(frame)}
 let LIVE=false;
 function startClock(){LIVE=true;if(!RAF){last=performance.now();RAF=requestAnimationFrame(frame)}}
 function stopClock(){LIVE=false;if(RAF){cancelAnimationFrame(RAF);RAF=0}subs.clear()}
@@ -61,7 +64,15 @@ const sleep=ms=>new Promise(res=>{const t0=CLOCK;const f=()=>{if(CLOCK-t0>=ms){s
 const after=(fn,ms)=>{sleep(ms||0).then(fn)};
 function run(ms,cb){return new Promise(res=>{const t0=CLOCK;const f=()=>{const t=Math.min(1,(CLOCK-t0)/ms);cb(t);if(t>=1){subs.delete(f);res()}};subs.add(f)})}
 const E={lin:t=>t,out:t=>1-Math.pow(1-t,3),in:t=>t*t*t,io:t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2,back:t=>{const c=1.7;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)},bounce:t=>{const n=7.56,d=2.75;if(t<1/d)return n*t*t;if(t<2/d)return n*(t-=1.5/d)*t+.75;if(t<2.5/d)return n*(t-=2.25/d)*t+.9375;return n*(t-=2.625/d)*t+.984375}};
+E.snap=t=>1-Math.pow(1-t,2.4);
 const rad=a=>a*Math.PI/180;
+/* пружина по углу: направление оружия запаздывает за кистью и доигрывает после остановки */
+function lagAng(F,key,target,t){const S=F._sp||(F._sp={});let st=S[key];if(!st){st=S[key]={a:target,v:0,t}}
+ const ms=t-st.t;st.t=t;if(ms>0){let n=Math.max(1,Math.ceil(ms/16));const dt=Math.min(.06,ms/1000)/n;
+  for(let i=0;i<n;i++){let d=target-st.a;d=Math.atan2(Math.sin(d),Math.cos(d));st.v+=(420*d-26*st.v)*dt;st.a+=st.v*dt}
+  let d=target-st.a;d=Math.atan2(Math.sin(d),Math.cos(d));if(Math.abs(d)>.7)st.a=target-Math.sign(d)*.7}
+ return st.a}
+const LAG={h:.1,fb:.14,bb:.16,fu:.05,bu:.07,fs:.11,bs:.11,ft:.04,bt:.04};
 
 /* ---------- скелет ---------- */
 // углы в градусах: 0 = вниз вдоль тела, + = вперёд. torso/head: 0 = вертикально вверх, + = вперёд.
@@ -108,10 +119,14 @@ class Fighter{
     this.sBU=bone(g,0,0,12,col);this.sFU=bone(g,0,0,12,col);this.sBT=bone(g,0,0,15,col);this.sFT=bone(g,0,0,15,col);
     this.cH=circ(g,17,col);this.cBH=circ(g,8,col);this.cFH=circ(g,8,col);
     this.band=document.createElementNS(NS,'line');this.band.setAttribute('stroke',col);this.band.setAttribute('stroke-width',6);this.band.setAttribute('stroke-linecap','round');g.appendChild(this.band);
+    this.rib=[0,1].map(()=>{const r=document.createElementNS(NS,'path');r.setAttribute('fill','none');r.setAttribute('stroke',col);r.setAttribute('stroke-width',4.2);r.setAttribute('stroke-linecap','round');g.appendChild(r);return r});this._rs=[null,null];
     this.home=x;this.sc=1;this._f=(t)=>this.draw(t);subs.add(this._f)}
   destroy(){subs.delete(this._f);if(this.g.parentNode)this.g.parentNode.removeChild(this.g)}
   draw(t){let P=this.pose;
-    if(this.idle){const b=(Math.sin(t/260+this.ph)+1)/2;P=mix(P,POSE.guard2,b*.7);P=Object.assign({},P,{dx:P.dx+Math.sin(t/520+this.ph)*5})}
+    if(this.idle){const ph=this.ph,b=(Math.sin(t/300+ph)+1)/2;P=mix(P,POSE.guard2,b*.7);
+      /* многочастотное дыхание: корпус/плечи, голова и ноги качаются на разных частотах и фазах; опора не скользит (dx почти не трогаем) */
+      P=Object.assign({},P,{dx:P.dx+Math.sin(t/1700+ph)*1.6,t:P.t+Math.sin(t/830+ph*1.3)*1.8+Math.sin(t/410+ph)*.7,h:P.h+Math.sin(t/610+ph*2.1)*2.4,
+       fu:P.fu+Math.sin(t/540+ph*.7)*2.2,bu:P.bu+Math.sin(t/470+ph*1.9)*2.2,ft:P.ft+Math.sin(t/970+ph)*1.4,bt:P.bt+Math.sin(t/1130+ph*1.7)*1.4,dy:(P.dy||0)+Math.sin(t/300+ph)*1.1})}
     const p=solve(P),pts=p;this.pts=p;const sc=this.sc;if(sc!==1){const cx=(P.dx||0)*(1/sc-1),cy=(P.dy||0)*(1/sc-1);for(const k in pts){pts[k]={x:pts[k].x+cx,y:pts[k].y+cy}}}
     this.g.setAttribute('transform','translate('+this.x+','+GROUND+') scale('+(this.dir*sc)+','+sc+')');
     this.sBU(pts.sh,pts.be);this.sBA(pts.be,pts.bh);this.sBT(pts.pel,pts.bk);this.sBL(pts.bk,pts.bf);
@@ -120,11 +135,19 @@ class Fighter{
     const hx=pts.head.x,hy=pts.head.y;const a=rad(P.t+P.h+(P.rot||0));this.band.setAttribute('x1',hx-14*Math.cos(a)-0);this.band.setAttribute('y1',hy-3+14*Math.sin(a));this.band.setAttribute('x2',hx+14*Math.cos(a));this.band.setAttribute('y2',hy-3-14*Math.sin(a));
     this.sFT(pts.pel,pts.fk);this.sFL(pts.fk,pts.ff);
     this.sFU(pts.sh,pts.fe);this.sFA(pts.fe,pts.fh);
-    this.cBH(pts.bh);this.cFH(pts.fh)}
+    this.cBH(pts.bh);this.cFH(pts.fh);this.ribbons(t,pts,P,hx,hy)}
+  /* хвосты повязки: два конца-пружины в мировых координатах, провисают и запаздывают за головой */
+  ribbons(t,pts,P,hx,hy){const a=rad(P.t+P.h+(P.rot||0)),sc=this.sc,d=this.dir,ax=hx-14*Math.cos(a),ay=hy-3+14*Math.sin(a);
+   const wx=this.x+ax*d*sc,wy=GROUND+ay*sc,ms=this._rt==null?0:t-this._rt;this._rt=t;this.rib.forEach(r=>r.setAttribute('stroke',this.band.getAttribute('stroke')));
+   for(let i=0;i<2;i++){const tx=wx-d*(20+i*9)*sc,ty=wy+(8+i*10)*sc;let s=this._rs[i];if(!s||Math.hypot(s.x-tx,s.y-ty)>150*sc)s=this._rs[i]={x:tx,y:ty,vx:0,vy:0};
+    if(ms>0){const n=Math.max(1,Math.ceil(ms/16)),dt=Math.min(.06,ms/1000)/n,k=i?150:230,c=i?9:12;for(let j=0;j<n;j++){s.vx+=(k*(tx-s.x)-c*s.vx)*dt;s.vy+=(k*(ty-s.y)-c*s.vy)*dt+40*dt;s.x+=s.vx*dt;s.y+=s.vy*dt}}
+    const ex=(s.x-this.x)/(d*sc),ey=(s.y-GROUND)/sc,mx=(ax+ex)/2,my=(ay+ey)/2-4;this.rib[i].setAttribute('d','M'+ax+' '+ay+' Q'+mx+' '+my+' '+ex+' '+ey)}}
   /* мировые координаты точки */
   W(k){if(!this.pts)this.draw(CLOCK);const p=this.pts[k];return {x:this.x+p.x*this.dir*this.sc,y:GROUND+p.y*this.sc}}
   async to(name,ms=200,ease=E.out,over={}){this.idle=false;const from=Object.assign({},this.pose),to=Object.assign({},typeof name==='string'?POSE[name]:name,over);
-    await run(ms,t=>{this.pose=mix(from,to,ease(t))});this.pose=to}
+    /* overlap: корпус ведёт движение, предплечья, голова и стопы догоняют с небольшой задержкой (доля длительности), к концу все суставы приходят вместе */
+    const lg=ms>=110?LAG:null;
+    await run(ms,t=>{if(!lg){this.pose=mix(from,to,ease(t));return}const o={};for(const k in from){const l=lg[k]||0,u=l?Math.min(1,Math.max(0,(t-l)/(1-l))):t;o[k]=from[k]+((to[k]===undefined?from[k]:to[k])-from[k])*ease(u)}this.pose=o});this.pose=to}
   async seq(steps){for(const s of steps)await this.to(...s)}
   rest(){this.idle=true;this.pose=Object.assign({},POSE.guard)}
 }
@@ -132,8 +155,8 @@ function attachSword(F,len=80){const g=F.inner;const mk=(c,w)=>{const l=document
  const bo=mk('#0d1118',8),bi=mk('#f4f8ff',3.6),hd=mk('#7a4a2a',6.5),gd=mk('#d8b24a',3);
  const set=(l,a,b)=>{l.setAttribute('x1',a.x);l.setAttribute('y1',a.y);l.setAttribute('x2',b.x);l.setAttribute('y2',b.y)};
  const old=F.draw.bind(F);F.draw=function(t){old(t);const p=this.pts;let dx=p.fh.x-p.fe.x,dy=p.fh.y-p.fe.y;const n=Math.hypot(dx,dy)||1;dx/=n;dy/=n;
-  const P=(k)=>({x:p.fh.x+dx*k,y:p.fh.y+dy*k});set(hd,P(-14),P(2));set(bo,P(3),P(len));set(bi,P(4),P(len-1));
-  const q=P(3),px=-dy*8,py=dx*8;gd.setAttribute('x1',q.x-px);gd.setAttribute('y1',q.y-py);gd.setAttribute('x2',q.x+px);gd.setAttribute('y2',q.y+py)}}
+  const P=(k)=>({x:p.fh.x+dx*k,y:p.fh.y+dy*k});const ag=lagAng(this,'sw',Math.atan2(dy,dx),t),lx=Math.cos(ag),ly=Math.sin(ag),PB=(k)=>({x:p.fh.x+lx*k,y:p.fh.y+ly*k});set(hd,P(-14),P(2));set(bo,PB(3),PB(len));set(bi,PB(4),PB(len-1));
+  const q=PB(3),px=-ly*8,py=lx*8;gd.setAttribute('x1',q.x-px);gd.setAttribute('y1',q.y-py);gd.setAttribute('x2',q.x+px);gd.setAttribute('y2',q.y+py)}}
 
 /* ---------- эффекты ---------- */
 const fxB=$('fxBack'),fxF=$('fxFront');
@@ -143,7 +166,7 @@ function burst(x,y,n=12,col='#ffe9a8',pow=1){const ps=[];for(let k=0;k<n;k++){co
 function ring(x,y,col='#fff',R=90){const c=el('circle',{cx:x,cy:y,r:4,fill:'none',stroke:col,'stroke-width':6});return run(380,t=>{c.setAttribute('r',4+R*E.out(t));c.setAttribute('opacity',1-t);c.setAttribute('stroke-width',6*(1-t)+1);if(t>=1)c.remove()})}
 function flash(a=.5){const f=$('flash');run(220,t=>f.style.opacity=a*(1-Math.abs(t*2-1)))}
 function shake(){const s=$('scene');s.classList.remove('ds-shake');void s.offsetWidth;s.classList.add('ds-shake')}
-function hitFx(F,col,big){const p=F.W('head'),c=F.W('sh');const x=(p.x+c.x)/2,y=(p.y+c.y)/2;flash(big?.6:.35);ring(x,y,col,big?130:80);burst(x,y,big?22:12,col,big?1.4:1);if(big)shake()}
+function hitFx(F,col,big){const p=F.W('head'),c=F.W('sh');const x=(p.x+c.x)/2,y=(p.y+c.y)/2;flash(big?.6:.35);ring(x,y,col,big?130:80);burst(x,y,big?22:12,col,big?1.4:1);if(big){hitstop(55);shake()}}
 
 /* озвучка приёма (голос персонажа), только при обычной скорости и включённом звуке */
 const VOX={};function voice(src){try{if(window.GL_NOVOX||!API.soundOn()||speed>1)return;const a=VOX[src]||(VOX[src]=new Audio(src));a.currentTime=0;a.volume=1;const q=a.play();if(q&&q.catch)q.catch(()=>{})}catch(e){}}
@@ -327,7 +350,7 @@ function flyer(F,A0,B0,o={}){const g=el('g',{});if(o.shape)o.shape(g,o);
   g.setAttribute('transform',`translate(${x},${y}) rotate(${rot}) scale(${s*(o.mirror&&!o.aim?F.dir:1)},${s})`);
   if(o.trail&&Math.random()<.85)tdot(x,y,o.col||'#fff',o.trailR||4);
   if(t>=1)g.remove()})}
-function boom(T,col,sz=1,k='sh'){const h=T.W(k);ring(h.x,h.y,col,80*sz);burst(h.x,h.y,Math.round(12*sz),col,Math.min(2,sz));flash(Math.min(.6,.18+.16*sz));if(sz>=1.6)shake()}
+function boom(T,col,sz=1,k='sh'){const h=T.W(k);ring(h.x,h.y,col,80*sz);burst(h.x,h.y,Math.round(12*sz),col,Math.min(2,sz));flash(Math.min(.6,.18+.16*sz));if(sz>=1.6){shake();if(sz>=2)hitstop(40)}}
 function cutAt(x,y,a,len,col='#f4fbff',w=9){const l=el('line',{x1:x-len*Math.cos(a),y1:y-len*Math.sin(a),x2:x+len*Math.cos(a),y2:y+len*Math.sin(a),stroke:col,'stroke-width':w,'stroke-linecap':'round',filter:`drop-shadow(0 0 9px ${col})`});run(260,t=>{l.setAttribute('opacity',1-t);if(t>=1)l.remove()})}
 function bolt(x0,y0,x1,y1,col='#fff6a8',w=6){const n=8;let d=`M ${x0} ${y0}`;for(let i=1;i<=n;i++){const k=i/n;d+=` L ${L_(x0,x1,k)+(i<n?R_(-22,22):0)} ${L_(y0,y1,k)+(i<n?R_(-12,12):0)}`}
  const p=el('path',{d,fill:'none',stroke:col,'stroke-width':w,'stroke-linejoin':'round',filter:`drop-shadow(0 0 10px ${col})`});run(260,t=>{p.setAttribute('opacity',1-t);if(t>=1)p.remove()})}
@@ -808,7 +831,7 @@ function hydra(F,i){const ow=el('path',{fill:'none',stroke:'#e0303a','stroke-wid
   gone:()=>run(240,t=>{for(const e of [ow,iw,h])e.setAttribute('opacity',1-t);if(t>=1){ow.remove();iw.remove();h.remove()}})}}
 function attachTrident(F){const g=F.inner;const mk=(c,w)=>{const l=document.createElementNS(NS,'line');l.setAttribute('stroke',c);l.setAttribute('stroke-width',w);l.setAttribute('stroke-linecap','round');g.appendChild(l);return l};
  const so=mk('#0d1118',9),si=mk('#ffd25a',4.5);const pr=document.createElementNS(NS,'path');pr.setAttribute('stroke','#ffd25a');pr.setAttribute('stroke-width',4.5);pr.setAttribute('fill','none');pr.setAttribute('stroke-linecap','round');g.appendChild(pr);
- const old=F.draw.bind(F);F.draw=function(t){old(t);const p=this.pts;let dx=p.fh.x-p.fe.x,dy=p.fh.y-p.fe.y;const n=Math.hypot(dx,dy)||1;dx/=n;dy/=n;const P=k=>({x:p.fh.x+dx*k,y:p.fh.y+dy*k});const a=P(-46),b=P(96);
+ const old=F.draw.bind(F);F.draw=function(t){old(t);const p=this.pts;let dx=p.fh.x-p.fe.x,dy=p.fh.y-p.fe.y;const n=Math.hypot(dx,dy)||1;dx/=n;dy/=n;{const ag=lagAng(this,'tr',Math.atan2(dy,dx),t);dx=Math.cos(ag);dy=Math.sin(ag)}const P=k=>({x:p.fh.x+dx*k,y:p.fh.y+dy*k});const a=P(-46),b=P(96);
   for(const l of [so,si]){l.setAttribute('x1',a.x);l.setAttribute('y1',a.y);l.setAttribute('x2',b.x);l.setAttribute('y2',b.y)}
   const px=-dy,py=dx,q=(k,s)=>{const c=P(k);return (c.x+px*s)+' '+(c.y+py*s)};
   pr.setAttribute('d','M '+q(96,-14)+' L '+q(96,14)+' M '+q(96,-14)+' L '+q(116,-14)+' M '+q(96,0)+' L '+q(124,0)+' M '+q(96,14)+' L '+q(116,14))}}
@@ -1082,18 +1105,20 @@ async function attack(F,T,abil){
   F.tgt=T;const A=ABIL[abil]||ABIL.none;
   if(A.pre){
     await A.pre(F,T);
-    if(A.fx){await A.fx(F,T)}else{await F.to('windup',160,E.in,{dx:-24});F.to('punch',150,E.in,{dx:GAP(F)-135});const tr=setInterval(()=>A.trail&&A.trail(F),30/speed);await sleep(150);clearInterval(tr)}
-  }else{await F.to('windup',230,E.out);await F.to('punch',120,E.in,{dx:GAP(F)-120*F.sc})}
+    if(A.fx){await A.fx(F,T)}else{await F.to('windup',170,E.io,{dx:-24});F.to('punch',150,E.snap,{dx:GAP(F)-135});const tr=setInterval(()=>A.trail&&A.trail(F),30/speed);await sleep(150);clearInterval(tr)}
+  }else{await F.to('windup',240,E.io);await F.to('punch',115,E.snap,{dx:GAP(F)-120*F.sc})}
   return {big:true,col:A.col||'#ffe9a8'}
 }
 async function react(T,info,fall){
   hitFx(T,info.col,true);
   if(fall){
     await T.to('hit',120,E.out,{dx:-50,rot:-10});
-    await T.to('hit',420,E.out,{dx:-120,dy:-70,rot:-52,t:-40});
+    await T.to('stagger',140,E.out,{dx:-62,rot:-14,t:2,ft:50,bt:-42}); // присед и потеря равновесия
+    await T.to('hit',380,E.out,{dx:-120,dy:-70,rot:-52,t:-40}); // корпус отклоняется, ноги отрываются
     await T.to('lie',430,E.in,{dx:-150,dy:0,rot:-92});
-    shake();snd('fall');burst(T.W('pel').x,GROUND-6,10,'#c9a574',.7);
-    await T.to('lie',260,E.bounce,{dx:-154,rot:-90});
+    hitstop(70);shake();snd('fall');burst(T.W('pel').x,GROUND-6,10,'#c9a574',.7);
+    await T.to('lie',130,E.out,{dx:-154,dy:-16,rot:-86}); // отскок
+    await T.to('lie',230,E.bounce,{dx:-154,dy:0,rot:-90});
   }else{await T.to('hit',90,E.out,{dx:-55});await sleep(120);await T.to('stagger',260,E.out,{dx:-30})}
 }
 async function entrance(F,k){const g=F.g,X=F.home;
@@ -1135,9 +1160,18 @@ function mkPeng(F,side){
   el('circle',{cx:10,cy:-57,r:2.6,fill:'#fff'},g);el('circle',{cx:11,cy:-57,r:1.3,fill:ink},g);
   el('polygon',{points:'14,-52 25,-49 14,-46',fill:'#ffb43a',stroke:ink,'stroke-width':1},g);
   const wing2=el('ellipse',Object.assign({cx:5,cy:-30,rx:5,ry:14,fill:ink,transform:'rotate(-18 5 -30)'},sw),g);
-  const st={F,g,side,x:F.x-F.dir*75,busy:false,kick(on){f2.setAttribute('transform',on?'translate(13,-10) rotate(-35 9 -2)':'');wing2.setAttribute('transform',on?'rotate(-60 5 -30)':'rotate(-18 5 -30)')}};
-  st.f=(t)=>{if(st.busy)return;st.x+=(F.x-F.dir*75-st.x)*.18;const bob=Math.abs(Math.sin(t/260+side*2))*3;g.setAttribute('transform','translate('+st.x+','+(GROUND-bob)+') scale('+(F.dir*1.5)+',1.5)')};
+  const st={F,g,side,x:F.x-F.dir*75,busy:false,r:null,react(k,ms){if(!st.busy)st.r={k,ms,t0:CLOCK}},kick(on){f2.setAttribute('transform',on?'translate(13,-10) rotate(-35 9 -2)':'');wing2.setAttribute('transform',on?'rotate(-60 5 -30)':'rotate(-18 5 -30)')}};
+  st.f=(t)=>{if(st.busy)return;const gx=F.x-F.dir*75,mv=Math.abs(gx-st.x);st.x+=(gx-st.x)*.18;
+   /* контроллер: покачивание корпуса и переваливание (сильнее, когда идёт), поверх него короткая реакция на событие боя */
+   let bob=Math.abs(Math.sin(t/260+side*2))*3,rot=Math.sin(t/380+side*2)*3.2+Math.sin(t/150+side)*Math.min(7,mv*.5),lift=0,sx=0;
+   const r=st.r;if(r){const u=(t-r.t0)/r.ms;if(u>=1){st.r=null;wing2.setAttribute('transform','rotate(-18 5 -30)')}else{
+     if(r.k==='hop')lift=Math.sin(Math.PI*u)*30;
+     else if(r.k==='cheer'){lift=Math.abs(Math.sin(3*Math.PI*u))*24;rot+=Math.sin(6*Math.PI*u)*8;wing2.setAttribute('transform','rotate('+(-70-Math.sin(14*u*Math.PI)*22)+' 5 -30)')}
+     else if(r.k==='scare'){rot-=Math.sin(Math.PI*Math.min(1,u*1.6))*16;sx=Math.sin(u*60)*2.4*(1-u);bob=0}
+     else if(r.k==='tilt')rot+=Math.sin(Math.PI*u)*14}}
+   g.setAttribute('transform','translate('+(st.x+sx)+','+(GROUND-bob-lift)+') scale('+(F.dir*1.5)+',1.5) rotate('+rot+')')};
   subs.add(st.f);return st}
+const pr=(i,k,ms)=>{const q=PL[i];if(q)q.react(k,ms)};
 function clearPeng(){for(const st of PL){subs.delete(st.f);if(st.g.parentNode)st.g.parentNode.removeChild(st.g)}PL=[]}
 
 /* ---------- публичное API ---------- */
@@ -1163,13 +1197,14 @@ const API={
  async round(o){
   if(!RF)return;
   /* общий замах: у всех раундов одинаковое начало, по движению не угадать исход */
+  pr(0,'hop',380);pr(1,'hop',380);
   {const all=[...LF,RF];await Promise.all(all.map(F=>F.to('windup',240,E.out,{dx:-18})));await sleep(200)}
   if(o.out===-1){
    const left=RNG()<.5,A=left?LF[0]:RF,Ds=left?[RF]:LF,hold=left?LF.slice(1):[];
    const doms=Ds.map(D=>dome(D));await Promise.all(doms.map(d=>d.open()));
    const D0=Ds[0],off=D0.dir*140*D0.sc,SP=Object.create(D0);SP.x=D0.x+off;SP.home=D0.home+off;SP.to=async()=>{}; // удар упирается в щит, а не в бойца
    const info=await attack(A,SP,pick(A,false));A.tgt=D0;
-   snd('clash');flash(.4);shake();await Promise.all(doms.map(d=>d.hit()));
+   pr(0,'tilt',520);pr(1,'tilt',520);snd('clash');flash(.4);shake();await Promise.all(doms.map(d=>d.hit()));
    await banner('НИЧЬЯ','щит выдержал удар — раунд никому','#cfd8e3');await sleep(450);
    await Promise.all(doms.map(d=>d.close()));await hideBanner();
    A.x=A.home;await Promise.all([...LF,RF].map(F=>F.to('guard',380,E.io,{dx:0})));[...LF,RF].forEach(F=>F.rest());
@@ -1179,10 +1214,10 @@ const API={
   const nm=moves.map(m=>(ABIL[m]||ABIL.none).n);label(leftWins?1:2,nm.length>2?nm.slice(0,2).join(' + ')+' …':nm.join(' + '));
   if(speed<=1)snd(elemOf(W[0],moves[0]));
   const infos=await Promise.all(W.map((F,i)=>sleep(i*160).then(()=>attack(F,T,moves[i]))));
-  snd(heavy||o.fall?'hitH':'hit');
+  snd(heavy||o.fall?'hitH':'hit');pr(leftWins?0:1,'cheer',900);pr(leftWins?1:0,'scare',800);
   if(o.fall)FELL[leftWins?1:0]=true;
   if(leftWins)LIVES[1]=Math.max(0,LIVES[1]-1);else LIVES[0]=Math.max(0,LIVES[0]-1);pips(1);pips(2);
-  await Promise.all([...losers.map((F,i)=>sleep(i*60).then(()=>react(F,infos[0],o.fall))),...W.map(F=>sleep(220).then(()=>F.to('guard',420,E.io,{dx:0})))]);
+  await Promise.all([...losers.map((F,i)=>sleep(i*60).then(()=>react(F,infos[0],o.fall))),...W.map(F=>sleep(160).then(async()=>{await F.to(Object.assign({},F.pose),70,E.out,{dx:(F.pose.dx||0)-12,t:(F.pose.t||0)-6});return F.to('guard',380,E.io,{dx:0})}))]);
   label(1,'');label(2,'');W.forEach(F=>{F.x=F.home;F.rest()});
   if(!o.fall)await Promise.all(losers.map(F=>F.to('guard',420,E.io,{dx:0}).then(()=>F.rest())));
  },
@@ -1203,7 +1238,7 @@ const API={
  async finish(winner,title){title=String(title||'').replace(/\s*\(.*?\)\s*/g,' ').trim();$('banner').style.fontSize=title.length>16?'4.6cqw':'';
   if(!RF)return;
   if((winner===0||winner===1)&&!FELL[1-winner]){FELL[1-winner]=true;const Lo=winner===0?[RF]:LF;await Promise.all(Lo.map((F,i)=>sleep(i*60).then(()=>react(F,{col:'#ffffff'},true))))}
-  if(winner===0||winner===1){const W=winner===0?LF:[RF];snd('win');W.forEach(F=>F.idle=false);
+  if(winner===0||winner===1){const W=winner===0?LF:[RF];snd('win');pr(winner,'cheer',1500);pr(1-winner,'scare',900);W.forEach(F=>F.idle=false);
    await Promise.all(W.map(F=>F.to('win',420,E.back,{dy:-34})));await Promise.all(W.map(F=>F.to('win',260,E.bounce,{dy:0})))}
   else snd('draw');
   await banner(title||'','','#ffd45a');await sleep(900)},
