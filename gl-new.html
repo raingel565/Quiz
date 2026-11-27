@@ -1417,7 +1417,8 @@ body.tutor #app{padding-top:110px}
 #deck .dkdolf{position:absolute;z-index:3;height:auto;pointer-events:none;animation:dkdolf 3.2s ease-in-out infinite;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
 #deck .dkpenb{border-color:rgba(160,225,255,.7);color:#cdeeff}
 #deck .dkship{position:absolute}
-#deck .dkship .dkcat{position:absolute;left:54%;top:46%;width:27%;height:auto;pointer-events:none;filter:drop-shadow(0 0 2px rgba(200,225,255,.95)) drop-shadow(0 0 6px rgba(150,200,255,.6))}
+#deck .dkship .dkcw{position:absolute;inset:0;pointer-events:none;animation:dksway 7s ease-in-out infinite}
+#deck .dkship .dkcw .dkcat{position:absolute;left:49%;top:47%;width:17%;height:auto;animation:none;pointer-events:none;filter:drop-shadow(0 0 2px rgba(200,225,255,.95)) drop-shadow(0 0 6px rgba(150,200,255,.6))}
 #deck .dkship .dkpeng{position:absolute;left:37%;top:50%;width:27%;height:auto;animation:none;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
 
 /* торговый галеон */
@@ -5232,7 +5233,7 @@ function dkRender(){
     if(ht)h+='<div class="dkegght" style="right:'+(W*0.04).toFixed(0)+'px;top:'+(H*0.2).toFixed(0)+'px;max-width:'+(W*0.5).toFixed(0)+'px">'+ht+'</div>'}
   const sd=DK_SHIPS[p.ch];let sx=W/2-shW/2,sy=shTop,sw=shW,sim='assets/deck/ship.webp';
   if(sd){const nh=shH*sd[1];sw=nh*sd[0]/900;sx=W/2-sw/2;sy=shTop+shH-nh+(sd[2]||0)*nh;sim='assets/deck/ships/'+p.ch+'.webp'}
-  h+='<div class="dkship wx-'+wk+'" style="left:'+sx.toFixed(0)+'px;top:'+sy.toFixed(0)+'px;width:'+sw.toFixed(0)+'px"><img src="'+sim+'" alt="">'+(p.pengu>0?'<img class="dkpeng" src="assets/deck/penguin1.webp" alt="">':'')+(p.cat>0?'<img class="dkcat" src="assets/deck/cat.webp" alt="">':'')+'</div>';
+  h+='<div class="dkship wx-'+wk+'" style="left:'+sx.toFixed(0)+'px;top:'+sy.toFixed(0)+'px;width:'+sw.toFixed(0)+'px"><img src="'+sim+'" alt="">'+(p.pengu>0?'<img class="dkpeng" src="assets/deck/penguin1.webp" alt="">':'')+(p.cat>0?'<div class="dkcw"><img class="dkcat" src="assets/deck/cat.webp" alt=""></div>':'')+'</div>';
   {const here=playersAt(p.loc).filter(q=>q!==p);here.forEach((q,k)=>{const sh=shH*0.38,sw=sh*360/294;const mv=moves.find(m=>m.q===q&&!fresh);h+='<img class="dkopp fl'+(mv?' arr':'')+'" src="assets/deck/opp'+(q.i%6)+'.webp" alt="" style="left:'+(W*0.97-sw-k*sw*0.5).toFixed(0)+'px;top:'+(shTop+shH*0.62-sh+k*8).toFixed(0)+'px;width:'+sw.toFixed(0)+'px">'})}
   // корабли соперников, которые только что сходили, проплывают между островами
   if(!fresh){const pos=id=>{const o=isl.find(x=>x.id===id);if(o){const sh=o.w*(o.far?0.26:0.32),sw=sh*360/294,fl=o.cx>W/2,l=o.cx+(fl?-o.w*0.12-sw:o.w*0.12);return{x:l+sw/2,y:o.y,s:sh}}if(id===p.loc){const sh=shH*0.38,sw=sh*360/294;return{x:W*0.97-sw/2,y:shTop+shH*0.62,s:sh}}return null};
