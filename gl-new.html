@@ -1014,6 +1014,7 @@ html,body{overscroll-behavior-y:none}
 .dshist span{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 8px;border-radius:10px;background:rgba(255,255,255,.05);font-size:12.5px;white-space:nowrap;overflow:hidden}
 .dshist span i{font-style:normal;opacity:.55;font-weight:700}
 .dsdet{border-radius:14px}.dsdet summary{font-size:13.5px;opacity:.75}
+body.dgate #fxbd{pointer-events:auto!important}
 #fxbd{position:fixed;inset:0;z-index:99997;background:rgba(5,10,8,.62);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);opacity:0;transition:opacity .25s ease;pointer-events:none}
 #fxbd.on{opacity:1}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
@@ -3903,9 +3904,9 @@ function diceFx(rows,done){
   const die=(r)=>r.kind==='pon'?ponDie():(r.sides||6)===6?'<div class="dscene"><div class="dwrap"><div class="cube">'+[1,2,3,4,5,6].map(face).join('')+'</div></div></div>':'<div class="dscene"><div class="dwrap"><div class="pd s'+r.sides+'"><b>?</b></div></div></div>';
   const gated=rows.some(r=>r.gate&&(NET.on?r.who===NET.me:!(G&&G.players[r.who]&&G.players[r.who].bot)));
   o.innerHTML=rows.map(r=>'<div class="drow"><div class="dl">'+esc(r.label)+'</div>'+r.vals.map(()=>die(r)).join('')+'<div class="dsum">'+(r.vals.length>1?'= ':'')+r.vals.reduce((a,b)=>a+b,0)+'</div></div>').join('')+(gated?'<button class="btn primary dgo">'+(rows.every(r=>r.kind==='pon')?'Прочитать понеглиф':'Бросить кубики')+'</button>':'<div class="dhint">нажмите, чтобы пропустить</div>');
-  document.body.appendChild(o);
+  document.body.appendChild(o);if(gated)document.body.classList.add('dgate'); // пока не брошены кубики дохода, остальное не нажимается
   let fin=false,started=false;
-  const end=()=>{if(fin)return;fin=true;o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},300)};
+  const end=()=>{if(fin)return;fin=true;document.body.classList.remove('dgate');o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},300)};
   const flat=[];rows.forEach(r=>r.vals.forEach(v=>flat.push({v,s:r.sides||6,k:r.kind})));
   const cubes=o.querySelectorAll('.dwrap>.cube,.dwrap>.pd,.dwrap>.pon'),wraps=o.querySelectorAll('.dwrap');
   const go=()=>{
@@ -6956,7 +6957,7 @@ function resumeCardHtml(){
 function resumeLocal(){const R=resumeInfo();if(!R.loc){render();return}SAVE=R.loc;if(!saveRestore())alert('Не удалось восстановить партию, начните новую.')}
 function resumeNet(){let code='';try{code=localStorage.getItem('gl_resume_room')||'';localStorage.removeItem('gl_resume_room');NET.name=NET.name||localStorage.getItem('gl_name')||'Игрок'}catch(e){}if(!code)return;NET.on=true;NET.stage='menu';netJoin(code,false)}
 function exitGame(keep){
-  window.__mnu=false;qoClose&&qoClose();FXQ.length=0;FXBUSY=false;['dicefx','cardfx','evfx','akfx','akvid','fxbd'].forEach(i=>{const e=document.getElementById(i);if(e)e.remove()});document.body.classList.remove('fxchain');
+  window.__mnu=false;qoClose&&qoClose();FXQ.length=0;FXBUSY=false;['dicefx','cardfx','evfx','akfx','akvid','fxbd'].forEach(i=>{const e=document.getElementById(i);if(e)e.remove()});document.body.classList.remove('fxchain');document.body.classList.remove('dgate');
   if(UI.dz){clearTimeout(UI.dz.at);if(UI.dz.sc)UI.dz.sc.close();UI.dz=null}
   if(NET.on){const code=NET.code;netLeave();try{if(keep&&code)localStorage.setItem('gl_resume_room',code);else localStorage.removeItem('gl_resume_room')}catch(e){}NET.on=false;NET.stage='menu'}
   else{if(keep){if(SAVE)saveWrite()}else saveClear()}
