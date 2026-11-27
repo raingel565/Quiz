@@ -1922,7 +1922,7 @@ const SFX=(()=>{
   }
   {const zOld=S.w_zun;S.w_zun=t=>playStorm(t,zOld,3)}
   return {
-    play(n,gap){if(!on||window.__nor)return;const c=init();if(!c||!S[n])return;const now=performance.now();if(now-(last[n]||0)<(gap||70))return;last[n]=now;try{if(c.state==='suspended')c.resume();S[n](c.currentTime+.02)}catch(e){}},
+    play(n,gap){if(!on||window.__nor||n==='alert'||n==='result')return; /* «ding» уведомлений (баннеры, карты погоды, дуэли ботов) убран: раздражал */ const c=init();if(!c||!S[n])return;const now=performance.now();if(now-(last[n]||0)<(gap||70))return;last[n]=now;try{if(c.state==='suspended')c.resume();S[n](c.currentTime+.02)}catch(e){}},
     stopVoice(){stopLuffy()},
     unlock(){const c=init();if(c&&c.state==='suspended')c.resume().catch(()=>{});preloadPk()},
     get on(){return on},
@@ -1935,7 +1935,7 @@ function logSnd(s){
   if(/ставит флаг|сжигает флаг/.test(s))fxSnd('flag');
   else if(/сидит в тюрьме|арестован|телепортируется в тюрьму/.test(s))fxSnd('jail');
   else if(/откупился|сбежал из тюрьмы|дал взятку/.test(s))fxSnd('coin');
-  else if(/побеждает|выполнил задание/.test(s))fxSnd('win');
+  else if(/побеждает|выполнил задание/.test(s)){/* фанфара на чужие победы убрана */}
   else if(/проиграл боссу/.test(s))fxSnd('lose');
   else if(/странный писк/.test(s))fxSnd('pengu');
   else if(/плеск и свист/.test(s))fxSnd('dolph');
