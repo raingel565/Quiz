@@ -420,6 +420,40 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 #splash.wt .wtc{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;opacity:0;animation:spup 1s var(--cd,3.4s) ease both;text-shadow:0 2px 16px #000}
 #splash.wt .spt{opacity:1;animation:spsh 3.2s infinite ease-in-out;font-size:clamp(34px,11vw,72px)}
 #splash.wt .sps2{opacity:1;animation:none;color:#d8c9a4}
+/* заставка «Бездна» */
+#splash.ab{background:#05060a;--cd:2.2s}
+#splash.ab .abbg{position:absolute;inset:-6%;background:url(assets/abyss.webp) 50% 40%/cover;filter:blur(18px) brightness(.45) saturate(1.2)}
+#splash.ab .abp{position:absolute;left:0;top:0;width:1408px;height:768px;transform-origin:0 0;-webkit-mask:linear-gradient(#000 82%,transparent);mask:linear-gradient(#000 82%,transparent)}
+#splash.ab .abz{position:absolute;inset:0;transform-origin:700px 440px;animation:abzm 26s ease-in-out infinite alternate;transition:transform 1.15s cubic-bezier(.55,0,.9,.4),opacity 1s}
+@keyframes abzm{from{transform:scale(1)}to{transform:scale(1.1)}}
+#splash.ab.dive .abz{animation:none;transform:scale(11);opacity:.2}
+#splash.ab .abz>img{position:absolute;inset:0;width:100%;height:100%;display:block;max-width:none}
+#splash.ab .abz>*{pointer-events:none}
+#splash.ab .abcol{position:absolute;left:585px;top:60px;width:250px;height:540px;mix-blend-mode:screen;opacity:.55;-webkit-mask:linear-gradient(90deg,transparent,#000 32%,#000 68%,transparent),linear-gradient(transparent,#000 14%,#000 80%,transparent);-webkit-mask-composite:source-in;mask:linear-gradient(90deg,transparent,#000 32%,#000 68%,transparent),linear-gradient(transparent,#000 14%,#000 80%,transparent);mask-composite:intersect;background:repeating-linear-gradient(112deg,transparent 0 15px,rgba(255,150,50,.75) 15px 21px,transparent 21px 44px);animation:abcol 1.6s linear infinite}
+#splash.ab .abcol.c2{left:610px;width:200px;opacity:.4;background:repeating-linear-gradient(68deg,transparent 0 22px,rgba(190,120,255,.7) 22px 26px,transparent 26px 58px);animation-duration:2.3s;animation-direction:reverse}
+@keyframes abcol{to{background-position:0 -176px}}
+#splash.ab .abring{position:absolute;border-radius:50%;mix-blend-mode:screen;pointer-events:none;-webkit-mask:radial-gradient(closest-side,transparent 52%,#000 72%,transparent 100%);mask:radial-gradient(closest-side,transparent 52%,#000 72%,transparent 100%)}
+#splash.ab .abring i{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0,rgba(255,140,40,.9) 12%,transparent 30%,rgba(255,210,140,.7) 52%,transparent 70%,rgba(255,120,40,.8) 88%,transparent);animation:abspin 3.2s linear infinite}
+#splash.ab .abring.r1{left:400px;top:290px;width:580px;height:560px;transform:scaleY(.26)}
+#splash.ab .abring.r2{left:300px;top:-170px;width:860px;height:600px;transform:scaleY(.42);opacity:.5}
+#splash.ab .abring.r2 i{background:conic-gradient(from 0deg,transparent 0,rgba(170,130,255,.7) 14%,transparent 34%,rgba(120,200,255,.6) 58%,transparent 76%,rgba(200,120,255,.6) 90%,transparent);animation-duration:7s;animation-direction:reverse}
+@keyframes abspin{to{transform:rotate(360deg)}}
+#splash.ab .abfl{position:absolute;inset:0;mix-blend-mode:screen;opacity:0;animation:abfl 7s infinite}
+#splash.ab .abfl.f1{background:radial-gradient(ellipse 340px 260px at 760px 200px,rgba(170,200,255,.75),transparent 70%)}
+#splash.ab .abfl.f2{background:radial-gradient(ellipse 300px 240px at 930px 400px,rgba(220,140,255,.65),transparent 70%);animation-duration:9.5s;animation-delay:2.1s}
+#splash.ab .abfl.f3{background:radial-gradient(ellipse 280px 220px at 560px 330px,rgba(150,220,255,.6),transparent 70%);animation-duration:11s;animation-delay:4.6s}
+@keyframes abfl{0%,92%,100%{opacity:0}93%{opacity:1}94%{opacity:.15}95%{opacity:.85}97%{opacity:0}}
+#splash.ab .abem{position:absolute;width:4px;height:4px;border-radius:50%;background:#ffb04a;box-shadow:0 0 8px 2px rgba(255,150,50,.8);opacity:0;animation:abem 5s linear infinite}
+@keyframes abem{0%{opacity:0;transform:translate(0,0)}15%{opacity:1}100%{opacity:0;transform:translate(var(--ex,40px),-230px)}}
+#splash.ab .abrain{position:absolute;inset:0;opacity:.35;background:repeating-linear-gradient(100deg,transparent 0 36px,rgba(190,210,255,.35) 36px 37px,transparent 37px 90px);background-size:90px 120px;animation:abrain .55s linear infinite;mix-blend-mode:screen}
+@keyframes abrain{to{background-position:-30px 120px}}
+#splash.ab .abshade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(transparent 54%,rgba(3,4,8,.7) 76%,rgba(3,4,8,.96)),radial-gradient(ellipse at 50% 38%,transparent 45%,rgba(2,3,6,.55) 100%)}
+#splash.ab .wtc{position:absolute;left:0;right:0;bottom:7%;padding:0 18px}
+#splash.ab .spt{font-size:clamp(30px,9.4vw,76px);letter-spacing:.14em;white-space:nowrap;text-align:center}
+#splash.ab .sps2{color:#c9bde0;text-shadow:0 2px 14px #000}
+#splash.ab .abwh{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .45s .7s ease-in}
+#splash.ab.dive .abwh{opacity:1}
+#splash.ab.dive .wtc,#splash.ab.dive .spf,#splash.ab.dive .abshade{opacity:0;transition:opacity .4s}
 @media(prefers-reduced-motion:reduce){#splash *{animation-duration:.01s!important;animation-delay:0s!important}}
 #admov{position:fixed;inset:0;z-index:2147482000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);padding:16px}
 #akvid{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.92);animation:dfin .25s ease both;padding:12px}
@@ -6852,7 +6886,7 @@ window.__g={endRound,SFX,fxSnd,kwFx,diceFx,eventFx,cardFx,fxCard,fxAnchor,random
 })();
 // ---------- V68: заставка с розыскными листовками (?splash=wanted) ----------
 (function(){
-  try{if(window.__nor||/[?&]nosplash/.test(location.search)||/[?&]splash=compass/.test(location.search))return}catch(e){}
+  try{if(window.__nor||/[?&]nosplash/.test(location.search)||!/[?&]splash=wanted/.test(location.search))return}catch(e){}
   const keys=Object.keys(CH).filter(k=>AVS[k]&&k!=='olesya'&&k!=='roger'&&k!=='smoker');
   const o=document.createElement('div');o.id='splash';o.className='wt';
   const fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' ');
@@ -6872,6 +6906,28 @@ window.__g={endRound,SFX,fxSnd,kwFx,diceFx,eventFx,cardFx,fxCard,fxAnchor,random
   const iv=setInterval(()=>{const e=o.querySelector('.spo');if(!e)return;if(PRES.ok){e.hidden=false;e.querySelector('b').textContent=PRES.n}},800);
   const go=()=>{if(gone||!o.classList.contains('rdy'))return;gone=true;clearInterval(iv);try{SFX.unlock();SFX.play('splash',0)}catch(e){}o.classList.add('out');setTimeout(()=>o.remove(),900)};
   setTimeout(()=>o.classList.add('rdy'),T*1000+700);
+  o.addEventListener('click',go);
+  document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go()});
+})();
+
+// ---------- заставка «Бездна» (по умолчанию; ?splash=wanted — листовки, ?splash=compass — компас) ----------
+(function(){
+  try{if(window.__nor||/[?&]nosplash/.test(location.search)||/[?&]splash=(wanted|compass)/.test(location.search))return}catch(e){}
+  const o=document.createElement('div');o.id='splash';o.className='ab';
+  let em='';for(let i=0;i<26;i++){const a=Math.random()*6.28,r=60+Math.random()*190;em+='<i class="abem" style="left:'+(690+Math.cos(a)*r*1.3).toFixed(0)+'px;top:'+(560+Math.sin(a)*r*.18-Math.random()*90).toFixed(0)+'px;--ex:'+((Math.random()*120-60)|0)+'px;animation-delay:'+(Math.random()*5).toFixed(2)+'s;animation-duration:'+(3.5+Math.random()*3).toFixed(1)+'s"></i>'}
+  o.innerHTML='<div class="abbg"></div><div class="abp"><div class="abz"><img alt="" src="assets/abyss.webp"><div class="abring r2"><i></i></div><div class="abcol"></div><div class="abcol c2"></div><div class="abring r1"><i></i></div><div class="abfl f1"></div><div class="abfl f2"></div><div class="abfl f3"></div>'+em+'<div class="abrain"></div></div></div><div class="abshade"></div>'
+   +'<div class="wtc"><div class="spt">ГРАНД ЛАЙН</div><div class="sps2">Бездна между двух миров</div><button class="spb" type="button">⚓ Выйти в море</button></div>'
+   +'<div class="spf" style="animation-delay:2.8s;bottom:14px"><span class="spv"></span><span class="spo" hidden><i></i>сейчас в игре: <b>0</b></span></div><div class="abwh"></div>';
+  document.body.appendChild(o);
+  const v=document.getElementById('ver');if(v)o.querySelector('.spv').textContent=v.textContent;
+  const fit=()=>{const W=innerWidth,H=innerHeight,p=o.querySelector('.abp');let sc,tx,ty;
+    if(W/H<1.1){sc=Math.max(W/700,H*0.76/768);tx=W/2-700*sc;ty=H*0.02}else{sc=Math.max(W/1408,H/768);tx=W/2-704*sc;ty=H/2-384*sc}
+    p.style.transform='translate('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px) scale('+sc.toFixed(4)+')'};
+  fit();addEventListener('resize',fit);
+  let gone=false;
+  const iv=setInterval(()=>{const e=o.querySelector('.spo');if(!e)return;if(PRES.ok){e.hidden=false;e.querySelector('b').textContent=PRES.n}},800);
+  const go=()=>{if(gone||!o.classList.contains('rdy'))return;gone=true;clearInterval(iv);try{SFX.unlock();SFX.play('splash',0)}catch(e){}o.classList.add('dive');setTimeout(()=>{o.classList.add('out');setTimeout(()=>{o.remove();removeEventListener('resize',fit)},700)},1250)};
+  setTimeout(()=>o.classList.add('rdy'),3200);
   o.addEventListener('click',go);
   document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go()});
 })();
