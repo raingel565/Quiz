@@ -427,6 +427,8 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 #grfx .grbox img{display:block;width:100%;height:auto;max-height:calc(100vh - 24px);object-fit:cover;animation:grz 5s ease-out both}
 @keyframes grz{from{transform:scale(1.08)}to{transform:scale(1)}}
 #grfx .grnone{height:min(60vh,420px);display:flex;align-items:center;justify-content:center;font-size:96px;background:radial-gradient(circle,#26324f,#0a0d18)}
+#grfx video{display:block;width:100%;height:auto;max-height:calc(100vh - 24px);background:#000}
+#grfx .grm{position:absolute;top:10px;left:10px;border:0;border-radius:99px;padding:9px 16px;font:700 14px/1 inherit;color:#fff;background:rgba(10,14,28,.78);box-shadow:0 0 0 1px rgba(255,255,255,.25);cursor:pointer}
 #grfx .grx{position:absolute;top:10px;right:10px;border:0;border-radius:99px;padding:9px 16px;font:700 14px/1 inherit;color:#fff;background:rgba(10,14,28,.78);box-shadow:0 0 0 1px rgba(255,255,255,.25);cursor:pointer}
 #grfx .grc{position:absolute;left:0;right:0;bottom:0;padding:34px 16px 14px;background:linear-gradient(transparent,rgba(2,6,18,.88));color:#e8f6ff;text-align:left}
 #grfx .grk{font-size:11px;letter-spacing:.22em;font-weight:800;color:#7fd4ff}
@@ -2173,7 +2175,7 @@ function locName(id){if(id==='Z')return'Зунеша (остров Зоя)';if(i
 function flagCount(p){return 4-p.fl}
 function playersAt(id){return G.players.filter(q=>q.loc===id)}
 // ---------- arrival ----------
-const GUARD={bigmom:{n:'Небесная Айрис',img:'assets/guards/iris-pop.webp'},kaido:{n:'Кайдо, царь зверей'},shanks:{n:'Рыжеволосый Шанкс'},whitebeard:{n:'Эдвард Ньюгейт Белоус'}};
+const GUARD={bigmom:{n:'Небесная Айрис',img:'assets/guards/iris-pop.webp',vid:'assets/guards/iris.mp4'},kaido:{n:'Кайдо, царь зверей'},shanks:{n:'Рыжеволосый Шанкс'},whitebeard:{n:'Эдвард Ньюгейт Белоус'}};
 const GUARD_A=9,GUARD_U=6;
 // V148: в новых партиях (tb≥3) хранитель сильнее и вызывается не чаще раза за раунд
 let GUARD_A3=11,GUARD_U3=8;
@@ -3817,10 +3819,17 @@ function grFx(ev,done){
   if(window.__nor||fast||!document.body||!gd){done&&done();return}
   const old=document.getElementById('grfx');if(old)old.remove();
   const o=document.createElement('div');o.id='grfx';
-  o.innerHTML='<div class="grbox">'+(gd.img?'<img src="'+gd.img+'" alt="">':'<div class="grnone">🗿</div>')+'<button class="grx">✕ Закрыть</button><div class="grc"><div class="grk">ХРАНИТЕЛЬ ПОНЕГЛИФА</div><div class="grn">'+esc(gd.n)+'</div><div class="grs">Атака '+ev.A+' · Уклонение '+ev.U+(ev.who?' · вызов: '+esc(ev.who):'')+'</div></div></div>';
+  o.innerHTML='<div class="grbox">'+(gd.vid?'<video playsinline preload="auto" poster="'+(gd.img||'')+'" src="'+gd.vid+SFXV+'"></video><button class="grm" hidden>🔊 Включить звук</button>':gd.img?'<img src="'+gd.img+'" alt="">':'<div class="grnone">🗿</div>')+'<button class="grx">✕ Закрыть</button><div class="grc"><div class="grk">ХРАНИТЕЛЬ ПОНЕГЛИФА</div><div class="grn">'+esc(gd.n)+'</div><div class="grs">Атака '+ev.A+' · Уклонение '+ev.U+(ev.who?' · вызов: '+esc(ev.who):'')+'</div></div></div>';
   document.body.appendChild(o);
   let fin=false;const end=()=>{if(fin)return;fin=true;o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},260)};
-  o.querySelector('.grx').onclick=e=>{e.stopPropagation();end()};o.onclick=()=>end();
+  o.querySelector('.grx').onclick=e=>{e.stopPropagation();end()};
+  const v=o.querySelector('video');
+  if(v){const mb=o.querySelector('.grm');o.onclick=e=>{if(e.target===o)end()};v.onended=()=>setTimeout(end,600);v.onerror=end;
+   mb.onclick=e=>{e.stopPropagation();v.muted=false;v.play().catch(()=>{});mb.hidden=true};
+   const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{v.muted=true;v.play().then(()=>{mb.hidden=false}).catch(()=>{})});
+   setTimeout(()=>{if(!fin&&v.readyState<2&&v.currentTime===0){v.remove();o.onclick=()=>end();setTimeout(end,3500)}},6000);
+   if(STREAM.on)setTimeout(end,8000);return}
+  o.onclick=()=>end();
   setTimeout(end,STREAM.on?2500:4200);
 }
 let FXBUSY=false;
