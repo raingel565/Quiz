@@ -442,6 +442,11 @@ select,input[type=text],input[type=number]{background:var(--sunk);color:var(--in
 @keyframes abzm{from{transform:scale(1)}to{transform:scale(1.1)}}
 #splash.ab.dive .abz{transform:scale(1.75);opacity:0;filter:blur(7px) brightness(1.5)}
 #splash.ab .abz>img{position:absolute;inset:0;width:100%;height:100%;display:block;max-width:none}
+#splash.ab .abvz{position:absolute;inset:0;display:none;transition:transform 1.5s cubic-bezier(.4,.05,.3,1),opacity 1.2s ease-in .2s,filter 1.4s ease-in}
+#splash.ab .abv{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+#splash.ab.vid .abvz{display:block}
+#splash.ab.vid .abp,#splash.ab.vid .abbg{display:none}
+#splash.ab.dive .abvz{transform:scale(1.75);opacity:0;filter:blur(7px) brightness(1.5)}
 #splash.ab .abz>*{pointer-events:none}
 #splash.ab .abcol{position:absolute;left:585px;top:60px;width:250px;height:540px;mix-blend-mode:screen;opacity:.55;-webkit-mask:linear-gradient(90deg,transparent,#000 32%,#000 68%,transparent),linear-gradient(transparent,#000 14%,#000 80%,transparent);-webkit-mask-composite:source-in;mask:linear-gradient(90deg,transparent,#000 32%,#000 68%,transparent),linear-gradient(transparent,#000 14%,#000 80%,transparent);mask-composite:intersect;background:repeating-linear-gradient(112deg,transparent 0 15px,rgba(255,150,50,.75) 15px 21px,transparent 21px 44px);animation:abcol 1.6s linear infinite}
 #splash.ab .abcol.c2{left:610px;width:200px;opacity:.4;background:repeating-linear-gradient(68deg,transparent 0 22px,rgba(190,120,255,.7) 22px 26px,transparent 26px 58px);animation-duration:2.3s;animation-direction:reverse}
@@ -7007,10 +7012,13 @@ window.__g={grFx,fxGuard,endRound,SFX,fxSnd,kwFx,diceFx,eventFx,cardFx,fxCard,fx
   try{if(window.__nor||/[?&]nosplash/.test(location.search)||/[?&]splash=(wanted|compass)/.test(location.search))return}catch(e){}
   const o=document.createElement('div');o.id='splash';o.className='ab';
   let em='';for(let i=0;i<26;i++){const a=Math.random()*6.28,r=60+Math.random()*190;em+='<i class="abem" style="left:'+(690+Math.cos(a)*r*1.3).toFixed(0)+'px;top:'+(560+Math.sin(a)*r*.18-Math.random()*90).toFixed(0)+'px;--ex:'+((Math.random()*120-60)|0)+'px;animation-delay:'+(Math.random()*5).toFixed(2)+'s;animation-duration:'+(3.5+Math.random()*3).toFixed(1)+'s"></i>'}
-  o.innerHTML='<div class="abbg"></div><div class="abp"><div class="abz"><img alt="" src="assets/abyss.webp"><div class="abring r2"><i></i></div><div class="abcol"></div><div class="abcol c2"></div><div class="abring r1"><i></i></div><div class="abfl f1"></div><div class="abfl f2"></div><div class="abfl f3"></div>'+em+'<div class="abrain"></div></div></div><div class="abshade"></div>'
+  o.innerHTML='<div class="abbg"></div><div class="abvz"><video class="abv" muted playsinline loop preload="auto"></video></div><div class="abp"><div class="abz"><img alt="" src="assets/abyss.webp"><div class="abring r2"><i></i></div><div class="abcol"></div><div class="abcol c2"></div><div class="abring r1"><i></i></div><div class="abfl f1"></div><div class="abfl f2"></div><div class="abfl f3"></div>'+em+'<div class="abrain"></div></div></div><div class="abshade"></div>'
    +'<div class="wtc"><div class="spt">ГРАНД ЛАЙН</div><div class="sps2">Бездна между двух миров</div><button class="spb" type="button">⚓ Выйти в море</button></div>'
    +'<div class="spf" style="animation-delay:2.8s;bottom:14px"><span class="spv"></span><span class="spo" hidden><i></i>сейчас в игре: <b>0</b></span></div><div class="abwh"></div>';
   document.body.appendChild(o);
+  {const vd=o.querySelector('.abv');let sv=false;try{sv=!!(navigator.connection&&navigator.connection.saveData)}catch(e){}
+   if(vd&&!sv){const pt=innerWidth/innerHeight<1.1;vd.poster=pt?'assets/abyss-p0.webp':'assets/abyss-v0.webp';vd.muted=true;vd.src=pt?'assets/abyss-p.mp4':'assets/abyss.mp4';o.classList.add('vid');
+    vd.addEventListener('error',()=>o.classList.remove('vid'));try{const pl=vd.play();if(pl&&pl.catch)pl.catch(()=>{})}catch(e){}}}
   const v=document.getElementById('ver');if(v)o.querySelector('.spv').textContent=v.textContent;
   const fit=()=>{const W=innerWidth,H=innerHeight,p=o.querySelector('.abp');let sc,tx,ty;
     if(W/H<1.1){sc=Math.max(W/700,H*0.76/768);tx=W/2-700*sc;ty=H*0.02}else{sc=Math.max(W/1408,H/768);tx=W/2-704*sc;ty=H/2-384*sc}
