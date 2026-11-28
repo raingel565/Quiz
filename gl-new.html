@@ -1382,6 +1382,10 @@ body.tutor #app{padding-top:110px}
 #deck img{-webkit-user-drag:none;pointer-events:none}
 #deck .dkbg{max-width:none}
 #deck.kwon .dksky,#deck.kwon .dkspark,#deck.kwon .dkgull,#deck.kwon .dkband{display:none!important}
+/* Морской король: всё лишнее прячем, видео чуть меньше и растворяется по краям — внизу остаётся море для корабля */
+#deck.wvk .dkui,#deck.wvk .dklb,#deck.wvk .dkwho,#deck.wvk .dkgal,#deck.wvk .dkgalb,#deck.wvk .dkpen,#deck.wvk .dkegght{opacity:0!important;pointer-events:none!important;transition:opacity .35s}
+body.wvk #botskip,body.wvk .dkcourse{display:none!important}
+#deck.wvk .wv{transform-origin:50% 0;transform:scale(.74) translateY(-3%);-webkit-mask-image:linear-gradient(to right,transparent 0,#000 11%,#000 89%,transparent 100%),linear-gradient(to bottom,#000 0,#000 60%,transparent 90%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent 0,#000 11%,#000 89%,transparent 100%),linear-gradient(to bottom,#000 0,#000 60%,transparent 90%);mask-composite:intersect}
 #deck video.wv{object-fit:cover;pointer-events:none;animation:dkvin .9s ease both}#deck video.wv.wout{animation:dkvout .95s ease forwards}@keyframes dkvout{from{opacity:1}to{opacity:0}}
 #deck.kwon .dkspray,#deck.kwon .dkflow{display:none!important}
 #deck video.dkvid{object-fit:cover;animation:dkvin .9s ease both;pointer-events:none}
@@ -1613,7 +1617,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N86</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N87</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -5377,7 +5381,7 @@ function dkRender(){
   const show=on&&p&&viewerNeeded()===p.i&&!extra.length&&!(G.pending&&G.pending.pick);
   wrap.classList.toggle('dk',!!show);document.body.classList.toggle('dkon',!!show);
   try{dkEvents(p,neigh,!!show)}catch(e){console.error('dkev',e)}
-  if(!show){if(el)el.hidden=true;return}
+  if(!show){document.body.classList.remove('wvk');if(el)el.hidden=true;return}
   if(!el){el=document.createElement('div');el.id='deck';wrap.insertBefore(el,wrap.firstChild)}
   el.hidden=false;
   el.classList.toggle('dkdark',!!DK.dark);
@@ -5501,7 +5505,7 @@ function dkRender(){
   oldBg.forEach(o=>{const n=[...el.querySelectorAll('.dkz img.dkbg,.dksky img')].find(x=>x.getAttribute('src')===o.getAttribute('src')&&x.parentNode&&x.parentNode.className===o.parentNode.className);if(n&&o.complete){o.setAttribute('style',n.getAttribute('style'));n.replaceWith(o)}});
   dkPreload();
   {const eh=el.querySelector('.dkegght');clearTimeout(DK.hT);if(eh)DK.hT=setTimeout(dkHintHide,Math.max(300,(DK.hu||0)-Date.now()))}
-  el.classList.toggle('fresh',fresh);el.classList.toggle('kwon',kwOn||!!wv);el.classList.toggle('wvon',!!wv);dkWv(el,wv);
+  el.classList.toggle('fresh',fresh);el.classList.toggle('kwon',kwOn||!!wv);el.classList.toggle('wvon',!!wv);{const wk2=!!(wv&&wv.wk==='seaking');el.classList.toggle('wvk',wk2);document.body.classList.toggle('wvk',wk2)}dkWv(el,wv);
   if(DK.arv&&Date.now()-DK.arv<4000){DK.arv=0;const z0=el.querySelector('.dkz'),im0=el.querySelector('.dkship img');if(z0)z0.classList.add('arv');
     if(im0){try{const arvKf=[{transform:'translate(0,14px) rotate(-2deg)'},{transform:'translate(0,-3px) rotate(1.2deg)',offset:.6},{transform:'translate(0,0) rotate(0)'}],arvOp={duration:1100,easing:'ease-out'};im0.animate(arvKf,arvOp);el.querySelectorAll('.dkship .dkcw').forEach(q=>q.animate(arvKf,arvOp))}catch(_){}}}
   el.querySelectorAll('.dkmov').forEach(m=>{requestAnimationFrame(()=>requestAnimationFrame(()=>{m.style.transform='translate('+m.dataset.dx+'px,'+m.dataset.dy+'px) scale('+m.dataset.sc+')'}));setTimeout(()=>m.remove(),2600)});
