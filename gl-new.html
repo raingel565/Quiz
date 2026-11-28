@@ -1591,7 +1591,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N76</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N77</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -1660,7 +1660,7 @@ const PAS={
 const TRE={
  vivre:{n:'Вивр-карта Зунеши',d:'Перемещает Зунешу на соседнюю локацию',ap:0,c:2},
  ancient:{n:'Древняя вивр-карта Зунеши',d:'Перемещает Зунешу в любое море на ту же цифру',ap:0,c:2},
- tamer:{n:'Король морей',d:'Укротитель морских королей. 3-я пассивка: +5 к атаке во всех раундах дуэли. Достаётся только за победу над Морским королём; купить нельзя, мусорщиками из сброса не достать',ap:null,c:0,pas:{a:5,u:0},guest:true,own:true},
+ tamer:{n:'Король морей',d:'Укротитель морских королей. Неактивна, пока вы не победите Морского короля; после победы — 3-я пассивка: +5 к атаке во всех раундах дуэли. Мусорщиками из сброса не достать',ap:null,c:4,pas:{a:5,u:0},tamer:true},
  fraternal:{n:'Братское наследие',d:'3-я пассивка: +5 к атаке в каждом раунде',ap:null,c:1,pas:{a:5,u:0}},
  scav:{n:'Мусорщики',d:'Взять любую карту из открытого сброса (кроме понеглифов и Лафтейла), 1 ОД',ap:1,c:4},
  coupe:{n:'Coupe de Burst',d:'Отменить дуэль, на которую вас вызвали, и уйти на соседнюю локацию',ap:null,c:6},
@@ -1681,7 +1681,7 @@ const TRE={
  underground:{n:'Подпольный рынок',d:'Чтобы получить: победить Дофламинго (А5 / У5). Покупать карты сокровищ можно где угодно со скидкой 10',ap:null,cond:{n:'Дофламинго',a:5,u:5},c:2},
 };
 const SPECIAL_PAY={dozor:{4:['dandan']},pirate:{}};
-const activeC=c=>!TRE[c.key].cond||c.active;
+const activeC=c=>!(TRE[c.key].cond||TRE[c.key].tamer)||c.active;
 const BOSS={
  dozor:[[1,'Солдат дозора',4,2,3],[2,'Капитан дозора',5,3,2],[3,'Вице-адмирал дозора',5,5,2],[4,'Адмирал дозора',7,5,2],[5,'Герой дозора',8,5,1]],
  pirate:[[1,'Простой пират',4,2,3],[2,'Капитан пиратов',5,3,2],[3,'Шичибукай',5,5,2],[4,'Великий пират',4,8,2],[5,'Правитель морей',9,3,1]]
@@ -2095,7 +2095,7 @@ function newGame(cfg){
   try{SFX.stopVoice()}catch(e){}
   if(!NET.on&&!window.__nor&&!window.__rep)saveBegin(seedv,cfg);
   CID=1;
-  const decks={atk:[],pas:[],tre:[],tamer:Array.from({length:4},()=>card('tre',{key:'tamer'})),weather:shuffle(WEATHER.map(w=>Object.assign({},w))),
+  const decks={atk:[],pas:[],tre:[],weather:shuffle(WEATHER.map(w=>Object.assign({},w))),
     tev:shuffle(T_EVENT.filter(x=>!x.tb||cfg.tb).flatMap(x=>Array.from({length:x.c},()=>Object.assign({},x)))),tpon:shuffle(T_PON.map(x=>Object.assign({},x))),tlaf:shuffle(T_LAF.map(x=>Object.assign({},x)))};
   for(const [v,c] of [[1,16],[3,16],[5,16],[7,14],[8,12]])for(let i=0;i<c;i++)decks.atk.push(card('atk',{v}));
   for(const k in PAS)for(let i=0;i<PAS[k].c;i++)decks.pas.push(card('pas',{key:k}));
@@ -2332,8 +2332,7 @@ function jailEntry(p,cb){
 // ---------- discard ----------
 function discardCard(p,c){
   for(const k of['atk','pas','tre']){const i=p[k].indexOf(c);if(i>=0)p[k].splice(i,1)}
-  if(c.kind==='tre'&&c.key==='tamer'){(G.decks.tamer=G.decks.tamer||[]).push(c)}
-  else if(c.kind==='tre'&&c.key==='dandan'){c.active=false;(G.gone=G.gone||[]).push(c)}
+  if(c.kind==='tre'&&c.key==='dandan'){c.active=false;(G.gone=G.gone||[]).push(c)}
   else if(c.kind==='tre'&&TRE[c.key].sp){c.used=false;G.specials.push(c)}else{c.active=false;G.discard.push(c)}
 }
 function discardTre(p,c,cb){
@@ -2588,7 +2587,7 @@ function spawnMonster(){
   fxEvent({sfx:'seaking',wk:'seaking',stage:'pre',banner:true,tone:'bad',icon:'🐉',title:'Морской король!',desc:'Он караулит '+locName(loc)+' до конца Калм Белта',auto:3200});
 }
 function monsterReward(p){
-  if(G.decks.tamer&&G.decks.tamer.length&&p.tre.length<3&&!p.tre.some(c=>c.key==='tamer')){const t=G.decks.tamer.shift();p.tre.push(t);fxCard(p,t);log('👑 '+p.name+' становится «Королём морей»: +5 к атаке во всех раундах дуэли.')}
+  {const t=p.tre.find(c=>c.key==='tamer'&&!c.active);if(t){t.active=true;fxCard(p,t);log('👑 '+p.name+' становится «Королём морей»: +5 к атаке во всех раундах дуэли.')}}
   const gold=()=>{p.berries+=100;log(p.name+' получает за победу 100 Берри.')};
   if(d(2)===1||p.tre.length>=3){gold();return}
   if(!G.decks.tre.length){const c0=drawDeck('tre');if(c0)G.decks.tre.unshift(c0)}
@@ -3388,7 +3387,7 @@ function useTre(p,c){
     o1.push({label:'Отмена',run:()=>{}});
     ask('pickloc',{who:p.i,title:'Древнее оружие Посейдон',text:'Первая локация.',opts:o1,pick:cand});
   }else if(c.key==='scav'){
-    const pool=G.discard.filter(x=>!(x.kind==='tre'&&TRE[x.key].guest)&&((x.kind==='atk'&&p.atk.length<10)||(x.kind==='pas'&&p.pas.length<10)||(x.kind==='tre'&&p.tre.length<3)));
+    const pool=G.discard.filter(x=>!(x.kind==='tre'&&(TRE[x.key].guest||x.key==='tamer'))&&((x.kind==='atk'&&p.atk.length<10)||(x.kind==='pas'&&p.pas.length<10)||(x.kind==='tre'&&p.tre.length<3)));
     const uniq=[];const seen={};
     for(const x of pool){const k=x.kind+(x.v||x.key);if(!seen[k]){seen[k]=1;uniq.push(x)}}
     const o=uniq.map(x=>({label:cname(x),run:()=>{discardCard(p,c);G.discard.splice(G.discard.indexOf(x),1);p[x.kind].push(x);fxCard(p,x);log(p.name+' достаёт из сброса: '+cname(x)+'.')}}));
@@ -3920,7 +3919,7 @@ function cardInfo(c){
   if(c.kind==='atk')return {ac:GK.atk[0],lab:GK.atk[1],cap:'Карта атаки +'+c.v,kind:'карту атаки'};
   if(c.kind==='pas')return {ac:GK.pas[0],lab:GK.pas[1],cap:'Пассивная способность «'+PAS[c.key].n+'»',kind:'пассивную способность'};
   if(c.kind==='task')return {ac:GK.task[0],lab:GK.task[1],cap:'Задание «'+c.def.t+'»',kind:'задание'};
-  const T=TRE[c.key],g=T.guest&&!T.own,s=T.sp||T.cond||T.own;
+  const T=TRE[c.key],g=T.guest&&!T.own,s=T.sp||T.cond||T.own||T.tamer;
   return {ac:g?'#7a45c9':'#b08a4e',lab:g?'ГОСТЬ':(s?'ОСОБАЯ КАРТА':GK.tre[1]),cap:(g?'Гость «':'Карта сокровищ «')+T.n+'»',kind:g?'гостя':'карту сокровищ'};
 }
 function cardFace(c){
