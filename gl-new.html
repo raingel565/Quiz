@@ -1034,6 +1034,9 @@ html,body{overscroll-behavior-y:none}
 .dshist span{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 8px;border-radius:10px;background:rgba(255,255,255,.05);font-size:12.5px;white-space:nowrap;overflow:hidden}
 .dshist span i{font-style:normal;opacity:.55;font-weight:700}
 .dsdet{border-radius:14px}.dsdet summary{font-size:13.5px;opacity:.75}
+body.dgate:has(#mnu.open) #fxbd{display:none!important}
+body:has(#mnu.open) #top{z-index:96000!important}
+body.dgate #qoov{z-index:95000!important}
 body.dgate #fxbd{display:block!important;z-index:89999!important;top:var(--bnt,0px)!important;bottom:var(--bnh,0px)!important;touch-action:pan-x pan-y;pointer-events:auto!important;background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 .dgplate{position:fixed;left:50%;top:18%;transform:translateX(-50%);z-index:100000;background:rgba(20,24,30,.92);color:#ffd45a;border:1px solid rgba(255,212,90,.5);border-radius:12px;padding:10px 18px;font:600 15px system-ui,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.4);pointer-events:none;animation:dfin .2s ease both}
 #fxbd{position:fixed;inset:0;z-index:99997;background:rgba(5,10,8,.62);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);opacity:0;transition:opacity .25s ease;pointer-events:none}
@@ -1192,9 +1195,9 @@ body.tutor #app{padding-top:110px}
 /* V156: экран партии на телефоне — по макету пользователя */
 .tp-m{display:none}
 @media all{
-  body.ingame #top{display:block;position:relative;text-align:center;padding:7px 52px 7px 12px;border-radius:18px;min-height:46px}
+  body.ingame #top{display:block;position:relative;text-align:center;padding:7px 52px 7px 12px;border-radius:18px;min-height:46px;z-index:60}
   body.ingame #top .tp-l,body.ingame #top .tp-st,body.ingame #top #sndbtn{display:none}
-  body.ingame #top .tp-r{position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;gap:6px}
+  body.ingame #top .tp-r{position:absolute;right:8px;top:2px;display:flex;gap:6px}
   body.ingame #top .tp-m{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:2px 10px}
   .tm-t{font-family:var(--f-display);font-size:17px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;line-height:1.1}
   .tm-r{font-size:13px;font-weight:700;color:var(--muted)}
@@ -1576,7 +1579,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N62</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N63</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
