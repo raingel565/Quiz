@@ -1199,6 +1199,7 @@ body.tutor #app{padding-top:110px}
 .tp-m{display:none}
 @media all{
   body.ingame #top{display:block;position:relative;text-align:center;padding:7px 52px 7px 12px;border-radius:18px;min-height:46px;z-index:60}
+  body.induel #top{display:none!important}
   body.ingame #top .tp-l,body.ingame #top .tp-st,body.ingame #top #sndbtn{display:none}
   body.ingame #top .tp-r{position:absolute;right:8px;top:2px;display:flex;gap:6px}
   body.ingame #top .tp-m{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:2px 10px}
@@ -2562,7 +2563,7 @@ function akainuPhase(cb){
 const MONSTER={n:'Морской король',a:6,u:2};
 function spawnMonster(){
   const busy=new Set(G.players.map(q=>q.loc));
-  const c=Object.keys(ADJ).filter(id=>id!=='L'&&id!=='Z'&&!deadAt(id)&&!busy.has(id)&&G.type[id]!=='start'&&!(G.zun&&G.zun.cell===id)&&!(G.akainu&&G.akainu.loc===id)&&!(G.laftel&&G.laftel.anch&&G.laftel.anch.includes(id))).sort();
+  const c=Object.keys(ADJ).filter(id=>id!=='L'&&id!=='Z'&&!deadAt(id)&&busy.has(id)&&G.type[id]!=='start'&&!(G.zun&&G.zun.cell===id)&&!(G.akainu&&G.akainu.loc===id)&&!(G.laftel&&G.laftel.anch&&G.laftel.anch.includes(id))).sort();
   if(!c.length)return;
   const loc=c[d(c.length)-1];G.monster={loc};
   log('🐉 Калм Белт: из глубины всплыл Морской король. Он караулит '+locName(loc)+' (атака '+MONSTER.a+', уклонение '+MONSTER.u+').');
@@ -4123,6 +4124,7 @@ function render(){
   presSet();
   musicSync();
   document.body.classList.toggle('ingame',!!G);
+  try{document.body.classList.toggle('induel',!!(G&&G.pending&&G.pending.type==='duelResult'&&!duelSpect(G.pending)))}catch(e){}
   if(!G){if(NET.on)renderLobby();else renderSetup();return}
   if(STREAM.on){renderStream();return}
   if(window.DKHOLD>Date.now()&&(G.pending||FXQ.length)&&!(G.pending&&G.pending.pick)){clearTimeout(render.hd);render.hd=setTimeout(render,window.DKHOLD-Date.now()+40);return}
