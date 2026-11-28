@@ -1348,6 +1348,8 @@ body.tutor #app{padding-top:110px}
 #deck{position:relative;width:100%;height:min(76svh,calc((100vw - 16px)*1.78));min-height:420px;overflow:hidden;border-radius:12px;background:#0b1220;touch-action:pan-y;user-select:none;-webkit-user-select:none;contain:layout paint}
 @media (min-width:901px){#deck{height:min(80vh,780px)}}
 #deck[hidden]{display:none}
+/* до первой отрисовки не показываем пустую карту-«артефакт» */
+#mapwrap:not(.dk):has(#map:empty),body:not(.ingame) #mapwrap{display:none!important}
 #mapwrap.dk #mapscroll,#mapwrap.dk #mapz,#mapwrap.dk #mapme,#mapwrap.dk #maplg,#mapwrap.dk #legend,#mapwrap.dk #mapdk{display:none!important}
 #mapdk{margin:0 0 6px 6px;padding:4px 10px;font-size:13px}
 #deck .dkz{position:absolute;inset:0;transform-origin:0 0;transition:transform .5s cubic-bezier(.3,.7,.3,1)}
@@ -1585,7 +1587,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N70</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N72</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -3970,7 +3972,7 @@ function fxAnchor(){
 window.addEventListener('scroll',()=>{if(document.querySelector('#dicefx,#cardfx,#evfx'))fxAnchor()},{passive:true});
 window.addEventListener('resize',()=>{if(document.querySelector('#dicefx,#cardfx,#evfx'))fxAnchor()});
 // «Пропустить» ход бота: убирает только анимации и паузы, сами действия бота не меняются
-let BOTSKIP=false;
+var BOTSKIP=false;
 function botActing(){if(NET.on||!G||G.winner!=null)return false;const w=viewerNeeded();return w!=null&&!!G.players[w]&&!!G.players[w].bot}
 function botSkipGo(){
   BOTSKIP=true;
@@ -5357,7 +5359,7 @@ function dkRender(){
   if(plan||(UI.nav&&UI.nav.arrived&&UI.nav.arrived===p.loc)){let c='<div class="dkui tc"><div class="dkcourse">';
     if(!plan)c+='<b>✅ Вы прибыли: '+esc(navName(UI.nav.arrived))+'</b>';
     else if(plan.none)c+='<b>🧭 '+esc(navName(plan.to))+'</b><small>Туда сейчас не доплыть</small><button data-navclear aria-label="Сбросить курс">✕</button>';
-    else{const nn=x=>x==='L'?'Бездна Миров':x==='Z'?'Зунеша':(seaOf(x)!==seaOf(p.loc)?SEAS[seaOf(x)][0]+'.':'')+numOf(x);c+='<b>🧭 '+esc(navName(plan.to))+' · '+plan.dist+' '+(plan.dist===1?'ход':plan.dist<5?'хода':'ходов')++'</b><button data-navclear aria-label="Сбросить курс">✕</button>';
+    else{const nn=x=>x==='L'?'Бездна Миров':x==='Z'?'Зунеша':(seaOf(x)!==seaOf(p.loc)?SEAS[seaOf(x)][0]+'.':'')+numOf(x);c+='<b>🧭 '+esc(navName(plan.to))+' · '+plan.dist+' '+(plan.dist===1?'ход':plan.dist<5?'хода':'ходов')+'</b><button data-navclear aria-label="Сбросить курс">✕</button>';
       plan.steps.slice(0,1).forEach((st,k)=>{c+='<small>'+st.path.map(nn).join(' → ')+(st.risk.length?' · <i class="risk">'+esc(st.risk.join(' '))+'</i>':'')+'</small>'})}
     h+=c+'</div></div>'}
   const cl=dkLabel(p.loc,false),cn=p.loc==='L'?'Бездна Миров':p.loc==='Z'?'Зунеша':'№'+numOf(p.loc)+' — '+DK_TN[ca];
@@ -5599,7 +5601,7 @@ function navOpen(sea){
     +'<div class="navqs">'+quick+'</div><div class="navtabs">'+tabs+'</div>'+svg
     +'<div class="navf">'+(to?'<span>Курс: '+esc(navName(to))+'</span><button class="btn" data-navclear>Сбросить курс</button>':'<span class="small">Нажмите на остров, чтобы проложить к нему курс</span>')+'</div></div>';
 }
-let MAPTAP={id:null,t:0};
+var MAPTAP={id:null,t:0};
 function mapCourse(id){
   if(!G||G.winner!=null)return;const p=dkFocus();if(!p||id===p.loc)return;
   navFor(p);if(navBfs(p.loc)[id]==null){try{toastPush('🧭 Туда сейчас не доплыть')}catch(e){}return}
