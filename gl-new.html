@@ -71,6 +71,8 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:8px;flex:1;min-h
 .small{font-size:12px;color:var(--muted)}
 #log{max-height:200px;overflow:auto;font-size:12px;display:flex;flex-direction:column;gap:2px}
 #log div{border-bottom:1px dashed var(--line);padding-bottom:2px}
+#log .lgh{position:sticky;top:0;z-index:1;margin-top:6px;padding:3px 8px;border:0;border-radius:8px;background:rgba(242,193,78,.18);color:var(--gold,#f2c14e);font-weight:800;font-size:11.5px;letter-spacing:.2px;backdrop-filter:blur(4px)}
+#log .lgh.now{background:rgba(80,200,120,.2);color:#8fe3a8}
 .ov.pickov{background:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;pointer-events:none;align-items:flex-end;padding:0 8px calc(8px + env(safe-area-inset-bottom))}.pickbar{pointer-events:auto;max-width:520px;width:100%;background:var(--panel);color:var(--ink);border:2px solid #12a05a;border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.35);padding:10px 12px;display:flex;flex-direction:column;gap:6px;font-size:14px}.pickbar span{opacity:.85}.pickbar .grp{display:flex;flex-wrap:wrap;gap:6px}
 .ov{position:fixed;inset:0;background:rgba(10,15,20,.6);display:flex;align-items:center;justify-content:center;padding:12px;z-index:50}
 .ov.solid{background:var(--bg)}
@@ -1587,7 +1589,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N72</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N73</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -2005,6 +2007,13 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&window.__mnu){windo
 // нижняя навигация по разделам (телефон)
 // V155: на телефоне журнал скрыт и открывается окном по кнопке «Журнал»
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-deal]');if(b){e.stopPropagation();dealOpen(+b.dataset.deal)}},true);
+function logGroups(){
+  const T=G.logTn||[];let h='',prev=null,gi=0;
+  G.log.slice(0,100).forEach((l,i)=>{const k=T[i];
+    if(k&&k!==prev){prev=k;const [n,r,nm]=k.split('|');gi++;h+='<div class="lgh'+(gi===1?' now':'')+'">'+(gi===1?'Сейчас':gi===2?'Предыдущий ход':'Ход')+' · '+esc(nm)+' · раунд '+r+'</div>'}
+    h+='<div>'+esc(lgv(l))+'</div>'});
+  return h;
+}
 function logOpen(on){document.body.classList.toggle('logopen',!!on);const b=document.querySelector('#bnav [data-go=".pr4"]');if(b)b.classList.toggle('on',!!on);if(on){const l=document.getElementById('log');if(l)l.scrollTop=0}}
 document.addEventListener('click',e=>{
   if(e.target.closest&&e.target.closest('[data-logx]')){logOpen(false);return}
@@ -2065,11 +2074,13 @@ function toastPush(s){
 }
 const BNR=[[/применяет «Воля/,'👑','Воля короля','bad'],[/нанимает охотника за головами/,'🎯','Охотник нанят','bad'],[/отменил дуэль картой Coupe/,'🛡','Coupe de Burst','good'],[/вызывает громовой дождь/,'⚡','Громовой дождь','bad'],[/откупился из тюрьмы|дал взятку и вышел/,'🔓','Откуп из тюрьмы','good'],[/сбежал(?: из тюрьмы|\.$)/,'🏃','Побег из тюрьмы','good'],[/арестован дозором|садится в тюрьму|телепортируется в тюрьму/,'⚓','Дозор!','bad'],[/проиграл боссу: пираты/,'🏴‍☠️','Ограбление!','bad'],[/выполнил(?:а)? (?:задание|«)/,'✔','Задание выполнено','good'],[/побеждает «/,'⚔','Победа в бою','good']];
 function logBanner(t){if(window.__nor||(typeof SET!=='undefined'&&SET.toast==='off'))return;for(const [re,ic,ti,tone] of BNR)if(re.test(t)){fxEvent({stage:'post',banner:1,tone,icon:ic,title:ti,desc:t,auto:2300,snd:null});return}}
-const log=s=>{statLine(s);if(G)G.logN=(G.logN||0)+1;logSnd(s);try{logBanner(s)}catch(e){}try{toastPush(s)}catch(e){}G.log.unshift(s);if(G.log.length>250)G.log.pop();if(LOGCAP)LOGCAP.push(s)};
+/* метка хода для каждой записи журнала (только отображение; параллельный массив) */
+function logTn(){const a=G.logTn=G.logTn||[];const q=G.players&&G.players[G.cur];a.unshift((G.turnNo|0)+'|'+(G.round|0)+'|'+(q?q.name:''));if(a.length>250)a.length=250}
+const log=s=>{statLine(s);if(G)G.logN=(G.logN||0)+1;logSnd(s);try{logBanner(s)}catch(e){}try{toastPush(s)}catch(e){}G.log.unshift(s);logTn();if(G.log.length>250)G.log.pop();if(LOGCAP)LOGCAP.push(s)};
 // V13: приватные записи журнала. Видны полностью только владельцу карты, остальным — обезличенный текст.
 const lgViewer=()=>NET.on?NET.me:(UI.viewer!=null&&UI.viewer>=0?UI.viewer:-1);
 const lgv=s=>{if(typeof s!=='string'||s.charCodeAt(0)!==1)return s;const a=s.slice(1).split('\u0002');return (+a[0]===lgViewer())?a[1]:a[2]};
-const logP=(o,priv,pub)=>{const t='\u0001'+o+'\u0002'+priv+'\u0002'+pub;statLine(pub);if(G)G.logN=(G.logN||0)+1;logSnd(pub);try{toastPush(lgv(t))}catch(e){}G.log.unshift(t);if(G.log.length>250)G.log.pop();if(LOGCAP)LOGCAP.push(pub)};
+const logP=(o,priv,pub)=>{const t='\u0001'+o+'\u0002'+priv+'\u0002'+pub;statLine(pub);if(G)G.logN=(G.logN||0)+1;logSnd(pub);try{toastPush(lgv(t))}catch(e){}G.log.unshift(t);logTn();if(G.log.length>250)G.log.pop();if(LOGCAP)LOGCAP.push(pub)};
 const pname=p=>p.name+' ('+CH[p.ch].n+')';
 function typeOf(id){return G.type[id]||null}
 function isCombat(id){const t=G.type[id];return t==='dozor'||t==='battle'}
@@ -4309,7 +4320,7 @@ function sideHtml(){
   h+='</div>';
   if(showHand)h+=handHtml(NET.on?meP:solo?humP[0]:p);
   h+=hPlayers;
-  h+='<div class="card pr4"><h3><span class="pn">4</span>Журнал<button class="btn logx" data-logx aria-label="Закрыть журнал">✕</button></h3><div id="log">'+G.log.slice(0,60).map(l=>'<div>'+esc(lgv(l))+'</div>').join('')+'</div></div>';
+  h+='<div class="card pr4"><h3><span class="pn">4</span>Журнал<button class="btn logx" data-logx aria-label="Закрыть журнал">✕</button></h3><div id="log">'+logGroups()+'</div></div>';
   return h;
 }
 function handHtml(p){
