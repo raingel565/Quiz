@@ -1034,9 +1034,9 @@ html,body{overscroll-behavior-y:none}
 .dshist span{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 8px;border-radius:10px;background:rgba(255,255,255,.05);font-size:12.5px;white-space:nowrap;overflow:hidden}
 .dshist span i{font-style:normal;opacity:.55;font-weight:700}
 .dsdet{border-radius:14px}.dsdet summary{font-size:13.5px;opacity:.75}
-/* пока не брошены кубики, на палубе нет ни текстов, ни кнопок, ни пасхалок: видны только сцена и видео погоды */
+/* пока не брошены кубики дохода, на палубе нет ни текстов, ни кнопок, ни пасхалок: видны только сцена и видео погоды */
 #deck .dkui,#deck .dklb,#deck .dknav,#deck .dkwho,#deck .dkegg,#deck .dkegght,#deck .dkgal,#deck .dkgalb{transition:opacity .45s ease}
-body.dgate #deck .dkui,body.dgate #deck .dklb,body.dgate #deck .dknav,body.dgate #deck .dkwho,body.dgate #deck .dkegg,body.dgate #deck .dkegght,body.dgate #deck .dkgal,body.dgate #deck .dkgalb{opacity:0!important;pointer-events:none!important}
+body.dgate-inc #deck .dkui,body.dgate-inc #deck .dklb,body.dgate-inc #deck .dknav,body.dgate-inc #deck .dkwho,body.dgate-inc #deck .dkegg,body.dgate-inc #deck .dkegght,body.dgate-inc #deck .dkgal,body.dgate-inc #deck .dkgalb{opacity:0!important;pointer-events:none!important}
 body.dgate:has(#mnu.open) #fxbd{display:none!important}
 body:has(#mnu.open) #top{z-index:96000!important}
 body.dgate #qoov{z-index:95000!important}
@@ -1582,7 +1582,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N64</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N65</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -2332,7 +2332,7 @@ let CARD_PRICE=10; // цена карты атаки / пассивки в Бе�
 const PAYT={2:50,12:50,3:30,11:30,4:20,10:20,5:15,9:15,6:12,8:12,7:10};
 const PAYT2={2:25,12:25,3:15,11:15,4:10,10:10,5:8,9:8,6:6,8:6,7:5};
 function incomeRoll(){
-  const a=d(6),b=d(6),n=a+b;G.roll=[a,b];fxRoll('Доход · '+P().name,[a,b],6,{gate:1,who:P().i});
+  const a=d(6),b=d(6),n=a+b;G.roll=[a,b];fxRoll('Доход · '+P().name,[a,b],6,{gate:1,inc:1,who:P().i});
   log(pname(P())+' бросает 2d6: '+a+'+'+b+' = '+n+'.');
   const res=[];
   for(const q of G.players){
@@ -3685,7 +3685,9 @@ window.addEventListener('scroll',()=>{if(document.body.classList.contains('dgate
 window.addEventListener('resize',()=>{if(document.body.classList.contains('dgate'))fxNavH()});
 function fxGate(){
   const g=FXQ.some(r=>r.t==='d'&&r.gate&&(NET.on?r.who===NET.me:!(G&&G.players[r.who]&&G.players[r.who].bot)));
+  const inc=FXQ.some(r=>r.t==='d'&&r.gate&&r.inc&&(NET.on?r.who===NET.me:!(G&&G.players[r.who]&&G.players[r.who].bot)));
   if(g){fxBd(true);document.body.classList.add('dgate');fxNavH()}else if(!document.getElementById('dicefx'))document.body.classList.remove('dgate');
+  document.body.classList.toggle('dgate-inc',inc||(!!document.getElementById('dicefx')&&document.body.classList.contains('dgate-inc')))
 }
 function fxEvent(ev){if(window.__nor)return;FXQ.push(Object.assign({t:'e'},ev))}
 function fxGuard(g,A,U,who){if(window.__nor)return;FXQ.push({t:'g',g,A,U,who})}
@@ -3988,9 +3990,9 @@ function diceFx(rows,done){
   const die=(r)=>r.kind==='pon'?ponDie():(r.sides||6)===6?'<div class="dscene"><div class="dwrap"><div class="cube">'+[1,2,3,4,5,6].map(face).join('')+'</div></div></div>':'<div class="dscene"><div class="dwrap"><div class="pd s'+r.sides+'"><b>?</b></div></div></div>';
   const gated=rows.some(r=>r.gate&&(NET.on?r.who===NET.me:!(G&&G.players[r.who]&&G.players[r.who].bot)));
   o.innerHTML=rows.map(r=>'<div class="drow"><div class="dl">'+esc(r.label)+'</div>'+r.vals.map(()=>die(r)).join('')+'<div class="dsum">'+(r.vals.length>1?'= ':'')+r.vals.reduce((a,b)=>a+b,0)+'</div></div>').join('')+(gated?'<button class="btn primary dgo">'+(rows.every(r=>r.kind==='pon')?'Прочитать понеглиф':'Бросить кубики')+'</button>':'<div class="dhint">нажмите, чтобы пропустить</div>');
-  document.body.appendChild(o);if(gated)document.body.classList.add('dgate'); // пока не брошены кубики дохода, остальное не нажимается
+  document.body.appendChild(o);if(gated){document.body.classList.add('dgate');if(rows.some(r=>r.gate&&r.inc))document.body.classList.add('dgate-inc')} // пока не брошены кубики дохода, остальное не нажимается
   let fin=false,started=false;
-  const end=()=>{if(fin)return;fin=true;document.body.classList.remove('dgate');o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},300)};
+  const end=()=>{if(fin)return;fin=true;document.body.classList.remove('dgate');document.body.classList.remove('dgate-inc');o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},300)};
   const flat=[];rows.forEach(r=>r.vals.forEach(v=>flat.push({v,s:r.sides||6,k:r.kind})));
   const cubes=o.querySelectorAll('.dwrap>.cube,.dwrap>.pd,.dwrap>.pon'),wraps=o.querySelectorAll('.dwrap');
   const go=()=>{
@@ -7118,7 +7120,7 @@ function resumeCardHtml(){
 function resumeLocal(){const R=resumeInfo();if(!R.loc){render();return}SAVE=R.loc;if(!saveRestore())alert('Не удалось восстановить партию, начните новую.')}
 function resumeNet(){let code='';try{code=localStorage.getItem('gl_resume_room')||'';localStorage.removeItem('gl_resume_room');NET.name=NET.name||localStorage.getItem('gl_name')||'Игрок'}catch(e){}if(!code)return;NET.on=true;NET.stage='menu';netJoin(code,false)}
 function exitGame(keep){
-  window.__mnu=false;qoClose&&qoClose();FXQ.length=0;FXBUSY=false;['dicefx','cardfx','evfx','akfx','akvid','fxbd'].forEach(i=>{const e=document.getElementById(i);if(e)e.remove()});document.body.classList.remove('dgate');document.body.classList.remove('fxchain');document.body.classList.remove('dgate');
+  window.__mnu=false;qoClose&&qoClose();FXQ.length=0;FXBUSY=false;['dicefx','cardfx','evfx','akfx','akvid','fxbd'].forEach(i=>{const e=document.getElementById(i);if(e)e.remove()});document.body.classList.remove('dgate','dgate-inc');document.body.classList.remove('fxchain');
   if(UI.dz){clearTimeout(UI.dz.at);if(UI.dz.sc)UI.dz.sc.close();UI.dz=null}
   if(NET.on){const code=NET.code;netLeave();try{if(keep&&code)localStorage.setItem('gl_resume_room',code);else localStorage.removeItem('gl_resume_room')}catch(e){}NET.on=false;NET.stage='menu'}
   else{if(keep){if(SAVE)saveWrite()}else saveClear()}
