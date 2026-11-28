@@ -1455,10 +1455,11 @@ body.tutor #app{padding-top:110px}
 #deck .dkgo i{font-style:normal;font-size:20px}#deck .dkgo b{color:#ffe08a;font-size:14px}
 #deck .dkgo.dis{opacity:.45;cursor:not-allowed}
 
-#deck .dkmon .sk{position:absolute;left:50%;bottom:-10%;width:122%;max-width:none;transform:translateX(-50%);transform-origin:50% 100%;animation:dkskb 4.2s ease-in-out infinite;filter:drop-shadow(0 4px 6px rgba(0,0,0,.55));z-index:1}
+#deck .dkmon .sk{position:absolute;left:50%;bottom:-10%;width:122%;max-width:none;transform:translateX(-50%);transform-origin:50% 100%;animation:dkskb 4.2s ease-in-out infinite;filter:saturate(.78) brightness(.9) contrast(.95) drop-shadow(0 3px 5px rgba(20,30,40,.35));-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 58%,rgba(0,0,0,.55) 78%,transparent 96%);mask-image:linear-gradient(to bottom,#000 0,#000 58%,rgba(0,0,0,.55) 78%,transparent 96%);z-index:1}
+#deck .dkmon::after{content:'';position:absolute;left:-18%;right:-18%;bottom:-12%;height:38%;background:radial-gradient(ellipse at 50% 55%,rgba(205,220,230,.85) 0,rgba(205,220,230,.45) 45%,rgba(205,220,230,0) 72%);z-index:2;pointer-events:none}
 @keyframes dkskb{0%,100%{transform:translateX(-50%) translateY(0) rotate(-1deg)}50%{transform:translateX(-50%) translateY(-5px) rotate(1deg)}}
 #deck .dkmon.hasimg svg{visibility:hidden}#deck .dkmon.hasimg>i{display:none}
-#deck .dki.mk{filter:drop-shadow(0 0 7px rgba(255,70,50,.95)) drop-shadow(0 0 16px rgba(255,40,30,.6))}
+#deck .dki.mk{filter:drop-shadow(0 2px 4px rgba(20,30,40,.4))}
 #deck .dkmon .rg{position:absolute;left:-22%;width:144%;bottom:-16%;height:40%;border:3px solid rgba(255,80,60,.85);border-radius:50%;box-shadow:0 0 14px rgba(255,60,40,.7);animation:dkrg 1.6s ease-in-out infinite alternate;pointer-events:none}
 @keyframes dkrg{from{opacity:.35;transform:scale(.92)}to{opacity:1;transform:scale(1.04)}}
 #deck .dklb.mon{border-color:rgba(255,90,70,.9);background:rgba(70,10,10,.85);box-shadow:0 0 12px rgba(255,60,40,.55)}
@@ -1590,7 +1591,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N74</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N76</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -1659,6 +1660,7 @@ const PAS={
 const TRE={
  vivre:{n:'Вивр-карта Зунеши',d:'Перемещает Зунешу на соседнюю локацию',ap:0,c:2},
  ancient:{n:'Древняя вивр-карта Зунеши',d:'Перемещает Зунешу в любое море на ту же цифру',ap:0,c:2},
+ tamer:{n:'Король морей',d:'Укротитель морских королей. 3-я пассивка: +5 к атаке во всех раундах дуэли. Достаётся только за победу над Морским королём; купить нельзя, мусорщиками из сброса не достать',ap:null,c:0,pas:{a:5,u:0},guest:true,own:true},
  fraternal:{n:'Братское наследие',d:'3-я пассивка: +5 к атаке в каждом раунде',ap:null,c:1,pas:{a:5,u:0}},
  scav:{n:'Мусорщики',d:'Взять любую карту из открытого сброса (кроме понеглифов и Лафтейла), 1 ОД',ap:1,c:4},
  coupe:{n:'Coupe de Burst',d:'Отменить дуэль, на которую вас вызвали, и уйти на соседнюю локацию',ap:null,c:6},
@@ -2093,7 +2095,7 @@ function newGame(cfg){
   try{SFX.stopVoice()}catch(e){}
   if(!NET.on&&!window.__nor&&!window.__rep)saveBegin(seedv,cfg);
   CID=1;
-  const decks={atk:[],pas:[],tre:[],weather:shuffle(WEATHER.map(w=>Object.assign({},w))),
+  const decks={atk:[],pas:[],tre:[],tamer:Array.from({length:4},()=>card('tre',{key:'tamer'})),weather:shuffle(WEATHER.map(w=>Object.assign({},w))),
     tev:shuffle(T_EVENT.filter(x=>!x.tb||cfg.tb).flatMap(x=>Array.from({length:x.c},()=>Object.assign({},x)))),tpon:shuffle(T_PON.map(x=>Object.assign({},x))),tlaf:shuffle(T_LAF.map(x=>Object.assign({},x)))};
   for(const [v,c] of [[1,16],[3,16],[5,16],[7,14],[8,12]])for(let i=0;i<c;i++)decks.atk.push(card('atk',{v}));
   for(const k in PAS)for(let i=0;i<PAS[k].c;i++)decks.pas.push(card('pas',{key:k}));
@@ -2330,7 +2332,8 @@ function jailEntry(p,cb){
 // ---------- discard ----------
 function discardCard(p,c){
   for(const k of['atk','pas','tre']){const i=p[k].indexOf(c);if(i>=0)p[k].splice(i,1)}
-  if(c.kind==='tre'&&c.key==='dandan'){c.active=false;(G.gone=G.gone||[]).push(c)}
+  if(c.kind==='tre'&&c.key==='tamer'){(G.decks.tamer=G.decks.tamer||[]).push(c)}
+  else if(c.kind==='tre'&&c.key==='dandan'){c.active=false;(G.gone=G.gone||[]).push(c)}
   else if(c.kind==='tre'&&TRE[c.key].sp){c.used=false;G.specials.push(c)}else{c.active=false;G.discard.push(c)}
 }
 function discardTre(p,c,cb){
@@ -2585,6 +2588,7 @@ function spawnMonster(){
   fxEvent({sfx:'seaking',wk:'seaking',stage:'pre',banner:true,tone:'bad',icon:'🐉',title:'Морской король!',desc:'Он караулит '+locName(loc)+' до конца Калм Белта',auto:3200});
 }
 function monsterReward(p){
+  if(G.decks.tamer&&G.decks.tamer.length&&p.tre.length<3&&!p.tre.some(c=>c.key==='tamer')){const t=G.decks.tamer.shift();p.tre.push(t);fxCard(p,t);log('👑 '+p.name+' становится «Королём морей»: +5 к атаке во всех раундах дуэли.')}
   const gold=()=>{p.berries+=100;log(p.name+' получает за победу 100 Берри.')};
   if(d(2)===1||p.tre.length>=3){gold();return}
   if(!G.decks.tre.length){const c0=drawDeck('tre');if(c0)G.decks.tre.unshift(c0)}
@@ -5753,10 +5757,11 @@ function worldPreviewHtml(W,o){
   return '<button class="btn pvz" data-pvz>'+(UI.pvfit?'🔍 Крупнее':'🗺 Вся карта')+'</button><div class="pvmap'+(UI.pvfit?' fit':'')+'"><svg viewBox="8 106 1572 860" xmlns="http://www.w3.org/2000/svg">'+s+'</svg></div><div class="small pvh">⚑ — старт моря · красные локации — проходы между морями (стоят у Рэд Лайн, номер каждый раз новый). Где лежат роад-понеглифы, неизвестно: они скрыты под фишками локаций, их придётся искать. Листайте карту пальцем.</div>';
 }
 function seaInfo(W,s){return W?'старт №1':''}
-function pickSteps(ch,sea){
+function pickSteps(ch,sea){ // море теперь назначается случайно
   const c=ch&&CH[ch]?CH[ch].n:'';
-  return '<div class="psteps"><div class="pst'+(ch?' ok':' cur')+'"><i>'+(ch?'✓':'1')+'</i><span>Персонаж'+(c?'<small>'+esc(c)+'</small>':'')+'</span></div><div class="pst'+(sea?' ok':(ch?' cur':''))+'"><i>'+(sea?'✓':'2')+'</i><span>Море'+(sea?'<small>'+esc(SEAS[sea])+'</small>':'')+'</span></div></div>';
+  return '<div class="psteps"><div class="pst'+(ch?' ok':' cur')+'"><i>'+(ch?'✓':'1')+'</i><span>Персонаж'+(c?'<small>'+esc(c)+'</small>':'')+'</span></div></div>';
 }
+function autoSea(taken){const f=SEAK.filter(k=>!taken[k]);const a=f.length?f:SEAK;return a[Math.floor(Math.random()*a.length)]}
 function seaTaken(list,mode){ // V142: занятость морей; в упрощённом режиме моря можно делить, но их только 2
   const t={};
   if(mode!=='easy'){list.forEach(x=>{if(x.sea)t[x.sea]=x.name});return t}
@@ -5769,8 +5774,8 @@ function seaPick(attr,W,taken,sel){ // taken: {море: имя игрока}
     +SEAK.map(k=>{const by=taken[k];return '<button class="btn seab'+(sel===k?' sel':'')+'" '+attr+'="'+k+'"'+(by?' disabled':'')+'><b>'+SEAF[k]+'</b><span class="small">'+(by?(by[0]==='#'?esc(by.slice(1)):'занято: '+esc(by)):seaInfo(W,k))+'</span>'+(sel===k?'<i class="seachk">✓</i>':'')+'</button>'}).join('')+'</div></div>';
 }
 function pickBar(id,ch,sea,okLabel){
-  const ready=ch&&sea;
-  return '<div class="pickbar"><div class="small pbh">'+(ready?'Всё выбрано — осталось подтвердить':(!ch?'Шаг 1: нажмите на персонажа':'Шаг 2: теперь выберите стартовое море'))+'</div><button class="btn primary" id="'+id+'" data-ready="'+(ready?1:0)+'">'+(ready?okLabel:(!ch?'Выберите персонажа ↑':'Выберите море ↓'))+'</button></div>';
+  const ready=!!ch;
+  return '<div class="pickbar"><div class="small pbh">'+(ready?'Всё выбрано — осталось подтвердить':'Нажмите на персонажа')+'</div><button class="btn primary" id="'+id+'" data-ready="'+(ready?1:0)+'">'+(ready?okLabel:(!ch?'Выберите персонажа ↑':'Выберите море ↓'))+'</button></div>';
 }
 function pickNudge(ready,ch){ // при незавершённом выборе — прокрутка к нужному шагу
   const t=document.querySelector(ch?'#seasec':'.chars');if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
@@ -5966,12 +5971,11 @@ function renderSetup(){
     if(S.cur>=S.order.length){const cfg={players:S.picks.slice(),wseed:S.wseed,mode:S.mode||'std',tb:3};UI.setup=null;newGame(cfg);render();return}
     const pl=S.order[S.cur];
     const taken=S.picks.map(p=>p.ch),seas=S.picks.map(p=>p.sea);
-    h+='<h2>'+esc(pl.name)+': выберите персонажа и стартовое море ('+(S.cur+1)+'/'+S.order.length+')</h2>'+pickSteps(S.selCh,S.selSea);
+    h+='<h2>'+esc(pl.name)+': выберите персонажа ('+(S.cur+1)+'/'+S.order.length+')</h2>'+pickSteps(S.selCh,S.selSea);
     const tkn=seaTaken(S.picks,S.mode||'std');
-    h+='<div class="small">Карта этой партии уже построена: каждый раз она разная. Смотрите, где стартовая локация каждого моря.</div>'+worldPreviewHtml(WP,{sel:S.selSea,taken:tkn});
+    h+='<div class="small">Стартовое море назначается случайно.</div>';
     h+='<div class="grp"><b>Шаг 1. Выберите персонажа</b></div><div class="chars">'+Object.keys(CH).map(k=>chBtn(k,'data-ch',taken.includes(k),S.selCh===k)).join('')+'</div>'+chInfo(S.selCh);
-    h+=seaPick('data-sea',WP,tkn,S.selSea);
-    h+=pickBar('pick',S.selCh,S.selSea,'Подтвердить');
+    h+=pickBar('pick',S.selCh,true,'Подтвердить');
   }
   h+='</div></div>';
   setModalKeep(h);
@@ -6012,9 +6016,9 @@ function renderSetup(){
     chVid();
     document.querySelectorAll('[data-sea]').forEach(b=>b.onclick=()=>{S.selSea=b.dataset.sea;renderSetup()});
     g('pick').onclick=()=>{
-      if(!(S.selCh&&S.selSea)){pickNudge(0,S.selCh);return}
+      if(!S.selCh){pickNudge(0,S.selCh);return}
       SFX.stopVoice();
-      S.picks.push({name:S.order[S.cur].name,ch:S.selCh,sea:S.selSea});S.selCh=null;S.selSea=null;S.cur++;
+      S.picks.push({name:S.order[S.cur].name,ch:S.selCh,sea:autoSea(seaTaken(S.picks,S.mode||'std'))});S.selCh=null;S.selSea=null;S.cur++;
       if(S.cur>=S.order.length){const cfg={players:S.picks.slice(),wseed:S.wseed,mode:S.mode||'std',tb:3};UI.setup=null;newGame(cfg);render()}else renderSetup();
     };
   }
@@ -6335,15 +6339,13 @@ function renderLobby(){
     }else{
       const myTurn=turn&&turn.uid===NET.uid,allOk=!turn;
       const tkn={};ord.forEach(x=>{if(x.ok&&x.sea)tkn[x.sea]=x.name});
-      h+='<div class="small">Порядок хода и выбора: '+ord.map((x,i)=>(i+1)+'. '+esc(x.name)).join(' → ')+'. Первый выбирает первым и может занять самое удобное море.</div>';
+      h+='<div class="small">Порядок хода и выбора: '+ord.map((x,i)=>(i+1)+'. '+esc(x.name)).join(' → ')+'.</div>';
       h+='<table class="t"><tr><th>№</th><th>Игрок</th><th>Персонаж</th><th>Море</th></tr>'+ord.map((x,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(x.name)+(x.uid===NET.uid?' (вы)':'')+'</td><td>'+(x.ok&&x.ch?'<span class="avw sm" style="--pc:var(--accent)">'+av(x.ch)+'</span> '+esc(CH[x.ch].n):'—')+'</td><td>'+(x.ok&&x.sea?esc(SEAF[x.sea]):'—')+'</td></tr>').join('')+'</table>';
       h+=worldPreviewHtml(W,{sel:myTurn?mine.sea:null,taken:tkn});
       if(myTurn){
         const tk=ord.filter(x=>x.uid!==NET.uid&&x.ok).map(x=>x.ch),ts=ord.filter(x=>x.uid!==NET.uid&&x.ok).map(x=>x.sea);
         h+='<div class="grp"><b>Ваш ход. Шаг 1. Выберите персонажа</b></div>'+pickSteps(mine.ch,mine.sea)+'<div class="chars">'+Object.keys(CH).map(k=>chBtn(k,'data-nch',tk.includes(k),mine.ch===k)).join('')+'</div>'+chInfo(mine.ch);
-        const tkn2=seaTaken(ord.filter(x=>x.uid!==NET.uid&&x.ok&&x.sea),(NET.meta&&NET.meta.mode)||'std');
-        h+=seaPick('data-nsea',W,tkn2,mine.sea);
-        h+=pickBar('nok',mine.ch,mine.sea,'Подтвердить выбор');
+        h+=pickBar('nok',mine.ch,true,'Подтвердить выбор');
       }else if(turn)h+='<div class="small"><b>Сейчас выбирает: '+esc(turn.name)+'.</b> Изучайте карту, скоро ваша очередь.</div>';
       h+='<div class="row">'+(allOk?(isHost?'<button class="btn primary" id="nstart">Начать игру</button>':'<span class="small">Все выбрали. Ждём, пока создатель начнёт игру…</span>'):'')+'<button class="btn" id="nleave">Выйти</button></div>';
       h+='</div>';
@@ -6370,7 +6372,7 @@ function renderLobby(){
   if(g('nstart'))g('nstart').onclick=netStart;
   if(g('nroll'))g('nroll').onclick=netRollOrder;
   if(g('nmode'))g('nmode').onchange=async e=>{try{await NET.db.doc('games/'+NET.code).update({mode:e.target.value})}catch(er){}};
-  if(g('nok'))g('nok').onclick=()=>{if(g('nok').dataset.ready!=='1'){pickNudge(0,mine.ch);return}SFX.stopVoice();setSeat({ok:true})};
+  if(g('nok'))g('nok').onclick=()=>{if(g('nok').dataset.ready!=='1'){pickNudge(0,mine.ch);return}SFX.stopVoice();setSeat({ok:true,sea:autoSea(seaTaken(NET.seats.filter(x=>x.uid!==NET.uid&&x.ok&&x.sea),(NET.meta&&NET.meta.mode)||'std'))})};
   if(g('nleave'))g('nleave').onclick=()=>{netLeave();render()};
 }
 // ---------- BOT AI (только публичная информация; дуэли оценивает Монте-Карло на отдельном ГСЧ) ----------
