@@ -1560,6 +1560,11 @@ body.dkon .tp-m .tm-od{display:none}
 #dkrev.out{transition:opacity .5s,transform .5s;opacity:0;transform:translate(-50%,-60%)}
 @keyframes dkrin{from{opacity:0;transform:translate(-50%,-50%) scale(.6)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 @media (prefers-reduced-motion:reduce){#deck *{animation:none!important}}
+.eco *,.eco *::before,.eco *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.eco #deck *,.eco #deck *::after,.eco #deck *::before{animation:none!important}
+.eco #deck [class*="wx-"],.eco #deck .dkfg{filter:none!important}
+.eco #splash *{animation-duration:.01s!important}
+.eco .dkegg,.eco #deck .dkz{will-change:auto}
 /* ---- N11: все всплывашки — в мини-окне слева сверху, без перекрытия экрана ---- */
 #fxbd{display:none!important}
 #evfx .wfx{display:none!important}
@@ -1570,7 +1575,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N56</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N57</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -3734,7 +3739,7 @@ function kwFx(ev,done){
 }
 const WXVID={aqua:'assets/aqua.mp4'+SFXV,tarai:'assets/tarai.mp4'+SFXV,storm:'assets/storm-v.mp4'+SFXV};
 function aquaFx(ev,done){ // видео-заставки Аквалагуны и Течения Тарай: звук берётся из самого видео
-  try{if(document.body.classList.contains('dkon')&&dkOn()&&document.getElementById('deck')&&Element.prototype.animate&&!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)&&!window.__nor){
+  try{if(!ecoOn()&&document.body.classList.contains('dkon')&&dkOn()&&document.getElementById('deck')&&Element.prototype.animate&&!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)&&!window.__nor){
     // на палубе видео идёт фоном вместо статичной картинки и в конце плавно растворяется в неё
     DK.wv={wk:ev.wk,until:Date.now()+13000,done};DK.wvEl=null;DK.sig='';dkRender();
     const v=DK.wvEl;if(v){return}
@@ -4610,6 +4615,10 @@ const SET={theme:'dark',hints:false,adv:true,notif:false,music:true,toast:'one'}
 function setSave(){try{localStorage.setItem('gl_set',JSON.stringify(SET))}catch(e){}}
 function applyTheme(){const r=document.documentElement;if(SET.theme==='light')r.setAttribute('data-theme','light');else r.setAttribute('data-theme','dark')}
 applyTheme();
+// режим экономии: меньше анимаций, без размытия и видео на палубе (SET.eco: true/false, по умолчанию — вкл при «экономии трафика» в системе)
+function ecoOn(){if(SET.eco===true)return true;if(SET.eco===false)return false;try{return !!(navigator.connection&&navigator.connection.saveData)}catch(e){return false}}
+function ecoApply(){document.documentElement.classList.toggle('eco',ecoOn())}
+ecoApply();
 const ACH=[
  {id:'king',n:'Король Пиратов',d:'Выиграть партию',ok:(i,s)=>G.winner===i},
  {id:'blood',n:'Первая кровь',d:'Выиграть хотя бы одну дуэль или бой',ok:(i,s)=>s.bossW+s.pvpW>=1},
@@ -4681,6 +4690,7 @@ function setHtml(){
   let h='<h2>Настройки</h2>'+installRow()+refreshRow()
    +'<div class="tgrow"><b>Тема</b><div class="seg">'+seg('theme','dark','Тёмная')+seg('theme','light','Светлая')+'</div></div>'
    +'<div class="tgrow"><div><b>Уведомления в игре</b><div class="small">«Строка» — одна короткая строка внизу; полный список всегда в «📜 Что было».</div></div><div class="seg">'+seg('toast','off','Выкл')+seg('toast','one','Строка')+seg('toast','all','Все')+'</div></div>'
+   +'<div class="tgrow"><div><b>Режим экономии</b><div class="small">Меньше анимаций, без размытия и фонового видео на палубе. Помогает, если телефон греется или быстро садится.</div></div><button class="btn tg'+(ecoOn()?' on':'')+'" data-qo="eco">'+(ecoOn()?'Вкл':'Выкл')+'</button></div>'
    +tg('music','Музыка на стартовом экране','Играет до начала партии; в игре выключается.')
    +tg('adv','Совет хода','Строка «💡 Совет» подсказывает, что сейчас лучше сделать, и подсвечивает нужную кнопку и остров.')
    +tg('hints','Подсказка «что могу сделать»','Строка над картой подсказывает доступные действия и подсвечивает «Закончить ход».')
@@ -4905,6 +4915,7 @@ document.addEventListener('click',async ev=>{
   if(k==='theme'){SET.theme=bt.dataset.v;setSave();applyTheme()}
   else if(k==='install'){if(DEFER){try{DEFER.prompt();await DEFER.userChoice}catch(e){}DEFER=null}}
   else if(k==='toast'){SET.toast=bt.dataset.v;setSave();const h=document.getElementById('toasts');if(h){h.classList.toggle('one',SET.toast==='one');if(SET.toast==='off')h.querySelectorAll('.toast').forEach(e=>e.remove())}}
+  else if(k==='eco'){SET.eco=!ecoOn();setSave();ecoApply();try{DK.sig='';render()}catch(e){}}
   else if(k==='music'){SET.music=!(SET.music!==false);setSave();musicSync()}
   else if(k==='hints'){SET.hints=!SET.hints;setSave();try{render()}catch(e){}}
   else if(k==='adv'){SET.adv=SET.adv===false;setSave();try{render()}catch(e){}}
@@ -5221,7 +5232,7 @@ function dkRender(){
   place(far,rowFar,Math.min(W*0.28,H*0.3),0.62);
   place(near,rowNear,two?Math.min(W*0.36,H*0.36):Math.min(W*0.42,H*0.42),1);
   const bgst='left:'+((W-bw)/2).toFixed(1)+'px;top:'+top.toFixed(1)+'px;width:'+bw.toFixed(1)+'px;height:'+bh.toFixed(1)+'px';
-  let h='<div class="dkz">'+(wv?'<img class="dkbg" src="assets/deck/bg-'+wk+'.webp" alt="" style="'+bgst+'"><video class="dkbg wv" src="'+WXVID[wk]+'" playsinline preload="auto" style="'+bgst+'"></video>':kwOn?'<video class="dkbg dkvid" src="assets/deck/bg-kw.mp4" poster="assets/deck/bg-kw.webp" autoplay muted loop playsinline preload="auto" style="'+bgst+'"></video>':'<img class="dkbg" src="assets/deck/bg-'+wk+'.webp" alt="" style="'+bgst+'">');
+  let h='<div class="dkz">'+(wv&&!ecoOn()?'<img class="dkbg" src="assets/deck/bg-'+wk+'.webp" alt="" style="'+bgst+'"><video class="dkbg wv" src="'+WXVID[wk]+'" playsinline preload="auto" style="'+bgst+'"></video>':kwOn&&!ecoOn()?'<video class="dkbg dkvid" src="assets/deck/bg-kw.mp4" poster="assets/deck/bg-kw.webp" autoplay muted loop playsinline preload="auto" style="'+bgst+'"></video>':'<img class="dkbg" src="assets/deck/bg-'+wk+'.webp" alt="" style="'+bgst+'">');
   if(!wv&&(wk==='still'||wk==='tarai'||wk==='storm'||wk==='buster'))h+='<div class="dksky" style="height:'+(Yh+4).toFixed(0)+'px"><img src="assets/deck/bg-'+wk+'.webp" alt="" style="left:'+((W-bw)/2-8).toFixed(1)+'px;top:'+top.toFixed(1)+'px;width:'+(bw+16).toFixed(1)+'px;height:'+(bh).toFixed(1)+'px"></div>';
   h+=dkFx(wk,W,H,Yh,'back');
   if(DK.dark)h+='<i class="dkwave" style="top:'+(Yh+H*0.02).toFixed(0)+'px"></i><i class="dkwave b" style="top:'+(Yh+H*0.06).toFixed(0)+'px"></i>';
@@ -5314,7 +5325,11 @@ function dkRender(){
    h+='<div class="dkui bot"><div class="dkqa">'+pr.map(chip).join('')+(G.winner==null?(()=>{const n=Math.max(3,G.apMax||3);return '<span class="dkap">ОД'+Array.from({length:n},(_,i)=>'<i class="'+(i<G.ap?'':'off')+'"></i>').join('')+'</span>'})():'')+'</div>'
     +'<div class="dkrow3"><span class="dkcur"><span class="dkth"><img src="assets/deck/'+ca+'.webp" alt=""></span><span><b>'+(DK_TI[ca]&&ca!=='base'&&ca!=='fog'?DK_TI[ca]+' ':'')+esc(!bt&&(p===G.players[G.cur]||NET.on)?cn.charAt(0).toUpperCase()+cn.slice(1):p.name+': '+cn)+'</b>'+(mine?'<small>Нажмите на остров · 1 ОД</small>':'')+'</span></span>'+'</div></div>'}
   DK.pos={};for(const o of isl)DK.pos[o.id]={cx:o.cx,ty:o.ty,w:o.w,ih:o.ih,y:o.y};DK.shp={x:W/2,y:shTop+shH*0.25,w:shW,h:shH};DK.fgp={x:-fw*0.54,y:Math.min(H*0.78,shTop+shH*0.9)-fh*0.85,w:fw,h:fh};DK.W=W;DK.H=H;DK.Yh=Yh;
+  const oldBg=[...el.querySelectorAll('.dkz img.dkbg,.dksky img')];
   el.innerHTML=h;
+  // фон-картинку не пересоздаём (на iPhone это давало чёрную вспышку): переносим прежний узел, если картинка та же
+  oldBg.forEach(o=>{const n=[...el.querySelectorAll('.dkz img.dkbg,.dksky img')].find(x=>x.getAttribute('src')===o.getAttribute('src')&&x.parentNode&&x.parentNode.className===o.parentNode.className);if(n&&o.complete){o.setAttribute('style',n.getAttribute('style'));n.replaceWith(o)}});
+  dkPreload();
   el.classList.toggle('fresh',fresh);el.classList.toggle('kwon',kwOn||!!wv);el.classList.toggle('wvon',!!wv);dkWv(el,wv);
   if(DK.arv&&Date.now()-DK.arv<4000){DK.arv=0;const z0=el.querySelector('.dkz'),im0=el.querySelector('.dkship img');if(z0)z0.classList.add('arv');
     if(im0){try{const arvKf=[{transform:'translate(0,14px) rotate(-2deg)'},{transform:'translate(0,-3px) rotate(1.2deg)',offset:.6},{transform:'translate(0,0) rotate(0)'}],arvOp={duration:1100,easing:'ease-out'};im0.animate(arvKf,arvOp);el.querySelectorAll('.dkship .dkcw').forEach(q=>q.animate(arvKf,arvOp))}catch(_){}}}
@@ -5322,6 +5337,12 @@ function dkRender(){
   el.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{const i=+b.dataset.a,a=ACTS[i];DK.more=false;DK.galOpen=false;if(a&&a.g==='end'&&!G.tut)endAsk(i);else submit({t:'a',i})});
   {const v=el.querySelector('video.dkvid');if(v){v.muted=true;const pr=v.play&&v.play();if(pr&&pr.catch)pr.catch(()=>{})}}
   dkZoomApply();
+}
+let DKPRE=false;
+function dkPreload(){ // прогреваем и декодируем фоны погод и пасхалки заранее, чтобы при смене не было чёрных вспышек и задержек
+  if(DKPRE)return;DKPRE=true;
+  const go=()=>{['still','storm','aqua','buster','tarai','belt'].map(k=>'assets/deck/bg-'+k+'.webp').concat(['penguins','dolphins','catboat','galleon'].map(k=>'assets/deck/'+k+'.webp')).forEach(u=>{const i=new Image();i.src=u;if(i.decode)i.decode().catch(()=>{})})};
+  if(window.requestIdleCallback)requestIdleCallback(go,{timeout:3000});else setTimeout(go,1200);
 }
 function dkWv(el,wv){ // фоновое видео погоды: узел переживает перерисовки, звук из самого ролика
   if(!wv){return}
@@ -5353,6 +5374,11 @@ function dkFx(wk,W,H,Yh,layer){
   return h;
 }
 // зум двумя пальцами, перетаскивание при увеличении, двойной тап — сброс
+function dkZoomTo(t,sc){ // плавно приблизить палубу к элементу t
+  const el=document.getElementById('deck');if(!el||!t)return;const r=el.getBoundingClientRect(),b=t.getBoundingClientRect(),W=el.clientWidth,H=el.clientHeight,s0=DK.z.s||1;
+  const cx=((b.left+b.width/2-r.left)-DK.z.x)/s0,cy=((b.top+b.height/2-r.top)-DK.z.y)/s0,s=sc;
+  DK.z={s,x:Math.min(0,Math.max(W-W*s,W/2-cx*s)),y:Math.min(0,Math.max(H-H*s,H/2-cy*s))};dkZoomApply();
+}
 function dkZoomApply(){const z=document.querySelector('#deck .dkz');if(z)z.style.transform=DK.z.s>1.01?'translate('+DK.z.x.toFixed(1)+'px,'+DK.z.y.toFixed(1)+'px) scale('+DK.z.s.toFixed(3)+')':''}
 (function(){const pts=new Map();let p0=null,lastTap=0,moved=false;
   const clamp=()=>{const el=document.getElementById('deck');if(!el)return;const W=el.clientWidth,H=el.clientHeight,s=DK.z.s;DK.z.x=Math.min(0,Math.max(W-W*s,DK.z.x));DK.z.y=Math.min(0,Math.max(H-H*s,DK.z.y))};
@@ -5363,7 +5389,7 @@ function dkZoomApply(){const z=document.querySelector('#deck .dkz');if(z)z.style
     if(pts.size===2&&p0.d){const a=[...pts.values()],d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),s=Math.min(3,Math.max(1,p0.s*d/p0.d));DK.z.x=p0.cx-(p0.cx-p0.x)*s/p0.s;DK.z.y=p0.cy-(p0.cy-p0.y)*s/p0.s;DK.z.s=s;moved=true;clamp();dkZoomApply()}
     else if(p0.pan&&DK.z.s>1.01){const dx=e.clientX-p0.x0,dy=e.clientY-p0.y0;if(Math.abs(dx)+Math.abs(dy)>6)moved=true;DK.z.x=p0.x+dx;DK.z.y=p0.y+dy;clamp();dkZoomApply()}},{passive:true});
   const up=e=>{if(!pts.has(e.pointerId))return;pts.delete(e.pointerId);if(pts.size<2&&p0&&p0.d)p0=null;if(!pts.size){
-    if(!moved&&e.type==='pointerup'&&e.target.closest&&e.target.closest('#deck')&&!e.target.closest('.dkhit.pk,.dkui')){const t=Date.now();if(t-lastTap<320){DK.z={s:1,x:0,y:0};dkZoomApply();lastTap=0}else lastTap=t}
+    if(!moved&&e.type==='pointerup'&&e.target.closest&&e.target.closest('#deck')&&!e.target.closest('.dkhit.pk,.dkui')){const t=Date.now();if(t-lastTap<320){if(DK.z.s>1.01)DK.z={s:1,x:0,y:0};else{const dk=document.getElementById('deck'),rr=dk.getBoundingClientRect(),W=dk.clientWidth,H=dk.clientHeight,s=2.2,cx=e.clientX-rr.left,cy=e.clientY-rr.top;DK.z={s,x:Math.min(0,Math.max(W-W*s,W/2-cx*s)),y:Math.min(0,Math.max(H-H*s,H/2-cy*s))}}dkZoomApply();lastTap=0}else lastTap=t}
     if(moved)DK.drag=Date.now();p0=null}};
   document.addEventListener('pointerup',up,{passive:true});document.addEventListener('pointercancel',up,{passive:true});
   // колесо мыши на ПК: приближение палубы (под курсор); при масштабе 1 и прокрутке вниз страница листается как обычно
@@ -5430,9 +5456,9 @@ function dkSail(b,done){
 document.addEventListener('click',e=>{
   if(e.target.closest&&e.target.closest('[data-dkmap]')){try{localStorage.setItem('nv_deck','0')}catch(_){}DK.sig='';render();return}
   if(e.target.closest&&e.target.closest('[data-galopen]')){DK.galOpen=!DK.galOpen;DK.sig='';render();return}
-  if(e.target.closest&&e.target.closest('[data-dolpick]')){if(!(DK.z.s>=1.5)||botTurnLock())return;const i=ACTS.findIndex(a=>/Дельфины/.test(a.label)&&!a.dis);if(i>=0)submit({t:'a',i});return}
-  if(e.target.closest&&e.target.closest('[data-catpick]')){if(!(DK.z.s>=1.5)||botTurnLock())return;const i=ACTS.findIndex(a=>/Кот:/.test(a.label)&&!a.dis);if(i>=0)submit({t:'a',i});return}
-  if(e.target.closest&&e.target.closest('[data-penpick]')){if(!(DK.z.s>=1.5)||botTurnLock())return;const i=ACTS.findIndex(a=>/Пингвины/.test(a.label)&&!a.dis);if(i>=0)submit({t:'a',i});return}
+  if(e.target.closest&&e.target.closest('[data-dolpick]')){if(botTurnLock())return;if(!(DK.z.s>=1.5)){dkZoomTo(e.target.closest('[data-dolpick]'),2.4);return}const i=ACTS.findIndex(a=>/Дельфины/.test(a.label)&&!a.dis);if(i>=0)submit({t:'a',i});return}
+  if(e.target.closest&&e.target.closest('[data-catpick]')){if(botTurnLock())return;if(!(DK.z.s>=1.5)){dkZoomTo(e.target.closest('[data-catpick]'),2.4);return}const i=ACTS.findIndex(a=>/Кот:/.test(a.label)&&!a.dis);if(i>=0)submit({t:'a',i});return}
+  if(e.target.closest&&e.target.closest('[data-penpick]')){if(botTurnLock())return;if(!(DK.z.s>=1.5)){dkZoomTo(e.target.closest('[data-penpick]'),2.4);return}const i=ACTS.findIndex(a=>/Пингвины/.test(a.label)&&!a.dis);if(i>=0)submit({t:'a',i});return}
   if(e.target.closest&&e.target.closest('[data-galclose]')){DK.galOpen=false;DK.sig='';render();return}
   if(e.target.closest&&e.target.closest('[data-dkon]')){try{localStorage.setItem('nv_deck','1')}catch(_){}DK.sig='';render();return}
   const b=e.target.closest&&e.target.closest('#deck .dkhit.pk');if(!b||(DK.drag&&Date.now()-DK.drag<250))return;
@@ -7032,7 +7058,7 @@ window.__g={grFx,fxGuard,endRound,SFX,fxSnd,kwFx,diceFx,eventFx,cardFx,fxCard,fx
    +'<div class="wtc"><div class="spt">ГРАНД ЛАЙН</div><div class="sps2">Бездна между двух миров</div><button class="spb" type="button">⚓ Выйти в море</button></div>'
    +'<div class="spf" style="animation-delay:2.8s;bottom:14px"><span class="spv"></span><span class="spo" hidden><i></i>сейчас в игре: <b>0</b></span></div><div class="abwh"></div>';
   document.body.appendChild(o);
-  {const vd=o.querySelector('.abv');let sv=false;try{sv=!!(navigator.connection&&navigator.connection.saveData)}catch(e){}
+  {const vd=o.querySelector('.abv');let sv=ecoOn();
    if(vd&&!sv){const pt=innerWidth/innerHeight<1.1;vd.poster=pt?'assets/abyss-p0.webp':'assets/abyss-v0.webp';vd.muted=true;vd.src=pt?'assets/abyss-p.mp4':'assets/abyss.mp4';o.classList.add('vid');
     vd.addEventListener('error',()=>o.classList.remove('vid'));try{const pl=vd.play();if(pl&&pl.catch)pl.catch(()=>{})}catch(e){}}}
   const v=document.getElementById('ver');if(v)o.querySelector('.spv').textContent=v.textContent;
