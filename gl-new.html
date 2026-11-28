@@ -4369,7 +4369,7 @@ function dsCompactHtml(pe,Z,side,line,wins){
     };
     const left=[0,1].some(k=>!Z.done[k]&&!Z.spin[k]);
     const mid=left&&!Z.busy?'<button class="btn primary dsroll" data-dz="roll">🎲 Бросить кубики</button>':(!Z.busy&&Z.done[0]&&Z.done[1]?'<div class="dswait">&nbsp;</div>':'<div class="dswait">'+(Z.busy?'⚔ Идёт бой…':'🎲 Кубики катятся…')+'</div>');
-    h+='<div class="dsdice">'+col(0)+'<div class="dsvs">VS</div>'+col(1)+'</div>'+mid+(Z.fast?'':'<button class="btn dsskip" data-dz="skip">⏩ Пропустить бой</button>');
+    h+='<div class="dsdice">'+col(0)+'<div class="dsvs">VS</div>'+col(1)+'</div>'+mid+('<button class="btn dsskip" data-dz="result">⏩ Пропустить к результату</button>');
   }else{
     h+='<div class="dsfin'+(res.winner===-1?' draw':'')+'"><div class="dsfk">'+(res.winner===-1?'Боевая ничья':'🏆 Победа')+'</div>'+(res.winner===-1?'':'<div class="dsfw">'+esc(pe.names[res.winner])+'</div>')+'<div class="dsfs">'+res.w[0]+' : '+res.w[1]+'</div></div><button class="btn primary dscont" data-a="0">Продолжить</button>';
   }
@@ -4411,7 +4411,7 @@ function dsMount(){
   const live=pe&&pe.type==='duelResult'&&Z&&Z.key===pe;
   if(!live){if(Z&&Z.sc){Z.sc.close();Z.sc=null}return}
   const slot=document.getElementById('dsslot');
-  if(slot&&!Z.sc&&dsWanted(pe)){
+  if(slot&&!Z.sc&&!Z.nosc&&dsWanted(pe)){
     Z.sc=DuelScene.open(DuelScene.fromRes(pe.res,pe.names,{fast:Z.fast}));Z.plan=DuelScene.plan(pe.res);Z.ready=false;
     const sc=Z.sc;Z.q=sc.intro().catch(()=>{}).then(()=>{if(UI.dz===Z&&Z.sc===sc){Z.ready=true;dzAuto(Z)}});
   }
@@ -4969,6 +4969,7 @@ function bind(){
     const n=pe.res.rounds.length,act=b.dataset.dz;
     if(act==='mode'){dzMode(pe,Z);return}
     if(act==='mode-on'){try{localStorage.setItem('gl_dscene','on')}catch(e){}Z.fast=false;clearTimeout(Z.at);Z.at=0;render();return}
+    if(act==='result'){clearTimeout(Z.at);Z.at=0;Z.nosc=true;if(Z.sc){try{Z.sc.close()}catch(e){}Z.sc=null}Z.q=Promise.resolve();Z.ready=true;Z.busy=false;Z.fast=true;Z.shown=n;Z.spin=[false,false];Z.done=[false,false];render();return}
     if(act==='skip'){
       if(Z.sc||dsWanted(pe)){Z.fast=true;if(Z.sc)Z.sc.fast(true);clearTimeout(Z.at);Z.at=0;dzRoll(pe,[0,1]);render();return}
       Z.shown=n;Z.spin=[false,false];Z.done=[false,false];render();return}
