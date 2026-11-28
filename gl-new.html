@@ -4143,7 +4143,7 @@ function render(){
   try{dkRender()}catch(e){console.error('deck',e)}
   $('#side').innerHTML=sideHtml();
   { const ah=advHtml(),hh=hintHtml(),pr=isMob()&&document.querySelector('#side .pr1 h3');if(pr&&ah){pr.insertAdjacentHTML('afterend',ah);if(hh)$('#now').insertAdjacentHTML('beforeend',hh)}else if(ah+hh)$('#now').insertAdjacentHTML('beforeend',ah+hh);hintMark() }
-  $('#legend').innerHTML=Object.entries(TYPES).map(([k,t])=>(BADGE[k]?'<span><i style="background:'+BADGE[k].c+'"></i>'+BADGE[k].i+' '+t.n+'</span>':'<span><i style="background:'+t.c+'"></i>'+t.n+'</span>')).join('')+'<span><i style="background:#cdbdee;border-color:#5b3f99!important"></i>⛰ переход между морями</span><span><i style="background:#ebe1ca"></i>«?» — фишка не вскрыта</span><span><i style="background:var(--gold);transform:rotate(45deg);border-radius:2px"></i><b>П</b> — остров понеглифа</span>';
+  $('#legend').innerHTML=Object.entries(TYPES).map(([k,t])=>(BADGE[k]?'<span><i style="background:'+BADGE[k].c+'"></i>'+BADGE[k].i+' '+t.n+'</span>':'<span><i style="background:'+t.c+'"></i>'+t.n+'</span>')).join('')+'<span><i style="background:#cdbdee;border-color:#5b3f99!important"></i>⛰ переход между морями</span><span><i style="background:#ebe1ca"></i>«?» — фишка не вскрыта</span><span><i style="background:var(--gold);transform:rotate(45deg);border-radius:2px"></i><b>П</b> — остров понеглифа</span><span>👆👆 двойной тап по острову — проложить курс</span>';
   {const hum=G.players.filter(q=>!q.bot);if(!NET.on&&hum.length===1&&hum.length<G.players.length&&need!=null&&!G.players[need].bot)UI.viewer=hum[0].i}
   let m='';
   if(G.winner!=null)m=winHtml();
@@ -5588,6 +5588,8 @@ function navOpen(sea){
       +(G.monster&&G.monster.loc===k?'<text x="'+x+'" y="'+(y+82)+'" text-anchor="middle" font-size="46">🐉</text>':'')
       +(k===p.loc?'<text x="'+x+'" y="'+(y-58)+'" text-anchor="middle" font-size="40">⛵</text>':'')
       +(G.flags[k]!=null?'<rect x="'+(x-50)+'" y="'+(y-62)+'" width="20" height="14" fill="'+G.players[G.flags[k]].color+'"/>':'')+'</g>'}
+  {const by={};G.players.forEach(q=>{if(q.i!==p.i&&ids.includes(q.loc)&&MAPD.nodes[q.loc])(by[q.loc]=by[q.loc]||[]).push(q)});
+    for(const k in by){const [x,y]=MAPD.nodes[k],a=by[k];a.forEach((q,j)=>{const dx=(j-(a.length-1)/2)*46;svg+='<g pointer-events="none"><text x="'+(x+dx)+'" y="'+(y-56)+'" text-anchor="middle" font-size="40" stroke="'+q.color+'" stroke-width="3" paint-order="stroke">⛵</text><rect x="'+(x+dx-14)+'" y="'+(y-50)+'" width="28" height="7" rx="3" fill="'+q.color+'" stroke="#fff" stroke-width="1.5"/></g>'})}}
   svg+='</svg>';
   const tabs=(G.seas||SEAK).map(s=>'<button class="navtab'+(s===sea?' on':'')+'" data-navsea="'+s+'">'+SEAS[s]+'</button>').join('');
   const quick=navQuick(p).map(([l,id])=>'<button class="navq" '+(id?'data-navto="'+id+'"':'disabled')+'>'+l+(id?'<small>'+esc(navName(id))+' · '+d[id]+' '+(d[id]===1?'ход':d[id]<5?'хода':'ходов')+'</small>':'<small>не найден</small>')+'</button>').join('');
@@ -5596,6 +5598,18 @@ function navOpen(sea){
     +'<div class="navqs">'+quick+'</div><div class="navtabs">'+tabs+'</div>'+svg
     +'<div class="navf">'+(to?'<span>Курс: '+esc(navName(to))+'</span><button class="btn" data-navclear>Сбросить курс</button>':'<span class="small">Нажмите на остров, чтобы проложить к нему курс</span>')+'</div></div>';
 }
+let MAPTAP={id:null,t:0};
+function mapCourse(id){
+  if(!G||G.winner!=null)return;const p=dkFocus();if(!p||id===p.loc)return;
+  navFor(p);if(navBfs(p.loc)[id]==null){try{toastPush('🧭 Туда сейчас не доплыть')}catch(e){}return}
+  UI.nav=Object.assign(UI.nav||{},{to:id,pi:p.i});DK.sig='';render();
+  try{toastPush('🧭 Курс проложен: '+navName(id))}catch(e){}
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest&&e.target.closest('#map [data-id]');if(!g)return;
+  const id=g.dataset.id,now=Date.now();
+  if(MAPTAP.id===id&&now-MAPTAP.t<450){MAPTAP.id=null;mapCourse(id)}else MAPTAP={id,t:now};
+},true);
 function navClose(){const o=document.getElementById('navov');if(o)o.remove()}
 document.addEventListener('click',e=>{
   const t=e.target.closest&&e.target;if(!t)return;
