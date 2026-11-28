@@ -1613,7 +1613,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N85</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N86</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -2679,13 +2679,13 @@ function akainuPhase(cb){
 }
 // ---------- N9: Морской король (появляется с картой «Калм Белт») ----------
 const MONSTER={n:'Морской король',a:6,u:2};
-function spawnMonster(){
-  const busy=new Set(G.players.map(q=>q.loc));
-  const c=Object.keys(ADJ).filter(id=>id!=='L'&&id!=='Z'&&!deadAt(id)&&busy.has(id)&&G.type[id]!=='start'&&!(G.zun&&G.zun.cell===id)&&!(G.akainu&&G.akainu.loc===id)&&!(G.laftel&&G.laftel.anch&&G.laftel.anch.includes(id))).sort();
-  if(!c.length)return;
-  const loc=c[d(c.length)-1];G.monster={loc};
-  log('🐉 Калм Белт: из глубины всплыл Морской король. Он караулит '+locName(loc)+' (атака '+MONSTER.a+', уклонение '+MONSTER.u+').');
-  fxEvent({sfx:'seaking',wk:'seaking',stage:'pre',banner:true,tone:'bad',icon:'🐉',title:'Морской король!',desc:'Он караулит '+locName(loc)+' до конца Калм Белта',auto:3200});
+function spawnMonster(){ // король всплывает на соседнем острове у случайного игрока: у него он виден прямо с палубы
+  const ex=id=>id==='L'||id==='Z'||deadAt(id)||G.type[id]==='start'||!!(G.zun&&G.zun.cell===id)||!!(G.akainu&&G.akainu.loc===id)||!!(G.laftel&&G.laftel.anch&&G.laftel.anch.includes(id));
+  const opts=G.players.map(q=>({q,n:dkNeigh(q.loc).filter(id=>!ex(id)).sort()})).filter(o=>o.n.length);
+  if(!opts.length)return;
+  const o=opts[d(opts.length)-1],loc=o.n[d(o.n.length)-1];G.monster={loc};
+  log('🐉 Калм Белт: из глубины всплыл Морской король рядом с игроком '+o.q.name+'. Он караулит '+locName(loc)+' (атака '+MONSTER.a+', уклонение '+MONSTER.u+').');
+  fxEvent({sfx:'seaking',wk:'seaking',stage:'pre',loc,banner:true,tone:'bad',icon:'🐉',title:'Морской король!',desc:'Он караулит '+locName(loc)+' до конца Калм Белта',auto:3200});
 }
 function monsterReward(p){
   {const t=p.tre.find(c=>c.key==='tamer'&&!c.active);if(t){t.active=true;fxCard(p,t);log('👑 '+p.name+' становится «Королём морей»: +5 к атаке во всех раундах дуэли.')}}
@@ -3883,7 +3883,11 @@ function kwFx(ev,done){
 }
 const WXVID={aqua:'assets/aqua.mp4'+SFXV,tarai:'assets/tarai.mp4'+SFXV,storm:'assets/storm-v.mp4'+SFXV,buster:'assets/buster.mp4'+SFXV,seaking:'assets/seaking.mp4'+SFXV};
 function aquaFx(ev,done){ // видео-заставки Аквалагуны и Течения Тарай: звук берётся из самого видео
-  try{if(ev.wk!=='seaking'&&!ecoOn()&&document.body.classList.contains('dkon')&&dkOn()&&document.getElementById('deck')&&Element.prototype.animate&&!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)&&!window.__nor){
+  if(ev.wk==='seaking'){ // короля видит только тот, у кого остров с ним по соседству (или кто сам на нём)
+    let vis=false;try{const vp=dkFocus();vis=!!(vp&&ev.loc&&(vp.loc===ev.loc||dkNeigh(vp.loc).includes(ev.loc)))}catch(_){}
+    if(!vis){done&&done();return}
+  }
+  try{if(!ecoOn()&&document.body.classList.contains('dkon')&&dkOn()&&document.getElementById('deck')&&Element.prototype.animate&&!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)&&!window.__nor){
     // на палубе видео идёт фоном вместо статичной картинки и в конце плавно растворяется в неё
     DK.wv={wk:ev.wk,until:Date.now()+13000,done};DK.wvEl=null;DK.sig='';dkRender();
     const v=DK.wvEl;if(v){return}
@@ -5384,7 +5388,7 @@ function dkRender(){
   const st=id=>[id,dkArt(id),G.flags[id],playersAt(id).map(q=>q.i).join(''),G.akainu&&G.akainu.loc===id?1:0,G.monster&&G.monster.loc===id?1:0,outAt(id)?'o'+outAt(id).pon.length:'',(G.hunt||[]).some(h=>h.loc===id)?1:0,picks.includes(id)?1:0,G.dead&&G.dead[id]?1:0].join(':');
   let plan=navPlan(p);if(plan&&plan.done){UI.nav.arrived=plan.to;UI.nav.to=null;plan=null}else if(UI.nav&&UI.nav.to)UI.nav.arrived=null;
   const navSig=(UI.nav&&(UI.nav.to||'')+'/'+(UI.nav.arrived||''))+':'+(plan&&plan.steps?plan.steps.map(x=>x.n+x.risk.join('')).join(','):'');
-  const wv=(DK.wv&&Date.now()<DK.wv.until&&DK.wv.wk===wk)?DK.wv:null,kwOn=!!(DK.kw&&Date.now()<DK.kw),sig=[wv?'wv':'',p.ch||'',G.fire?'f'+G.fire.loc:'',p.loc,G.ap+'/'+G.apMax,ACTS.map(a=>a.g+a.label+(a.dis?1:0)).join('|'),navSig,kwOn?'kw':'',DK.dark?1:0,DK.lrise?1:0,(DK.flhold?[...DK.flhold].join(','):''),W,H,wk,p.i,p.loc,dkArt(p.loc),mine?1:0,bt?'b':'',(G.gal?G.gal.who+':'+(G.gal.done?1:0)+':'+(DK.galOpen?1:0):''),(G.pen?G.pen.who+':'+(G.pen.done?1:0):'',G.cat?'c'+G.cat.who+':'+(G.cat.done?1:0):''),p.pengu|0,p.cat|0,(G.dol?G.dol.who+':'+(G.dol.done?1:0):''),p.dolph|0,G.zun&&G.zun.cell,neigh.concat([...SKY]).map(st).join('|'),G.flags[p.loc],playersAt(p.loc).length].join('#');
+  const wv=(DK.wv&&Date.now()<DK.wv.until&&(DK.wv.wk===wk||DK.wv.wk==='seaking'))?DK.wv:null,kwOn=!!(DK.kw&&Date.now()<DK.kw),sig=[wv?'wv':'',p.ch||'',G.fire?'f'+G.fire.loc:'',p.loc,G.ap+'/'+G.apMax,ACTS.map(a=>a.g+a.label+(a.dis?1:0)).join('|'),navSig,kwOn?'kw':'',DK.dark?1:0,DK.lrise?1:0,(DK.flhold?[...DK.flhold].join(','):''),W,H,wk,p.i,p.loc,dkArt(p.loc),mine?1:0,bt?'b':'',(G.gal?G.gal.who+':'+(G.gal.done?1:0)+':'+(DK.galOpen?1:0):''),(G.pen?G.pen.who+':'+(G.pen.done?1:0):'',G.cat?'c'+G.cat.who+':'+(G.cat.done?1:0):''),p.pengu|0,p.cat|0,(G.dol?G.dol.who+':'+(G.dol.done?1:0):''),p.dolph|0,G.zun&&G.zun.cell,neigh.concat([...SKY]).map(st).join('|'),G.flags[p.loc],playersAt(p.loc).length].join('#');
   const pl=DK.pl||{};const moves=[];for(const q of G.players){if(q!==p&&pl[q.i]&&pl[q.i]!==q.loc)moves.push({q,from:pl[q.i],to:q.loc})}DK.pl={};for(const q of G.players)DK.pl[q.i]=q.loc;
   if(sig===DK.sig)return;
   const fresh=DK.sig.split('#')[0]!==p.loc;DK.sig=sig;
@@ -5398,7 +5402,7 @@ function dkRender(){
   place(far,rowFar,Math.min(W*0.28,H*0.3),0.62);
   place(near,rowNear,two?Math.min(W*0.36,H*0.36):Math.min(W*0.42,H*0.42),1);
   const bgst='left:'+((W-bw)/2).toFixed(1)+'px;top:'+top.toFixed(1)+'px;width:'+bw.toFixed(1)+'px;height:'+bh.toFixed(1)+'px';
-  let h='<div class="dkz">'+(wv&&!ecoOn()?'<img class="dkbg" src="assets/deck/bg-'+wk+'.webp" alt="" style="'+bgst+'"><video class="dkbg wv" src="'+WXVID[wk]+'" playsinline preload="auto" style="'+bgst+'"></video>':kwOn&&!ecoOn()?'<video class="dkbg dkvid" src="assets/deck/bg-kw.mp4" poster="assets/deck/bg-kw.webp" autoplay muted loop playsinline preload="auto" style="'+bgst+'"></video>':'<img class="dkbg" src="assets/deck/bg-'+wk+'.webp" alt="" style="'+bgst+'">');
+  let h='<div class="dkz">'+(wv&&!ecoOn()?'<img class="dkbg" src="assets/deck/bg-'+wk+'.webp" alt="" style="'+bgst+'"><video class="dkbg wv" src="'+WXVID[wv.wk]+'" playsinline preload="auto" style="'+bgst+'"></video>':kwOn&&!ecoOn()?'<video class="dkbg dkvid" src="assets/deck/bg-kw.mp4" poster="assets/deck/bg-kw.webp" autoplay muted loop playsinline preload="auto" style="'+bgst+'"></video>':'<img class="dkbg" src="assets/deck/bg-'+wk+'.webp" alt="" style="'+bgst+'">');
   if(!wv&&(wk==='still'||wk==='tarai'||wk==='storm'||wk==='buster'))h+='<div class="dksky" style="height:'+(Yh+4).toFixed(0)+'px"><img src="assets/deck/bg-'+wk+'.webp" alt="" style="left:'+((W-bw)/2-8).toFixed(1)+'px;top:'+top.toFixed(1)+'px;width:'+(bw+16).toFixed(1)+'px;height:'+(bh).toFixed(1)+'px"></div>';
   h+=dkFx(wk,W,H,Yh,'back');
   if(DK.dark)h+='<i class="dkwave" style="top:'+(Yh+H*0.02).toFixed(0)+'px"></i><i class="dkwave b" style="top:'+(Yh+H*0.06).toFixed(0)+'px"></i>';
