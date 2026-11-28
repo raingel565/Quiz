@@ -1321,11 +1321,12 @@ body.tutor #app{padding-top:110px}
 #deck .dkmov img{width:100%;display:block;animation:dkbob3 1.6s ease-in-out infinite}
 
 #deck .dkui.tc{left:10px;right:10px;top:92px;bottom:auto;justify-content:center;pointer-events:none}
-#deck .dkcourse{pointer-events:auto;position:relative;background:rgba(10,14,22,.8);border:1px solid rgba(242,193,78,.55);border-radius:14px;padding:7px 34px 7px 12px;color:#f3ead6;max-width:100%;backdrop-filter:blur(6px)}
-#deck .dkcourse b{display:block;font:700 13px/1.25 system-ui,sans-serif}
-#deck .dkcourse small{display:block;font-size:11.5px;color:#cbd5df;margin-top:2px}
+#deck .dkcourse{pointer-events:auto;position:relative;background:rgba(10,14,22,.8);border:1px solid rgba(242,193,78,.55);border-radius:14px;padding:4px 30px 4px 10px;color:#f3ead6;max-width:100%;backdrop-filter:blur(6px)}
+#deck .dkcourse b,#deck .dkcourse small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#deck .dkcourse b{display:block;font:700 12px/1.3 system-ui,sans-serif}
+#deck .dkcourse small{display:block;font-size:10.5px;color:#cbd5df;margin-top:0}
 #deck .dkcourse .risk{font-style:normal;color:#ff9b8b}
-#deck .dkcourse button{position:absolute;right:6px;top:6px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;font-size:12px}
+#deck .dkcourse button{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;font-size:12px}
 #deck .dknav{transform:translateX(-50%);background:#f2c14e;color:#3a2a10;border-radius:10px;padding:2px 8px;font:800 10.5px/1.3 system-ui,sans-serif;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.45);animation:dknv 1.3s ease-in-out infinite;pointer-events:none;z-index:2}
 @keyframes dknv{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(3px)}}
 #deck .dklb.nav{border-color:#f2c14e;box-shadow:0 0 0 2px rgba(242,193,78,.35)}
@@ -5356,8 +5357,8 @@ function dkRender(){
   if(plan||(UI.nav&&UI.nav.arrived&&UI.nav.arrived===p.loc)){let c='<div class="dkui tc"><div class="dkcourse">';
     if(!plan)c+='<b>✅ Вы прибыли: '+esc(navName(UI.nav.arrived))+'</b>';
     else if(plan.none)c+='<b>🧭 '+esc(navName(plan.to))+'</b><small>Туда сейчас не доплыть</small><button data-navclear aria-label="Сбросить курс">✕</button>';
-    else{const nn=x=>x==='L'?'Бездна Миров':x==='Z'?'Зунеша':(seaOf(x)!==seaOf(p.loc)?SEAS[seaOf(x)][0]+'.':'')+numOf(x);c+='<b>🧭 Курс: '+esc(navName(plan.to))+' · '+plan.dist+' '+(plan.dist===1?'ход':plan.dist<5?'хода':'ходов')+(plan.dist>G.ap&&G.players[G.cur]===p?' (в этот ход не успеть)':'')+'</b><button data-navclear aria-label="Сбросить курс">✕</button>';
-      plan.steps.forEach((st,k)=>{c+='<small>'+(plan.steps.length>1?'Путь '+(k+1)+': ':'')+st.path.map(nn).join(' → ')+(st.risk.length?' · <i class="risk">'+esc(st.risk.join(' '))+'</i>':(plan.steps.length>1&&plan.steps.some(z=>z.risk.length)?' · безопаснее':''))+'</small>'})}
+    else{const nn=x=>x==='L'?'Бездна Миров':x==='Z'?'Зунеша':(seaOf(x)!==seaOf(p.loc)?SEAS[seaOf(x)][0]+'.':'')+numOf(x);c+='<b>🧭 '+esc(navName(plan.to))+' · '+plan.dist+' '+(plan.dist===1?'ход':plan.dist<5?'хода':'ходов')++'</b><button data-navclear aria-label="Сбросить курс">✕</button>';
+      plan.steps.slice(0,1).forEach((st,k)=>{c+='<small>'+st.path.map(nn).join(' → ')+(st.risk.length?' · <i class="risk">'+esc(st.risk.join(' '))+'</i>':'')+'</small>'})}
     h+=c+'</div></div>'}
   const cl=dkLabel(p.loc,false),cn=p.loc==='L'?'Бездна Миров':p.loc==='Z'?'Зунеша':'№'+numOf(p.loc)+' — '+DK_TN[ca];
   {if(G.gal&&G.gal.who===p.i&&!G.gal.done&&DK.galOpen&&!bt){const gi=re=>ACTS.findIndex(a=>re.test(a.label)),a1=gi(/Галеон: купить карту/),a2=gi(/Галеон: нанять гостя/);
