@@ -1570,7 +1570,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N55</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N56</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -2110,7 +2110,7 @@ function newGame(cfg){
     for(const q of G.players)if(q.ch==='smoker'){q.cpon=[];q.smD=0}
   }
   G.cur=0;log('Игра началась. Первым ходит '+pname(G.players[0])+'.');
-  UI.viewer=-1;UI.pp={};
+  UI.viewer=-1;UI.pp={};UI.nav=null;UI.navs={};
   beginTurn();
 }
 // ---------- helpers ----------
@@ -5451,7 +5451,15 @@ function dkReveal(loc,t){
 }
 // ---------- N: навигатор курса для вида с палубы ----------
 function navBfs(from){const dist={},q=[from];dist[from]=0;while(q.length){const c=q.shift();for(const n of (ADJ[c]||[])){if(dist[n]!=null||deadAt(n))continue;dist[n]=dist[c]+1;q.push(n)}}return dist}
+// маршрут навигатора у каждого игрока свой: при смене активного игрока подменяем UI.nav
+function navFor(p){
+  if(!p)return;UI.navs=UI.navs||{};
+  if(UI.nav&&UI.nav.pi!=null&&UI.nav.pi!==p.i){UI.navs[UI.nav.pi]=UI.nav;UI.nav=UI.navs[p.i]||{sea:UI.nav.sea}}
+  if(!UI.nav)UI.nav=UI.navs[p.i]||null;
+  if(UI.nav&&UI.nav.pi==null)UI.nav.pi=p.i;
+}
 function navPlan(p){
+  navFor(p);
   const to=UI.nav&&UI.nav.to;if(!to||!p)return null;
   if(p.loc===to)return{to,done:true};
   const dT=navBfs(to);if(dT[p.loc]==null)return{to,none:true};
@@ -5484,9 +5492,9 @@ function navQuick(p){
   ];
 }
 function navOpen(sea){
-  const p=dkFocus();if(!p)return;
+  const p=dkFocus();if(!p)return;navFor(p);
   const cur=p.loc==='L'||p.loc==='Z'?seaOf(p.loc==='Z'&&G.zun?G.zun.cell:(p.prev||'N1')):seaOf(p.loc);
-  sea=sea||(UI.nav&&UI.nav.sea)||cur;UI.nav=Object.assign(UI.nav||{},{sea});
+  sea=sea||(UI.nav&&UI.nav.sea)||cur;UI.nav=Object.assign(UI.nav||{},{sea,pi:p.i});
   const ids=Object.keys(MAPD.nodes).filter(k=>k[0]===sea&&!(G.seas&&!G.seas.includes(sea)));
   let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;ids.forEach(k=>{const [x,y]=MAPD.nodes[k];x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)});
   const pad=60,vb=[x0-pad,y0-pad,x1-x0+pad*2,y1-y0+pad*2];
@@ -5518,8 +5526,8 @@ document.addEventListener('click',e=>{
   if(!document.getElementById('navov')&&!t.closest('[data-navclear]'))return;
   if(t.closest('[data-navx]')||t.id==='navov'){navClose();return}
   const s=t.closest('[data-navsea]');if(s){navOpen(s.dataset.navsea);return}
-  if(t.closest('[data-navclear]')){UI.nav={sea:UI.nav&&UI.nav.sea};navClose();DK.sig='';render();return}
-  const n=t.closest('[data-navto]');if(n){const p=dkFocus(),id=n.dataset.navto;if(!p||id===p.loc)return;if(navBfs(p.loc)[id]==null)return;UI.nav=Object.assign(UI.nav||{},{to:id});navClose();DK.sig='';render()}
+  if(t.closest('[data-navclear]')){{const fp=dkFocus();navFor(fp);UI.nav={sea:UI.nav&&UI.nav.sea,pi:fp?fp.i:null}}navClose();DK.sig='';render();return}
+  const n=t.closest('[data-navto]');if(n){const p=dkFocus(),id=n.dataset.navto;if(!p||id===p.loc)return;if(navBfs(p.loc)[id]==null)return;UI.nav=Object.assign(UI.nav||{},{to:id,pi:p.i});navClose();DK.sig='';render()}
 });
 function renderMap(){let PTOP=''; // понеглиф-метки рисуем поверх кораблей и всадников
   const R=44; // V153: острова крупнее
