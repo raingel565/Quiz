@@ -3970,7 +3970,7 @@ function fxAnchor(){
 window.addEventListener('scroll',()=>{if(document.querySelector('#dicefx,#cardfx,#evfx'))fxAnchor()},{passive:true});
 window.addEventListener('resize',()=>{if(document.querySelector('#dicefx,#cardfx,#evfx'))fxAnchor()});
 // «Пропустить» ход бота: убирает только анимации и паузы, сами действия бота не меняются
-let BOTSKIP=false;
+var BOTSKIP=false;
 function botActing(){if(NET.on||!G||G.winner!=null)return false;const w=viewerNeeded();return w!=null&&!!G.players[w]&&!!G.players[w].bot}
 function botSkipGo(){
   BOTSKIP=true;
@@ -5357,7 +5357,7 @@ function dkRender(){
   if(plan||(UI.nav&&UI.nav.arrived&&UI.nav.arrived===p.loc)){let c='<div class="dkui tc"><div class="dkcourse">';
     if(!plan)c+='<b>✅ Вы прибыли: '+esc(navName(UI.nav.arrived))+'</b>';
     else if(plan.none)c+='<b>🧭 '+esc(navName(plan.to))+'</b><small>Туда сейчас не доплыть</small><button data-navclear aria-label="Сбросить курс">✕</button>';
-    else{const nn=x=>x==='L'?'Бездна Миров':x==='Z'?'Зунеша':(seaOf(x)!==seaOf(p.loc)?SEAS[seaOf(x)][0]+'.':'')+numOf(x);c+='<b>🧭 '+esc(navName(plan.to))+' · '+plan.dist+' '+(plan.dist===1?'ход':plan.dist<5?'хода':'ходов')++'</b><button data-navclear aria-label="Сбросить курс">✕</button>';
+    else{const nn=x=>x==='L'?'Бездна Миров':x==='Z'?'Зунеша':(seaOf(x)!==seaOf(p.loc)?SEAS[seaOf(x)][0]+'.':'')+numOf(x);c+='<b>🧭 '+esc(navName(plan.to))+' · '+plan.dist+' '+(plan.dist===1?'ход':plan.dist<5?'хода':'ходов')+'</b><button data-navclear aria-label="Сбросить курс">✕</button>';
       plan.steps.slice(0,1).forEach((st,k)=>{c+='<small>'+st.path.map(nn).join(' → ')+(st.risk.length?' · <i class="risk">'+esc(st.risk.join(' '))+'</i>':'')+'</small>'})}
     h+=c+'</div></div>'}
   const cl=dkLabel(p.loc,false),cn=p.loc==='L'?'Бездна Миров':p.loc==='Z'?'Зунеша':'№'+numOf(p.loc)+' — '+DK_TN[ca];
@@ -5599,7 +5599,7 @@ function navOpen(sea){
     +'<div class="navqs">'+quick+'</div><div class="navtabs">'+tabs+'</div>'+svg
     +'<div class="navf">'+(to?'<span>Курс: '+esc(navName(to))+'</span><button class="btn" data-navclear>Сбросить курс</button>':'<span class="small">Нажмите на остров, чтобы проложить к нему курс</span>')+'</div></div>';
 }
-let MAPTAP={id:null,t:0};
+var MAPTAP={id:null,t:0};
 function mapCourse(id){
   if(!G||G.winner!=null)return;const p=dkFocus();if(!p||id===p.loc)return;
   navFor(p);if(navBfs(p.loc)[id]==null){try{toastPush('🧭 Туда сейчас не доплыть')}catch(e){}return}
