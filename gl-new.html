@@ -76,7 +76,7 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:8px;flex:1;min-h
 .mgm .small{margin:4px 0 8px}
 .mgres{font-size:20px;font-weight:800;padding:26px 0}.mgres.ok{color:#8fe3a8}.mgres.bad{color:#ff9b8b}
 .cphw{display:flex;flex-wrap:wrap;gap:8px 6px;justify-content:center;margin:6px 0 10px;padding:10px 8px;border-radius:12px;background:rgba(0,0,0,.28)}
-.cphc{position:relative;padding:14px 8px 4px;font-size:17px;font-weight:700;letter-spacing:.5px}
+.cphc{position:relative;padding:4px 8px;font-size:17px;font-weight:700;letter-spacing:.5px}
 .cphc i{position:absolute;top:0;left:50%;transform:translateX(-50%);font-style:normal;font-size:11px;font-weight:800;color:#e8b64a}
 .cphp{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0 10px}
 .cphp b{min-width:46px;padding:6px 8px;border-radius:10px;background:rgba(232,182,74,.16);border:1px solid #e8b64a;color:#f3d98b;font-size:16px}
@@ -1603,7 +1603,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N82</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N83</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -2269,7 +2269,9 @@ function cipherIssue(p,loc,gd){
 }
 function cipherOpen(p){
   const c=p.cipher;if(!c)return;
-  ask('cipher',{who:p.i,title:'Надпись · '+locName(c.loc),c,opts:[{label:'Расшифровано',run:()=>cipherSolve(p)},{label:'Закрыть',run:()=>{}}]});
+  const o=[{label:'Расшифровано',run:()=>cipherSolve(p)},{label:'Закрыть',run:()=>{}}];
+  if(!c.hint)o.push({label:'Подсказка (50 Берри)',dis:p.berries<50,run:()=>{pay(p,50);c.hint=true;log(p.name+' платит 50 Берри за подсказку к шифру.');cipherOpen(p)}});
+  ask('cipher',{who:p.i,title:'Надпись · '+locName(c.loc),c,opts:o});
 }
 function cipherSolve(p){
   const c=p.cipher;if(!c)return;p.cipher=null;
@@ -2286,11 +2288,11 @@ function cipherMount(){
   const pe=G&&G.pending,box=document.getElementById('cpb');
   if(!pe||pe.type!=='cipher'||!box)return;
   const c=pe.c;
-  if(!UI.cp||UI.cp.key!==pe)UI.cp={key:pe,val:'',msg:'',done:false};
+  if(!UI.cp||UI.cp.c!==c)UI.cp={c,val:'',msg:'',done:false};UI.cp.key=pe;
   const U=UI.cp;
   if(U.done){box.innerHTML='<div class="mgres ok">Надпись расшифрована!</div>';return}
   const ws=cphSplit(c.text);
-  box.innerHTML='<div class="small">Слово №, буква № — так читается шифр. Из букв получится слово.</div><div class="cphw">'+ws.map((w,i)=>'<span class="cphc"><i>'+(i+1)+'</i>'+esc(w)+'</span>').join('')+'</div><div class="cphp">'+c.pairs.map(x=>'<b>'+x[0]+'-'+x[1]+'</b>').join('')+'</div><div class="cph-in"><input type="text" id="cpi" maxlength="12" autocomplete="off" autocapitalize="characters" placeholder="слово" value="'+esc(U.val)+'"><button class="btn primary" id="cpok">Проверить</button></div><div class="cphm" id="cphm">'+esc(U.msg)+'</div>';
+  box.innerHTML=(c.hint?'<div class="small">Это шифр Оттендорфа. Первое число — номер слова во фразе, второе — номер буквы в этом слове. Выпишите буквы по порядку — получится слово.</div>':'<div class="small">Фраза и ключ. Что с ними делать — разгадайте сами или купите подсказку.</div>')+'<div class="cphw">'+ws.map(w=>'<span class="cphc">'+esc(w)+'</span>').join('')+'</div><div class="cphp">'+c.pairs.map(x=>'<b>'+x[0]+'-'+x[1]+'</b>').join('')+'</div><div class="cph-in"><input type="text" id="cpi" maxlength="12" autocomplete="off" autocapitalize="characters" placeholder="слово" value="'+esc(U.val)+'"><button class="btn primary" id="cpok">Проверить</button></div><div class="cphm" id="cphm">'+esc(U.msg)+'</div>';
   const inp=box.querySelector('#cpi');
   inp.oninput=()=>{U.val=inp.value};
   const go=()=>{
@@ -4457,7 +4459,7 @@ function pendingHtml(){
   const pe=G.pending;
   if(pe.type==='prep')return prepHtml(pe);
   if(pe.type==='duelResult')return resultHtml(pe);
-  if(pe.type==='cipher')return '<div class="ov"><div class="modal mgm"><h2>'+esc(pe.title)+'</h2><div id="cpb"></div><button class="btn" id="mgwin" data-a="0" hidden></button><div class="grp"><button class="btn" data-a="1">Закрыть</button></div></div></div>';
+  if(pe.type==='cipher')return '<div class="ov"><div class="modal mgm"><h2>'+esc(pe.title)+'</h2><div id="cpb"></div><button class="btn" id="mgwin" data-a="0" hidden></button><div class="grp">'+(pe.c&&!pe.c.hint?'<button class="btn" data-a="2"'+(pe.opts[2]&&pe.opts[2].dis?' disabled':'')+'>💡 Подсказка · 50 Берри</button>':'')+'<button class="btn" data-a="1">Закрыть</button></div></div></div>';
   const retr=pe.pick&&pe.pick.length;
   if(pe.type==='pickloc'&&retr&&UI.pickList!==pe){
     let h='<div class="ov pickov"><div class="pickbar"><b>'+esc(pe.title||'Выбор')+'</b><span>'+esc((pe.text?pe.text+' ':'')+'Нажмите на подсвеченный зелёным остров на карте.')+'</span><div class="grp">';
