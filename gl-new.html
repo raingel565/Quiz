@@ -1351,6 +1351,7 @@ body.tutor #app{padding-top:110px}
 @media (min-width:901px){#deck{height:min(80vh,780px)}}
 #deck[hidden]{display:none}
 /* до первой отрисовки не показываем пустую карту-«артефакт» */
+#map,#mapscroll{touch-action:manipulation}
 #mapwrap:not(.dk):has(#map:empty),body:not(.ingame) #mapwrap{display:none!important}
 #mapwrap.dk #mapscroll,#mapwrap.dk #mapz,#mapwrap.dk #mapme,#mapwrap.dk #maplg,#mapwrap.dk #legend,#mapwrap.dk #mapdk{display:none!important}
 #mapdk{margin:0 0 6px 6px;padding:4px 10px;font-size:13px}
@@ -5619,10 +5620,13 @@ function mapCourse(id){
   UI.nav=Object.assign(UI.nav||{},{to:id,pi:p.i});DK.sig='';render();
   try{toastPush('🧭 Курс проложен: '+navName(id))}catch(e){}
 }
-document.addEventListener('click',e=>{
-  const g=e.target.closest&&e.target.closest('#map [data-id]');if(!g)return;
+let MAPDN=null;
+document.addEventListener('pointerdown',e=>{MAPDN=e.target.closest&&e.target.closest('#map [data-id]')?{x:e.clientX,y:e.clientY}:null},true);
+document.addEventListener('pointerup',e=>{
+  const g=e.target.closest&&e.target.closest('#map [data-id]');const d=MAPDN;MAPDN=null;
+  if(!g||!d||Math.hypot(e.clientX-d.x,e.clientY-d.y)>14)return;
   const id=g.dataset.id,now=Date.now();
-  if(MAPTAP.id===id&&now-MAPTAP.t<450){MAPTAP.id=null;mapCourse(id)}else MAPTAP={id,t:now};
+  if(MAPTAP.id===id&&now-MAPTAP.t<500){MAPTAP.id=null;mapCourse(id)}else MAPTAP={id,t:now};
 },true);
 function navClose(){const o=document.getElementById('navov');if(o)o.remove()}
 document.addEventListener('click',e=>{
