@@ -1590,7 +1590,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N73</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N74</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -4261,7 +4261,7 @@ function mobHead(){ // V156: шапка партии на телефоне
   else if(w.bot)t='Ходит '+w.name;
   else t=G.players.filter(q=>!q.bot).length>1?'Ход: '+w.name:'Ваш ход';
   const dots=Array.from({length:Math.max(3,G.apMax||3)},(_,i)=>'<span class="dot'+(i<G.ap?'':' off')+'"></span>').join('');
-  return '<div class="tp-m"><b class="tm-t">'+esc(t)+'</b><span class="tm-r">Раунд '+G.round+(G.mode&&G.mode!=='std'?' · '+esc(modeOf().n):'')+'</span>'+(G.winner==null?'<span class="pill tm-od">ОД '+dots+'</span>':'')+'</div>';
+  return '<div class="tp-m"><b class="tm-t">'+esc(t)+'</b><span class="tm-r">Раунд '+G.round+(G.mode&&G.mode!=='std'?' · '+esc(modeOf().n):'')+'</span>'+(()=>{try{const wn=G.winner==null&&DK_WN[dkWeather()];return wn?'<span class="pill tm-w">'+wn+'</span>':''}catch(e){return ''}})()+(G.winner==null?'<span class="pill tm-od">ОД '+dots+'</span>':'')+'</div>';
 }
 function topHtml(){
   const p=P(),me=(NET.on&&G.players[NET.me])?G.players[NET.me]:p;
@@ -5366,14 +5366,14 @@ function dkRender(){
   h+='</div>';
   // интерфейс сцены
   const wn=DK_WN[wk];
-  h+='<div class="dkui tl"><span class="dkpill">'+(p.loc==='L'?'Бездна Миров':DK_SEAN[dkSea(p.loc)]||'')+'</span>'+(wn?'<span class="dkpill w">'+wn+'</span>':'')+'</div>';
+  h+='<div class="dkui tl"><span class="dkpill">'+(p.loc==='L'?'Бездна Миров':DK_SEAN[dkSea(p.loc)]||'')+'</span>'+'</div>';
   h+='<div class="dkui tr"><button class="dkpill btn" data-navopen>🧭 Навигатор</button><button class="dkpill btn" data-dkmap>🗺 Карта</button></div>';
   if(plan||(UI.nav&&UI.nav.arrived&&UI.nav.arrived===p.loc)){let c='<div class="dkui tc"><div class="dkcourse">';
     if(!plan)c+='<b>✅ Вы прибыли: '+esc(navName(UI.nav.arrived))+'</b>';
     else if(plan.none)c+='<b>🧭 '+esc(navName(plan.to))+'</b><small>Туда сейчас не доплыть</small><button data-navclear aria-label="Сбросить курс">✕</button>';
     else{const nn=x=>x==='L'?'Бездна Миров':x==='Z'?'Зунеша':(seaOf(x)!==seaOf(p.loc)?SEAS[seaOf(x)][0]+'.':'')+numOf(x);c+='<b>🧭 '+esc(navName(plan.to))+' · '+plan.dist+' '+(plan.dist===1?'ход':plan.dist<5?'хода':'ходов')+'</b><button data-navclear aria-label="Сбросить курс">✕</button>';
       plan.steps.slice(0,1).forEach((st,k)=>{c+='<small>'+st.path.map(nn).join(' → ')+(st.risk.length?' · <i class="risk">'+esc(st.risk.join(' '))+'</i>':'')+'</small>'})}
-    h+=c+'</div></div>'}
+    /* плашка курса с экрана убрана: курс виден в окне навигатора */}
   const cl=dkLabel(p.loc,false),cn=p.loc==='L'?'Бездна Миров':p.loc==='Z'?'Зунеша':'№'+numOf(p.loc)+' — '+DK_TN[ca];
   {if(G.gal&&G.gal.who===p.i&&!G.gal.done&&DK.galOpen&&!bt){const gi=re=>ACTS.findIndex(a=>re.test(a.label)),a1=gi(/Галеон: купить карту/),a2=gi(/Галеон: нанять гостя/);
     const opt=(i,ic,t)=>i<0?'':'<button class="dkgo'+(ACTS[i].dis?' dis':'')+'" data-a="'+i+'"'+(ACTS[i].dis?' disabled':'')+'><i>'+ic+'</i><span>'+esc(t)+'</span><b>'+(/\((\d+) Берри/.exec(ACTS[i].label)||[])[1]+' ⓑ</b></button>';
