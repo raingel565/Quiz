@@ -1572,6 +1572,7 @@ body.dkon .tp-m .tm-od{display:none}
 .eco #deck [class*="wx-"],.eco #deck .dkfg{filter:none!important}
 .eco #splash *{animation-duration:.01s!important}
 .eco .dkegg,.eco #deck .dkz{will-change:auto}
+#botskip{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + env(safe-area-inset-bottom));z-index:90001;box-shadow:0 6px 20px rgba(0,0,0,.45)}
 /* ---- N11: все всплывашки — в мини-окне слева сверху, без перекрытия экрана ---- */
 #fxbd{display:none!important}
 #evfx .wfx{display:none!important}
@@ -1582,7 +1583,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N69</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N70</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -3966,7 +3967,25 @@ function fxAnchor(){
 }
 window.addEventListener('scroll',()=>{if(document.querySelector('#dicefx,#cardfx,#evfx'))fxAnchor()},{passive:true});
 window.addEventListener('resize',()=>{if(document.querySelector('#dicefx,#cardfx,#evfx'))fxAnchor()});
+// «Пропустить» ход бота: убирает только анимации и паузы, сами действия бота не меняются
+let BOTSKIP=false;
+function botActing(){if(NET.on||!G||G.winner!=null)return false;const w=viewerNeeded();return w!=null&&!!G.players[w]&&!!G.players[w].bot}
+function botSkipGo(){
+  BOTSKIP=true;
+  FXQ.length=0;FXBUSY=false;
+  ['dicefx','cardfx','evfx','akfx','akvid','grfx'].forEach(i=>{const e=document.getElementById(i);if(e)e.remove()});
+  document.body.classList.remove('dgate','dgate-inc');try{fxBd(false)}catch(e){}
+  clearTimeout(BOTTIMER);BOTTIMER=null;
+  botSkipSync();try{render()}catch(e){}
+}
+function botSkipSync(){
+  let b=document.getElementById('botskip');
+  const show=botActing()&&!BOTSKIP&&!window.__nor&&document.body.classList.contains('ingame');
+  if(!show){if(b)b.remove();return}
+  if(!b){b=document.createElement('button');b.id='botskip';b.className='btn primary';b.textContent='⏩ Пропустить ход бота';b.onclick=botSkipGo;document.body.appendChild(b)}
+}
 function flushFx(){
+  if(BOTSKIP&&botActing()){FXQ.length=0;FXBUSY=false;try{fxBd(false)}catch(e){}return}
   fxAnchor();try{fxGate()}catch(e){}
   if(FXQ.length&&Date.now()<FXHOLD){setTimeout(flushFx,FXHOLD-Date.now()+30);return}
   if(FXBUSY||!FXQ.length||window.__nor||document.querySelector('[data-ui=ready]')){if(!FXBUSY&&!FXQ.some(x=>x.t!=='s'))fxBd(false);return}
@@ -4143,6 +4162,8 @@ function render(){
   bind();
   dsMount();
   notifyTurn();
+  if(BOTSKIP&&!botActing())BOTSKIP=false;
+  botSkipSync();
   botSchedule();
 }
 function goalHtml(){ // V141: цель партии одной строкой и прогресс
@@ -6847,14 +6868,15 @@ function botSchedule(){
   const humanSees=pe&&pe.type==='duelResult'&&pe.res.st.some(x=>(x.s.ps||[x.s.p]).some(q=>q&&!q.bot));
   if(humanSees)return; // человек сам нажмёт «Продолжить»
   let delay=pe&&pe.type==='duelResult'?(duelSpect(pe)?900:4000):(pe&&pe.type==='prep'?2000:2000);
+  if(BOTSKIP)delay=40;
   BOTTIMER=setTimeout(function tick(){
     BOTTIMER=null;
     if(!G||G.winner!=null||NET.on)return;
-    if(FXQ.length||FXBUSY){BOTTIMER=setTimeout(tick,350);return}
+    if(FXQ.length||FXBUSY){if(BOTSKIP){FXQ.length=0;FXBUSY=false}else{BOTTIMER=setTimeout(tick,350);return}}
     const w2=viewerNeeded();if(w2==null||!G.players[w2].bot){render();return}
     const m=botMove();if(!m){return}
     try{const a=m.t==='a'&&ACTS[m.i],bt=a&&a.loc&&a.g==='move'&&document.body.classList.contains('dkon')&&document.querySelector('#deck .dkhit[data-dk="'+a.loc+'"]');
-      if(bt){BOTTIMER=setTimeout(()=>{},1600);if(dkSail(bt,()=>{BOTTIMER=null;if(G&&G.winner==null&&!NET.on&&viewerNeeded()===w2)submit(m,true)}))return;clearTimeout(BOTTIMER);BOTTIMER=null}}catch(e){BOTTIMER=null}
+      if(bt&&!BOTSKIP){BOTTIMER=setTimeout(()=>{},1600);if(dkSail(bt,()=>{BOTTIMER=null;if(G&&G.winner==null&&!NET.on&&viewerNeeded()===w2)submit(m,true)}))return;clearTimeout(BOTTIMER);BOTTIMER=null}}catch(e){BOTTIMER=null}
     submit(m,true);
   },delay);
 }
