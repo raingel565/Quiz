@@ -1034,6 +1034,12 @@ html,body{overscroll-behavior-y:none}
 .dshist span{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 8px;border-radius:10px;background:rgba(255,255,255,.05);font-size:12.5px;white-space:nowrap;overflow:hidden}
 .dshist span i{font-style:normal;opacity:.55;font-weight:700}
 .dsdet{border-radius:14px}.dsdet summary{font-size:13.5px;opacity:.75}
+/* пока не брошены кубики дохода, на палубе нет ни текстов, ни кнопок, ни пасхалок: видны только сцена и видео погоды */
+#deck .dkui,#deck .dklb,#deck .dknav,#deck .dkwho,#deck .dkegg,#deck .dkegght,#deck .dkgal,#deck .dkgalb{transition:opacity .45s ease}
+body.dgate-inc #deck .dkui,body.dgate-inc #deck .dklb,body.dgate-inc #deck .dknav,body.dgate-inc #deck .dkwho,body.dgate-inc #deck .dkegg,body.dgate-inc #deck .dkegght,body.dgate-inc #deck .dkgal,body.dgate-inc #deck .dkgalb{opacity:0!important;pointer-events:none!important}
+body.dgate:has(#mnu.open) #fxbd{display:none!important}
+body:has(#mnu.open) #top{z-index:96000!important}
+body.dgate #qoov{z-index:95000!important}
 body.dgate #fxbd{display:block!important;z-index:89999!important;top:var(--bnt,0px)!important;bottom:var(--bnh,0px)!important;touch-action:pan-x pan-y;pointer-events:auto!important;background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 .dgplate{position:fixed;left:50%;top:18%;transform:translateX(-50%);z-index:100000;background:rgba(20,24,30,.92);color:#ffd45a;border:1px solid rgba(255,212,90,.5);border-radius:12px;padding:10px 18px;font:600 15px system-ui,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.4);pointer-events:none;animation:dfin .2s ease both}
 #fxbd{position:fixed;inset:0;z-index:99997;background:rgba(5,10,8,.62);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);opacity:0;transition:opacity .25s ease;pointer-events:none}
@@ -1192,9 +1198,9 @@ body.tutor #app{padding-top:110px}
 /* V156: экран партии на телефоне — по макету пользователя */
 .tp-m{display:none}
 @media all{
-  body.ingame #top{display:block;position:relative;text-align:center;padding:7px 52px 7px 12px;border-radius:18px;min-height:46px}
+  body.ingame #top{display:block;position:relative;text-align:center;padding:7px 52px 7px 12px;border-radius:18px;min-height:46px;z-index:60}
   body.ingame #top .tp-l,body.ingame #top .tp-st,body.ingame #top #sndbtn{display:none}
-  body.ingame #top .tp-r{position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;gap:6px}
+  body.ingame #top .tp-r{position:absolute;right:8px;top:2px;display:flex;gap:6px}
   body.ingame #top .tp-m{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:2px 10px}
   .tm-t{font-family:var(--f-display);font-size:17px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;line-height:1.1}
   .tm-r{font-size:13px;font-weight:700;color:var(--muted)}
@@ -1419,7 +1425,7 @@ body.tutor #app{padding-top:110px}
 #deck .dkpen{position:absolute;z-index:5;padding:0;border:0;background:none;cursor:pointer;animation:dkbob 7s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
 #deck .dkpen img{width:100%;display:block;pointer-events:none}
 @keyframes dkegght{0%{opacity:0;transform:translateY(6px)}8%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0}}
-#deck .dkegght{position:absolute;z-index:9;padding:8px 12px;border-radius:14px 14px 4px 14px;background:rgba(20,26,34,.82);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.22);color:#eef4fa;font-size:12px;line-height:1.35;font-weight:600;pointer-events:none;animation:dkegght 11s both;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+#deck .dkegght{position:absolute;z-index:9;padding:8px 12px;border-radius:14px 14px 4px 14px;background:rgba(20,26,34,.82);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.22);color:#eef4fa;font-size:12px;line-height:1.35;font-weight:600;pointer-events:auto;cursor:pointer;animation:dkegght 5.5s both;box-shadow:0 4px 14px rgba(0,0,0,.35)}
 @keyframes dkdolf{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 #deck .dkdolf{position:absolute;z-index:3;height:auto;pointer-events:none;animation:dkdolf 3.2s ease-in-out infinite;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
 #deck .dkpenb{border-color:rgba(160,225,255,.7);color:#cdeeff}
@@ -1576,7 +1582,7 @@ body.dkon .tp-m .tm-od{display:none}
 #cardfx .cfrow{gap:14px}
 body.fxchain #dicefx,body.fxchain #cardfx,body.fxchain #evfx{background:rgba(10,14,18,.88)!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important}
 </style>
-<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N62</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
+<div id="app"><div id="top"></div><div id="now"></div><main><section id="mapwrap"><button class="btn pvz" id="mapz" data-mapz></button><button class="btn" id="mapdk" data-dkon>⛵ Палуба</button><button class="btn" id="mapme" data-mapme style="margin:0 0 6px 6px;padding:4px 10px;font-size:13px">📍 Где я</button><button class="btn" id="maplg" data-maplg aria-expanded="false">ℹ️ Легенда</button><div id="mapscroll"><svg id="map" viewBox="8 106 1572 860" role="img" aria-label="Игровое поле"></svg></div><div class="legend" id="legend"></div><div id="toasts" aria-live="polite"></div></section><aside id="side"></aside></main></div><div id="ver" title="Новая версия">N66</div><nav id="bnav" aria-label="Разделы"><button data-go="#mapwrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></svg><span>Карта</span></button><button data-go=".pr1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg><span>Действия</span></button><button data-go=".pr2"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="10" height="14" rx="2"/><path d="M9 20h8a2 2 0 0 0 2-2V8"/></svg><span>Инвентарь</span></button><button data-go=".pr3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M15 15.5c3 0 6 1 6 3.5"/></svg><span>Игроки</span></button><button data-go=".pr4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg><span>Журнал</span></button></nav>
 <div id="modal"></div>
 <script src="assets/duel-scene.js?v=21"></script>
 <script>
@@ -2326,7 +2332,7 @@ let CARD_PRICE=10; // цена карты атаки / пассивки в Бе�
 const PAYT={2:50,12:50,3:30,11:30,4:20,10:20,5:15,9:15,6:12,8:12,7:10};
 const PAYT2={2:25,12:25,3:15,11:15,4:10,10:10,5:8,9:8,6:6,8:6,7:5};
 function incomeRoll(){
-  const a=d(6),b=d(6),n=a+b;G.roll=[a,b];fxRoll('Доход · '+P().name,[a,b],6,{gate:1,who:P().i});
+  const a=d(6),b=d(6),n=a+b;G.roll=[a,b];fxRoll('Доход · '+P().name,[a,b],6,{gate:1,inc:1,who:P().i});
   log(pname(P())+' бросает 2d6: '+a+'+'+b+' = '+n+'.');
   const res=[];
   for(const q of G.players){
@@ -3679,7 +3685,9 @@ window.addEventListener('scroll',()=>{if(document.body.classList.contains('dgate
 window.addEventListener('resize',()=>{if(document.body.classList.contains('dgate'))fxNavH()});
 function fxGate(){
   const g=FXQ.some(r=>r.t==='d'&&r.gate&&(NET.on?r.who===NET.me:!(G&&G.players[r.who]&&G.players[r.who].bot)));
+  const inc=FXQ.some(r=>r.t==='d'&&r.gate&&r.inc&&(NET.on?r.who===NET.me:!(G&&G.players[r.who]&&G.players[r.who].bot)));
   if(g){fxBd(true);document.body.classList.add('dgate');fxNavH()}else if(!document.getElementById('dicefx'))document.body.classList.remove('dgate');
+  document.body.classList.toggle('dgate-inc',inc||(!!document.getElementById('dicefx')&&document.body.classList.contains('dgate-inc')))
 }
 function fxEvent(ev){if(window.__nor)return;FXQ.push(Object.assign({t:'e'},ev))}
 function fxGuard(g,A,U,who){if(window.__nor)return;FXQ.push({t:'g',g,A,U,who})}
@@ -3982,9 +3990,9 @@ function diceFx(rows,done){
   const die=(r)=>r.kind==='pon'?ponDie():(r.sides||6)===6?'<div class="dscene"><div class="dwrap"><div class="cube">'+[1,2,3,4,5,6].map(face).join('')+'</div></div></div>':'<div class="dscene"><div class="dwrap"><div class="pd s'+r.sides+'"><b>?</b></div></div></div>';
   const gated=rows.some(r=>r.gate&&(NET.on?r.who===NET.me:!(G&&G.players[r.who]&&G.players[r.who].bot)));
   o.innerHTML=rows.map(r=>'<div class="drow"><div class="dl">'+esc(r.label)+'</div>'+r.vals.map(()=>die(r)).join('')+'<div class="dsum">'+(r.vals.length>1?'= ':'')+r.vals.reduce((a,b)=>a+b,0)+'</div></div>').join('')+(gated?'<button class="btn primary dgo">'+(rows.every(r=>r.kind==='pon')?'Прочитать понеглиф':'Бросить кубики')+'</button>':'<div class="dhint">нажмите, чтобы пропустить</div>');
-  document.body.appendChild(o);if(gated)document.body.classList.add('dgate'); // пока не брошены кубики дохода, остальное не нажимается
+  document.body.appendChild(o);if(gated){document.body.classList.add('dgate');if(rows.some(r=>r.gate&&r.inc))document.body.classList.add('dgate-inc')} // пока не брошены кубики дохода, остальное не нажимается
   let fin=false,started=false;
-  const end=()=>{if(fin)return;fin=true;document.body.classList.remove('dgate');o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},300)};
+  const end=()=>{if(fin)return;fin=true;document.body.classList.remove('dgate');document.body.classList.remove('dgate-inc');o.classList.add('out');setTimeout(()=>{o.remove();done&&done()},300)};
   const flat=[];rows.forEach(r=>r.vals.forEach(v=>flat.push({v,s:r.sides||6,k:r.kind})));
   const cubes=o.querySelectorAll('.dwrap>.cube,.dwrap>.pd,.dwrap>.pon'),wraps=o.querySelectorAll('.dwrap');
   const go=()=>{
@@ -5305,7 +5313,7 @@ function dkRender(){
     if(G.cat&&G.cat.who===p.i&&!G.cat.done)h+=eg('catpick','catboat.webp',46,760/1250,true)}
   if(p.dolph>0){const fw=Math.min(W*0.34,shW*1.02);h+='<img class="dkdolf" src="assets/deck/dolphins-back.webp" alt="" style="left:'+(W/2-fw/2).toFixed(0)+'px;top:'+(shTop+shH*0.8).toFixed(0)+'px;width:'+fw.toFixed(0)+'px">'}
   if(mine&&!bt){const ht=(G.pen&&G.pen.who===p.i&&!G.pen.done)?'🐧 Где-то рядом слышен странный писк… Присмотрись к воде.':(G.dol&&G.dol.who===p.i&&!G.dol.done)?'🐬 Где-то рядом слышен плеск и свист… Присмотрись к воде.':(G.cat&&G.cat.who===p.i&&!G.cat.done)?'🐈 Где-то рядом слышно тихое мяуканье… Присмотрись к воде.':'';
-    if(ht)h+='<div class="dkegght" style="right:'+(W*0.04).toFixed(0)+'px;top:'+(H*0.2).toFixed(0)+'px;max-width:'+(W*0.5).toFixed(0)+'px">'+ht+'</div>'}
+    if(ht&&dkHintOk(p))h+='<div class="dkegght" style="right:'+(W*0.04).toFixed(0)+'px;top:'+(H*0.2).toFixed(0)+'px;max-width:'+(W*0.5).toFixed(0)+'px">'+ht+'</div>'}
   const sd=DK_SHIPS[p.ch];let sx=W/2-shW/2,sy=shTop,sw=shW,sim='assets/deck/ship.webp';
   if(sd){const nh=shH*sd[1];sw=nh*sd[0]/900;sx=W/2-sw/2;sy=shTop+shH-nh+(sd[2]||0)*nh;sim='assets/deck/ships/'+p.ch+'.webp'}
   h+='<div class="dkship wx-'+wk+'" style="left:'+sx.toFixed(0)+'px;top:'+sy.toFixed(0)+'px;width:'+sw.toFixed(0)+'px"><img src="'+sim+'" alt="">'+(p.pengu>0?'<img class="dkpeng" src="assets/deck/penguin1.webp" alt="">':'')+(p.cat>0?'<div class="dkcw"><img class="dkcat" src="assets/deck/cat.webp" alt=""></div>':'')+'</div>';
@@ -5344,6 +5352,7 @@ function dkRender(){
   // фон-картинку не пересоздаём (на iPhone это давало чёрную вспышку): переносим прежний узел, если картинка та же
   oldBg.forEach(o=>{const n=[...el.querySelectorAll('.dkz img.dkbg,.dksky img')].find(x=>x.getAttribute('src')===o.getAttribute('src')&&x.parentNode&&x.parentNode.className===o.parentNode.className);if(n&&o.complete){o.setAttribute('style',n.getAttribute('style'));n.replaceWith(o)}});
   dkPreload();
+  {const eh=el.querySelector('.dkegght');clearTimeout(DK.hT);if(eh)DK.hT=setTimeout(dkHintHide,Math.max(300,(DK.hu||0)-Date.now()))}
   el.classList.toggle('fresh',fresh);el.classList.toggle('kwon',kwOn||!!wv);el.classList.toggle('wvon',!!wv);dkWv(el,wv);
   if(DK.arv&&Date.now()-DK.arv<4000){DK.arv=0;const z0=el.querySelector('.dkz'),im0=el.querySelector('.dkship img');if(z0)z0.classList.add('arv');
     if(im0){try{const arvKf=[{transform:'translate(0,14px) rotate(-2deg)'},{transform:'translate(0,-3px) rotate(1.2deg)',offset:.6},{transform:'translate(0,0) rotate(0)'}],arvOp={duration:1100,easing:'ease-out'};im0.animate(arvKf,arvOp);el.querySelectorAll('.dkship .dkcw').forEach(q=>q.animate(arvKf,arvOp))}catch(_){}}}
@@ -5352,6 +5361,9 @@ function dkRender(){
   {const v=el.querySelector('video.dkvid');if(v){v.muted=true;const pr=v.play&&v.play();if(pr&&pr.catch)pr.catch(()=>{})}}
   dkZoomApply();
 }
+// подсказка пасхалки: один раз за ход и недолго (5,5 с), закрывается нажатием
+function dkHintOk(p){const k=(G.turnNo|0)+':'+p.i;if(DK.hk!==k){DK.hk=k;DK.hu=Date.now()+5500}return Date.now()<DK.hu}
+function dkHintHide(){DK.hu=0;clearTimeout(DK.hT);const e=document.querySelector('#deck .dkegght');if(e)e.remove()}
 let DKPRE=false;
 function dkPreload(){ // прогреваем и декодируем фоны погод и пасхалки заранее, чтобы при смене не было чёрных вспышек и задержек
   if(DKPRE)return;DKPRE=true;
@@ -5470,6 +5482,8 @@ function dkSail(b,done){
 document.addEventListener('click',e=>{
   if(e.target.closest&&e.target.closest('[data-dkmap]')){try{localStorage.setItem('nv_deck','0')}catch(_){}DK.sig='';render();return}
   if(e.target.closest&&e.target.closest('[data-galopen]')){DK.galOpen=!DK.galOpen;DK.sig='';render();return}
+  if(e.target.closest&&e.target.closest('.dkegght,[data-dolpick],[data-catpick],[data-penpick]'))dkHintHide();
+  if(e.target.closest&&e.target.closest('.dkegght')){return}
   if(e.target.closest&&e.target.closest('[data-dolpick]')){if(botTurnLock())return;if(!(DK.z.s>=1.5)){dkZoomTo(e.target.closest('[data-dolpick]'),2.4);return}const i=ACTS.findIndex(a=>/Дельфины/.test(a.label)&&!a.dis);if(i>=0)submit({t:'a',i});return}
   if(e.target.closest&&e.target.closest('[data-catpick]')){if(botTurnLock())return;if(!(DK.z.s>=1.5)){dkZoomTo(e.target.closest('[data-catpick]'),2.4);return}const i=ACTS.findIndex(a=>/Кот:/.test(a.label)&&!a.dis);if(i>=0)submit({t:'a',i});return}
   if(e.target.closest&&e.target.closest('[data-penpick]')){if(botTurnLock())return;if(!(DK.z.s>=1.5)){dkZoomTo(e.target.closest('[data-penpick]'),2.4);return}const i=ACTS.findIndex(a=>/Пингвины/.test(a.label)&&!a.dis);if(i>=0)submit({t:'a',i});return}
@@ -7112,7 +7126,7 @@ function resumeCardHtml(){
 function resumeLocal(){const R=resumeInfo();if(!R.loc){render();return}SAVE=R.loc;if(!saveRestore())alert('Не удалось восстановить партию, начните новую.')}
 function resumeNet(){let code='';try{code=localStorage.getItem('gl_resume_room')||'';localStorage.removeItem('gl_resume_room');NET.name=NET.name||localStorage.getItem('gl_name')||'Игрок'}catch(e){}if(!code)return;NET.on=true;NET.stage='menu';netJoin(code,false)}
 function exitGame(keep){
-  window.__mnu=false;qoClose&&qoClose();FXQ.length=0;FXBUSY=false;['dicefx','cardfx','evfx','akfx','akvid','fxbd'].forEach(i=>{const e=document.getElementById(i);if(e)e.remove()});document.body.classList.remove('dgate');document.body.classList.remove('fxchain');document.body.classList.remove('dgate');
+  window.__mnu=false;qoClose&&qoClose();FXQ.length=0;FXBUSY=false;['dicefx','cardfx','evfx','akfx','akvid','fxbd'].forEach(i=>{const e=document.getElementById(i);if(e)e.remove()});document.body.classList.remove('dgate','dgate-inc');document.body.classList.remove('fxchain');
   if(UI.dz){clearTimeout(UI.dz.at);if(UI.dz.sc)UI.dz.sc.close();UI.dz=null}
   if(NET.on){const code=NET.code;netLeave();try{if(keep&&code)localStorage.setItem('gl_resume_room',code);else localStorage.removeItem('gl_resume_room')}catch(e){}NET.on=false;NET.stage='menu'}
   else{if(keep){if(SAVE)saveWrite()}else saveClear()}
